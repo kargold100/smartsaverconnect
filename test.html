@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>SmartSaver Connect - Connection Test</title>
+<style>
+body{font-family:system-ui,sans-serif;max-width:700px;margin:2rem auto;padding:0 1rem;color:#1a1a18}
+h1{font-size:20px;margin-bottom:.5rem}
+.subtitle{color:#6b6a65;font-size:13px;margin-bottom:1.5rem}
+.step{background:#f5f4f0;border-radius:10px;padding:14px 16px;margin-bottom:12px}
+.step h3{font-size:14px;font-weight:600;margin-bottom:6px}
+.step p,.step li{font-size:13px;color:#444;line-height:1.6}
+ul{padding-left:18px}
+.url-row{display:flex;gap:8px;margin-top:10px}
+input{flex:1;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:13px}
+button{padding:8px 16px;background:#1a6b3c;color:#fff;border:0;border-radius:6px;font-size:13px;cursor:pointer}
+button:hover{opacity:.85}
+#result{margin-top:12px;padding:12px;border-radius:8px;font-size:13px;display:none}
+.ok{background:#e8f5ee;color:#1a6b3c}
+.err{background:#fde8e6;color:#c0392b}
+pre{background:#1a1a18;color:#e8e6df;padding:12px;border-radius:8px;overflow-x:auto;font-size:12px;margin-top:8px}
+a{color:#1a6b3c}
+</style>
+</head>
+<body>
+<h1>SmartSaver Connect — Setup Test</h1>
+<p class="subtitle">Use this page to verify your Apps Script URL is working before updating index.html</p>
+
+<div class="step">
+  <h3>Step 1 — Get your Web App URL</h3>
+  <p>In your Google Sheet: <strong>Extensions → Apps Script → Deploy → Manage deployments</strong></p>
+  <p>Copy the Web App URL (looks like: <code>https://script.google.com/macros/s/AKfy.../exec</code>)</p>
+</div>
+
+<div class="step">
+  <h3>Step 2 — Test the connection</h3>
+  <div class="url-row">
+    <input id="urlInput" type="text" placeholder="Paste your Apps Script Web App URL here" />
+    <button onclick="testUrl()">Test</button>
+  </div>
+  <div id="result"></div>
+</div>
+
+<div class="step">
+  <h3>Step 3 — Update your files</h3>
+  <p>Once the test passes, paste the same URL into:</p>
+  <ul>
+    <li><strong>index.html</strong> — find <code>YOUR_APPS_SCRIPT_WEB_APP_URL_HERE</code> and replace it</li>
+    <li><strong>compare.html</strong> — same replacement</li>
+  </ul>
+  <p>Then push both files to GitHub.</p>
+</div>
+
+<div class="step">
+  <h3>Still not working?</h3>
+  <ul>
+    <li>Make sure the Web App is deployed with <strong>Execute as: Me</strong> and <strong>Who has access: Anyone</strong></li>
+    <li>After any code change, create a <strong>New deployment</strong> (not just save)</li>
+    <li>Run at least one scraper first: Google Sheet → SmartSaver Connect menu → Test scrapers</li>
+    <li><a href="SETUP.md" target="_blank">Read the full SETUP.md guide</a></li>
+  </ul>
+</div>
+
+<script>
+async function testUrl() {
+  const url = document.getElementById('urlInput').value.trim();
+  const res = document.getElementById('result');
+  res.style.display = 'none';
+
+  if (!url || !url.includes('script.google.com')) {
+    res.className = 'err'; res.style.display = 'block';
+    res.textContent = 'That does not look like an Apps Script URL. It should start with https://script.google.com/macros/s/';
+    return;
+  }
+
+  res.className = ''; res.style.display = 'block';
+  res.textContent = 'Testing...';
+
+  try {
+    const controller = new AbortController();
+    setTimeout(() => controller.abort(), 20000);
+    const resp = await fetch(url + '?tab=all', { signal: controller.signal });
+    const text = await resp.text();
+    let json;
+    try { json = JSON.parse(text); } catch(e) {
+      res.className = 'err'; res.style.display = 'block';
+      res.innerHTML = '<strong>Got a response but it is not valid JSON.</strong><br>This usually means the Web App returned an error page. Raw response:<br><pre>' + text.slice(0, 500) + '</pre>';
+      return;
+    }
+    if (json.ok) {
+      const d = json.data || {};
+      const deals = (d.deals||[]).length;
+      const fuel  = (d.fuel||[]).length;
+      const ins   = (d.insurance||[]).length;
+      res.className = 'ok'; res.style.display = 'block';
+      res.innerHTML = '<strong>✓ Connection working!</strong><br>' +
+        'Deals: ' + deals + ' | Fuel: ' + fuel + ' | Insurance: ' + ins + '<br>' +
+        (deals === 0 ? '<br>No deals yet — run scrapers from your Google Sheet menu first.' : '<br>Ready to copy this URL into index.html and compare.html.');
+    } else {
+      res.className = 'err'; res.style.display = 'block';
+      res.innerHTML = '<strong>Apps Script returned an error:</strong> ' + (json.error || 'unknown') +
+        '<pre>' + JSON.stringify(json, null, 2) + '</pre>';
+    }
+  } catch(e) {
+    res.className = 'err'; res.style.display = 'block';
+    if (e.name === 'AbortError') {
+      res.innerHTML = '<strong>Timed out after 20 seconds.</strong><br>The Apps Script may be slow to start. Try clicking Test again.';
+    } else {
+      res.innerHTML = '<strong>Network error: ' + e.message + '</strong><br>' +
+        'Possible causes:<ul>' +
+        '<li>URL is wrong or Web App is not deployed</li>' +
+        '<li>Web App access is not set to "Anyone"</li>' +
+        '<li>CORS blocked — make sure doGet uses HtmlService (latest Code.gs)</li>' +
+        '</ul>';
+    }
+  }
+}
+</script>
+</body>
+</html>
