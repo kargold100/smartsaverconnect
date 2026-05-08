@@ -3,499 +3,566 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>SmartSaver Connect — Price Comparison</title>
+<title>SmartSaver Connect</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#f5f4f0;--card:#fff;--text:#1a1a18;--muted:#6b6a65;--hint:#9e9d98;
-  --border:rgba(0,0,0,0.08);--accent:#1a6b3c;--accent-bg:#e8f5ee;
-  --danger:#c0392b;--danger-bg:#fde8e6;--radius:12px;
-  --shadow:0 1px 6px rgba(0,0,0,.07);
+  --border:rgba(0,0,0,0.09);--accent:#1a6b3c;--accent-bg:#e8f5ee;
+  --danger:#c0392b;--danger-bg:#fde8e6;--warn-bg:#fef3cd;--warn:#92600a;
+  --radius:12px;
 }
 @media(prefers-color-scheme:dark){:root{
   --bg:#18181a;--card:#232325;--text:#e8e6df;--muted:#9a9890;--hint:#6a6860;
-  --border:rgba(255,255,255,0.08);--accent:#4caf7a;--accent-bg:#0e2d1a;
-  --danger:#e57373;--danger-bg:#2d0e0e;
+  --border:rgba(255,255,255,0.09);--accent:#4caf7a;--accent-bg:#0e2d1a;
+  --danger:#e57373;--danger-bg:#2d0e0e;--warn-bg:#2a1e00;--warn:#f0c060;
 }}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  background:var(--bg);color:var(--text);min-height:100vh}
-
-.wrap{max-width:980px;margin:0 auto;padding:1.5rem 1rem 4rem}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.wrap{max-width:1100px;margin:0 auto;padding:1.5rem 1rem 4rem}
 
 /* Header */
-.header{display:flex;align-items:center;justify-content:space-between;
-  flex-wrap:wrap;gap:12px;margin-bottom:2rem}
-.logo{font-size:20px;font-weight:800;letter-spacing:-.5px;text-decoration:none;color:var(--text)}
+.header{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:1.5rem}
+.logo{font-size:24px;font-weight:800;letter-spacing:-0.5px}
 .logo span{color:var(--accent)}
-.back-link{font-size:13px;color:var(--accent);text-decoration:none;
-  display:flex;align-items:center;gap:4px}
-.back-link:hover{text-decoration:underline}
-
-/* Search */
-.search-section{background:var(--card);border:1px solid var(--border);
-  border-radius:var(--radius);padding:24px;margin-bottom:1.5rem;
-  box-shadow:var(--shadow)}
-.search-section h1{font-size:20px;font-weight:700;margin-bottom:6px}
-.search-section p{font-size:13px;color:var(--muted);margin-bottom:18px}
-.search-row{display:flex;gap:10px;flex-wrap:wrap}
-.search-input{flex:1;min-width:200px;padding:11px 16px;
-  border:1.5px solid var(--border);border-radius:8px;
-  background:var(--bg);color:var(--text);font-size:15px}
-.search-input:focus{outline:none;border-color:var(--accent)}
-.search-btn{padding:11px 24px;background:var(--accent);color:#fff;
-  border:0;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;
-  white-space:nowrap}
-.search-btn:hover{opacity:.88}
-.search-btn:disabled{opacity:.5;cursor:not-allowed}
-
-/* Category quick-picks */
-.cat-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
-.cat-chip{padding:5px 12px;border-radius:20px;border:1px solid var(--border);
-  background:var(--bg);color:var(--muted);font-size:12px;cursor:pointer;
-  transition:all .15s}
-.cat-chip:hover,.cat-chip.on{background:var(--accent-bg);color:var(--accent);
-  border-color:var(--accent)}
-
-/* Stats strip */
-.stats-strip{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:1.25rem}
-.stat-pill{background:var(--card);border:1px solid var(--border);
-  border-radius:8px;padding:8px 14px;font-size:13px;
-  display:flex;align-items:center;gap:6px}
-.stat-num{font-weight:700;color:var(--accent)}
-
-/* Results */
-.results-header{display:flex;align-items:center;justify-content:space-between;
-  flex-wrap:wrap;gap:8px;margin-bottom:1rem}
-.results-title{font-size:16px;font-weight:600}
-.sort-row{display:flex;gap:8px;align-items:center}
-.sort-label{font-size:12px;color:var(--muted)}
-select{padding:6px 10px;border:1px solid var(--border);border-radius:6px;
-  background:var(--card);color:var(--text);font-size:13px;cursor:pointer}
-
-/* Comparison table */
-.compare-table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;background:var(--card);
-  border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
-thead tr{background:var(--bg)}
-th{text-align:left;padding:10px 14px;font-size:11px;font-weight:600;
-  color:var(--muted);text-transform:uppercase;letter-spacing:.04em;
-  border-bottom:1px solid var(--border);white-space:nowrap}
-td{padding:12px 14px;border-bottom:1px solid var(--border);vertical-align:middle;
-  font-size:13px}
-tr:last-child td{border-bottom:none}
-tr:hover td{background:var(--bg)}
-
-.vendor-badge{display:inline-block;font-size:11px;font-weight:600;
-  padding:2px 8px;border-radius:20px;white-space:nowrap}
-.v-woolworths{background:#e8f5e9;color:#2e7d32}
-.v-coles{background:#fce4ec;color:#c62828}
-.v-aldi{background:#e3f2fd;color:#1565c0}
-.v-amazon{background:#fff3e0;color:#e65100}
-.v-bigw{background:#e1f5fe;color:#01579b}
-.v-chemist{background:#fbe9e7;color:#bf360c}
-.v-kogan{background:#f3e5f5;color:#6a1b9a}
-.v-jb{background:#e8f5e9;color:#1b5e20}
-.v-default{background:#f5f5f5;color:#424242}
-@media(prefers-color-scheme:dark){
-  .v-woolworths{background:#0d2e12;color:#81c784}.v-coles{background:#2d0b10;color:#ef9a9a}
-  .v-aldi{background:#0a1929;color:#90caf9}.v-amazon{background:#1a1200;color:#ffcc80}
-  .v-bigw{background:#001825;color:#81d4fa}.v-chemist{background:#2a0e00;color:#ffab91}
-  .v-kogan{background:#1a0e2a;color:#ce93d8}.v-jb{background:#0d2010;color:#a5d6a7}
-  .v-default{background:#2a2a2a;color:#bdbdbd}
-}
-
-.price-best{font-size:16px;font-weight:700;color:var(--accent)}
-.price-best::after{content:' ✓';font-size:12px}
-.price-normal{font-size:15px;font-weight:600}
-.price-was{font-size:11px;color:var(--hint);text-decoration:line-through;margin-left:4px}
-.save-badge{display:inline-block;font-size:11px;padding:1px 6px;border-radius:10px;
-  background:var(--danger-bg);color:var(--danger);margin-top:3px}
-.view-link{color:var(--accent);text-decoration:none;font-size:12px;white-space:nowrap}
-.view-link:hover{text-decoration:underline}
-.item-title{font-weight:500;line-height:1.4;margin-bottom:3px}
-.item-desc{font-size:11px;color:var(--muted);line-height:1.4}
-.more-count{font-size:11px;color:var(--muted);margin-top:4px}
-
-/* Cards view (mobile) */
-.cards{display:none;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
-@media(max-width:640px){
-  .compare-table-wrap{display:none}
-  .cards{display:grid}
-}
-.cmp-card{background:var(--card);border:1px solid var(--border);
-  border-radius:var(--radius);padding:14px;display:flex;flex-direction:column;gap:8px}
-.cmp-card.best-card{border-color:var(--accent);border-width:2px}
-.best-label{font-size:11px;font-weight:600;color:var(--accent)}
-
-/* State views */
-.empty-state,.loading-state{text-align:center;padding:4rem 2rem;color:var(--muted)}
-.spinner{width:32px;height:32px;border:2.5px solid var(--border);
-  border-top-color:var(--accent);border-radius:50%;
-  animation:spin .7s linear infinite;margin:0 auto 16px}
+.header-sub{font-size:13px;color:var(--muted);margin-top:3px}
+.hdr-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-size:13px;cursor:pointer;white-space:nowrap;transition:opacity .15s;text-decoration:none}
+.btn:hover{opacity:.75}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn-accent{background:var(--accent-bg);color:var(--accent);border-color:var(--accent)}
+.spin{display:inline-block;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.no-data{font-size:14px}
-.no-data strong{display:block;font-size:18px;margin-bottom:8px;color:var(--text)}
 
-/* Retailer filter pills */
-.retailer-pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem}
-.r-pill{padding:4px 12px;border-radius:20px;border:1px solid var(--border);
-  background:var(--card);color:var(--muted);font-size:12px;cursor:pointer;
-  transition:all .15s;display:flex;align-items:center;gap:4px}
-.r-pill.on{background:var(--accent-bg);color:var(--accent);border-color:var(--accent)}
-.r-pill-dot{width:8px;height:8px;border-radius:50%;background:currentColor}
+/* Banner */
+.banner{background:var(--warn-bg);color:var(--warn);border:1px solid var(--warn);border-radius:var(--radius);padding:12px 16px;margin-bottom:1.25rem;font-size:13px;line-height:1.6}
+.banner a{color:var(--warn);font-weight:600}
+
+/* Stats */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:1.5rem}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px}
+.stat-num{font-size:22px;font-weight:700}
+.stat-lbl{font-size:11px;color:var(--muted);margin-top:3px;text-transform:uppercase;letter-spacing:.04em}
+
+/* Controls */
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:1rem}
+.search-wrap{flex:1;min-width:200px;position:relative}
+.search-wrap input{width:100%;padding:9px 12px 9px 36px;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-size:14px}
+.search-wrap input:focus{outline:2px solid var(--accent)}
+.s-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:15px;pointer-events:none;opacity:.4}
+select{padding:9px 12px;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-size:13px;cursor:pointer}
+
+/* Chips */
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.25rem}
+.chip{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:var(--card);color:var(--muted);font-size:13px;cursor:pointer;transition:all .15s;white-space:nowrap}
+.chip:hover{border-color:var(--accent);color:var(--accent)}
+.chip.on{background:var(--accent-bg);color:var(--accent);border-color:var(--accent)}
+
+/* Compare bar */
+.cmp-bar{display:none;align-items:center;gap:10px;flex-wrap:wrap;
+  background:var(--accent-bg);border:1px solid var(--accent);
+  border-radius:var(--radius);padding:10px 14px;margin-bottom:1rem}
+.cmp-bar.show{display:flex}
+.cmp-bar-text{font-size:13px;color:var(--accent);flex:1}
+.cmp-bar-btn{font-size:12px;padding:5px 14px;border-radius:7px;
+  background:var(--accent);color:#fff;border:0;cursor:pointer;white-space:nowrap}
+
+/* Cards */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.deal{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;display:flex;flex-direction:column;gap:8px}
+.deal-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.vbadge{font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;white-space:nowrap}
+.v-ww{background:#e8f5e9;color:#2e7d32}.v-coles{background:#fce4ec;color:#c62828}
+.v-aldi{background:#e3f2fd;color:#1565c0}.v-amz{background:#fff3e0;color:#e65100}
+.v-fuel{background:#ede7f6;color:#4527a0}.v-cpn{background:#e0f7fa;color:#006064}
+.v-bw{background:#e1f5fe;color:#01579b}.v-cw{background:#fbe9e7;color:#bf360c}
+.v-ins{background:#e8eaf6;color:#283593}.v-def{background:#f5f5f5;color:#424242}
+@media(prefers-color-scheme:dark){
+  .v-ww{background:#0d2e12;color:#81c784}.v-coles{background:#2d0b10;color:#ef9a9a}
+  .v-aldi{background:#0a1929;color:#90caf9}.v-amz{background:#1a1200;color:#ffcc80}
+  .v-fuel{background:#1a0e2a;color:#ce93d8}.v-cpn{background:#00131a;color:#80deea}
+  .v-bw{background:#001825;color:#81d4fa}.v-cw{background:#2a0e00;color:#ffab91}
+  .v-ins{background:#0d0f2a;color:#9fa8da}.v-def{background:#2a2a2a;color:#bdbdbd}
+}
+.disc{font-size:12px;font-weight:700;background:var(--danger-bg);color:var(--danger);padding:3px 9px;border-radius:20px;white-space:nowrap}
+.deal-title{font-size:14px;font-weight:600;line-height:1.4}
+.deal-desc{font-size:12px;color:var(--muted);line-height:1.5}
+.deal-footer{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:4px}
+.pnow{font-size:17px;font-weight:700}
+.pwas{font-size:12px;color:var(--hint);text-decoration:line-through;margin-left:5px}
+.dlink{display:block;font-size:12px;color:var(--accent);text-decoration:none;margin-top:4px}
+.dlink:hover{text-decoration:underline}
+.cpybtn{font-size:12px;padding:4px 10px;border:1px solid var(--border);border-radius:7px;background:transparent;color:var(--muted);cursor:pointer}
+
+/* Fuel */
+.sec-title{font-size:16px;font-weight:600;margin:1.75rem 0 .75rem}
+.fuel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
+.fuel-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:12px}
+.fuel-price{font-size:22px;font-weight:700;color:var(--accent)}
+.fuel-type{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:12px;background:var(--accent-bg);color:var(--accent);margin-bottom:6px}
+.fuel-meta{font-size:12px;color:var(--muted);line-height:1.6}
+
+/* Insurance */
+.ins-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.ins-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;display:flex;flex-direction:column;gap:8px}
+.ins-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.ins-type{font-size:11px;font-weight:600;padding:2px 8px;border-radius:12px;background:var(--accent-bg);color:var(--accent)}
+.ins-title{font-size:14px;font-weight:600;line-height:1.4}
+.ins-desc{font-size:12px;color:var(--muted);line-height:1.5}
+
+/* States */
+.no-results{grid-column:1/-1;text-align:center;padding:2rem;color:var(--muted)}
+.err-box{background:var(--danger-bg);color:var(--danger);border-radius:var(--radius);padding:1rem 1.25rem;font-size:13px;margin-bottom:1rem}
+.last-updated{font-size:11px;color:var(--hint);text-align:right;margin-top:1.25rem}
+.pulse{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* Skeleton */
+.skel{pointer-events:none}
+.skel-line{border-radius:6px;background:linear-gradient(90deg,var(--border) 25%,rgba(128,128,128,.12) 50%,var(--border) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;height:14px}
+.sl-s{width:40%}.sl-m{width:65%}.sl-l{width:90%}
+@keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
 </style>
 </head>
 <body>
 <div class="wrap">
 
+  <!-- Header -->
   <div class="header">
-    <a class="logo" href="index.html">SmartSaver<span>Connect</span></a>
-    <a class="back-link" href="index.html">← Back to deals</a>
-  </div>
-
-  <div class="search-section">
-    <h1>Price Comparison</h1>
-    <p>Search any product and instantly compare prices across Woolworths, Coles, ALDI, Amazon AU, Big W, Chemist Warehouse, Kogan, JB Hi-Fi and more.</p>
-    <div class="search-row">
-      <input class="search-input" id="searchInput" type="text"
-        placeholder="e.g. dishwashing liquid, protein powder, headphones…"
-        onkeydown="if(event.key==='Enter') doSearch()" />
-      <button class="search-btn" id="searchBtn" onclick="doSearch()">Compare prices</button>
+    <div>
+      <div class="logo">SmartSaver<span>Connect</span></div>
+      <div class="header-sub" id="hdrSub">Woolworths · Coles · ALDI · Amazon AU · Retail · Fuel · Insurance</div>
     </div>
-    <div class="cat-row">
-      <span class="cat-chip" onclick="quickSearch(this,'milk')">Milk</span>
-      <span class="cat-chip" onclick="quickSearch(this,'coffee')">Coffee</span>
-      <span class="cat-chip" onclick="quickSearch(this,'protein powder')">Protein powder</span>
-      <span class="cat-chip" onclick="quickSearch(this,'headphones')">Headphones</span>
-      <span class="cat-chip" onclick="quickSearch(this,'vitamin')">Vitamins</span>
-      <span class="cat-chip" onclick="quickSearch(this,'washing powder')">Washing powder</span>
-      <span class="cat-chip" onclick="quickSearch(this,'nappies')">Nappies</span>
-      <span class="cat-chip" onclick="quickSearch(this,'shampoo')">Shampoo</span>
-      <span class="cat-chip" onclick="quickSearch(this,'pasta')">Pasta</span>
+    <div class="hdr-actions">
+      <span id="liveInd"></span>
+      <a class="btn btn-accent" href="compare.html" target="_blank">⚖ Compare prices</a>
+      <button class="btn" id="refreshBtn" onclick="doRefresh()">
+        <span id="refreshIcon">↻</span> Refresh
+      </button>
     </div>
   </div>
 
-  <div id="statsStrip" class="stats-strip" style="display:none"></div>
-  <div id="retailerPills" class="retailer-pills" style="display:none"></div>
-  <div class="results-header" id="resultsHeader" style="display:none">
-    <div class="results-title" id="resultsTitle"></div>
-    <div class="sort-row">
-      <span class="sort-label">Sort by</span>
-      <select id="sortSelect" onchange="renderResults()">
-        <option value="price_asc">Price: low to high</option>
-        <option value="price_desc">Price: high to low</option>
-        <option value="discount">Biggest discount</option>
-        <option value="vendor">Retailer</option>
-      </select>
-    </div>
+  <!-- Banners -->
+  <div id="setupBanner" class="banner" style="display:none">
+    ⚠ <strong>Setup needed:</strong> Open <code>index.html</code> and replace <code>YOUR_APPS_SCRIPT_WEB_APP_URL_HERE</code> with your Apps Script Web App URL. <a href="SETUP.md">See SETUP.md</a>
+  </div>
+  <div id="errArea"></div>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat"><div class="stat-num" id="sTot">—</div><div class="stat-lbl">Deals</div></div>
+    <div class="stat"><div class="stat-num" id="sDisc">—</div><div class="stat-lbl">Avg discount</div></div>
+    <div class="stat"><div class="stat-num" id="sFuel">—</div><div class="stat-lbl">Best ULP ¢/L</div></div>
+    <div class="stat"><div class="stat-num" id="sCpn">—</div><div class="stat-lbl">Coupons</div></div>
+    <div class="stat"><div class="stat-num" id="sIns">—</div><div class="stat-lbl">Insurance offers</div></div>
   </div>
 
-  <div class="compare-table-wrap" id="tableWrap">
-    <div class="empty-state">
-      <div class="no-data">
-        <strong>Search for any product</strong>
-        Compare prices across Australian retailers instantly.
-      </div>
+  <!-- Controls -->
+  <div class="controls">
+    <div class="search-wrap">
+      <span class="s-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Search deals, products, stores…" oninput="onSearch()"/>
+    </div>
+    <select id="sortSel" onchange="renderDeals()">
+      <option value="discount">Highest discount</option>
+      <option value="price_asc">Price ↑</option>
+      <option value="price_desc">Price ↓</option>
+      <option value="newest">Newest first</option>
+    </select>
+  </div>
+
+  <!-- Filter chips -->
+  <div class="chips">
+    <button class="chip on" data-cat="all"        onclick="setFilter(this)">All</button>
+    <button class="chip"    data-cat="woolworths" onclick="setFilter(this)">Woolworths</button>
+    <button class="chip"    data-cat="coles"      onclick="setFilter(this)">Coles</button>
+    <button class="chip"    data-cat="aldi"       onclick="setFilter(this)">ALDI</button>
+    <button class="chip"    data-cat="amazon"     onclick="setFilter(this)">Amazon AU</button>
+    <button class="chip"    data-cat="retail"     onclick="setFilter(this)">Retail</button>
+    <button class="chip"    data-cat="coupon"     onclick="setFilter(this)">Coupons</button>
+    <button class="chip"    data-cat="fuel"       onclick="setFilter(this)">Fuel</button>
+    <button class="chip"    data-cat="insurance"  onclick="setFilter(this)">Insurance</button>
+  </div>
+
+  <!-- Compare bar (appears when searching) -->
+  <div class="cmp-bar" id="cmpBar">
+    <span class="cmp-bar-text" id="cmpBarText">Compare across retailers</span>
+    <button class="cmp-bar-btn" onclick="goCompare()">Compare prices →</button>
+  </div>
+
+  <!-- Main content -->
+  <div id="mainContent">
+    <div class="grid" id="dealGrid">
+      <!-- skeletons shown on first load -->
     </div>
   </div>
-  <div class="cards" id="cardsWrap"></div>
+  <div id="fuelSec"></div>
+  <div class="last-updated" id="lastUpdated"></div>
 
 </div>
-
 <script>
 // ── Config ─────────────────────────────────────────────────────
-// ── IMPORTANT: paste your Apps Script Web App URL here ─────────
-// Must be the same URL as in index.html
+// Replace YOUR_APPS_SCRIPT_WEB_APP_URL_HERE with your actual URL
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz60iBo_PfKtmny2YmwFgjvCCIMDoXpHWf7KBPVDfUNBA8VtRybMCSwn7Ze9wvCdg8KHA/exec';
-const CACHE_KEY       = 'smartsaver_connect_v3';
+const CACHE_KEY = 'ssc_v4';
+const CACHE_TTL = 2 * 60 * 60 * 1000;
 
 // ── State ───────────────────────────────────────────────────────
-let allDeals      = [];
-let searchResults = [];
-let activeVendors = new Set();
-let lastQuery     = '';
+let deals = [], coupons = [], fuel = [], insurance = [];
+let activeFilter = 'all';
 
 // ── Boot ────────────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', () => {
-  // Prefill from URL param ?q=...
-  const urlQ = new URLSearchParams(location.search).get('q');
-  if (urlQ) {
-    document.getElementById('searchInput').value = urlQ;
-  }
-  loadData().then(() => { if (urlQ) doSearch(); });
-});
-
-async function loadData() {
-  // 1. Load from localStorage cache (shared with main portal)
-  try {
-    const raw = localStorage.getItem(CACHE_KEY);
-    if (raw) {
-      const obj = JSON.parse(raw);
-      if (obj && obj.deals && obj.deals.length) {
-        allDeals = normalise(obj.deals);
-        showStatus('Loaded ' + allDeals.length + ' products from cache. Search above to compare.', false);
-        return;
-      }
-    }
-  } catch(e) {}
-
-  // 2. URL not set
   if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes('YOUR_')) {
-    showStatus('Setup needed: open compare.html (and index.html) and replace YOUR_APPS_SCRIPT_WEB_APP_URL_HERE with your Apps Script Web App URL.', true);
+    document.getElementById('setupBanner').style.display = 'block';
+    showSkeletons();
     return;
   }
+  const cached = getCache();
+  if (cached) {
+    deals = cached.deals || [];
+    coupons = cached.coupons || [];
+    fuel = cached.fuel || [];
+    insurance = cached.insurance || [];
+    updateStats(); renderDeals();
+    document.getElementById('lastUpdated').textContent = 'Cached · ' + fmtTime(cached.ts);
+    if (Date.now() - cached.ts > CACHE_TTL) loadFresh(false);
+  } else {
+    showSkeletons();
+    loadFresh(true);
+  }
+});
 
-  // 3. Fetch fresh from Apps Script with timeout
-  showStatus('Loading product data…', false);
+function showSkeletons() {
+  document.getElementById('dealGrid').innerHTML = Array(8).fill(`
+    <div class="deal skel">
+      <div class="skel-line sl-s"></div>
+      <div class="skel-line sl-l" style="margin-top:10px"></div>
+      <div class="skel-line sl-m" style="margin-top:6px"></div>
+    </div>`).join('');
+}
+
+// ── Fetch ───────────────────────────────────────────────────────
+async function loadFresh(showSpinner) {
+  const btn = document.getElementById('refreshBtn');
+  const ico = document.getElementById('refreshIcon');
+  if (showSpinner) { btn.disabled = true; ico.classList.add('spin'); }
+  setErr(null);
+
   try {
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 25000);
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), 25000);
     const resp = await fetch(APPS_SCRIPT_URL + '?tab=all', {
-      cache: 'no-store', signal: controller.signal,
+      cache: 'no-store', signal: ctrl.signal,
     });
-    clearTimeout(timer);
+    clearTimeout(t);
 
-    if (!resp.ok) throw new Error('HTTP ' + resp.status);
-    // HtmlService returns text/html — parse body text as JSON
     const text = await resp.text();
-    const json = JSON.parse(text);
+    let json;
+    try { json = JSON.parse(text); }
+    catch(e) { throw new Error('Invalid response from Apps Script — check it is deployed correctly'); }
+
     if (!json.ok) throw new Error(json.error || 'Apps Script error');
+    const d = json.data || {};
 
-    const rawDeals = json.data?.deals || [];
-    allDeals = normalise(rawDeals);
+    deals     = normDeals(d.deals       || []);
+    fuel      = normFuel(d.fuel         || []);
+    coupons   = normCoupons(d.coupons   || []);
+    insurance = normIns(d.insurance     || []);
 
-    // Save to shared cache
-    try {
-      const existing = JSON.parse(localStorage.getItem(CACHE_KEY) || '{}');
-      existing.deals = rawDeals;
-      existing.ts = Date.now();
-      localStorage.setItem(CACHE_KEY, JSON.stringify(existing));
-    } catch(e) {}
-
-    if (allDeals.length) {
-      showStatus('Loaded ' + allDeals.length + ' products. Search above to compare.', false);
-    } else {
-      showStatus('Connected but no data yet. Run scrapers first from your Google Sheet.', true);
+    if (!deals.length && !coupons.length) {
+      setErr('Connected but no data yet. Open your Google Sheet → SmartSaver Connect menu → Test scrapers, then run each one.');
     }
+
+    saveCache();
+    updateStats();
+    renderDeals();
+    const lr = d.lastRun;
+    document.getElementById('lastUpdated').textContent = lr && lr.source
+      ? 'Last run: ' + lr.source + ' · ' + deals.length + ' deals'
+      : 'Updated ' + fmtTime(Date.now()) + ' · ' + deals.length + ' deals';
+
   } catch(err) {
-    const isTimeout = err.name === 'AbortError';
-    showStatus(isTimeout
-      ? 'Request timed out. Try refreshing — Apps Script can be slow on first load.'
-      : 'Could not load data: ' + err.message + '. Check your Apps Script URL and make sure it is deployed as "Anyone can access".',
-      true);
+    const msg = err.name === 'AbortError'
+      ? 'Timed out — Apps Script cold start can take ~30s, try refreshing'
+      : err.message;
+    if (deals.length) {
+      document.getElementById('lastUpdated').textContent = 'Showing cached data (' + msg + ')';
+    } else {
+      document.getElementById('dealGrid').innerHTML = '';
+      setErr('Could not load: ' + msg + ' — Is your Web App URL correct and deployed as "Anyone can access"?');
+    }
+  } finally {
+    btn.disabled = false; ico.classList.remove('spin');
+    document.getElementById('liveInd').innerHTML = '<span class="pulse" title="Auto-refreshes"></span>';
   }
 }
 
-function showStatus(msg, isError) {
-  document.getElementById('tableWrap').innerHTML =
-    '<div class="empty-state"><div class="no-data"' +
-    (isError ? ' style="color:var(--danger)"' : '') + '>' + msg + '</div></div>';
-}
+function doRefresh() { showSkeletons(); loadFresh(true); }
 
-function normalise(rows) {
+// ── Normalise ───────────────────────────────────────────────────
+function normDeals(rows) {
   return rows.filter(r => r.title).map(r => ({
-    vendor:      String(r.vendor      || ''),
-    category:    String(r.category    || ''),
-    title:       String(r.title       || ''),
-    description: String(r.description || ''),
-    priceNow:    parseNum(r.priceNow),
-    priceWas:    parseNum(r.priceWas),
-    discountPct: parseInt(r.discountPct) || 0,
-    dealUrl:     String(r.dealUrl     || ''),
-    scrapedAt:   String(r.scrapedAt   || ''),
+    vendor: str(r.vendor), category: str(r.category).toLowerCase(),
+    title: str(r.title), description: str(r.description),
+    priceNow: num(r.priceNow), priceWas: num(r.priceWas),
+    discountPct: parseInt(r.discountPct)||0,
+    dealUrl: str(r.dealUrl), scrapedAt: str(r.scrapedAt),
+  }));
+}
+function normFuel(rows) {
+  return rows.filter(r => r.stationName && r.priceCents).map(r => ({
+    stationName: str(r.stationName), brand: str(r.brand),
+    fuelType: str(r.fuelType), priceCents: parseFloat(r.priceCents)||0,
+    suburb: str(r.suburb), postcode: str(r.postcode), state: str(r.state),
+  }));
+}
+function normCoupons(rows) {
+  return rows.filter(r => r.code && r.code !== 'SEE_LINK').map(r => ({
+    vendor: str(r.vendor)||'Various', code: str(r.code),
+    description: str(r.description), discountText: str(r.discountText),
+    dealUrl: str(r.dealUrl), _coupon: true,
+  }));
+}
+function normIns(rows) {
+  return rows.filter(r => r.title).map(r => ({
+    insurer: str(r.insurer)||'Various', type: str(r.type)||'General',
+    title: str(r.title), description: str(r.description),
+    discountPct: parseInt(r.discountPct)||0,
+    saveDollars: num(r.saveDollars), dealUrl: str(r.dealUrl),
   }));
 }
 
-// ── Search ──────────────────────────────────────────────────────
-function doSearch() {
-  const q = document.getElementById('searchInput').value.trim().toLowerCase();
-  if (!q || q.length < 2) return;
-  lastQuery = q;
+// ── Render ───────────────────────────────────────────────────────
+function renderDeals() {
+  const q    = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+  const sort = document.getElementById('sortSel').value;
+  document.getElementById('fuelSec').innerHTML = '';
 
-  // Update URL
-  history.replaceState(null,'','?q='+encodeURIComponent(q));
-
-  // Filter deals
-  searchResults = allDeals.filter(d =>
-    (d.title||'').toLowerCase().includes(q) ||
-    (d.description||'').toLowerCase().includes(q)
-  );
-
-  // Build active vendor set (all vendors initially)
-  const vendors = [...new Set(searchResults.map(d=>d.vendor).filter(Boolean))].sort();
-  activeVendors = new Set(vendors);
-
-  renderVendorPills(vendors);
-  renderStats();
-  renderResults();
-
-  document.getElementById('resultsHeader').style.display = 'flex';
-  document.querySelector('.cat-row').querySelectorAll('.cat-chip')
-    .forEach(c => c.classList.remove('on'));
-}
-
-function quickSearch(el, term) {
-  document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('on'));
-  el.classList.add('on');
-  document.getElementById('searchInput').value = term;
-  doSearch();
-}
-
-// ── Vendor filter pills ─────────────────────────────────────────
-function renderVendorPills(vendors) {
-  const wrap = document.getElementById('retailerPills');
-  if (!vendors.length) { wrap.style.display = 'none'; return; }
-  wrap.style.display = 'flex';
-  wrap.innerHTML = '<span style="font-size:12px;color:var(--muted);align-self:center">Filter:</span>'
-    + vendors.map(v => `
-      <button class="r-pill on" data-vendor="${esc(v)}" onclick="toggleVendor(this,'${esc(v)}')">
-        <span class="r-pill-dot"></span>${esc(v)}
-      </button>`).join('');
-}
-
-function toggleVendor(el, vendor) {
-  if (activeVendors.has(vendor)) {
-    if (activeVendors.size === 1) return; // keep at least one
-    activeVendors.delete(vendor);
-    el.classList.remove('on');
-  } else {
-    activeVendors.add(vendor);
-    el.classList.add('on');
+  if (activeFilter === 'fuel') {
+    document.getElementById('dealGrid').innerHTML = '';
+    renderFuelView(q); return;
   }
-  renderStats();
-  renderResults();
-}
+  if (activeFilter === 'insurance') {
+    document.getElementById('dealGrid').innerHTML = '';
+    renderInsView(q); return;
+  }
 
-// ── Stats strip ─────────────────────────────────────────────────
-function renderStats() {
-  const filtered = searchResults.filter(d => activeVendors.has(d.vendor));
-  const vendors  = [...new Set(filtered.map(d=>d.vendor))];
-  const prices   = filtered.map(d=>d.priceNow).filter(Boolean);
-  const strip    = document.getElementById('statsStrip');
+  let pool = [...deals];
+  if (activeFilter === 'all' || activeFilter === 'coupon') {
+    pool = pool.concat(coupons.map(c => ({
+      vendor: c.vendor, category: 'coupon', _coupon: true,
+      title: c.code + (c.discountText ? ' - ' + c.discountText : ''),
+      description: c.description, priceNow: null, priceWas: null,
+      discountPct: 0, dealUrl: c.dealUrl, scrapedAt: '',
+    })));
+  }
 
-  if (!filtered.length) { strip.style.display='none'; return; }
-  strip.style.display = 'flex';
+  let items = pool.filter(d => {
+    const catOk = activeFilter === 'all' ? true
+      : activeFilter === 'coupon'   ? (d._coupon || d.category === 'coupon')
+      : activeFilter === 'retail'   ? (d.category === 'retail' || isRetail(d.vendor))
+      : d.category === activeFilter;
+    const qOk = !q
+      || (d.title||'').toLowerCase().includes(q)
+      || (d.description||'').toLowerCase().includes(q)
+      || (d.vendor||'').toLowerCase().includes(q);
+    return catOk && qOk;
+  });
 
-  const minP = prices.length ? Math.min(...prices) : null;
-  const maxP = prices.length ? Math.max(...prices) : null;
-  const avgP = prices.length ? prices.reduce((a,b)=>a+b,0)/prices.length : null;
-  const savings = prices.length > 1 ? maxP - minP : null;
+  if (sort === 'discount')   items.sort((a,b)=>(b.discountPct||0)-(a.discountPct||0));
+  if (sort === 'price_asc')  items.sort((a,b)=>(a.priceNow??9999)-(b.priceNow??9999));
+  if (sort === 'price_desc') items.sort((a,b)=>(b.priceNow||0)-(a.priceNow||0));
+  if (sort === 'newest')     items.sort((a,b)=>new Date(b.scrapedAt||0)-new Date(a.scrapedAt||0));
 
-  strip.innerHTML = [
-    `<div class="stat-pill"><span class="stat-num">${filtered.length}</span> results</div>`,
-    `<div class="stat-pill"><span class="stat-num">${vendors.length}</span> retailers</div>`,
-    minP ? `<div class="stat-pill">Lowest <span class="stat-num">$${minP.toFixed(2)}</span></div>` : '',
-    maxP && maxP !== minP ? `<div class="stat-pill">Highest <span class="stat-num">$${maxP.toFixed(2)}</span></div>` : '',
-    savings && savings > 0.5 ? `<div class="stat-pill">Save up to <span class="stat-num">$${savings.toFixed(2)}</span> by choosing wisely</div>` : '',
-  ].filter(Boolean).join('');
-}
-
-// ── Render results ──────────────────────────────────────────────
-function renderResults() {
-  const sort = document.getElementById('sortSelect').value;
-  let results = searchResults.filter(d => activeVendors.has(d.vendor));
-
-  if (sort === 'price_asc')  results.sort((a,b)=>(a.priceNow??99999)-(b.priceNow??99999));
-  if (sort === 'price_desc') results.sort((a,b)=>(b.priceNow??0)-(a.priceNow??0));
-  if (sort === 'discount')   results.sort((a,b)=>(b.discountPct||0)-(a.discountPct||0));
-  if (sort === 'vendor')     results.sort((a,b)=>a.vendor.localeCompare(b.vendor));
-
-  document.getElementById('resultsTitle').textContent =
-    results.length + ' results for "' + lastQuery + '"';
-
-  const prices  = results.map(d=>d.priceNow).filter(Boolean);
-  const minPrice = prices.length ? Math.min(...prices) : null;
-
-  if (!results.length) {
-    document.getElementById('tableWrap').innerHTML =
-      '<div class="empty-state"><div class="no-data"><strong>No results</strong>' +
-      'Try a different search term or enable more retailers above.</div></div>';
-    document.getElementById('cardsWrap').innerHTML = '';
+  const grid = document.getElementById('dealGrid');
+  if (!items.length) {
+    grid.innerHTML = '<div class="no-results">No deals match — try clearing the search.</div>';
     return;
   }
+  grid.innerHTML = items.slice(0,20).map(dealCard).join('');
+  if (items.length > 20) {
+    requestAnimationFrame(() => {
+      grid.insertAdjacentHTML('beforeend', items.slice(20).map(dealCard).join(''));
+    });
+  }
+  if (activeFilter === 'all' && fuel.length) renderFuelSummary();
+}
 
-  // Table (desktop)
-  document.getElementById('tableWrap').innerHTML = `
-    <div class="compare-table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th>Retailer</th>
-          <th>Product</th>
-          <th>Price</th>
-          <th>Was</th>
-          <th>Saving</th>
-          <th>Link</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${results.map(d => {
-          const isBest = minPrice && d.priceNow === minPrice;
-          const vc = vClass(d.vendor);
-          const priceCls = isBest ? 'price-best' : 'price-normal';
-          const saveAmt  = d.priceWas && d.priceNow ? (d.priceWas - d.priceNow).toFixed(2) : null;
-          return `<tr>
-            <td><span class="vendor-badge ${vc}">${esc(d.vendor)}</span></td>
-            <td>
-              <div class="item-title">${esc(d.title)}</div>
-              ${d.description ? '<div class="item-desc">'+esc(d.description.slice(0,100))+'</div>' : ''}
-            </td>
-            <td>
-              ${d.priceNow ? '<span class="'+priceCls+'">$'+d.priceNow.toFixed(2)+'</span>' : '<span style="color:var(--muted)">—</span>'}
-            </td>
-            <td>${d.priceWas ? '<span class="price-was">$'+d.priceWas.toFixed(2)+'</span>' : '—'}</td>
-            <td>
-              ${d.discountPct > 0 ? '<span class="save-badge">-'+d.discountPct+'%</span>' : ''}
-              ${saveAmt && parseFloat(saveAmt)>0 ? '<div style="font-size:11px;color:var(--danger);margin-top:2px">Save $'+saveAmt+'</div>' : ''}
-            </td>
-            <td>${d.dealUrl ? '<a class="view-link" href="'+esc(d.dealUrl)+'" target="_blank" rel="noopener">View →</a>' : '—'}</td>
-          </tr>`;
-        }).join('')}
-      </tbody>
-    </table>
-    </div>`;
+function dealCard(d) {
+  const vc = vclass(d.vendor, d.category);
+  const disc = d.discountPct > 0 ? `<span class="disc">-${d.discountPct}%</span>` : '';
+  const price = d.priceNow != null && d.priceNow > 0
+    ? `<span class="pnow">$${d.priceNow.toFixed(2)}</span>${d.priceWas > 0 ? `<span class="pwas">$${d.priceWas.toFixed(2)}</span>` : ''}`
+    : '';
+  const link = d.dealUrl ? `<a class="dlink" href="${e(d.dealUrl)}" target="_blank" rel="noopener">View deal →</a>` : '';
+  const copy = d._coupon ? `<button class="cpybtn" onclick="cpyCode('${e(d.code||'')}',this)">Copy ${e(d.code||'')}</button>` : '';
+  return `<div class="deal">
+    <div class="deal-top"><span class="vbadge ${vc}">${e(d.vendor)}</span>${disc}</div>
+    <div class="deal-title">${e(d.title)}</div>
+    ${d.description ? `<div class="deal-desc">${e(d.description)}</div>` : ''}
+    <div class="deal-footer"><div>${price}</div></div>
+    ${copy}${link}
+  </div>`;
+}
 
-  // Cards (mobile)
-  document.getElementById('cardsWrap').innerHTML = results.map(d => {
-    const isBest = minPrice && d.priceNow === minPrice;
-    const vc = vClass(d.vendor);
-    const saveAmt = d.priceWas && d.priceNow ? (d.priceWas - d.priceNow).toFixed(2) : null;
-    return `<div class="cmp-card ${isBest ? 'best-card' : ''}">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
-        <span class="vendor-badge ${vc}">${esc(d.vendor)}</span>
-        ${isBest ? '<span class="best-label">Lowest price</span>' : ''}
-      </div>
-      <div class="item-title">${esc(d.title)}</div>
-      ${d.description ? '<div class="item-desc">'+esc(d.description.slice(0,90))+'</div>' : ''}
-      <div style="display:flex;align-items:baseline;gap:8px;margin-top:4px">
-        ${d.priceNow ? '<span class="'+(isBest?'price-best':'price-normal')+'">$'+d.priceNow.toFixed(2)+'</span>' : ''}
-        ${d.priceWas ? '<span class="price-was">$'+d.priceWas.toFixed(2)+'</span>' : ''}
-      </div>
-      ${d.discountPct > 0 ? '<span class="save-badge">-'+d.discountPct+'% off</span>' : ''}
-      ${saveAmt && parseFloat(saveAmt)>0 ? '<span class="save-badge">Save $'+saveAmt+'</span>' : ''}
-      ${d.dealUrl ? '<a class="view-link" href="'+esc(d.dealUrl)+'" target="_blank" rel="noopener">View at '+esc(d.vendor)+' →</a>' : ''}
-    </div>`;
-  }).join('');
+function renderFuelView(q) {
+  let items = fuel.filter(f => !q
+    || (f.stationName||'').toLowerCase().includes(q)
+    || (f.brand||'').toLowerCase().includes(q)
+    || (f.fuelType||'').toLowerCase().includes(q));
+  if (!items.length) {
+    document.getElementById('fuelSec').innerHTML = '<div class="no-results">No fuel prices yet — run the fuel scraper first.</div>'; return;
+  }
+  const byType = {};
+  items.forEach(f => { if (!byType[f.fuelType]||f.priceCents<byType[f.fuelType].priceCents) byType[f.fuelType]=f; });
+  const best = Object.values(byType).sort((a,b)=>a.priceCents-b.priceCents);
+  document.getElementById('fuelSec').innerHTML =
+    `<div class="sec-title">Best prices near you</div>
+    <div class="fuel-grid">${best.map(fuelCard).join('')}</div>
+    <div class="sec-title" style="margin-top:1.5rem">All stations</div>
+    <div class="fuel-grid">${items.sort((a,b)=>a.priceCents-b.priceCents).slice(0,20).map(fuelCard).join('')}</div>`;
+}
+
+function renderFuelSummary() {
+  const ulp = fuel.filter(f=>f.fuelType==='ULP'||f.fuelType==='E10').sort((a,b)=>a.priceCents-b.priceCents).slice(0,4);
+  if (!ulp.length) return;
+  document.getElementById('fuelSec').innerHTML =
+    `<div class="sec-title">Best ULP near you</div><div class="fuel-grid">${ulp.map(fuelCard).join('')}</div>`;
+}
+
+function fuelCard(f) {
+  return `<div class="fuel-card">
+    <div class="fuel-type">${e(f.fuelType)}</div>
+    <div class="fuel-price">${f.priceCents}¢/L</div>
+    <div class="fuel-meta">${e(f.brand||f.stationName)}<br>${e(f.stationName)}<br>${[f.suburb,f.postcode].filter(Boolean).map(e).join(', ')}</div>
+  </div>`;
+}
+
+function renderInsView(q) {
+  let items = insurance.filter(o => !q
+    || (o.title||'').toLowerCase().includes(q)
+    || (o.insurer||'').toLowerCase().includes(q)
+    || (o.type||'').toLowerCase().includes(q));
+  if (!items.length) {
+    document.getElementById('fuelSec').innerHTML = '<div class="no-results">No insurance offers yet.</div>'; return;
+  }
+  const byType = {};
+  items.forEach(o => (byType[o.type]=byType[o.type]||[]).push(o));
+  const order = ['Car','Home','Health','Pet','Travel','Life','Income Protection','General'];
+  let html = '';
+  [...order, ...Object.keys(byType).filter(t=>!order.includes(t))].forEach(t => {
+    if (!byType[t]?.length) return;
+    html += `<div class="sec-title">${e(t)} Insurance</div><div class="ins-grid">${byType[t].map(insCard).join('')}</div>`;
+  });
+  document.getElementById('fuelSec').innerHTML = html;
+}
+
+function insCard(o) {
+  const disc = o.discountPct > 0 ? `<span class="disc">-${o.discountPct}%</span>`
+    : o.saveDollars > 0 ? `<span class="disc">Save $${o.saveDollars}</span>` : '';
+  const link = o.dealUrl ? `<a class="dlink" href="${e(o.dealUrl)}" target="_blank" rel="noopener">View offer →</a>` : '';
+  return `<div class="ins-card">
+    <div class="ins-top"><span class="vbadge v-ins">${e(o.insurer)}</span><span class="ins-type">${e(o.type)}</span>${disc}</div>
+    <div class="ins-title">${e(o.title)}</div>
+    ${o.description ? `<div class="ins-desc">${e(o.description)}</div>` : ''}
+    ${link}
+  </div>`;
+}
+
+// ── Stats ────────────────────────────────────────────────────────
+function updateStats() {
+  document.getElementById('sTot').textContent  = deals.length || '—';
+  const discs = deals.filter(d=>d.discountPct>0).map(d=>d.discountPct);
+  document.getElementById('sDisc').textContent = discs.length
+    ? Math.round(discs.reduce((a,b)=>a+b,0)/discs.length)+'%' : '—';
+  const ulp = fuel.filter(f=>f.fuelType==='ULP'||f.fuelType==='E10');
+  document.getElementById('sFuel').textContent  = ulp.length ? Math.min(...ulp.map(f=>f.priceCents)) : '—';
+  document.getElementById('sCpn').textContent   = coupons.length || '—';
+  document.getElementById('sIns').textContent   = insurance.length || '—';
 }
 
 // ── Helpers ──────────────────────────────────────────────────────
-function vClass(v) {
+function setFilter(el) {
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
+  el.classList.add('on');
+  activeFilter = el.dataset.cat;
+  renderDeals();
+}
+
+function onSearch() {
+  renderDeals();
+  const q = (document.getElementById('searchInput').value || '').trim();
+  const bar = document.getElementById('cmpBar');
+  if (q.length >= 2) {
+    const vendors = [...new Set(deals.filter(d =>
+      (d.title||'').toLowerCase().includes(q.toLowerCase()) ||
+      (d.description||'').toLowerCase().includes(q.toLowerCase())
+    ).map(d=>d.vendor).filter(Boolean))];
+    document.getElementById('cmpBarText').textContent = vendors.length > 1
+      ? `Found at ${vendors.length} retailers — compare prices`
+      : `Search results — open comparison view`;
+    bar.classList.add('show');
+  } else {
+    bar.classList.remove('show');
+  }
+}
+
+function goCompare() {
+  const q = (document.getElementById('searchInput').value || '').trim();
+  window.open('compare.html' + (q ? '?q=' + encodeURIComponent(q) : ''), '_blank');
+}
+
+function isRetail(v) {
+  return ['big w','bigw','chemist warehouse','jb hi-fi','officeworks',
+    'harvey norman','kogan','catch','myer','target'].some(r=>(v||'').toLowerCase().includes(r));
+}
+
+function vclass(v, cat) {
   const n = (v||'').toLowerCase();
-  if (n.includes('woolworths')) return 'v-woolworths';
+  if (n.includes('woolworths')) return 'v-ww';
   if (n.includes('coles'))      return 'v-coles';
   if (n.includes('aldi'))       return 'v-aldi';
-  if (n.includes('amazon'))     return 'v-amazon';
-  if (n.includes('big w')||n.includes('bigw')) return 'v-bigw';
-  if (n.includes('chemist'))    return 'v-chemist';
-  if (n.includes('kogan'))      return 'v-kogan';
-  if (n.includes('jb'))         return 'v-jb';
-  return 'v-default';
+  if (n.includes('amazon'))     return 'v-amz';
+  if (n.includes('fuel')||n.includes('ampol')||n.includes('bp')||n.includes('shell')||n.includes('7-eleven')||n.includes('united')||n.includes('puma')) return 'v-fuel';
+  if (n.includes('big w')||n.includes('bigw'))    return 'v-bw';
+  if (n.includes('chemist'))    return 'v-cw';
+  if (cat === 'coupon')         return 'v-cpn';
+  if (cat === 'insurance')      return 'v-ins';
+  return 'v-def';
 }
-function esc(s){
-  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+function cpyCode(code, btn) {
+  navigator.clipboard.writeText(code).then(() => {
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy ' + code, 1800);
+  });
 }
-function parseNum(v){ const n=parseFloat(v); return isNaN(n)?null:n; }
+
+function setErr(msg) {
+  document.getElementById('errArea').innerHTML = msg
+    ? `<div class="err-box">${msg}</div>` : '';
+}
+
+function str(v) { return String(v||''); }
+function num(v) { const n=parseFloat(v); return isNaN(n)?null:n; }
+function e(s)   { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function fmtTime(ts) {
+  return new Date(ts).toLocaleString('en-AU',{hour:'2-digit',minute:'2-digit',day:'numeric',month:'short'});
+}
+
+function getCache() {
+  try {
+    const o = JSON.parse(localStorage.getItem(CACHE_KEY)||'null');
+    return o && (o.deals||[]).length ? o : null;
+  } catch { return null; }
+}
+function saveCache() {
+  try {
+    localStorage.setItem(CACHE_KEY, JSON.stringify({
+      ts: Date.now(), deals, coupons, fuel, insurance,
+    }));
+  } catch {}
+}
 </script>
 </body>
 </html>
