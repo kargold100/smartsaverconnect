@@ -269,7 +269,7 @@ select{padding:9px 12px;border:1px solid var(--border);border-radius:8px;backgro
 // REPLACE THIS with your deployed Apps Script Web App URL
 // Extensions → Apps Script → Deploy → New deployment → Web App
 // ─────────────────────────────────────────────────────────────
-const APPS_SCRIPT_URL = 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz60iBo_PfKtmny2YmwFgjvCCIMDoXpHWf7KBPVDfUNBA8VtRybMCSwn7Ze9wvCdg8KHA/exec';
 
 const CACHE_KEY = 'smartsaver_connect_v3';
 const CACHE_TTL = 2 * 60 * 60 * 1000;
@@ -283,7 +283,7 @@ let _fetchController = null;
 
 // ── Boot ─────────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', () => {
-  if (APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbz60iBo_PfKtmny2YmwFgjvCCIMDoXpHWf7KBPVDfUNBA8VtRybMCSwn7Ze9wvCdg8KHA/exec') {
+  if (APPS_SCRIPT_URL === 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE') {
     document.getElementById('configBanner').style.display = 'flex';
   }
   // Show cached data instantly, then refresh in background
@@ -344,7 +344,9 @@ async function fetchFresh(showSpinner) {
     clearTimeout(timer);
 
     if (!resp.ok) throw new Error('Server returned HTTP ' + resp.status);
-    const json = await resp.json();
+    // HtmlService returns text/html even though content is JSON
+    const text = await resp.text();
+    const json = JSON.parse(text);
     if (!json.ok) throw new Error(json.error || 'Apps Script returned an error');
 
     const data = json.data || {};
