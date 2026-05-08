@@ -138,6 +138,40 @@ select{padding:9px 12px;border:1px solid var(--border);border-radius:8px;backgro
 .s-med   { width: 65%; }
 .s-long  { width: 90%; }
 @keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+
+/* Price comparison */
+.compare-bar{background:var(--accent-bg);border:1px solid var(--accent);border-radius:var(--radius);padding:12px 16px;margin-bottom:1.25rem;display:none;align-items:center;gap:12px;flex-wrap:wrap}
+.compare-bar.show{display:flex}
+.compare-title{font-size:13px;font-weight:600;color:var(--accent);flex:1;min-width:160px}
+.compare-chips{display:flex;gap:6px;flex-wrap:wrap}
+.compare-chip{font-size:12px;padding:3px 10px;border-radius:12px;background:var(--card);border:1px solid var(--border);color:var(--text)}
+.compare-btn{font-size:12px;padding:5px 12px;border-radius:8px;background:var(--accent);color:#fff;border:0;cursor:pointer;white-space:nowrap}
+.compare-btn:hover{opacity:.85}
+
+/* Compare modal */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:100;align-items:center;justify-content:center;padding:16px}
+.modal-overlay.show{display:flex}
+.modal{background:var(--card);border-radius:var(--radius);max-width:720px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 8px 40px rgba(0,0,0,.25)}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border)}
+.modal-head h2{font-size:16px;font-weight:600}
+.modal-close{background:none;border:none;font-size:20px;cursor:pointer;color:var(--muted);line-height:1}
+.modal-body{padding:20px}
+.compare-query{font-size:13px;color:var(--muted);margin-bottom:16px}
+.compare-table{width:100%;border-collapse:collapse;font-size:13px}
+.compare-table th{text-align:left;padding:8px 10px;border-bottom:2px solid var(--border);color:var(--muted);font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:.04em}
+.compare-table td{padding:10px;border-bottom:1px solid var(--border);vertical-align:top}
+.compare-table tr:last-child td{border-bottom:none}
+.compare-table tr:hover td{background:var(--bg)}
+.best-price{font-weight:700;color:var(--accent)}
+.cmp-price{font-size:15px;font-weight:600}
+.cmp-was{font-size:12px;color:var(--hint);text-decoration:line-through}
+.cmp-save{font-size:11px;color:var(--danger);margin-top:2px}
+.cmp-link{font-size:12px;color:var(--accent);text-decoration:none}
+.cmp-link:hover{text-decoration:underline}
+.cmp-vendor{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px}
+.no-compare{text-align:center;padding:2rem;color:var(--muted);font-size:14px}
+.compare-tip{font-size:12px;color:var(--muted);margin-top:16px;padding-top:12px;border-top:1px solid var(--border)}
+
 </style>
 </head>
 <body>
@@ -199,6 +233,25 @@ select{padding:9px 12px;border:1px solid var(--border);border-radius:8px;backgro
     <button class="chip"    data-cat="coupon"     onclick="setFilter(this)">Coupons</button>
     <button class="chip"    data-cat="fuel"       onclick="setFilter(this)">Fuel</button>
     <button class="chip"    data-cat="insurance"  onclick="setFilter(this)">Insurance</button>
+  </div>
+
+
+  <!-- Price compare bar (appears when searching) -->
+  <div class="compare-bar" id="compareBar">
+    <span class="compare-title" id="compareTitle">Compare prices</span>
+    <div class="compare-chips" id="compareChips"></div>
+    <button class="compare-btn" onclick="openCompare()">Compare across retailers →</button>
+  </div>
+
+  <!-- Compare modal -->
+  <div class="modal-overlay" id="compareModal" onclick="closeCompare(event)">
+    <div class="modal">
+      <div class="modal-head">
+        <h2>Price comparison</h2>
+        <button class="modal-close" onclick="closeCompareBtn()">&#x2715;</button>
+      </div>
+      <div class="modal-body" id="compareBody"></div>
+    </div>
   </div>
 
   <!-- ── Main content ── -->
@@ -379,6 +432,7 @@ function normaliseInsurance(rows) {
 // ── Render ────────────────────────────────────────────────────
 function renderDeals() {
   const q    = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+  updateCompareBar(q);
   const sort = document.getElementById('sortSelect').value;
 
   document.getElementById('fuelSection').innerHTML = '';
@@ -641,4 +695,125 @@ function trySaveCache() {
     }));
   } catch {}
 }
+
+// ── Price Comparison ─────────────────────────────────────────
+// Shows when a search term is entered and multiple retailers have results
+
+function updateCompareBar(q) {
+  const bar    = document.getElementById('compareBar');
+  const title  = document.getElementById('compareTitle');
+  const chips  = document.getElementById('compareChips');
+  if (!q || q.length < 2) { bar.classList.remove('show'); return; }
+
+  // Find how many distinct vendors have matches
+  const matches = [...allDeals].filter(d =>
+    (d.title||'').toLowerCase().includes(q) ||
+    (d.description||'').toLowerCase().includes(q)
+  );
+  const vendors = [...new Set(matches.map(d => d.vendor))].filter(Boolean);
+  if (vendors.length < 2) { bar.classList.remove('show'); return; }
+
+  title.textContent = 'Found "' + q + '" at ' + vendors.length + ' retailers';
+  chips.innerHTML = vendors.slice(0, 5).map(v =>
+    '<span class="compare-chip">' + esc(v) + '</span>'
+  ).join('');
+  bar.classList.add('show');
+}
+
+function openCompare() {
+  const q = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+  if (!q) return;
+
+  // Gather all deals matching the search, grouped by vendor
+  const matches = [...allDeals].filter(d =>
+    (d.title||'').toLowerCase().includes(q) ||
+    (d.description||'').toLowerCase().includes(q)
+  );
+
+  // Group by vendor, pick cheapest matching deal per vendor
+  const byVendor = {};
+  matches.forEach(d => {
+    if (!byVendor[d.vendor]) byVendor[d.vendor] = [];
+    byVendor[d.vendor].push(d);
+  });
+
+  // Sort each vendor's results by price
+  Object.keys(byVendor).forEach(v => {
+    byVendor[v].sort((a,b) => {
+      if (a.priceNow && b.priceNow) return a.priceNow - b.priceNow;
+      if (a.priceNow) return -1;
+      if (b.priceNow) return 1;
+      return (b.discountPct||0) - (a.discountPct||0);
+    });
+  });
+
+  const vendors  = Object.keys(byVendor);
+  const allPrices = vendors.map(v => byVendor[v][0]?.priceNow).filter(Boolean);
+  const minPrice  = allPrices.length ? Math.min(...allPrices) : null;
+
+  const body = document.getElementById('compareBody');
+  if (!vendors.length) {
+    body.innerHTML = '<div class="no-compare">No matching deals found across retailers.</div>';
+  } else {
+    body.innerHTML = `
+      <p class="compare-query">Showing results for "<strong>${esc(q)}</strong>" across ${vendors.length} retailer${vendors.length>1?'s':''}</p>
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Retailer</th>
+            <th>Best match</th>
+            <th>Price</th>
+            <th>Saving</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          ${vendors.map(v => {
+            const best = byVendor[v][0];
+            const isBest = minPrice && best.priceNow === minPrice;
+            const vc = vendorClass(v, best.category);
+            const priceHtml = best.priceNow
+              ? `<div class="cmp-price ${isBest ? 'best-price' : ''}">$${best.priceNow.toFixed(2)}${isBest ? ' ✓' : ''}</div>
+                 ${best.priceWas ? '<div class="cmp-was">$'+best.priceWas.toFixed(2)+'</div>' : ''}`
+              : '<span style="color:var(--muted)">—</span>';
+            const saveHtml = best.discountPct > 0
+              ? `<div class="cmp-save">-${best.discountPct}% off</div>`
+              : best.priceWas && best.priceNow
+                ? `<div class="cmp-save">Save $${(best.priceWas - best.priceNow).toFixed(2)}</div>`
+                : '—';
+            const moreCount = byVendor[v].length - 1;
+            return `<tr>
+              <td><span class="cmp-vendor vendor ${vc}">${esc(v)}</span></td>
+              <td>
+                <div style="font-size:13px;font-weight:500">${esc(best.title)}</div>
+                ${best.description ? '<div style="font-size:11px;color:var(--muted);margin-top:3px">'+esc(best.description.slice(0,80))+'</div>' : ''}
+                ${moreCount > 0 ? '<div style="font-size:11px;color:var(--muted);margin-top:4px">+'+moreCount+' more deal'+(moreCount>1?'s':'')+' at this retailer</div>' : ''}
+              </td>
+              <td>${priceHtml}</td>
+              <td>${saveHtml}</td>
+              <td>${best.dealUrl ? '<a class="cmp-link" href="'+esc(best.dealUrl)+'" target="_blank" rel="noopener">View →</a>' : ''}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+      <p class="compare-tip">Tip: Prices shown are the best (cheapest) match found per retailer for your search. Click "View" to go directly to that retailer's product page.</p>
+    `;
+  }
+
+  document.getElementById('compareModal').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCompare(e) {
+  if (e.target === document.getElementById('compareModal')) closeCompareBtn();
+}
+function closeCompareBtn() {
+  document.getElementById('compareModal').classList.remove('show');
+  document.body.style.overflow = '';
+}
+// Close on Escape key
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeCompareBtn();
+});
+
 </script>
