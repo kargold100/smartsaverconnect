@@ -269,7 +269,7 @@ select{padding:9px 12px;border:1px solid var(--border);border-radius:8px;backgro
 // REPLACE THIS with your deployed Apps Script Web App URL
 // Extensions → Apps Script → Deploy → New deployment → Web App
 // ─────────────────────────────────────────────────────────────
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz60iBo_PfKtmny2YmwFgjvCCIMDoXpHWf7KBPVDfUNBA8VtRybMCSwn7Ze9wvCdg8KHA/exec';
+const APPS_SCRIPT_URL = 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
 
 const CACHE_KEY = 'smartsaver_connect_v3';
 const CACHE_TTL = 2 * 60 * 60 * 1000;
@@ -283,23 +283,23 @@ let _fetchController = null;
 
 // ── Boot ─────────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', () => {
-  if (APPS_SCRIPT_URL === 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE') {
+  if (APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbz60iBo_PfKtmny2YmwFgjvCCIMDoXpHWf7KBPVDfUNBA8VtRybMCSwn7Ze9wvCdg8KHA/exec') {
     document.getElementById('configBanner').style.display = 'flex';
   }
-  // Show cached data INSTANTLY while fresh data loads in background
+  // Show cached data instantly, then refresh in background
   const cached = tryGetCache();
-  if (cached) {
+  if (cached && (cached.deals||[]).length) {
     allDeals     = cached.deals     || [];
     allCoupons   = cached.coupons   || [];
     allFuel      = cached.fuel      || [];
     allInsurance = cached.insurance || [];
     updateStats();
     renderDeals();
-    setSubtitle('From cache · refreshing…');
-    // Still fetch fresh in background (silent, no spinner)
+    setSubtitle('From cache · last updated ' + formatTime(cached.ts));
+    // Refresh in background only if cache is stale
     if (Date.now() - cached.ts > CACHE_TTL) fetchFresh(false);
-    else setSubtitle('From cache · last updated ' + formatTime(cached.ts));
   } else {
+    // No cache — fetch fresh (shows skeletons while loading)
     showSkeletons();
     fetchFresh(true);
   }
@@ -319,55 +319,70 @@ function showSkeletons() {
   setSubtitle('Loading deals…');
 }
 
-// ── Fetch from Apps Script ───────────────────────────────────
+// ── Fetch from Apps Script ─────────────────────────────────────
 async function fetchFresh(showSpinner) {
   const btn  = document.getElementById('refreshBtn');
   const icon = document.getElementById('refreshIcon');
   if (showSpinner) { btn.disabled = true; icon.classList.add('spin'); }
   showError(null);
 
-  try {
-    // Single fetch — doGet returns all tabs at once
-    const url = APPS_SCRIPT_URL + '?tab=all';
-    const resp = await fetch(url, { cache: 'no-store' });
-    if (!resp.ok) throw new Error('HTTP ' + resp.status);
-    const json = await resp.json();
-    if (!json.ok) throw new Error(json.error || 'Apps Script error');
-    const data = json.data || {};
+  // Guard: URL not configured
+  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes('YOUR_')) {
+    document.getElementById('dealsContainer').innerHTML = '';
+    showError('Setup needed: open index.html and replace YOUR_APPS_SCRIPT_WEB_APP_URL_HERE with your Apps Script Web App URL. See SETUP.md for instructions.');
+    btn.disabled = false; icon.classList.remove('spin');
+    return;
+  }
 
+  try {
+    // 25s timeout — Apps Script cold starts can be slow
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 25000);
+    const resp = await fetch(APPS_SCRIPT_URL + '?tab=all', {
+      cache: 'no-store', signal: controller.signal,
+    });
+    clearTimeout(timer);
+
+    if (!resp.ok) throw new Error('Server returned HTTP ' + resp.status);
+    const json = await resp.json();
+    if (!json.ok) throw new Error(json.error || 'Apps Script returned an error');
+
+    const data = json.data || {};
     allDeals     = normaliseDeals(data.deals       || []);
     allFuel      = normaliseFuel(data.fuel          || []);
     allCoupons   = normaliseCoupons(data.coupons    || []);
     allInsurance = normaliseInsurance(data.insurance || []);
+
+    if (!allDeals.length && !allCoupons.length) {
+      showError('Connected OK but no data yet. Open your Google Sheet → SmartSaver Connect → Test scrapers, and run each one.');
+    }
 
     trySaveCache();
     updateStats();
     renderDeals();
 
     const lr = data.lastRun;
-    if (lr && lr.finishedAt) {
-      setSubtitle('Last scraped ' + formatTime(new Date(lr.finishedAt).getTime())
-        + ' · ' + allDeals.length + ' deals · ' + allCoupons.length + ' coupons');
-    } else {
-      setSubtitle('Updated ' + formatTime(Date.now())
-        + ' · ' + allDeals.length + ' deals');
-    }
+    setSubtitle(lr && lr.source
+      ? 'Last run: ' + lr.source + ' · ' + allDeals.length + ' deals'
+      : 'Updated ' + formatTime(Date.now()) + ' · ' + allDeals.length + ' deals');
+
   } catch (err) {
+    const isTimeout = err.name === 'AbortError';
+    const msg = isTimeout
+      ? 'Timed out — Apps Script cold start can take 30s, try refreshing'
+      : err.message;
     if (allDeals.length) {
-      setSubtitle('Could not refresh — showing cached data');
+      setSubtitle('Showing cached data (' + msg + ')');
     } else {
-      showError('Could not load: ' + err.message
-        + (APPS_SCRIPT_URL.includes('YOUR_') ? ' — paste your Apps Script Web App URL into index.html' : ''));
       document.getElementById('dealsContainer').innerHTML = '';
+      showError('Could not load: ' + msg + '<br><small>Is your Apps Script URL correct? Is the Web App deployed as "Anyone can access"?</small>');
     }
   } finally {
-    btn.disabled = false;
-    icon.classList.remove('spin');
+    btn.disabled = false; icon.classList.remove('spin');
     document.getElementById('liveIndicator').innerHTML =
-      '<span class="pulse" title="Data refreshes automatically"></span>';
+      '<span class="pulse" title="Refreshes automatically"></span>';
   }
 }
-
 // Refresh button — force new fetch
 async function loadAll(forceRefresh = false) {
   if (forceRefresh) {
