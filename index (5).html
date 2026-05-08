@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SmartSaver Connect</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f5f4f0;--card:#fff;--text:#1a1a18;--muted:#6b6a65;--hint:#9e9d98;
+  --border:rgba(0,0,0,0.08);--accent:#1a6b3c;--accent-bg:#e8f5ee;
+  --danger:#c0392b;--danger-bg:#fde8e6;--warn:#92600a;--warn-bg:#fef3cd;
+  --radius:12px;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#18181a;--card:#232325;--text:#e8e6df;--muted:#9a9890;--hint:#6a6860;
+  --border:rgba(255,255,255,0.08);--accent:#4caf7a;--accent-bg:#0e2d1a;
+  --danger:#e57373;--danger-bg:#2d0e0e;--warn:#f0c060;--warn-bg:#2a1e00;
+}}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+/* Layout */
+.wrap{max-width:1100px;margin:0 auto;padding:1.5rem 1rem 4rem}
+
+/* Header */
+.header{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:1.5rem}
+.logo{font-size:24px;font-weight:800;letter-spacing:-0.5px}
+.logo span{color:var(--accent)}
+.header-sub{font-size:13px;color:var(--muted);margin-top:3px}
+.header-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.btn{display:flex;align-items:center;gap:6px;padding:8px 16px;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-size:13px;cursor:pointer;white-space:nowrap;transition:opacity .15s}
+.btn:hover{opacity:.75}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn-primary{background:var(--accent-bg);color:var(--accent);border-color:var(--accent)}
+.spin{display:inline-block;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Config banner */
+.config-banner{background:var(--warn-bg);color:var(--warn);border:1px solid var(--warn);border-radius:var(--radius);padding:12px 16px;margin-bottom:1.25rem;font-size:13px;display:flex;gap:10px;align-items:flex-start}
+.config-banner code{background:rgba(0,0,0,0.08);padding:1px 6px;border-radius:4px;font-size:12px}
+
+/* Stats */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:1.5rem}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px}
+.stat-num{font-size:22px;font-weight:700}
+.stat-lbl{font-size:11px;color:var(--muted);margin-top:3px;text-transform:uppercase;letter-spacing:.04em}
+
+/* Controls */
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:1rem}
+.search-wrap{flex:1;min-width:200px;position:relative}
+.search-wrap input{width:100%;padding:9px 12px 9px 36px;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-size:14px}
+.search-wrap input:focus{outline:2px solid var(--accent)}
+.search-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:15px;pointer-events:none;opacity:.4}
+select{padding:9px 12px;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-size:13px;cursor:pointer}
+
+/* Filter chips */
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.25rem}
+.chip{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:var(--card);color:var(--muted);font-size:13px;cursor:pointer;transition:all .15s;white-space:nowrap}
+.chip:hover{border-color:var(--accent);color:var(--accent)}
+.chip.on{background:var(--accent-bg);color:var(--accent);border-color:var(--accent)}
+
+/* Deal grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.deal{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;display:flex;flex-direction:column;gap:8px}
+.deal-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.vendor{font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;white-space:nowrap}
+.v-woolworths{background:#e8f5e9;color:#2e7d32}
+.v-coles{background:#fce4ec;color:#c62828}
+.v-aldi{background:#e3f2fd;color:#1565c0}
+.v-amazon{background:#fff3e0;color:#e65100}
+.v-fuel{background:#ede7f6;color:#4527a0}
+.v-coupon{background:#e0f7fa;color:#006064}
+.v-bigw{background:#e1f5fe;color:#01579b}
+.v-chemist{background:#fbe9e7;color:#bf360c}
+.v-default{background:#f5f5f5;color:#424242}
+@media(prefers-color-scheme:dark){
+  .v-woolworths{background:#0d2e12;color:#81c784}
+  .v-coles{background:#2d0b10;color:#ef9a9a}
+  .v-aldi{background:#0a1929;color:#90caf9}
+  .v-amazon{background:#1a1200;color:#ffcc80}
+  .v-fuel{background:#1a0e2a;color:#ce93d8}
+  .v-coupon{background:#00131a;color:#80deea}
+  .v-bigw{background:#001825;color:#81d4fa}
+  .v-chemist{background:#2a0e00;color:#ffab91}
+  .v-default{background:#2a2a2a;color:#bdbdbd}
+}
+.disc-pill{font-size:12px;font-weight:700;background:var(--danger-bg);color:var(--danger);padding:3px 9px;border-radius:20px;white-space:nowrap}
+.deal-title{font-size:14px;font-weight:600;line-height:1.4}
+.deal-desc{font-size:12px;color:var(--muted);line-height:1.5}
+.deal-footer{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:4px}
+.price-now{font-size:17px;font-weight:700}
+.price-was{font-size:12px;color:var(--hint);text-decoration:line-through;margin-left:5px}
+.deal-link{display:block;font-size:12px;color:var(--accent);text-decoration:none;margin-top:4px}
+.deal-link:hover{text-decoration:underline}
+.copy-btn{font-size:12px;padding:4px 10px;border:1px solid var(--border);border-radius:7px;background:transparent;color:var(--muted);cursor:pointer}
+.copy-btn:hover{background:var(--bg)}
+
+/* Fuel section */
+.section-title{font-size:16px;font-weight:600;margin:1.75rem 0 .75rem}
+.fuel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
+.fuel-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:12px}
+.fuel-price{font-size:22px;font-weight:700;color:var(--accent)}
+.fuel-type-badge{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:12px;background:var(--accent-bg);color:var(--accent);margin-bottom:6px}
+.fuel-meta{font-size:12px;color:var(--muted);line-height:1.6}
+
+/* States */
+.loading{text-align:center;padding:3rem}
+.spinner{width:28px;height:28px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 12px}
+.empty{text-align:center;padding:3rem;color:var(--muted);font-size:14px}
+.no-results{grid-column:1/-1;text-align:center;padding:2rem;color:var(--muted)}
+.error-box{background:var(--danger-bg);color:var(--danger);border-radius:var(--radius);padding:1rem 1.25rem;font-size:13px;margin-bottom:1rem}
+.last-updated{font-size:11px;color:var(--hint);text-align:right;margin-top:1.25rem}
+
+/* Refresh indicator */
+.pulse{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ── CONFIG BANNER (hidden once URL is set) ── -->
+  <div class="config-banner" id="configBanner" style="display:none">
+    ⚠ Set your Apps Script Web App URL below, then this banner disappears.
+    Open this file, find <code>APPS_SCRIPT_URL</code> near the top of the script, and replace the placeholder.
+  </div>
+
+  <!-- ── Header ── -->
+  <div class="header">
+    <div>
+      <div class="logo">SmartSaver<span>Connect</span></div>
+      <div class="header-sub" id="headerSub">Loading…</div>
+    </div>
+    <div class="header-actions">
+      <span id="liveIndicator"></span>
+      <button class="btn" id="refreshBtn" onclick="loadAll(true)">
+        <span id="refreshIcon">↻</span> Refresh now
+      </button>
+    </div>
+  </div>
+
+  <div id="errorArea"></div>
+
+  <!-- ── Stats ── -->
+  <div class="stats">
+    <div class="stat"><div class="stat-num" id="sTotalDeals">—</div><div class="stat-lbl">Active deals</div></div>
+    <div class="stat"><div class="stat-num" id="sAvgDisc">—</div><div class="stat-lbl">Avg discount</div></div>
+    <div class="stat"><div class="stat-num" id="sBestFuel">—</div><div class="stat-lbl">Best ULP (c/L)</div></div>
+    <div class="stat"><div class="stat-num" id="sCoupons">—</div><div class="stat-lbl">Coupons</div></div>
+  </div>
+
+  <!-- ── Controls ── -->
+  <div class="controls">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Search deals, products, stores…" oninput="renderDeals()"/>
+    </div>
+    <select id="sortSelect" onchange="renderDeals()">
+      <option value="discount">Highest discount</option>
+      <option value="price_asc">Price ↑</option>
+      <option value="price_desc">Price ↓</option>
+      <option value="newest">Newest first</option>
+    </select>
+  </div>
+
+  <!-- ── Filter chips ── -->
+  <div class="filters">
+    <button class="chip on" data-cat="all"        onclick="setFilter(this)">All</button>
+    <button class="chip"    data-cat="woolworths" onclick="setFilter(this)">Woolworths</button>
+    <button class="chip"    data-cat="coles"      onclick="setFilter(this)">Coles</button>
+    <button class="chip"    data-cat="aldi"       onclick="setFilter(this)">ALDI</button>
+    <button class="chip"    data-cat="amazon"     onclick="setFilter(this)">Amazon AU</button>
+    <button class="chip"    data-cat="coupon"     onclick="setFilter(this)">Coupons</button>
+    <button class="chip"    data-cat="fuel"       onclick="setFilter(this)">Fuel</button>
+  </div>
+
+  <!-- ── Main content ── -->
+  <div id="dealsContainer">
+    <div class="loading"><div class="spinner"></div>Loading today's deals…</div>
+  </div>
+  <div id="fuelSection"></div>
+
+  <div class="last-updated" id="lastUpdated"></div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────────────────────
+// REPLACE THIS with your deployed Apps Script Web App URL
+// Extensions → Apps Script → Deploy → New deployment → Web App
+// ─────────────────────────────────────────────────────────────
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz60iBo_PfKtmny2YmwFgjvCCIMDoXpHWf7KBPVDfUNBA8VtRybMCSwn7Ze9wvCdg8KHA/exec';
+
+const CACHE_KEY = 'smartsaver_connect_v1';
+const CACHE_TTL = 2 * 60 * 60 * 1000; // 2 hours — matches trigger frequency
+
+let allDeals   = [];
+let allCoupons = [];
+let allFuel    = [];
+let activeFilter = 'all';
+
+// ── Boot ────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  if (APPS_SCRIPT_URL === 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE') {
+    document.getElementById('configBanner').style.display = 'flex';
+  }
+  loadAll();
+});
+
+// ── Load all data ───────────────────────────────────────────
+async function loadAll(forceRefresh = false) {
+  const btn  = document.getElementById('refreshBtn');
+  const icon = document.getElementById('refreshIcon');
+  btn.disabled = true;
+  icon.classList.add('spin');
+  showError(null);
+
+  try {
+    const cached = forceRefresh ? null : tryGetCache();
+    if (cached) {
+      allDeals   = cached.deals   || [];
+      allCoupons = cached.coupons || [];
+      allFuel    = cached.fuel    || [];
+      setSubtitle('From cache — last refreshed ' + formatTime(cached.ts));
+    } else {
+      document.getElementById('dealsContainer').innerHTML =
+        '<div class="loading"><div class="spinner"></div>Fetching latest deals…</div>';
+      await fetchFromAppsScript();
+      trySaveCache();
+      setSubtitle('Updated ' + formatTime(Date.now()));
+    }
+    updateStats();
+    renderDeals();
+  } catch (err) {
+    showError('Could not load deals: ' + err.message +
+      (APPS_SCRIPT_URL.includes('YOUR_') ? ' — make sure you've set your Apps Script URL.' : ''));
+    document.getElementById('dealsContainer').innerHTML = '';
+  } finally {
+    btn.disabled = false;
+    icon.classList.remove('spin');
+    // Live indicator
+    document.getElementById('liveIndicator').innerHTML =
+      '<span class="pulse" title="Data updates every 2 hours"></span>';
+  }
+}
+
+async function fetchFromAppsScript() {
+  // Single request — ?tab=all returns deals + fuel + coupons in one payload
+  const url  = APPS_SCRIPT_URL + '?tab=all&limit=200';
+  const resp = await fetch(url);
+  if (!resp.ok) throw new Error('HTTP ' + resp.status);
+  const json = await resp.json();
+  if (!json.ok) throw new Error(json.error || 'Apps Script error');
+
+  const data = json.data;
+  allDeals   = normaliseDeals(data.deals   || []);
+  allFuel    = normaliseFuel(data.fuel     || []);
+  allCoupons = normaliseCoupons(data.coupons || []);
+
+  // Update subtitle with last scrape time from run log
+  if (data.lastRun && data.lastRun.finishedAt) {
+    setSubtitle('Last scraped ' + formatTime(new Date(data.lastRun.finishedAt).getTime()) +
+      ' · ' + (data.lastRun.totalDeals || 0) + ' deals · ' +
+      (data.lastRun.errors > 0 ? data.lastRun.errors + ' errors' : 'no errors'));
+  }
+}
+
+// ── Normalise raw sheet rows ────────────────────────────────
+function normaliseDeals(rows) {
+  return rows.filter(r => r.title).map(r => ({
+    vendor:      r.vendor      || '',
+    category:    r.category    || 'other',
+    title:       r.title       || '',
+    description: r.description || '',
+    priceNow:    parseNum(r.priceNow),
+    priceWas:    parseNum(r.priceWas),
+    discountPct: parseInt(r.discountPct) || 0,
+    dealUrl:     r.dealUrl     || '',
+    scrapedAt:   r.scrapedAt   || '',
+  }));
+}
+
+function normaliseFuel(rows) {
+  return rows.filter(r => r.stationName && r.priceCents).map(r => ({
+    stationName: r.stationName || '',
+    brand:       r.brand       || '',
+    fuelType:    r.fuelType    || '',
+    priceCents:  parseFloat(r.priceCents) || 0,
+    suburb:      r.suburb      || '',
+    postcode:    r.postcode    || '',
+    state:       r.state       || '',
+    scrapedAt:   r.scrapedAt   || '',
+  }));
+}
+
+function normaliseCoupons(rows) {
+  return rows.filter(r => r.code && r.code !== 'SEE_LINK').map(r => ({
+    vendor:       r.vendor       || 'Various',
+    code:         r.code         || '',
+    description:  r.description  || '',
+    discountText: r.discountText || '',
+    minSpend:     parseNum(r.minSpend),
+    dealUrl:      r.dealUrl      || '',
+    scrapedAt:    r.scrapedAt    || '',
+    _isCoupon:    true,
+  }));
+}
+
+// ── Render ──────────────────────────────────────────────────
+function renderDeals() {
+  const q    = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+  const sort = document.getElementById('sortSelect').value;
+
+  document.getElementById('fuelSection').innerHTML = '';
+
+  // Fuel-only view
+  if (activeFilter === 'fuel') {
+    document.getElementById('dealsContainer').innerHTML = '';
+    renderFuelSection(q);
+    return;
+  }
+
+  // Merge deals + coupons
+  let pool = [...allDeals];
+  if (activeFilter === 'all' || activeFilter === 'coupon') {
+    pool = pool.concat(allCoupons.map(c => ({
+      ...c, category: 'coupon', priceNow: null,
+      discountPct: 0,
+      title: c.code + (c.discountText ? ' — ' + c.discountText : ''),
+      description: c.description + (c.minSpend ? ' (min $' + c.minSpend + ')' : ''),
+    })));
+  }
+
+  let items = pool.filter(d => {
+    const catOk = activeFilter === 'all' ||
+                  d.category === activeFilter ||
+                  (activeFilter === 'coupon' && d._isCoupon);
+    const qOk = !q ||
+                (d.title || '').toLowerCase().includes(q) ||
+                (d.description || '').toLowerCase().includes(q) ||
+                (d.vendor || '').toLowerCase().includes(q);
+    return catOk && qOk;
+  });
+
+  if (sort === 'discount')   items.sort((a,b) => b.discountPct - a.discountPct);
+  if (sort === 'price_asc')  items.sort((a,b) => (a.priceNow||9999) - (b.priceNow||9999));
+  if (sort === 'price_desc') items.sort((a,b) => (b.priceNow||0) - (a.priceNow||0));
+  if (sort === 'newest')     items.sort((a,b) => new Date(b.scrapedAt||0) - new Date(a.scrapedAt||0));
+
+  const cont = document.getElementById('dealsContainer');
+  if (!items.length) {
+    cont.innerHTML = '<div class="grid"><div class="no-results">No deals match — try clearing the search.</div></div>';
+    return;
+  }
+
+  cont.innerHTML = '<div class="grid">' + items.map(dealCard).join('') + '</div>';
+
+  // Append fuel summary at bottom of "all" view
+  if (activeFilter === 'all' && allFuel.length) renderFuelSummary();
+}
+
+function dealCard(d) {
+  const vc = vendorClass(d.vendor, d.category);
+  const disc = d.discountPct > 0 ? `<span class="disc-pill">-${d.discountPct}%</span>` : '';
+  const price = d.priceNow != null && d.priceNow > 0
+    ? `<span class="price-now">$${d.priceNow.toFixed(2)}</span>` +
+      (d.priceWas > 0 ? `<span class="price-was">$${d.priceWas.toFixed(2)}</span>` : '')
+    : '';
+  const link = d.dealUrl
+    ? `<a class="deal-link" href="${esc(d.dealUrl)}" target="_blank" rel="noopener">View deal →</a>` : '';
+  const copy = d._isCoupon
+    ? `<button class="copy-btn" onclick="copyCode('${esc(d.code)}',this)">Copy ${esc(d.code)}</button>` : '';
+  return `<div class="deal">
+    <div class="deal-top"><span class="vendor ${vc}">${esc(d.vendor)}</span>${disc}</div>
+    <div class="deal-title">${esc(d.title)}</div>
+    ${d.description ? `<div class="deal-desc">${esc(d.description)}</div>` : ''}
+    <div class="deal-footer"><div>${price}</div></div>
+    ${copy}${link}
+  </div>`;
+}
+
+function renderFuelSection(q) {
+  let items = allFuel.filter(f =>
+    !q || (f.stationName||'').toLowerCase().includes(q) ||
+    (f.brand||'').toLowerCase().includes(q) ||
+    (f.fuelType||'').toLowerCase().includes(q)
+  );
+  if (!items.length) {
+    document.getElementById('fuelSection').innerHTML =
+      '<div class="empty">No fuel prices yet — run the scraper first.</div>';
+    return;
+  }
+  // Group by fuel type, show cheapest per type
+  const byType = {};
+  items.forEach(f => {
+    if (!byType[f.fuelType] || f.priceCents < byType[f.fuelType].priceCents)
+      byType[f.fuelType] = f;
+  });
+  const bestByType = Object.values(byType).sort((a,b) => a.priceCents - b.priceCents);
+
+  document.getElementById('fuelSection').innerHTML =
+    `<div class="section-title">Best prices near Point Cook</div>
+    <div class="fuel-grid">${bestByType.map(f => `
+      <div class="fuel-card">
+        <div class="fuel-type-badge">${esc(f.fuelType)}</div>
+        <div class="fuel-price">${f.priceCents}¢/L</div>
+        <div class="fuel-meta">
+          <strong>${esc(f.brand || f.stationName)}</strong><br>
+          ${esc(f.stationName)}<br>
+          ${[f.suburb, f.postcode].filter(Boolean).map(esc).join(', ')}
+        </div>
+      </div>`).join('')}</div>
+    <div class="section-title" style="margin-top:1.5rem">All stations</div>
+    <div class="fuel-grid">${items.sort((a,b)=>a.priceCents-b.priceCents).slice(0,20).map(f => `
+      <div class="fuel-card">
+        <div class="fuel-type-badge">${esc(f.fuelType)}</div>
+        <div class="fuel-price">${f.priceCents}¢/L</div>
+        <div class="fuel-meta">
+          ${esc(f.brand || f.stationName)}<br>
+          ${esc(f.stationName)}<br>
+          ${[f.suburb, f.postcode].filter(Boolean).map(esc).join(', ')}
+        </div>
+      </div>`).join('')}</div>`;
+}
+
+function renderFuelSummary() {
+  const ulp = allFuel.filter(f => f.fuelType === 'ULP' || f.fuelType === 'E10')
+                     .sort((a,b) => a.priceCents - b.priceCents).slice(0, 4);
+  if (!ulp.length) return;
+  document.getElementById('fuelSection').innerHTML =
+    `<div class="section-title">Best ULP near Point Cook</div>
+    <div class="fuel-grid">${ulp.map(f => `
+      <div class="fuel-card">
+        <div class="fuel-type-badge">${esc(f.fuelType)}</div>
+        <div class="fuel-price">${f.priceCents}¢/L</div>
+        <div class="fuel-meta">${esc(f.brand||f.stationName)}<br>${[f.suburb,f.postcode].filter(Boolean).map(esc).join(', ')}</div>
+      </div>`).join('')}</div>`;
+}
+
+// ── Stats ────────────────────────────────────────────────────
+function updateStats() {
+  document.getElementById('sTotalDeals').textContent = allDeals.length || '—';
+  const discs = allDeals.filter(d => d.discountPct > 0).map(d => d.discountPct);
+  document.getElementById('sAvgDisc').textContent = discs.length
+    ? Math.round(discs.reduce((a,b)=>a+b,0)/discs.length) + '%' : '—';
+  const ulp = allFuel.filter(f => f.fuelType === 'ULP' || f.fuelType === 'E10');
+  document.getElementById('sBestFuel').textContent = ulp.length
+    ? Math.min(...ulp.map(f=>f.priceCents)) + '¢' : '—';
+  document.getElementById('sCoupons').textContent = allCoupons.length || '—';
+}
+
+// ── Helpers ──────────────────────────────────────────────────
+function setFilter(el) {
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
+  el.classList.add('on');
+  activeFilter = el.dataset.cat;
+  renderDeals();
+}
+
+function copyCode(code, btn) {
+  navigator.clipboard.writeText(code).then(() => {
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy ' + code, 1800);
+  });
+}
+
+function vendorClass(vendor, cat) {
+  const v = (vendor || '').toLowerCase();
+  if (v.includes('woolworths'))                return 'v-woolworths';
+  if (v.includes('coles'))                     return 'v-coles';
+  if (v.includes('aldi'))                      return 'v-aldi';
+  if (v.includes('amazon'))                    return 'v-amazon';
+  if (cat === 'fuel' || v.includes('ampol') || v.includes('bp') || v.includes('7-eleven') || v.includes('caltex')) return 'v-fuel';
+  if (v.includes('big w') || v.includes('bigw')) return 'v-bigw';
+  if (v.includes('chemist'))                   return 'v-chemist';
+  if (cat === 'coupon')                        return 'v-coupon';
+  return 'v-default';
+}
+
+function setSubtitle(text) {
+  document.getElementById('headerSub').textContent =
+    'Woolworths · Coles · ALDI · Amazon AU · Fuel · Coupons — ' + text;
+}
+
+function showError(msg) {
+  document.getElementById('errorArea').innerHTML = msg
+    ? `<div class="error-box">${msg}</div>` : '';
+}
+
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function parseNum(v) {
+  const n = parseFloat(v);
+  return isNaN(n) ? null : n;
+}
+
+function formatTime(ts) {
+  const d = new Date(ts);
+  return d.toLocaleString('en-AU', { hour: '2-digit', minute: '2-digit', day: 'numeric', month: 'short' });
+}
+
+function tryGetCache() {
+  try {
+    const raw = localStorage.getItem(CACHE_KEY);
+    if (!raw) return null;
+    const obj = JSON.parse(raw);
+    return Date.now() - obj.ts < CACHE_TTL ? obj : null;
+  } catch { return null; }
+}
+
+function trySaveCache() {
+  try {
+    localStorage.setItem(CACHE_KEY, JSON.stringify({
+      ts: Date.now(), deals: allDeals, coupons: allCoupons, fuel: allFuel,
+    }));
+  } catch {}
+}
+</script>
+</body>
+</html>
