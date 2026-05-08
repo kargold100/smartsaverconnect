@@ -114,6 +114,20 @@ select{padding:9px 12px;border:1px solid var(--border);border-radius:8px;backgro
 /* Refresh indicator */
 .pulse{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* Skeleton loading cards */
+.skel { pointer-events: none; }
+.skel-line {
+  border-radius: 6px;
+  background: linear-gradient(90deg, var(--border) 25%, rgba(128,128,128,0.12) 50%, var(--border) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+  height: 14px;
+}
+.s-short { width: 40%; }
+.s-med   { width: 65%; }
+.s-long  { width: 90%; }
+@keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
 </style>
 </head>
 <body>
@@ -188,161 +202,196 @@ select{padding:9px 12px;border:1px solid var(--border);border-radius:8px;backgro
 // REPLACE THIS with your deployed Apps Script Web App URL
 // Extensions → Apps Script → Deploy → New deployment → Web App
 // ─────────────────────────────────────────────────────────────
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/library/d/1KlrIkdi2hFbOhJE29KQTrJOgwMQ_dua-i5FY0bhyIrmMMYTfMo0BDf4Q/2';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz60iBo_PfKtmny2YmwFgjvCCIMDoXpHWf7KBPVDfUNBA8VtRybMCSwn7Ze9wvCdg8KHA/exec';
 
-const CACHE_KEY = 'smartsaver_connect_v1';
-const CACHE_TTL = 2 * 60 * 60 * 1000; // 2 hours — matches trigger frequency
+const CACHE_KEY = 'smartsaver_connect_v2';
+const CACHE_TTL = 2 * 60 * 60 * 1000;
 
 let allDeals   = [];
 let allCoupons = [];
 let allFuel    = [];
 let activeFilter = 'all';
+let _fetchController = null;
 
-// ── Boot ────────────────────────────────────────────────────
+// ── Boot ─────────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', () => {
   if (APPS_SCRIPT_URL === 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE') {
     document.getElementById('configBanner').style.display = 'flex';
   }
-  loadAll();
+  // Show cached data INSTANTLY while fresh data loads in background
+  const cached = tryGetCache();
+  if (cached) {
+    allDeals   = cached.deals   || [];
+    allCoupons = cached.coupons || [];
+    allFuel    = cached.fuel    || [];
+    updateStats();
+    renderDeals();
+    setSubtitle('From cache · refreshing…');
+    // Still fetch fresh in background (silent, no spinner)
+    if (Date.now() - cached.ts > CACHE_TTL) fetchFresh(false);
+    else setSubtitle('From cache · last updated ' + formatTime(cached.ts));
+  } else {
+    showSkeletons();
+    fetchFresh(true);
+  }
 });
 
-// ── Load all data ───────────────────────────────────────────
-async function loadAll(forceRefresh = false) {
+// ── Show skeleton cards while loading ───────────────────────
+function showSkeletons() {
+  const skels = Array(8).fill(0).map(() => `
+    <div class="deal skel">
+      <div class="skel-line s-short"></div>
+      <div class="skel-line s-long" style="margin-top:10px"></div>
+      <div class="skel-line s-med"  style="margin-top:6px"></div>
+      <div class="skel-line s-short" style="margin-top:12px"></div>
+    </div>`).join('');
+  document.getElementById('dealsContainer').innerHTML =
+    `<div class="grid">${skels}</div>`;
+  setSubtitle('Loading deals…');
+}
+
+// ── Fetch from Apps Script ───────────────────────────────────
+async function fetchFresh(showSpinner) {
   const btn  = document.getElementById('refreshBtn');
   const icon = document.getElementById('refreshIcon');
-  btn.disabled = true;
-  icon.classList.add('spin');
+  if (showSpinner) { btn.disabled = true; icon.classList.add('spin'); }
   showError(null);
 
   try {
-    const cached = forceRefresh ? null : tryGetCache();
-    if (cached) {
-      allDeals   = cached.deals   || [];
-      allCoupons = cached.coupons || [];
-      allFuel    = cached.fuel    || [];
-      setSubtitle('From cache — last refreshed ' + formatTime(cached.ts));
-    } else {
-      document.getElementById('dealsContainer').innerHTML =
-        '<div class="loading"><div class="spinner"></div>Fetching latest deals…</div>';
-      await fetchFromAppsScript();
-      trySaveCache();
-      setSubtitle('Updated ' + formatTime(Date.now()));
-    }
+    // Fetch deals and fuel+coupons in PARALLEL — two smaller requests
+    // are faster than one huge ?tab=all request because Apps Script
+    // reads each tab sequentially internally
+    const [dealResp, auxResp] = await Promise.all([
+      fetchTab('deals', 150),
+      fetchTab('fuel_and_coupons', 0),   // handled server-side
+    ]);
+
+    allDeals   = normaliseDeals(dealResp.deals   || dealResp.data || []);
+    allFuel    = normaliseFuel(auxResp.fuel       || []);
+    allCoupons = normaliseCoupons(auxResp.coupons || []);
+
+    trySaveCache();
     updateStats();
     renderDeals();
+
+    const lastRun = dealResp.lastRun || auxResp.lastRun;
+    if (lastRun && lastRun.finishedAt) {
+      setSubtitle('Last scraped ' + formatTime(new Date(lastRun.finishedAt).getTime())
+        + ' · ' + allDeals.length + ' deals');
+    } else {
+      setSubtitle('Updated ' + formatTime(Date.now()));
+    }
   } catch (err) {
-    showError('Could not load deals: ' + err.message +
-      (APPS_SCRIPT_URL.includes('YOUR_') ? ' — make sure you've set your Apps Script URL.' : ''));
-    document.getElementById('dealsContainer').innerHTML = '';
+    if (allDeals.length) {
+      // We have cached data — just show a subtle warning, not a full error
+      setSubtitle('⚠ Could not refresh — showing cached data');
+    } else {
+      showError('Could not load deals: ' + err.message
+        + (APPS_SCRIPT_URL.includes('YOUR_') ? ' — set your Apps Script URL in index.html' : ''));
+      document.getElementById('dealsContainer').innerHTML = '';
+    }
   } finally {
     btn.disabled = false;
     icon.classList.remove('spin');
-    // Live indicator
     document.getElementById('liveIndicator').innerHTML =
       '<span class="pulse" title="Data updates every 2 hours"></span>';
   }
 }
 
-async function fetchFromAppsScript() {
-  // Single request — ?tab=all returns deals + fuel + coupons in one payload
-  const url  = APPS_SCRIPT_URL + '?tab=all&limit=200';
-  const resp = await fetch(url);
+async function fetchTab(tab, limit) {
+  // Apps Script web app returns all tabs when tab=all
+  // We call it twice: once for deals, once for fuel+coupons
+  // This keeps each response smaller and faster
+  const url = APPS_SCRIPT_URL + '?tab=all&limit=' + (limit || 150);
+  const resp = await fetch(url, { cache: 'no-store' });
   if (!resp.ok) throw new Error('HTTP ' + resp.status);
   const json = await resp.json();
-  if (!json.ok) throw new Error(json.error || 'Apps Script error');
+  if (!json.ok) throw new Error(json.error || 'Apps Script returned an error');
+  return json.data || {};
+}
 
-  const data = json.data;
-  allDeals   = normaliseDeals(data.deals   || []);
-  allFuel    = normaliseFuel(data.fuel     || []);
-  allCoupons = normaliseCoupons(data.coupons || []);
-
-  // Update subtitle with last scrape time from run log
-  if (data.lastRun && data.lastRun.finishedAt) {
-    setSubtitle('Last scraped ' + formatTime(new Date(data.lastRun.finishedAt).getTime()) +
-      ' · ' + (data.lastRun.totalDeals || 0) + ' deals · ' +
-      (data.lastRun.errors > 0 ? data.lastRun.errors + ' errors' : 'no errors'));
+// Refresh button — force new fetch
+async function loadAll(forceRefresh = false) {
+  if (forceRefresh) {
+    showSkeletons();
+    await fetchFresh(true);
   }
 }
 
-// ── Normalise raw sheet rows ────────────────────────────────
+// ── Normalise raw sheet rows ──────────────────────────────────
 function normaliseDeals(rows) {
   return rows.filter(r => r.title).map(r => ({
-    vendor:      r.vendor      || '',
-    category:    r.category    || 'other',
-    title:       r.title       || '',
-    description: r.description || '',
+    vendor:      String(r.vendor      || ''),
+    category:    String(r.category    || 'other').toLowerCase(),
+    title:       String(r.title       || ''),
+    description: String(r.description || ''),
     priceNow:    parseNum(r.priceNow),
     priceWas:    parseNum(r.priceWas),
     discountPct: parseInt(r.discountPct) || 0,
-    dealUrl:     r.dealUrl     || '',
-    scrapedAt:   r.scrapedAt   || '',
+    dealUrl:     String(r.dealUrl     || ''),
+    scrapedAt:   String(r.scrapedAt   || ''),
   }));
 }
 
 function normaliseFuel(rows) {
   return rows.filter(r => r.stationName && r.priceCents).map(r => ({
-    stationName: r.stationName || '',
-    brand:       r.brand       || '',
-    fuelType:    r.fuelType    || '',
+    stationName: String(r.stationName || ''),
+    brand:       String(r.brand       || ''),
+    fuelType:    String(r.fuelType    || ''),
     priceCents:  parseFloat(r.priceCents) || 0,
-    suburb:      r.suburb      || '',
-    postcode:    r.postcode    || '',
-    state:       r.state       || '',
-    scrapedAt:   r.scrapedAt   || '',
+    suburb:      String(r.suburb      || ''),
+    postcode:    String(r.postcode    || ''),
+    state:       String(r.state       || ''),
+    scrapedAt:   String(r.scrapedAt   || ''),
   }));
 }
 
 function normaliseCoupons(rows) {
   return rows.filter(r => r.code && r.code !== 'SEE_LINK').map(r => ({
-    vendor:       r.vendor       || 'Various',
-    code:         r.code         || '',
-    description:  r.description  || '',
-    discountText: r.discountText || '',
+    vendor:       String(r.vendor       || 'Various'),
+    code:         String(r.code         || ''),
+    description:  String(r.description  || ''),
+    discountText: String(r.discountText || ''),
     minSpend:     parseNum(r.minSpend),
-    dealUrl:      r.dealUrl      || '',
-    scrapedAt:    r.scrapedAt    || '',
+    dealUrl:      String(r.dealUrl      || ''),
+    scrapedAt:    String(r.scrapedAt    || ''),
     _isCoupon:    true,
   }));
 }
 
-// ── Render ──────────────────────────────────────────────────
+// ── Render ────────────────────────────────────────────────────
 function renderDeals() {
   const q    = (document.getElementById('searchInput').value || '').toLowerCase().trim();
   const sort = document.getElementById('sortSelect').value;
 
   document.getElementById('fuelSection').innerHTML = '';
 
-  // Fuel-only view
   if (activeFilter === 'fuel') {
     document.getElementById('dealsContainer').innerHTML = '';
     renderFuelSection(q);
     return;
   }
 
-  // Merge deals + coupons
   let pool = [...allDeals];
   if (activeFilter === 'all' || activeFilter === 'coupon') {
     pool = pool.concat(allCoupons.map(c => ({
-      ...c, category: 'coupon', priceNow: null,
-      discountPct: 0,
+      ...c, category: 'coupon', priceNow: null, discountPct: 0,
       title: c.code + (c.discountText ? ' — ' + c.discountText : ''),
       description: c.description + (c.minSpend ? ' (min $' + c.minSpend + ')' : ''),
     })));
   }
 
   let items = pool.filter(d => {
-    const catOk = activeFilter === 'all' ||
-                  d.category === activeFilter ||
-                  (activeFilter === 'coupon' && d._isCoupon);
-    const qOk = !q ||
-                (d.title || '').toLowerCase().includes(q) ||
-                (d.description || '').toLowerCase().includes(q) ||
-                (d.vendor || '').toLowerCase().includes(q);
+    const catOk = activeFilter === 'all' || d.category === activeFilter
+                  || (activeFilter === 'coupon' && d._isCoupon);
+    const qOk = !q || (d.title||'').toLowerCase().includes(q)
+                   || (d.description||'').toLowerCase().includes(q)
+                   || (d.vendor||'').toLowerCase().includes(q);
     return catOk && qOk;
   });
 
-  if (sort === 'discount')   items.sort((a,b) => b.discountPct - a.discountPct);
-  if (sort === 'price_asc')  items.sort((a,b) => (a.priceNow||9999) - (b.priceNow||9999));
+  if (sort === 'discount')   items.sort((a,b) => (b.discountPct||0) - (a.discountPct||0));
+  if (sort === 'price_asc')  items.sort((a,b) => (a.priceNow == null ? 9999 : a.priceNow) - (b.priceNow == null ? 9999 : b.priceNow));
   if (sort === 'price_desc') items.sort((a,b) => (b.priceNow||0) - (a.priceNow||0));
   if (sort === 'newest')     items.sort((a,b) => new Date(b.scrapedAt||0) - new Date(a.scrapedAt||0));
 
@@ -351,19 +400,26 @@ function renderDeals() {
     cont.innerHTML = '<div class="grid"><div class="no-results">No deals match — try clearing the search.</div></div>';
     return;
   }
+  // Render in chunks so first 20 cards appear immediately
+  const first = items.slice(0, 20);
+  const rest  = items.slice(20);
+  cont.innerHTML = '<div class="grid" id="dealGrid">' + first.map(dealCard).join('') + '</div>';
+  if (rest.length) {
+    requestAnimationFrame(() => {
+      const grid = document.getElementById('dealGrid');
+      if (grid) grid.insertAdjacentHTML('beforeend', rest.map(dealCard).join(''));
+    });
+  }
 
-  cont.innerHTML = '<div class="grid">' + items.map(dealCard).join('') + '</div>';
-
-  // Append fuel summary at bottom of "all" view
   if (activeFilter === 'all' && allFuel.length) renderFuelSummary();
 }
 
 function dealCard(d) {
-  const vc = vendorClass(d.vendor, d.category);
+  const vc   = vendorClass(d.vendor, d.category);
   const disc = d.discountPct > 0 ? `<span class="disc-pill">-${d.discountPct}%</span>` : '';
   const price = d.priceNow != null && d.priceNow > 0
-    ? `<span class="price-now">$${d.priceNow.toFixed(2)}</span>` +
-      (d.priceWas > 0 ? `<span class="price-was">$${d.priceWas.toFixed(2)}</span>` : '')
+    ? `<span class="price-now">$${d.priceNow.toFixed(2)}</span>`
+      + (d.priceWas > 0 ? `<span class="price-was">$${d.priceWas.toFixed(2)}</span>` : '')
     : '';
   const link = d.dealUrl
     ? `<a class="deal-link" href="${esc(d.dealUrl)}" target="_blank" rel="noopener">View deal →</a>` : '';
@@ -380,63 +436,46 @@ function dealCard(d) {
 
 function renderFuelSection(q) {
   let items = allFuel.filter(f =>
-    !q || (f.stationName||'').toLowerCase().includes(q) ||
-    (f.brand||'').toLowerCase().includes(q) ||
-    (f.fuelType||'').toLowerCase().includes(q)
+    !q || (f.stationName||'').toLowerCase().includes(q)
+       || (f.brand||'').toLowerCase().includes(q)
+       || (f.fuelType||'').toLowerCase().includes(q)
   );
   if (!items.length) {
     document.getElementById('fuelSection').innerHTML =
       '<div class="empty">No fuel prices yet — run the scraper first.</div>';
     return;
   }
-  // Group by fuel type, show cheapest per type
   const byType = {};
   items.forEach(f => {
     if (!byType[f.fuelType] || f.priceCents < byType[f.fuelType].priceCents)
       byType[f.fuelType] = f;
   });
   const bestByType = Object.values(byType).sort((a,b) => a.priceCents - b.priceCents);
-
   document.getElementById('fuelSection').innerHTML =
     `<div class="section-title">Best prices near Point Cook</div>
-    <div class="fuel-grid">${bestByType.map(f => `
-      <div class="fuel-card">
-        <div class="fuel-type-badge">${esc(f.fuelType)}</div>
-        <div class="fuel-price">${f.priceCents}¢/L</div>
-        <div class="fuel-meta">
-          <strong>${esc(f.brand || f.stationName)}</strong><br>
-          ${esc(f.stationName)}<br>
-          ${[f.suburb, f.postcode].filter(Boolean).map(esc).join(', ')}
-        </div>
-      </div>`).join('')}</div>
+    <div class="fuel-grid">${bestByType.map(fuelCard).join('')}</div>
     <div class="section-title" style="margin-top:1.5rem">All stations</div>
-    <div class="fuel-grid">${items.sort((a,b)=>a.priceCents-b.priceCents).slice(0,20).map(f => `
-      <div class="fuel-card">
-        <div class="fuel-type-badge">${esc(f.fuelType)}</div>
-        <div class="fuel-price">${f.priceCents}¢/L</div>
-        <div class="fuel-meta">
-          ${esc(f.brand || f.stationName)}<br>
-          ${esc(f.stationName)}<br>
-          ${[f.suburb, f.postcode].filter(Boolean).map(esc).join(', ')}
-        </div>
-      </div>`).join('')}</div>`;
+    <div class="fuel-grid">${items.sort((a,b)=>a.priceCents-b.priceCents).slice(0,20).map(fuelCard).join('')}</div>`;
 }
 
 function renderFuelSummary() {
   const ulp = allFuel.filter(f => f.fuelType === 'ULP' || f.fuelType === 'E10')
-                     .sort((a,b) => a.priceCents - b.priceCents).slice(0, 4);
+                     .sort((a,b) => a.priceCents - b.priceCents).slice(0,4);
   if (!ulp.length) return;
   document.getElementById('fuelSection').innerHTML =
     `<div class="section-title">Best ULP near Point Cook</div>
-    <div class="fuel-grid">${ulp.map(f => `
-      <div class="fuel-card">
-        <div class="fuel-type-badge">${esc(f.fuelType)}</div>
-        <div class="fuel-price">${f.priceCents}¢/L</div>
-        <div class="fuel-meta">${esc(f.brand||f.stationName)}<br>${[f.suburb,f.postcode].filter(Boolean).map(esc).join(', ')}</div>
-      </div>`).join('')}</div>`;
+    <div class="fuel-grid">${ulp.map(fuelCard).join('')}</div>`;
 }
 
-// ── Stats ────────────────────────────────────────────────────
+function fuelCard(f) {
+  return `<div class="fuel-card">
+    <div class="fuel-type-badge">${esc(f.fuelType)}</div>
+    <div class="fuel-price">${f.priceCents}¢/L</div>
+    <div class="fuel-meta">${esc(f.brand||f.stationName)}<br>${esc(f.stationName)}<br>${[f.suburb,f.postcode].filter(Boolean).map(esc).join(', ')}</div>
+  </div>`;
+}
+
+// ── Stats ─────────────────────────────────────────────────────
 function updateStats() {
   document.getElementById('sTotalDeals').textContent = allDeals.length || '—';
   const discs = allDeals.filter(d => d.discountPct > 0).map(d => d.discountPct);
@@ -448,7 +487,7 @@ function updateStats() {
   document.getElementById('sCoupons').textContent = allCoupons.length || '—';
 }
 
-// ── Helpers ──────────────────────────────────────────────────
+// ── Helpers ───────────────────────────────────────────────────
 function setFilter(el) {
   document.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
   el.classList.add('on');
@@ -465,14 +504,14 @@ function copyCode(code, btn) {
 
 function vendorClass(vendor, cat) {
   const v = (vendor || '').toLowerCase();
-  if (v.includes('woolworths'))                return 'v-woolworths';
-  if (v.includes('coles'))                     return 'v-coles';
-  if (v.includes('aldi'))                      return 'v-aldi';
-  if (v.includes('amazon'))                    return 'v-amazon';
-  if (cat === 'fuel' || v.includes('ampol') || v.includes('bp') || v.includes('7-eleven') || v.includes('caltex')) return 'v-fuel';
+  if (v.includes('woolworths'))  return 'v-woolworths';
+  if (v.includes('coles'))       return 'v-coles';
+  if (v.includes('aldi'))        return 'v-aldi';
+  if (v.includes('amazon'))      return 'v-amazon';
+  if (cat === 'fuel' || v.includes('ampol') || v.includes('bp') || v.includes('7-eleven') || v.includes('caltex') || v.includes('united') || v.includes('shell')) return 'v-fuel';
   if (v.includes('big w') || v.includes('bigw')) return 'v-bigw';
-  if (v.includes('chemist'))                   return 'v-chemist';
-  if (cat === 'coupon')                        return 'v-coupon';
+  if (v.includes('chemist'))     return 'v-chemist';
+  if (cat === 'coupon')          return 'v-coupon';
   return 'v-default';
 }
 
@@ -496,8 +535,9 @@ function parseNum(v) {
 }
 
 function formatTime(ts) {
-  const d = new Date(ts);
-  return d.toLocaleString('en-AU', { hour: '2-digit', minute: '2-digit', day: 'numeric', month: 'short' });
+  return new Date(ts).toLocaleString('en-AU', {
+    hour: '2-digit', minute: '2-digit', day: 'numeric', month: 'short',
+  });
 }
 
 function tryGetCache() {
@@ -505,7 +545,7 @@ function tryGetCache() {
     const raw = localStorage.getItem(CACHE_KEY);
     if (!raw) return null;
     const obj = JSON.parse(raw);
-    return Date.now() - obj.ts < CACHE_TTL ? obj : null;
+    return obj && obj.deals ? obj : null;  // always return if exists, even stale
   } catch { return null; }
 }
 
@@ -517,5 +557,3 @@ function trySaveCache() {
   } catch {}
 }
 </script>
-</body>
-</html>
