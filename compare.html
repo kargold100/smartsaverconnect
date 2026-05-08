@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SmartSaver Connect — Price Comparison</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f5f4f0;--card:#fff;--text:#1a1a18;--muted:#6b6a65;--hint:#9e9d98;
+  --border:rgba(0,0,0,0.08);--accent:#1a6b3c;--accent-bg:#e8f5ee;
+  --danger:#c0392b;--danger-bg:#fde8e6;--radius:12px;
+  --shadow:0 1px 6px rgba(0,0,0,.07);
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#18181a;--card:#232325;--text:#e8e6df;--muted:#9a9890;--hint:#6a6860;
+  --border:rgba(255,255,255,0.08);--accent:#4caf7a;--accent-bg:#0e2d1a;
+  --danger:#e57373;--danger-bg:#2d0e0e;
+}}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:var(--bg);color:var(--text);min-height:100vh}
+
+.wrap{max-width:980px;margin:0 auto;padding:1.5rem 1rem 4rem}
+
+/* Header */
+.header{display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:12px;margin-bottom:2rem}
+.logo{font-size:20px;font-weight:800;letter-spacing:-.5px;text-decoration:none;color:var(--text)}
+.logo span{color:var(--accent)}
+.back-link{font-size:13px;color:var(--accent);text-decoration:none;
+  display:flex;align-items:center;gap:4px}
+.back-link:hover{text-decoration:underline}
+
+/* Search */
+.search-section{background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:24px;margin-bottom:1.5rem;
+  box-shadow:var(--shadow)}
+.search-section h1{font-size:20px;font-weight:700;margin-bottom:6px}
+.search-section p{font-size:13px;color:var(--muted);margin-bottom:18px}
+.search-row{display:flex;gap:10px;flex-wrap:wrap}
+.search-input{flex:1;min-width:200px;padding:11px 16px;
+  border:1.5px solid var(--border);border-radius:8px;
+  background:var(--bg);color:var(--text);font-size:15px}
+.search-input:focus{outline:none;border-color:var(--accent)}
+.search-btn{padding:11px 24px;background:var(--accent);color:#fff;
+  border:0;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;
+  white-space:nowrap}
+.search-btn:hover{opacity:.88}
+.search-btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* Category quick-picks */
+.cat-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.cat-chip{padding:5px 12px;border-radius:20px;border:1px solid var(--border);
+  background:var(--bg);color:var(--muted);font-size:12px;cursor:pointer;
+  transition:all .15s}
+.cat-chip:hover,.cat-chip.on{background:var(--accent-bg);color:var(--accent);
+  border-color:var(--accent)}
+
+/* Stats strip */
+.stats-strip{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:1.25rem}
+.stat-pill{background:var(--card);border:1px solid var(--border);
+  border-radius:8px;padding:8px 14px;font-size:13px;
+  display:flex;align-items:center;gap:6px}
+.stat-num{font-weight:700;color:var(--accent)}
+
+/* Results */
+.results-header{display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:8px;margin-bottom:1rem}
+.results-title{font-size:16px;font-weight:600}
+.sort-row{display:flex;gap:8px;align-items:center}
+.sort-label{font-size:12px;color:var(--muted)}
+select{padding:6px 10px;border:1px solid var(--border);border-radius:6px;
+  background:var(--card);color:var(--text);font-size:13px;cursor:pointer}
+
+/* Comparison table */
+.compare-table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;background:var(--card);
+  border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+thead tr{background:var(--bg)}
+th{text-align:left;padding:10px 14px;font-size:11px;font-weight:600;
+  color:var(--muted);text-transform:uppercase;letter-spacing:.04em;
+  border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:12px 14px;border-bottom:1px solid var(--border);vertical-align:middle;
+  font-size:13px}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--bg)}
+
+.vendor-badge{display:inline-block;font-size:11px;font-weight:600;
+  padding:2px 8px;border-radius:20px;white-space:nowrap}
+.v-woolworths{background:#e8f5e9;color:#2e7d32}
+.v-coles{background:#fce4ec;color:#c62828}
+.v-aldi{background:#e3f2fd;color:#1565c0}
+.v-amazon{background:#fff3e0;color:#e65100}
+.v-bigw{background:#e1f5fe;color:#01579b}
+.v-chemist{background:#fbe9e7;color:#bf360c}
+.v-kogan{background:#f3e5f5;color:#6a1b9a}
+.v-jb{background:#e8f5e9;color:#1b5e20}
+.v-default{background:#f5f5f5;color:#424242}
+@media(prefers-color-scheme:dark){
+  .v-woolworths{background:#0d2e12;color:#81c784}.v-coles{background:#2d0b10;color:#ef9a9a}
+  .v-aldi{background:#0a1929;color:#90caf9}.v-amazon{background:#1a1200;color:#ffcc80}
+  .v-bigw{background:#001825;color:#81d4fa}.v-chemist{background:#2a0e00;color:#ffab91}
+  .v-kogan{background:#1a0e2a;color:#ce93d8}.v-jb{background:#0d2010;color:#a5d6a7}
+  .v-default{background:#2a2a2a;color:#bdbdbd}
+}
+
+.price-best{font-size:16px;font-weight:700;color:var(--accent)}
+.price-best::after{content:' ✓';font-size:12px}
+.price-normal{font-size:15px;font-weight:600}
+.price-was{font-size:11px;color:var(--hint);text-decoration:line-through;margin-left:4px}
+.save-badge{display:inline-block;font-size:11px;padding:1px 6px;border-radius:10px;
+  background:var(--danger-bg);color:var(--danger);margin-top:3px}
+.view-link{color:var(--accent);text-decoration:none;font-size:12px;white-space:nowrap}
+.view-link:hover{text-decoration:underline}
+.item-title{font-weight:500;line-height:1.4;margin-bottom:3px}
+.item-desc{font-size:11px;color:var(--muted);line-height:1.4}
+.more-count{font-size:11px;color:var(--muted);margin-top:4px}
+
+/* Cards view (mobile) */
+.cards{display:none;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+@media(max-width:640px){
+  .compare-table-wrap{display:none}
+  .cards{display:grid}
+}
+.cmp-card{background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:14px;display:flex;flex-direction:column;gap:8px}
+.cmp-card.best-card{border-color:var(--accent);border-width:2px}
+.best-label{font-size:11px;font-weight:600;color:var(--accent)}
+
+/* State views */
+.empty-state,.loading-state{text-align:center;padding:4rem 2rem;color:var(--muted)}
+.spinner{width:32px;height:32px;border:2.5px solid var(--border);
+  border-top-color:var(--accent);border-radius:50%;
+  animation:spin .7s linear infinite;margin:0 auto 16px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.no-data{font-size:14px}
+.no-data strong{display:block;font-size:18px;margin-bottom:8px;color:var(--text)}
+
+/* Retailer filter pills */
+.retailer-pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem}
+.r-pill{padding:4px 12px;border-radius:20px;border:1px solid var(--border);
+  background:var(--card);color:var(--muted);font-size:12px;cursor:pointer;
+  transition:all .15s;display:flex;align-items:center;gap:4px}
+.r-pill.on{background:var(--accent-bg);color:var(--accent);border-color:var(--accent)}
+.r-pill-dot{width:8px;height:8px;border-radius:50%;background:currentColor}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header">
+    <a class="logo" href="index.html">SmartSaver<span>Connect</span></a>
+    <a class="back-link" href="index.html">← Back to deals</a>
+  </div>
+
+  <div class="search-section">
+    <h1>Price Comparison</h1>
+    <p>Search any product and instantly compare prices across Woolworths, Coles, ALDI, Amazon AU, Big W, Chemist Warehouse, Kogan, JB Hi-Fi and more.</p>
+    <div class="search-row">
+      <input class="search-input" id="searchInput" type="text"
+        placeholder="e.g. dishwashing liquid, protein powder, headphones…"
+        onkeydown="if(event.key==='Enter') doSearch()" />
+      <button class="search-btn" id="searchBtn" onclick="doSearch()">Compare prices</button>
+    </div>
+    <div class="cat-row">
+      <span class="cat-chip" onclick="quickSearch(this,'milk')">Milk</span>
+      <span class="cat-chip" onclick="quickSearch(this,'coffee')">Coffee</span>
+      <span class="cat-chip" onclick="quickSearch(this,'protein powder')">Protein powder</span>
+      <span class="cat-chip" onclick="quickSearch(this,'headphones')">Headphones</span>
+      <span class="cat-chip" onclick="quickSearch(this,'vitamin')">Vitamins</span>
+      <span class="cat-chip" onclick="quickSearch(this,'washing powder')">Washing powder</span>
+      <span class="cat-chip" onclick="quickSearch(this,'nappies')">Nappies</span>
+      <span class="cat-chip" onclick="quickSearch(this,'shampoo')">Shampoo</span>
+      <span class="cat-chip" onclick="quickSearch(this,'pasta')">Pasta</span>
+    </div>
+  </div>
+
+  <div id="statsStrip" class="stats-strip" style="display:none"></div>
+  <div id="retailerPills" class="retailer-pills" style="display:none"></div>
+  <div class="results-header" id="resultsHeader" style="display:none">
+    <div class="results-title" id="resultsTitle"></div>
+    <div class="sort-row">
+      <span class="sort-label">Sort by</span>
+      <select id="sortSelect" onchange="renderResults()">
+        <option value="price_asc">Price: low to high</option>
+        <option value="price_desc">Price: high to low</option>
+        <option value="discount">Biggest discount</option>
+        <option value="vendor">Retailer</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="compare-table-wrap" id="tableWrap">
+    <div class="empty-state">
+      <div class="no-data">
+        <strong>Search for any product</strong>
+        Compare prices across Australian retailers instantly.
+      </div>
+    </div>
+  </div>
+  <div class="cards" id="cardsWrap"></div>
+
+</div>
+
+<script>
+// ── Config ─────────────────────────────────────────────────────
+const APPS_SCRIPT_URL = 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
+const CACHE_KEY       = 'smartsaver_connect_v3';
+
+// ── State ───────────────────────────────────────────────────────
+let allDeals      = [];
+let searchResults = [];
+let activeVendors = new Set();
+let lastQuery     = '';
+
+// ── Boot ────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  // Prefill from URL param ?q=...
+  const urlQ = new URLSearchParams(location.search).get('q');
+  if (urlQ) {
+    document.getElementById('searchInput').value = urlQ;
+  }
+  loadData().then(() => { if (urlQ) doSearch(); });
+});
+
+async function loadData() {
+  // Try cache first
+  try {
+    const raw = localStorage.getItem(CACHE_KEY);
+    if (raw) {
+      const obj = JSON.parse(raw);
+      if (obj && obj.deals) {
+        allDeals = normalise(obj.deals);
+        return;
+      }
+    }
+  } catch(e) {}
+
+  // Fetch from Apps Script
+  if (APPS_SCRIPT_URL.includes('YOUR_')) return;
+  try {
+    const resp = await fetch(APPS_SCRIPT_URL + '?tab=all', { cache: 'no-store' });
+    const json = await resp.json();
+    if (json.ok) {
+      allDeals = normalise(json.data.deals || []);
+      // Cache it
+      try {
+        const existing = JSON.parse(localStorage.getItem(CACHE_KEY) || '{}');
+        existing.deals = json.data.deals || [];
+        localStorage.setItem(CACHE_KEY, JSON.stringify(existing));
+      } catch(e) {}
+    }
+  } catch(e) {}
+}
+
+function normalise(rows) {
+  return rows.filter(r => r.title).map(r => ({
+    vendor:      String(r.vendor      || ''),
+    category:    String(r.category    || ''),
+    title:       String(r.title       || ''),
+    description: String(r.description || ''),
+    priceNow:    parseNum(r.priceNow),
+    priceWas:    parseNum(r.priceWas),
+    discountPct: parseInt(r.discountPct) || 0,
+    dealUrl:     String(r.dealUrl     || ''),
+    scrapedAt:   String(r.scrapedAt   || ''),
+  }));
+}
+
+// ── Search ──────────────────────────────────────────────────────
+function doSearch() {
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  if (!q || q.length < 2) return;
+  lastQuery = q;
+
+  // Update URL
+  history.replaceState(null,'','?q='+encodeURIComponent(q));
+
+  // Filter deals
+  searchResults = allDeals.filter(d =>
+    (d.title||'').toLowerCase().includes(q) ||
+    (d.description||'').toLowerCase().includes(q)
+  );
+
+  // Build active vendor set (all vendors initially)
+  const vendors = [...new Set(searchResults.map(d=>d.vendor).filter(Boolean))].sort();
+  activeVendors = new Set(vendors);
+
+  renderVendorPills(vendors);
+  renderStats();
+  renderResults();
+
+  document.getElementById('resultsHeader').style.display = 'flex';
+  document.querySelector('.cat-row').querySelectorAll('.cat-chip')
+    .forEach(c => c.classList.remove('on'));
+}
+
+function quickSearch(el, term) {
+  document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('searchInput').value = term;
+  doSearch();
+}
+
+// ── Vendor filter pills ─────────────────────────────────────────
+function renderVendorPills(vendors) {
+  const wrap = document.getElementById('retailerPills');
+  if (!vendors.length) { wrap.style.display = 'none'; return; }
+  wrap.style.display = 'flex';
+  wrap.innerHTML = '<span style="font-size:12px;color:var(--muted);align-self:center">Filter:</span>'
+    + vendors.map(v => `
+      <button class="r-pill on" data-vendor="${esc(v)}" onclick="toggleVendor(this,'${esc(v)}')">
+        <span class="r-pill-dot"></span>${esc(v)}
+      </button>`).join('');
+}
+
+function toggleVendor(el, vendor) {
+  if (activeVendors.has(vendor)) {
+    if (activeVendors.size === 1) return; // keep at least one
+    activeVendors.delete(vendor);
+    el.classList.remove('on');
+  } else {
+    activeVendors.add(vendor);
+    el.classList.add('on');
+  }
+  renderStats();
+  renderResults();
+}
+
+// ── Stats strip ─────────────────────────────────────────────────
+function renderStats() {
+  const filtered = searchResults.filter(d => activeVendors.has(d.vendor));
+  const vendors  = [...new Set(filtered.map(d=>d.vendor))];
+  const prices   = filtered.map(d=>d.priceNow).filter(Boolean);
+  const strip    = document.getElementById('statsStrip');
+
+  if (!filtered.length) { strip.style.display='none'; return; }
+  strip.style.display = 'flex';
+
+  const minP = prices.length ? Math.min(...prices) : null;
+  const maxP = prices.length ? Math.max(...prices) : null;
+  const avgP = prices.length ? prices.reduce((a,b)=>a+b,0)/prices.length : null;
+  const savings = prices.length > 1 ? maxP - minP : null;
+
+  strip.innerHTML = [
+    `<div class="stat-pill"><span class="stat-num">${filtered.length}</span> results</div>`,
+    `<div class="stat-pill"><span class="stat-num">${vendors.length}</span> retailers</div>`,
+    minP ? `<div class="stat-pill">Lowest <span class="stat-num">$${minP.toFixed(2)}</span></div>` : '',
+    maxP && maxP !== minP ? `<div class="stat-pill">Highest <span class="stat-num">$${maxP.toFixed(2)}</span></div>` : '',
+    savings && savings > 0.5 ? `<div class="stat-pill">Save up to <span class="stat-num">$${savings.toFixed(2)}</span> by choosing wisely</div>` : '',
+  ].filter(Boolean).join('');
+}
+
+// ── Render results ──────────────────────────────────────────────
+function renderResults() {
+  const sort = document.getElementById('sortSelect').value;
+  let results = searchResults.filter(d => activeVendors.has(d.vendor));
+
+  if (sort === 'price_asc')  results.sort((a,b)=>(a.priceNow??99999)-(b.priceNow??99999));
+  if (sort === 'price_desc') results.sort((a,b)=>(b.priceNow??0)-(a.priceNow??0));
+  if (sort === 'discount')   results.sort((a,b)=>(b.discountPct||0)-(a.discountPct||0));
+  if (sort === 'vendor')     results.sort((a,b)=>a.vendor.localeCompare(b.vendor));
+
+  document.getElementById('resultsTitle').textContent =
+    results.length + ' results for "' + lastQuery + '"';
+
+  const prices  = results.map(d=>d.priceNow).filter(Boolean);
+  const minPrice = prices.length ? Math.min(...prices) : null;
+
+  if (!results.length) {
+    document.getElementById('tableWrap').innerHTML =
+      '<div class="empty-state"><div class="no-data"><strong>No results</strong>' +
+      'Try a different search term or enable more retailers above.</div></div>';
+    document.getElementById('cardsWrap').innerHTML = '';
+    return;
+  }
+
+  // Table (desktop)
+  document.getElementById('tableWrap').innerHTML = `
+    <div class="compare-table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Retailer</th>
+          <th>Product</th>
+          <th>Price</th>
+          <th>Was</th>
+          <th>Saving</th>
+          <th>Link</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${results.map(d => {
+          const isBest = minPrice && d.priceNow === minPrice;
+          const vc = vClass(d.vendor);
+          const priceCls = isBest ? 'price-best' : 'price-normal';
+          const saveAmt  = d.priceWas && d.priceNow ? (d.priceWas - d.priceNow).toFixed(2) : null;
+          return `<tr>
+            <td><span class="vendor-badge ${vc}">${esc(d.vendor)}</span></td>
+            <td>
+              <div class="item-title">${esc(d.title)}</div>
+              ${d.description ? '<div class="item-desc">'+esc(d.description.slice(0,100))+'</div>' : ''}
+            </td>
+            <td>
+              ${d.priceNow ? '<span class="'+priceCls+'">$'+d.priceNow.toFixed(2)+'</span>' : '<span style="color:var(--muted)">—</span>'}
+            </td>
+            <td>${d.priceWas ? '<span class="price-was">$'+d.priceWas.toFixed(2)+'</span>' : '—'}</td>
+            <td>
+              ${d.discountPct > 0 ? '<span class="save-badge">-'+d.discountPct+'%</span>' : ''}
+              ${saveAmt && parseFloat(saveAmt)>0 ? '<div style="font-size:11px;color:var(--danger);margin-top:2px">Save $'+saveAmt+'</div>' : ''}
+            </td>
+            <td>${d.dealUrl ? '<a class="view-link" href="'+esc(d.dealUrl)+'" target="_blank" rel="noopener">View →</a>' : '—'}</td>
+          </tr>`;
+        }).join('')}
+      </tbody>
+    </table>
+    </div>`;
+
+  // Cards (mobile)
+  document.getElementById('cardsWrap').innerHTML = results.map(d => {
+    const isBest = minPrice && d.priceNow === minPrice;
+    const vc = vClass(d.vendor);
+    const saveAmt = d.priceWas && d.priceNow ? (d.priceWas - d.priceNow).toFixed(2) : null;
+    return `<div class="cmp-card ${isBest ? 'best-card' : ''}">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+        <span class="vendor-badge ${vc}">${esc(d.vendor)}</span>
+        ${isBest ? '<span class="best-label">Lowest price</span>' : ''}
+      </div>
+      <div class="item-title">${esc(d.title)}</div>
+      ${d.description ? '<div class="item-desc">'+esc(d.description.slice(0,90))+'</div>' : ''}
+      <div style="display:flex;align-items:baseline;gap:8px;margin-top:4px">
+        ${d.priceNow ? '<span class="'+(isBest?'price-best':'price-normal')+'">$'+d.priceNow.toFixed(2)+'</span>' : ''}
+        ${d.priceWas ? '<span class="price-was">$'+d.priceWas.toFixed(2)+'</span>' : ''}
+      </div>
+      ${d.discountPct > 0 ? '<span class="save-badge">-'+d.discountPct+'% off</span>' : ''}
+      ${saveAmt && parseFloat(saveAmt)>0 ? '<span class="save-badge">Save $'+saveAmt+'</span>' : ''}
+      ${d.dealUrl ? '<a class="view-link" href="'+esc(d.dealUrl)+'" target="_blank" rel="noopener">View at '+esc(d.vendor)+' →</a>' : ''}
+    </div>`;
+  }).join('');
+}
+
+// ── Helpers ──────────────────────────────────────────────────────
+function vClass(v) {
+  const n = (v||'').toLowerCase();
+  if (n.includes('woolworths')) return 'v-woolworths';
+  if (n.includes('coles'))      return 'v-coles';
+  if (n.includes('aldi'))       return 'v-aldi';
+  if (n.includes('amazon'))     return 'v-amazon';
+  if (n.includes('big w')||n.includes('bigw')) return 'v-bigw';
+  if (n.includes('chemist'))    return 'v-chemist';
+  if (n.includes('kogan'))      return 'v-kogan';
+  if (n.includes('jb'))         return 'v-jb';
+  return 'v-default';
+}
+function esc(s){
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function parseNum(v){ const n=parseFloat(v); return isNaN(n)?null:n; }
+</script>
+</body>
+</html>
