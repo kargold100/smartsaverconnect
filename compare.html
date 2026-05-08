@@ -204,7 +204,9 @@ tr:hover td{background:var(--bg)}
 
 <script>
 // ── Config ─────────────────────────────────────────────────────
-const APPS_SCRIPT_URL = 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
+// ── IMPORTANT: paste your Apps Script Web App URL here ─────────
+// Must be the same URL as in index.html
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz60iBo_PfKtmny2YmwFgjvCCIMDoXpHWf7KBPVDfUNBA8VtRybMCSwn7Ze9wvCdg8KHA/exec';
 const CACHE_KEY       = 'smartsaver_connect_v3';
 
 // ── State ───────────────────────────────────────────────────────
@@ -224,33 +226,68 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 async function loadData() {
-  // Try cache first
+  // 1. Load from localStorage cache (shared with main portal)
   try {
     const raw = localStorage.getItem(CACHE_KEY);
     if (raw) {
       const obj = JSON.parse(raw);
-      if (obj && obj.deals) {
+      if (obj && obj.deals && obj.deals.length) {
         allDeals = normalise(obj.deals);
+        showStatus('Loaded ' + allDeals.length + ' products from cache. Search above to compare.', false);
         return;
       }
     }
   } catch(e) {}
 
-  // Fetch from Apps Script
-  if (APPS_SCRIPT_URL.includes('YOUR_')) return;
+  // 2. URL not set
+  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes('YOUR_')) {
+    showStatus('Setup needed: open compare.html (and index.html) and replace YOUR_APPS_SCRIPT_WEB_APP_URL_HERE with your Apps Script Web App URL.', true);
+    return;
+  }
+
+  // 3. Fetch fresh from Apps Script with timeout
+  showStatus('Loading product data…', false);
   try {
-    const resp = await fetch(APPS_SCRIPT_URL + '?tab=all', { cache: 'no-store' });
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 25000);
+    const resp = await fetch(APPS_SCRIPT_URL + '?tab=all', {
+      cache: 'no-store', signal: controller.signal,
+    });
+    clearTimeout(timer);
+
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
     const json = await resp.json();
-    if (json.ok) {
-      allDeals = normalise(json.data.deals || []);
-      // Cache it
-      try {
-        const existing = JSON.parse(localStorage.getItem(CACHE_KEY) || '{}');
-        existing.deals = json.data.deals || [];
-        localStorage.setItem(CACHE_KEY, JSON.stringify(existing));
-      } catch(e) {}
+    if (!json.ok) throw new Error(json.error || 'Apps Script error');
+
+    const rawDeals = json.data?.deals || [];
+    allDeals = normalise(rawDeals);
+
+    // Save to shared cache
+    try {
+      const existing = JSON.parse(localStorage.getItem(CACHE_KEY) || '{}');
+      existing.deals = rawDeals;
+      existing.ts = Date.now();
+      localStorage.setItem(CACHE_KEY, JSON.stringify(existing));
+    } catch(e) {}
+
+    if (allDeals.length) {
+      showStatus('Loaded ' + allDeals.length + ' products. Search above to compare.', false);
+    } else {
+      showStatus('Connected but no data yet. Run scrapers first from your Google Sheet.', true);
     }
-  } catch(e) {}
+  } catch(err) {
+    const isTimeout = err.name === 'AbortError';
+    showStatus(isTimeout
+      ? 'Request timed out. Try refreshing — Apps Script can be slow on first load.'
+      : 'Could not load data: ' + err.message + '. Check your Apps Script URL and make sure it is deployed as "Anyone can access".',
+      true);
+  }
+}
+
+function showStatus(msg, isError) {
+  document.getElementById('tableWrap').innerHTML =
+    '<div class="empty-state"><div class="no-data"' +
+    (isError ? ' style="color:var(--danger)"' : '') + '>' + msg + '</div></div>';
 }
 
 function normalise(rows) {
