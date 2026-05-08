@@ -28,7 +28,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .logo span{color:var(--accent)}
 .header-sub{font-size:13px;color:var(--muted);margin-top:3px}
 .header-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.btn{display:flex;align-items:center;gap:6px;padding:8px 16px;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-size:13px;cursor:pointer;white-space:nowrap;transition:opacity .15s}
+.btn{display:flex;align-items:center;gap:6px;padding:8px 16px;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-size:13px;cursor:pointer;white-space:nowrap;transition:opacity .15s;text-decoration:none}
 .btn:hover{opacity:.75}
 .btn:disabled{opacity:.4;cursor:not-allowed}
 .btn-primary{background:var(--accent-bg);color:var(--accent);border-color:var(--accent)}
@@ -191,6 +191,7 @@ select{padding:9px 12px;border:1px solid var(--border);border-radius:8px;backgro
     </div>
     <div class="header-actions">
       <span id="liveIndicator"></span>
+      <a class="btn btn-primary" href="compare.html" title="Compare prices across all retailers">⚖ Compare prices</a>
       <button class="btn" id="refreshBtn" onclick="loadAll(true)">
         <span id="refreshIcon">↻</span> Refresh now
       </button>
@@ -212,7 +213,7 @@ select{padding:9px 12px;border:1px solid var(--border);border-radius:8px;backgro
   <div class="controls">
     <div class="search-wrap">
       <span class="search-icon">🔍</span>
-      <input type="text" id="searchInput" placeholder="Search deals, products, stores…" oninput="renderDeals()"/>
+      <input type="text" id="searchInput" placeholder="Search deals, products, stores…" oninput="renderDeals()" onkeydown="if(event.key==='Enter'){window.open('compare.html?q='+encodeURIComponent(this.value.trim()),'_blank')}"/>
     </div>
     <select id="sortSelect" onchange="renderDeals()">
       <option value="discount">Highest discount</option>
@@ -700,29 +701,36 @@ function trySaveCache() {
 // Shows when a search term is entered and multiple retailers have results
 
 function updateCompareBar(q) {
-  const bar    = document.getElementById('compareBar');
-  const title  = document.getElementById('compareTitle');
-  const chips  = document.getElementById('compareChips');
+  const bar   = document.getElementById('compareBar');
+  const title = document.getElementById('compareTitle');
+  const chips = document.getElementById('compareChips');
+
   if (!q || q.length < 2) { bar.classList.remove('show'); return; }
 
-  // Find how many distinct vendors have matches
-  const matches = [...allDeals].filter(d =>
+  const matches = allDeals.filter(d =>
     (d.title||'').toLowerCase().includes(q) ||
     (d.description||'').toLowerCase().includes(q)
   );
-  const vendors = [...new Set(matches.map(d => d.vendor))].filter(Boolean);
-  if (vendors.length < 2) { bar.classList.remove('show'); return; }
+  const vendors = [...new Set(matches.map(d => d.vendor).filter(Boolean))];
 
-  title.textContent = 'Found "' + q + '" at ' + vendors.length + ' retailers';
-  chips.innerHTML = vendors.slice(0, 5).map(v =>
+  // Always show bar when user is searching, even if only 1 vendor
+  title.textContent = vendors.length > 1
+    ? 'Found at ' + vendors.length + ' retailers — compare prices'
+    : matches.length > 0
+      ? 'Found ' + matches.length + ' result' + (matches.length>1?'s':'') + ' — open comparison'
+      : 'Search across all retailers';
+
+  chips.innerHTML = vendors.slice(0,6).map(v =>
     '<span class="compare-chip">' + esc(v) + '</span>'
   ).join('');
   bar.classList.add('show');
 }
 
 function openCompare() {
-  const q = (document.getElementById('searchInput').value || '').toLowerCase().trim();
-  if (!q) return;
+  const q = (document.getElementById('searchInput').value || '').trim();
+  window.open('compare.html' + (q ? '?q=' + encodeURIComponent(q) : ''), '_blank');
+}
+// compare function removed
 
   // Gather all deals matching the search, grouped by vendor
   const matches = [...allDeals].filter(d =>
