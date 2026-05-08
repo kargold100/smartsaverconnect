@@ -73,7 +73,17 @@ select{padding:9px 12px;border:1px solid var(--border);border-radius:8px;backgro
 .v-bigw{background:#e1f5fe;color:#01579b}
 .v-chemist{background:#fbe9e7;color:#bf360c}
 .v-default{background:#f5f5f5;color:#424242}
+.v-insurance{background:#e8eaf6;color:#283593}
+.ins-type{font-size:11px;font-weight:600;padding:2px 8px;border-radius:12px;background:var(--accent-bg);color:var(--accent);white-space:nowrap}
+.ins-save{font-size:13px;font-weight:700;color:var(--accent)}
+.ins-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.ins-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;display:flex;flex-direction:column;gap:8px}
+.ins-card:hover{box-shadow:var(--shadow,0 1px 4px rgba(0,0,0,.06))}
+.ins-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.ins-title{font-size:14px;font-weight:600;line-height:1.4}
+.ins-desc{font-size:12px;color:var(--muted);line-height:1.5}
 @media(prefers-color-scheme:dark){
+  .v-insurance{background:#0d0f2a;color:#9fa8da}
   .v-woolworths{background:#0d2e12;color:#81c784}
   .v-coles{background:#2d0b10;color:#ef9a9a}
   .v-aldi{background:#0a1929;color:#90caf9}
@@ -161,6 +171,7 @@ select{padding:9px 12px;border:1px solid var(--border);border-radius:8px;backgro
     <div class="stat"><div class="stat-num" id="sAvgDisc">—</div><div class="stat-lbl">Avg discount</div></div>
     <div class="stat"><div class="stat-num" id="sBestFuel">—</div><div class="stat-lbl">Best ULP (c/L)</div></div>
     <div class="stat"><div class="stat-num" id="sCoupons">—</div><div class="stat-lbl">Coupons</div></div>
+    <div class="stat"><div class="stat-num" id="sInsurance">—</div><div class="stat-lbl">Insurance offers</div></div>
   </div>
 
   <!-- ── Controls ── -->
@@ -184,8 +195,10 @@ select{padding:9px 12px;border:1px solid var(--border);border-radius:8px;backgro
     <button class="chip"    data-cat="coles"      onclick="setFilter(this)">Coles</button>
     <button class="chip"    data-cat="aldi"       onclick="setFilter(this)">ALDI</button>
     <button class="chip"    data-cat="amazon"     onclick="setFilter(this)">Amazon AU</button>
+    <button class="chip"    data-cat="retail"     onclick="setFilter(this)">Retail</button>
     <button class="chip"    data-cat="coupon"     onclick="setFilter(this)">Coupons</button>
     <button class="chip"    data-cat="fuel"       onclick="setFilter(this)">Fuel</button>
+    <button class="chip"    data-cat="insurance"  onclick="setFilter(this)">Insurance</button>
   </div>
 
   <!-- ── Main content ── -->
@@ -204,12 +217,13 @@ select{padding:9px 12px;border:1px solid var(--border);border-radius:8px;backgro
 // ─────────────────────────────────────────────────────────────
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz60iBo_PfKtmny2YmwFgjvCCIMDoXpHWf7KBPVDfUNBA8VtRybMCSwn7Ze9wvCdg8KHA/exec';
 
-const CACHE_KEY = 'smartsaver_connect_v2';
+const CACHE_KEY = 'smartsaver_connect_v3';
 const CACHE_TTL = 2 * 60 * 60 * 1000;
 
-let allDeals   = [];
-let allCoupons = [];
-let allFuel    = [];
+let allDeals     = [];
+let allCoupons   = [];
+let allFuel      = [];
+let allInsurance = [];
 let activeFilter = 'all';
 let _fetchController = null;
 
@@ -221,9 +235,10 @@ window.addEventListener('DOMContentLoaded', () => {
   // Show cached data INSTANTLY while fresh data loads in background
   const cached = tryGetCache();
   if (cached) {
-    allDeals   = cached.deals   || [];
-    allCoupons = cached.coupons || [];
-    allFuel    = cached.fuel    || [];
+    allDeals     = cached.deals     || [];
+    allCoupons   = cached.coupons   || [];
+    allFuel      = cached.fuel      || [];
+    allInsurance = cached.insurance || [];
     updateStats();
     renderDeals();
     setSubtitle('From cache · refreshing…');
@@ -258,56 +273,45 @@ async function fetchFresh(showSpinner) {
   showError(null);
 
   try {
-    // Fetch deals and fuel+coupons in PARALLEL — two smaller requests
-    // are faster than one huge ?tab=all request because Apps Script
-    // reads each tab sequentially internally
-    const [dealResp, auxResp] = await Promise.all([
-      fetchTab('deals', 150),
-      fetchTab('fuel_and_coupons', 0),   // handled server-side
-    ]);
+    // Single fetch — doGet returns all tabs at once
+    const url = APPS_SCRIPT_URL + '?tab=all';
+    const resp = await fetch(url, { cache: 'no-store' });
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const json = await resp.json();
+    if (!json.ok) throw new Error(json.error || 'Apps Script error');
+    const data = json.data || {};
 
-    allDeals   = normaliseDeals(dealResp.deals   || dealResp.data || []);
-    allFuel    = normaliseFuel(auxResp.fuel       || []);
-    allCoupons = normaliseCoupons(auxResp.coupons || []);
+    allDeals     = normaliseDeals(data.deals       || []);
+    allFuel      = normaliseFuel(data.fuel          || []);
+    allCoupons   = normaliseCoupons(data.coupons    || []);
+    allInsurance = normaliseInsurance(data.insurance || []);
 
     trySaveCache();
     updateStats();
     renderDeals();
 
-    const lastRun = dealResp.lastRun || auxResp.lastRun;
-    if (lastRun && lastRun.finishedAt) {
-      setSubtitle('Last scraped ' + formatTime(new Date(lastRun.finishedAt).getTime())
-        + ' · ' + allDeals.length + ' deals');
+    const lr = data.lastRun;
+    if (lr && lr.finishedAt) {
+      setSubtitle('Last scraped ' + formatTime(new Date(lr.finishedAt).getTime())
+        + ' · ' + allDeals.length + ' deals · ' + allCoupons.length + ' coupons');
     } else {
-      setSubtitle('Updated ' + formatTime(Date.now()));
+      setSubtitle('Updated ' + formatTime(Date.now())
+        + ' · ' + allDeals.length + ' deals');
     }
   } catch (err) {
     if (allDeals.length) {
-      // We have cached data — just show a subtle warning, not a full error
-      setSubtitle('⚠ Could not refresh — showing cached data');
+      setSubtitle('Could not refresh — showing cached data');
     } else {
-      showError('Could not load deals: ' + err.message
-        + (APPS_SCRIPT_URL.includes('YOUR_') ? ' — set your Apps Script URL in index.html' : ''));
+      showError('Could not load: ' + err.message
+        + (APPS_SCRIPT_URL.includes('YOUR_') ? ' — paste your Apps Script Web App URL into index.html' : ''));
       document.getElementById('dealsContainer').innerHTML = '';
     }
   } finally {
     btn.disabled = false;
     icon.classList.remove('spin');
     document.getElementById('liveIndicator').innerHTML =
-      '<span class="pulse" title="Data updates every 2 hours"></span>';
+      '<span class="pulse" title="Data refreshes automatically"></span>';
   }
-}
-
-async function fetchTab(tab, limit) {
-  // Apps Script web app returns all tabs when tab=all
-  // We call it twice: once for deals, once for fuel+coupons
-  // This keeps each response smaller and faster
-  const url = APPS_SCRIPT_URL + '?tab=all&limit=' + (limit || 150);
-  const resp = await fetch(url, { cache: 'no-store' });
-  if (!resp.ok) throw new Error('HTTP ' + resp.status);
-  const json = await resp.json();
-  if (!json.ok) throw new Error(json.error || 'Apps Script returned an error');
-  return json.data || {};
 }
 
 // Refresh button — force new fetch
@@ -359,6 +363,19 @@ function normaliseCoupons(rows) {
   }));
 }
 
+function normaliseInsurance(rows) {
+  return rows.filter(r => r.title).map(r => ({
+    insurer:     String(r.insurer     || 'Various'),
+    type:        String(r.type        || 'General'),
+    title:       String(r.title       || ''),
+    description: String(r.description || ''),
+    discountPct: parseInt(r.discountPct) || 0,
+    saveDollars: parseNum(r.saveDollars),
+    dealUrl:     String(r.dealUrl     || ''),
+    scrapedAt:   String(r.scrapedAt   || ''),
+  }));
+}
+
 // ── Render ────────────────────────────────────────────────────
 function renderDeals() {
   const q    = (document.getElementById('searchInput').value || '').toLowerCase().trim();
@@ -371,19 +388,29 @@ function renderDeals() {
     renderFuelSection(q);
     return;
   }
+  if (activeFilter === 'insurance') {
+    document.getElementById('dealsContainer').innerHTML = '';
+    renderInsuranceSection(q);
+    return;
+  }
 
   let pool = [...allDeals];
   if (activeFilter === 'all' || activeFilter === 'coupon') {
     pool = pool.concat(allCoupons.map(c => ({
       ...c, category: 'coupon', priceNow: null, discountPct: 0,
-      title: c.code + (c.discountText ? ' — ' + c.discountText : ''),
+      title: c.code + (c.discountText ? ' - ' + c.discountText : ''),
       description: c.description + (c.minSpend ? ' (min $' + c.minSpend + ')' : ''),
     })));
   }
 
   let items = pool.filter(d => {
-    const catOk = activeFilter === 'all' || d.category === activeFilter
-                  || (activeFilter === 'coupon' && d._isCoupon);
+    let catOk;
+    if (activeFilter === 'all')     catOk = true;
+    else if (activeFilter === 'coupon')  catOk = d._isCoupon || d.category === 'coupon';
+    else if (activeFilter === 'retail')  catOk = d.category === 'retail' ||
+      ['big w','bigw','chemist warehouse','jb hi-fi','officeworks','harvey norman',
+       'kogan','catch','myer','target'].some(r => (d.vendor||'').toLowerCase().includes(r));
+    else catOk = d.category === activeFilter;
     const qOk = !q || (d.title||'').toLowerCase().includes(q)
                    || (d.description||'').toLowerCase().includes(q)
                    || (d.vendor||'').toLowerCase().includes(q);
@@ -467,6 +494,59 @@ function renderFuelSummary() {
     <div class="fuel-grid">${ulp.map(fuelCard).join('')}</div>`;
 }
 
+function renderInsuranceSection(q) {
+  const INS_TYPES = ['All','Car','Home','Health','Pet','Travel','Life','Income Protection','Business','Landlord','Boat','General'];
+  let items = allInsurance.filter(o =>
+    !q || (o.title||'').toLowerCase().includes(q)
+       || (o.insurer||'').toLowerCase().includes(q)
+       || (o.type||'').toLowerCase().includes(q)
+       || (o.description||'').toLowerCase().includes(q)
+  );
+  if (!items.length) {
+    document.getElementById('fuelSection').innerHTML =
+      '<div class="empty">No insurance offers yet — run the scraper first.</div>';
+    return;
+  }
+  // Group by type
+  const byType = {};
+  items.forEach(o => { (byType[o.type] = byType[o.type]||[]).push(o); });
+  const typeOrder = ['Car','Home','Health','Pet','Travel','Life','Income Protection','Business','Landlord','General'];
+  let sectionsHtml = '';
+  typeOrder.forEach(type => {
+    const group = byType[type];
+    if (!group || !group.length) return;
+    sectionsHtml += `<div class="section-title">${esc(type)} Insurance</div>
+      <div class="ins-grid">${group.map(insuranceCard).join('')}</div>`;
+  });
+  // Any remaining types not in order
+  Object.keys(byType).forEach(type => {
+    if (typeOrder.includes(type)) return;
+    sectionsHtml += `<div class="section-title">${esc(type)} Insurance</div>
+      <div class="ins-grid">${byType[type].map(insuranceCard).join('')}</div>`;
+  });
+  document.getElementById('fuelSection').innerHTML = sectionsHtml;
+}
+
+function insuranceCard(o) {
+  const saveBadge = o.discountPct > 0
+    ? `<span class="disc-pill">-${o.discountPct}%</span>`
+    : o.saveDollars > 0
+      ? `<span class="disc-pill">Save $${o.saveDollars}</span>`
+      : '';
+  const link = o.dealUrl
+    ? `<a class="deal-link" href="${esc(o.dealUrl)}" target="_blank" rel="noopener">View offer →</a>` : '';
+  return `<div class="ins-card">
+    <div class="ins-top">
+      <span class="vendor v-insurance">${esc(o.insurer)}</span>
+      <span class="ins-type">${esc(o.type)}</span>
+      ${saveBadge}
+    </div>
+    <div class="ins-title">${esc(o.title)}</div>
+    ${o.description ? `<div class="ins-desc">${esc(o.description)}</div>` : ''}
+    ${link}
+  </div>`;
+}
+
 function fuelCard(f) {
   return `<div class="fuel-card">
     <div class="fuel-type-badge">${esc(f.fuelType)}</div>
@@ -485,6 +565,7 @@ function updateStats() {
   document.getElementById('sBestFuel').textContent = ulp.length
     ? Math.min(...ulp.map(f=>f.priceCents)) + '¢' : '—';
   document.getElementById('sCoupons').textContent = allCoupons.length || '—';
+  document.getElementById('sInsurance').textContent = allInsurance.length || '—';
 }
 
 // ── Helpers ───────────────────────────────────────────────────
@@ -509,15 +590,19 @@ function vendorClass(vendor, cat) {
   if (v.includes('aldi'))        return 'v-aldi';
   if (v.includes('amazon'))      return 'v-amazon';
   if (cat === 'fuel' || v.includes('ampol') || v.includes('bp') || v.includes('7-eleven') || v.includes('caltex') || v.includes('united') || v.includes('shell')) return 'v-fuel';
-  if (v.includes('big w') || v.includes('bigw')) return 'v-bigw';
-  if (v.includes('chemist'))     return 'v-chemist';
-  if (cat === 'coupon')          return 'v-coupon';
+  if (v.includes('big w') || v.includes('bigw'))   return 'v-bigw';
+  if (v.includes('chemist'))                         return 'v-chemist';
+  if (v.includes('jb hi-fi') || v.includes('jb'))   return 'v-default';
+  if (v.includes('officeworks'))                     return 'v-default';
+  if (v.includes('harvey norman'))                   return 'v-default';
+  if (cat === 'retail')                              return 'v-default';
+  if (cat === 'coupon')                              return 'v-coupon';
   return 'v-default';
 }
 
 function setSubtitle(text) {
   document.getElementById('headerSub').textContent =
-    'Woolworths · Coles · ALDI · Amazon AU · Fuel · Coupons — ' + text;
+    'Woolworths · Coles · ALDI · Amazon AU · Retail · Fuel · Coupons · Insurance — ' + text;
 }
 
 function showError(msg) {
@@ -552,7 +637,7 @@ function tryGetCache() {
 function trySaveCache() {
   try {
     localStorage.setItem(CACHE_KEY, JSON.stringify({
-      ts: Date.now(), deals: allDeals, coupons: allCoupons, fuel: allFuel,
+      ts: Date.now(), deals: allDeals, coupons: allCoupons, fuel: allFuel, insurance: allInsurance,
     }));
   } catch {}
 }
