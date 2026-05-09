@@ -6,413 +6,462 @@
 <title>SmartSaver Connect — Weekly Catalogues</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#f5f4f0;--card:#fff;--text:#1a1a18;--muted:#6b6a65;--hint:#9e9d98;
-  --border:rgba(0,0,0,0.09);--accent:#1a6b3c;--accent-bg:#e8f5ee;--radius:12px;
-}
-@media(prefers-color-scheme:dark){:root{
-  --bg:#18181a;--card:#232325;--text:#e8e6df;--muted:#9a9890;--hint:#6a6860;
-  --border:rgba(255,255,255,0.09);--accent:#4caf7a;--accent-bg:#0e2d1a;
-}}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  background:var(--bg);color:var(--text);min-height:100vh;margin:0}
-
-/* ── Header ── */
-.header{display:flex;align-items:center;justify-content:space-between;
-  flex-wrap:wrap;gap:12px;padding:1rem 1.25rem;
-  background:var(--card);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50}
-.logo{font-size:18px;font-weight:800;letter-spacing:-.5px;text-decoration:none;color:var(--text)}
+:root{--bg:#f5f4f0;--card:#fff;--text:#1a1a18;--muted:#6b6a65;--hint:#9e9d98;--border:rgba(0,0,0,.09);--accent:#1a6b3c;--accent-bg:#e8f5ee;--radius:12px;}
+@media(prefers-color-scheme:dark){:root{--bg:#18181a;--card:#232325;--text:#e8e6df;--muted:#9a9890;--hint:#6a6860;--border:rgba(255,255,255,.09);--accent:#4caf7a;--accent-bg:#0e2d1a;}}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.wrap{max-width:1100px;margin:0 auto;padding:1.5rem 1rem 4rem}
+.header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:1.75rem}
+.logo{font-size:20px;font-weight:800;letter-spacing:-.5px;text-decoration:none;color:var(--text)}
 .logo span{color:var(--accent)}
-.nav{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.back{font-size:13px;color:var(--accent);text-decoration:none;display:flex;align-items:center;gap:3px}
-.back:hover{text-decoration:underline}
+.nav{display:flex;gap:10px}
+.back{font-size:13px;color:var(--accent);text-decoration:none}.back:hover{text-decoration:underline}
 
-/* ── Retailer selector ── */
-.retailer-strip{padding:.75rem 1.25rem;background:var(--card);
-  border-bottom:1px solid var(--border);display:flex;gap:8px;
-  flex-wrap:wrap;align-items:center}
-.r-lbl{font-size:12px;color:var(--muted);font-weight:500;margin-right:4px}
-.rbtn{display:flex;align-items:center;gap:6px;padding:6px 14px;
-  border-radius:20px;border:1.5px solid var(--border);
-  background:var(--card);color:var(--text);font-size:13px;
-  cursor:pointer;transition:all .15s;white-space:nowrap;font-weight:500}
-.rbtn:hover{border-color:var(--accent);color:var(--accent)}
-.rbtn.active{background:var(--accent-bg);color:var(--accent);border-color:var(--accent)}
-.rbtn .dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+/* Intro */
+.intro{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;margin-bottom:2rem}
+.intro h1{font-size:18px;font-weight:700;margin-bottom:4px}
+.intro p{font-size:13px;color:var(--muted);line-height:1.6}
 
-/* ── Category tabs ── */
-.cat-tabs{padding:.5rem 1.25rem;background:var(--bg);
-  border-bottom:1px solid var(--border);display:flex;gap:6px;flex-wrap:wrap}
-.ctab{padding:5px 14px;border-radius:20px;border:1px solid var(--border);
-  background:var(--card);color:var(--muted);font-size:12px;cursor:pointer;transition:all .15s}
-.ctab:hover,.ctab.on{background:var(--accent-bg);color:var(--accent);border-color:var(--accent)}
+/* Jump bar */
+.jump-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:2rem;align-items:center}
+.jlbl{font-size:12px;color:var(--muted)}
+.jbtn{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:var(--card);color:var(--muted);font-size:12px;cursor:pointer;text-decoration:none;transition:all .15s;white-space:nowrap}
+.jbtn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-bg)}
 
-/* ── Main layout ── */
-.layout{display:flex;height:calc(100vh - 140px)}
+/* Section */
+.section{margin-bottom:2.5rem}
+.sec-title{font-size:17px;font-weight:700;margin-bottom:1rem;display:flex;align-items:center;gap:8px;padding-top:.5rem}
+.sec-sub{font-size:12px;color:var(--muted);font-weight:400}
 
-/* Left panel — catalogue cards */
-.sidebar{width:320px;flex-shrink:0;overflow-y:auto;
-  border-right:1px solid var(--border);background:var(--bg);padding:.75rem}
-
-.cat-group{margin-bottom:1.25rem}
-.cat-label{font-size:11px;font-weight:600;color:var(--muted);
-  text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem;padding:0 4px}
-
-.cat-card{background:var(--card);border:1.5px solid var(--border);
-  border-radius:10px;padding:12px;margin-bottom:8px;cursor:pointer;
-  display:flex;align-items:center;gap:12px;transition:all .15s;
-  text-decoration:none;color:var(--text)}
-.cat-card:hover{border-color:var(--accent)}
-.cat-card.active{border-color:var(--accent);background:var(--accent-bg)}
-.cat-icon{font-size:22px;width:44px;height:44px;border-radius:10px;
-  display:flex;align-items:center;justify-content:center;
-  background:var(--bg);flex-shrink:0}
-.cat-info{flex:1;min-width:0}
-.cat-name{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cat-sub{font-size:11px;color:var(--muted);margin-top:2px}
-.cat-badge{font-size:10px;padding:2px 7px;border-radius:10px;
-  background:var(--accent-bg);color:var(--accent);font-weight:600;
-  white-space:nowrap;flex-shrink:0}
-
-/* Right panel — viewer */
-.viewer{flex:1;display:flex;flex-direction:column;background:var(--bg)}
-.viewer-header{padding:.75rem 1rem;background:var(--card);
-  border-bottom:1px solid var(--border);display:flex;
-  align-items:center;justify-content:space-between;gap:12px}
-.viewer-title{font-size:14px;font-weight:600}
-.viewer-actions{display:flex;gap:8px}
-.vbtn{padding:6px 14px;border-radius:7px;border:1px solid var(--border);
-  background:var(--card);color:var(--text);font-size:12px;cursor:pointer;
-  text-decoration:none;display:inline-flex;align-items:center;gap:4px}
-.vbtn:hover{background:var(--accent-bg);color:var(--accent);border-color:var(--accent)}
-.vbtn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
-.vbtn.primary:hover{opacity:.88}
-
-.iframe-wrap{flex:1;position:relative;background:#333}
-.catalogue-frame{width:100%;height:100%;border:none}
-.placeholder{position:absolute;inset:0;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:16px;background:var(--bg);
-  color:var(--muted);text-align:center;padding:2rem}
-.placeholder h2{font-size:18px;font-weight:600;color:var(--text)}
-.placeholder p{font-size:13px;line-height:1.6;max-width:380px}
-.placeholder .hint{font-size:12px;color:var(--hint)}
-
-/* Mobile */
-@media(max-width:640px){
-  .layout{flex-direction:column;height:auto}
-  .sidebar{width:100%;height:auto;border-right:none;border-bottom:1px solid var(--border)}
-  .viewer{height:70vh}
-  .cat-card{padding:10px}
+/* Retailer cards */
+.rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.rcard{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:16px;display:flex;flex-direction:column;gap:10px;text-decoration:none;color:var(--text);transition:all .15s;position:relative}
+.rcard:hover{border-color:var(--accent);transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,0,0,.08)}
+.rcard.featured{border-color:var(--accent)}
+.rtop{display:flex;align-items:center;gap:10px}
+.ricon{font-size:26px;width:48px;height:48px;border-radius:10px;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-style:normal}
+.rname{font-size:14px;font-weight:700}
+.rdomain{font-size:11px;color:var(--muted);margin-top:1px}
+.rdesc{font-size:12px;color:var(--muted);line-height:1.5;flex:1}
+.rfoot{display:flex;align-items:center;justify-content:space-between;margin-top:auto;gap:6px;flex-wrap:wrap}
+.rtag{display:inline-block;font-size:10px;padding:2px 7px;border-radius:8px;font-weight:600;white-space:nowrap}
+.t-green{background:#e8f5e9;color:#2e7d32}
+.t-blue{background:#e3f2fd;color:#1565c0}
+.t-orange{background:#fff3e0;color:#e65100}
+.t-red{background:#fce4ec;color:#c62828}
+.t-purple{background:#f3e5f5;color:#6a1b9a}
+@media(prefers-color-scheme:dark){
+  .t-green{background:#0d2e12;color:#81c784}.t-blue{background:#0a1929;color:#90caf9}
+  .t-orange{background:#1a1200;color:#ffcc80}.t-red{background:#2d0b10;color:#ef9a9a}
+  .t-purple{background:#1a0e2a;color:#ce93d8}
 }
-
-/* Colours per retailer */
-.c-ww{background:#e8f5e9!important}  .c-coles{background:#fce4ec!important}
-.c-aldi{background:#e3f2fd!important} .c-amz{background:#fff3e0!important}
-.c-bw{background:#e1f5fe!important}   .c-cw{background:#fbe9e7!important}
-.c-jb{background:#e8f5e9!important}   .c-kmart{background:#f3e5f5!important}
-.c-bunnings{background:#fff8e1!important} .c-dan{background:#fce4ec!important}
-.c-fuel{background:#ede7f6!important}
+.rlink{font-size:12px;font-weight:600;color:var(--accent)}
+.badge-live{position:absolute;top:10px;right:10px;font-size:9px;font-weight:700;padding:2px 6px;border-radius:6px;background:#e65100;color:#fff}
+.badge-weekly{position:absolute;top:10px;right:10px;font-size:9px;font-weight:700;padding:2px 6px;border-radius:6px;background:var(--accent);color:#fff}
 </style>
 </head>
 <body>
-
-<div class="header">
-  <a class="logo" href="index.html">SmartSaver<span>Connect</span></a>
-  <div class="nav">
-    <a class="back" href="index.html">← Deals</a>
-    <a class="back" href="compare.html" style="margin-left:8px">⚖ Compare</a>
-  </div>
-</div>
-
-<div class="retailer-strip">
-  <span class="r-lbl">Jump to:</span>
-  <button class="rbtn" onclick="scrollTo('cat-grocery')"><span class="dot" style="background:#2e7d32"></span>Grocery</button>
-  <button class="rbtn" onclick="scrollTo('cat-retail')"><span class="dot" style="background:#1565c0"></span>Retail</button>
-  <button class="rbtn" onclick="scrollTo('cat-health')"><span class="dot" style="background:#bf360c"></span>Health</button>
-  <button class="rbtn" onclick="scrollTo('cat-home')"><span class="dot" style="background:#e65100"></span>Home & Hardware</button>
-  <button class="rbtn" onclick="scrollTo('cat-liquor')"><span class="dot" style="background:#6a1b9a"></span>Liquor</button>
-  <button class="rbtn" onclick="scrollTo('cat-fuel')"><span class="dot" style="background:#4527a0"></span>Fuel & Auto</button>
-</div>
-
-<div class="layout">
-
-  <!-- Sidebar: catalogue list -->
-  <div class="sidebar" id="sidebar">
-
-    <div class="cat-group" id="cat-grocery">
-      <div class="cat-label">🛒 Grocery</div>
-
-      <div class="cat-card" onclick="open_('Woolworths Specials','https://www.woolworths.com.au/shop/specials/all','woolworths',this)">
-        <div class="cat-icon c-ww">🟢</div>
-        <div class="cat-info"><div class="cat-name">Woolworths</div><div class="cat-sub">Weekly specials & half price</div></div>
-        <span class="cat-badge">Live</span>
-      </div>
-
-      <div class="cat-card" onclick="open_('Coles On Special','https://www.coles.com.au/on-special','coles',this)">
-        <div class="cat-icon c-coles">🔴</div>
-        <div class="cat-info"><div class="cat-name">Coles</div><div class="cat-sub">On special this week</div></div>
-        <span class="cat-badge">Live</span>
-      </div>
-
-      <div class="cat-card" onclick="open_('ALDI Special Buys','https://www.aldi.com.au/en/special-buys/','aldi',this)">
-        <div class="cat-icon c-aldi">🔵</div>
-        <div class="cat-info"><div class="cat-name">ALDI</div><div class="cat-sub">Wed & Sat special buys</div></div>
-        <span class="cat-badge">Weekly</span>
-      </div>
-
-      <div class="cat-card" onclick="open_('IGA Specials','https://www.iga.com.au/specials/','iga',this)">
-        <div class="cat-icon" style="background:#e8f5e9">🏪</div>
-        <div class="cat-info"><div class="cat-name">IGA</div><div class="cat-sub">Weekly specials</div></div>
-      </div>
-
-      <div class="cat-card" onclick="open_('Costco Deals','https://www.costco.com.au/','costco',this)">
-        <div class="cat-icon" style="background:#e3f2fd">🔵</div>
-        <div class="cat-info"><div class="cat-name">Costco</div><div class="cat-sub">Member deals & hot buys</div></div>
-      </div>
-    </div>
-
-    <div class="cat-group" id="cat-retail">
-      <div class="cat-label">🏬 General Retail</div>
-
-      <div class="cat-card" onclick="open_('Big W Deals','https://www.bigw.com.au/category/sale-clearance','bigw',this)">
-        <div class="cat-icon c-bw">🔵</div>
-        <div class="cat-info"><div class="cat-name">Big W</div><div class="cat-sub">Sale & clearance</div></div>
-        <span class="cat-badge">Live</span>
-      </div>
-
-      <div class="cat-card" onclick="open_('Kmart Deals','https://www.kmart.com.au/category/on-sale/','kmart',this)">
-        <div class="cat-icon c-kmart">🟣</div>
-        <div class="cat-info"><div class="cat-name">Kmart</div><div class="cat-sub">On sale now</div></div>
-        <span class="cat-badge">Live</span>
-      </div>
-
-      <div class="cat-card" onclick="open_('Target Sales','https://www.target.com.au/sale','target',this)">
-        <div class="cat-icon" style="background:#fce4ec">🎯</div>
-        <div class="cat-info"><div class="cat-name">Target</div><div class="cat-sub">Current sales</div></div>
-      </div>
-
-      <div class="cat-card" onclick="open_('Myer Sale','https://www.myer.com.au/c/sale','myer',this)">
-        <div class="cat-icon" style="background:#fff3e0">🟠</div>
-        <div class="cat-info"><div class="cat-name">Myer</div><div class="cat-sub">Sale & clearance</div></div>
-      </div>
-
-      <div class="cat-card" onclick="open_('David Jones Sale','https://www.davidjones.com/sale','dj',this)">
-        <div class="cat-icon" style="background:#f5f5f5">🏛️</div>
-        <div class="cat-info"><div class="cat-name">David Jones</div><div class="cat-sub">Current offers</div></div>
-      </div>
-    </div>
-
-    <div class="cat-group" id="cat-electronics">
-      <div class="cat-label">💻 Electronics</div>
-
-      <div class="cat-card" onclick="open_('JB Hi-Fi Weekly Specials','https://www.jbhifi.com.au/pages/weekly-specials','jb',this)">
-        <div class="cat-icon c-jb">🟢</div>
-        <div class="cat-info"><div class="cat-name">JB Hi-Fi</div><div class="cat-sub">Weekly specials</div></div>
-        <span class="cat-badge">Weekly</span>
-      </div>
-
-      <div class="cat-card" onclick="open_('Harvey Norman Deals','https://www.harveynorman.com.au/specials/','hn',this)">
-        <div class="cat-icon" style="background:#fff3e0">🟠</div>
-        <div class="cat-info"><div class="cat-name">Harvey Norman</div><div class="cat-sub">Current specials</div></div>
-      </div>
-
-      <div class="cat-card" onclick="open_('The Good Guys Deals','https://www.thegoodguys.com.au/specials','tgg',this)">
-        <div class="cat-icon" style="background:#e3f2fd">🔵</div>
-        <div class="cat-info"><div class="cat-name">The Good Guys</div><div class="cat-sub">Latest specials</div></div>
-      </div>
-
-      <div class="cat-card" onclick="open_('Officeworks Deals','https://www.officeworks.com.au/shop/officeworks/specials','ow',this)">
-        <div class="cat-icon" style="background:#e8f5e9">📎</div>
-        <div class="cat-info"><div class="cat-name">Officeworks</div><div class="cat-sub">Deals & specials</div></div>
-      </div>
-
-      <div class="cat-card" onclick="open_('Amazon AU Deals','https://www.amazon.com.au/gp/goldbox','amz',this)">
-        <div class="cat-icon c-amz">📦</div>
-        <div class="cat-info"><div class="cat-name">Amazon AU</div><div class="cat-sub">Today's deals (Gold Box)</div></div>
-        <span class="cat-badge">Hourly</span>
-      </div>
-
-      <div class="cat-card" onclick="open_('Kogan Sales','https://www.kogan.com/au/shop/?feature_sale=1','kog',this)">
-        <div class="cat-icon c-kmart">💜</div>
-        <div class="cat-info"><div class="cat-name">Kogan</div><div class="cat-sub">Flash sales & deals</div></div>
-      </div>
-    </div>
-
-    <div class="cat-group" id="cat-health">
-      <div class="cat-label">💊 Health & Beauty</div>
-
-      <div class="cat-card" onclick="open_('Chemist Warehouse Specials','https://www.chemistwarehouse.com.au/specials','cw',this)">
-        <div class="cat-icon c-cw">💊</div>
-        <div class="cat-info"><div class="cat-name">Chemist Warehouse</div><div class="cat-sub">Half price specials</div></div>
-        <span class="cat-badge">Weekly</span>
-      </div>
-
-      <div class="cat-card" onclick="open_('Priceline Deals','https://www.priceline.com.au/specials','pl',this)">
-        <div class="cat-icon" style="background:#fce4ec">💗</div>
-        <div class="cat-info"><div class="cat-name">Priceline</div><div class="cat-sub">Half price beauty & health</div></div>
-      </div>
-
-      <div class="cat-card" onclick="open_('My Chemist Specials','https://www.mychemist.com.au/specials.html','mc',this)">
-        <div class="cat-icon" style="background:#e8f5e9">🏥</div>
-        <div class="cat-info"><div class="cat-name">My Chemist</div><div class="cat-sub">Current specials</div></div>
-      </div>
-    </div>
-
-    <div class="cat-group" id="cat-home">
-      <div class="cat-label">🏠 Home & Hardware</div>
-
-      <div class="cat-card" onclick="open_('Bunnings Deals','https://www.bunnings.com.au/our-range/building-hardware/specials','bun',this)">
-        <div class="cat-icon c-bunnings">🔨</div>
-        <div class="cat-info"><div class="cat-name">Bunnings</div><div class="cat-sub">Specials & deals</div></div>
-      </div>
-
-      <div class="cat-card" onclick="open_('IKEA Deals','https://www.ikea.com/au/en/offers/','ikea',this)">
-        <div class="cat-icon" style="background:#fff3e0">🛋️</div>
-        <div class="cat-info"><div class="cat-name">IKEA</div><div class="cat-sub">Current offers</div></div>
-      </div>
-
-      <div class="cat-card" onclick="open_('Temple & Webster Sale','https://www.templeandwebster.com.au/sale/','tw',this)">
-        <div class="cat-icon" style="background:#f3e5f5">🏺</div>
-        <div class="cat-info"><div class="cat-name">Temple & Webster</div><div class="cat-sub">Sale items</div></div>
-      </div>
-    </div>
-
-    <div class="cat-group" id="cat-liquor">
-      <div class="cat-label">🍷 Liquor</div>
-
-      <div class="cat-card" onclick="open_('Dan Murphy\'s Specials','https://www.danmurphys.com.au/specials','dan',this)">
-        <div class="cat-icon c-dan">🍷</div>
-        <div class="cat-info"><div class="cat-name">Dan Murphy's</div><div class="cat-sub">Specials & promotions</div></div>
-      </div>
-
-      <div class="cat-card" onclick="open_('BWS Deals','https://www.bws.com.au/specials','bws',this)">
-        <div class="cat-icon" style="background:#fce4ec">🍺</div>
-        <div class="cat-info"><div class="cat-name">BWS</div><div class="cat-sub">Weekly specials</div></div>
-      </div>
-
-      <div class="cat-card" onclick="open_('Liquorland Specials','https://www.liquorland.com.au/specials','ll',this)">
-        <div class="cat-icon" style="background:#e3f2fd">🥂</div>
-        <div class="cat-info"><div class="cat-name">Liquorland</div><div class="cat-sub">Current deals</div></div>
-      </div>
-    </div>
-
-    <div class="cat-group" id="cat-sports">
-      <div class="cat-label">⚽ Sports & Outdoors</div>
-
-      <div class="cat-card" onclick="open_('Rebel Sport Sale','https://www.rebelsport.com.au/sale','rebel',this)">
-        <div class="cat-icon" style="background:#e8f5e9">⚽</div>
-        <div class="cat-info"><div class="cat-name">Rebel Sport</div><div class="cat-sub">Sale & clearance</div></div>
-      </div>
-
-      <div class="cat-card" onclick="open_('Anaconda Deals','https://www.anacondastores.com/specials','anac',this)">
-        <div class="cat-icon" style="background:#e3f2fd">🏕️</div>
-        <div class="cat-info"><div class="cat-name">Anaconda</div><div class="cat-sub">Outdoor & camping deals</div></div>
-      </div>
-
-      <div class="cat-card" onclick="open_('BCF Deals','https://www.bcf.com.au/content/specials','bcf',this)">
-        <div class="cat-icon" style="background:#e8f5e9">🎣</div>
-        <div class="cat-info"><div class="cat-name">BCF</div><div class="cat-sub">Fishing, camping, boating</div></div>
-      </div>
-    </div>
-
-    <div class="cat-group" id="cat-fuel">
-      <div class="cat-label">⛽ Fuel & Automotive</div>
-
-      <div class="cat-card" onclick="open_('MotorMouth - Live Fuel Prices','https://www.motormouth.com.au/fuel-price-map','fuel',this)">
-        <div class="cat-icon c-fuel">🗺️</div>
-        <div class="cat-info"><div class="cat-name">MotorMouth</div><div class="cat-sub">Live VIC fuel price map</div></div>
-        <span class="cat-badge">Live</span>
-      </div>
-
-      <div class="cat-card" onclick="open_('GasBuddy Melbourne','https://www.gasbuddy.com/go/melbourne','gasbuddy',this)">
-        <div class="cat-icon c-fuel">⛽</div>
-        <div class="cat-info"><div class="cat-name">GasBuddy Melbourne</div><div class="cat-sub">Community fuel prices</div></div>
-        <span class="cat-badge">Live</span>
-      </div>
-
-      <div class="cat-card" onclick="open_('Supercheap Auto Deals','https://www.supercheapauto.com.au/on-sale','sca',this)">
-        <div class="cat-icon" style="background:#fff3e0">🔧</div>
-        <div class="cat-info"><div class="cat-name">Supercheap Auto</div><div class="cat-sub">On-sale specials</div></div>
-      </div>
-
-      <div class="cat-card" onclick="open_('Repco Deals','https://www.repco.com.au/repco/specials','repco',this)">
-        <div class="cat-icon" style="background:#fce4ec">🚗</div>
-        <div class="cat-info"><div class="cat-name">Repco</div><div class="cat-sub">Specials & promotions</div></div>
-      </div>
-    </div>
-
-  </div><!-- /sidebar -->
-
-  <!-- Viewer panel -->
-  <div class="viewer">
-    <div class="viewer-header">
-      <div class="viewer-title" id="viewerTitle">Select a retailer to view their current catalogue</div>
-      <div class="viewer-actions">
-        <a class="vbtn" id="openExtBtn" href="#" target="_blank" rel="noopener" style="display:none">
-          Open in new tab ↗
-        </a>
-      </div>
-    </div>
-    <div class="iframe-wrap">
-      <div class="placeholder" id="placeholder">
-        <div style="font-size:48px">🛒</div>
-        <h2>Weekly Catalogues</h2>
-        <p>Choose a retailer from the left to view their current specials, weekly catalogue or deals page — all loading directly from the retailer's own website.</p>
-        <p class="hint">30+ retailers across grocery, electronics, health, home, liquor, sports and fuel.</p>
-      </div>
-      <iframe id="catalogueFrame" class="catalogue-frame" style="display:none"
-        title="Retailer catalogue" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-top-navigation"></iframe>
+<div class="wrap">
+  <div class="header">
+    <a class="logo" href="index.html">SmartSaver<span>Connect</span></a>
+    <div class="nav">
+      <a class="back" href="index.html">← Deals</a>
+      <a class="back" href="compare.html" style="margin-left:8px">⚖ Compare</a>
     </div>
   </div>
 
-</div><!-- /layout -->
+  <div class="intro">
+    <h1>📖 Weekly Catalogues & Specials</h1>
+    <p>Browse current weekly catalogues and specials from 35+ Australian retailers across grocery, electronics, health, home, liquor, sports and fuel. All links open directly on the retailer's own website.</p>
+  </div>
 
-<script>
-let currentUrl = '';
+  <div class="jump-bar">
+    <span class="jlbl">Jump to:</span>
+    <a class="jbtn" href="#grocery">🛒 Grocery</a>
+    <a class="jbtn" href="#electronics">💻 Electronics</a>
+    <a class="jbtn" href="#health">💊 Health & Beauty</a>
+    <a class="jbtn" href="#home">🏠 Home & Hardware</a>
+    <a class="jbtn" href="#fashion">👗 Fashion</a>
+    <a class="jbtn" href="#sports">⚽ Sports</a>
+    <a class="jbtn" href="#liquor">🍷 Liquor</a>
+    <a class="jbtn" href="#fuel">⛽ Fuel & Auto</a>
+    <a class="jbtn" href="#food">🍔 Food Delivery</a>
+  </div>
 
-function open_(title, url, id, el) {
-  // Update active state
-  document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('active'));
-  if (el) el.classList.add('active');
+  <!-- GROCERY -->
+  <div class="section" id="grocery">
+    <div class="sec-title">🛒 Grocery <span class="sec-sub">— weekly specials & half price items</span></div>
+    <div class="rgrid">
 
-  currentUrl = url;
-  document.getElementById('viewerTitle').textContent = title;
+      <a class="rcard featured" href="https://www.woolworths.com.au/shop/specials/all" target="_blank" rel="noopener">
+        <span class="badge-weekly">Weekly</span>
+        <div class="rtop"><div class="ricon">🟢</div><div><div class="rname">Woolworths</div><div class="rdomain">woolworths.com.au</div></div></div>
+        <div class="rdesc">Half price specials, fresh deals and weekly catalogue items. Updates every Wednesday.</div>
+        <div class="rfoot"><span class="rtag t-green">Grocery</span><span class="rlink">View specials →</span></div>
+      </a>
 
-  const extBtn = document.getElementById('openExtBtn');
-  extBtn.href = url;
-  extBtn.style.display = 'inline-flex';
+      <a class="rcard featured" href="https://www.coles.com.au/on-special" target="_blank" rel="noopener">
+        <span class="badge-weekly">Weekly</span>
+        <div class="rtop"><div class="ricon">🔴</div><div><div class="rname">Coles</div><div class="rdomain">coles.com.au</div></div></div>
+        <div class="rdesc">On-special items and half price catalogue updated every week. Includes Flybuys bonus points deals.</div>
+        <div class="rfoot"><span class="rtag t-red">Grocery</span><span class="rlink">View specials →</span></div>
+      </a>
 
-  const frame = document.getElementById('catalogueFrame');
-  const placeholder = document.getElementById('placeholder');
+      <a class="rcard featured" href="https://www.aldi.com.au/en/special-buys/" target="_blank" rel="noopener">
+        <span class="badge-weekly">Wed & Sat</span>
+        <div class="rtop"><div class="ricon">🔵</div><div><div class="rname">ALDI</div><div class="rdomain">aldi.com.au</div></div></div>
+        <div class="rdesc">Wednesday and Saturday Special Buys — household, clothing, tools and more at very low prices. Limited stock.</div>
+        <div class="rfoot"><span class="rtag t-blue">Special Buys</span><span class="rlink">View buys →</span></div>
+      </a>
 
-  placeholder.style.display = 'none';
-  frame.style.display = 'block';
-  frame.src = url;
-}
+      <a class="rcard" href="https://www.iga.com.au/specials/" target="_blank" rel="noopener">
+        <div class="rtop"><div class="ricon">🏪</div><div><div class="rname">IGA</div><div class="rdomain">iga.com.au</div></div></div>
+        <div class="rdesc">IGA weekly specials — local community supermarkets with competitive prices.</div>
+        <div class="rfoot"><span class="rtag t-green">Grocery</span><span class="rlink">View specials →</span></div>
+      </a>
 
-function scrollTo(id) {
-  const el = document.getElementById(id);
-  if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
-}
+      <a class="rcard" href="https://www.costco.com.au/savings-events" target="_blank" rel="noopener">
+        <div class="rtop"><div class="ricon">🏭</div><div><div class="rname">Costco</div><div class="rdomain">costco.com.au</div></div></div>
+        <div class="rdesc">Costco member savings and hot buys. Bulk value on groceries, electronics, household and more.</div>
+        <div class="rfoot"><span class="rtag t-blue">Warehouse</span><span class="rlink">View savings →</span></div>
+      </a>
 
-// On mobile, clicking a card opens the URL in new tab instead of iframe
-if (window.innerWidth < 640) {
-  document.querySelectorAll('.cat-card').forEach(card => {
-    const origClick = card.onclick;
-    card.onclick = function(e) {
-      // Extract URL from the onclick call
-      const match = card.getAttribute('onclick').match(/'(https?:\/\/[^']+)'/);
-      if (match) window.open(match[1], '_blank', 'noopener');
-    };
-  });
-}
+      <a class="rcard" href="https://www.trolley.com.au" target="_blank" rel="noopener">
+        <span class="badge-live">Compare</span>
+        <div class="rtop"><div class="ricon">⚖️</div><div><div class="rname">Trolley.com.au</div><div class="rdomain">trolley.com.au</div></div></div>
+        <div class="rdesc">Compare Woolworths vs Coles prices on any product side by side. Free and live.</div>
+        <div class="rfoot"><span class="rtag t-green">Compare</span><span class="rlink">Compare prices →</span></div>
+      </a>
 
-// Pre-select from URL param
-const urlParam = new URLSearchParams(location.search).get('open');
-if (urlParam) {
-  const card = document.querySelector('[onclick*="' + urlParam + '"]');
-  if (card) card.click();
-}
-</script>
+    </div>
+  </div>
+
+  <!-- ELECTRONICS -->
+  <div class="section" id="electronics">
+    <div class="sec-title">💻 Electronics & Tech <span class="sec-sub">— weekly specials & deals</span></div>
+    <div class="rgrid">
+
+      <a class="rcard" href="https://www.jbhifi.com.au/pages/weekly-specials" target="_blank" rel="noopener">
+        <span class="badge-weekly">Weekly</span>
+        <div class="rtop"><div class="ricon">🟢</div><div><div class="rname">JB Hi-Fi</div><div class="rdomain">jbhifi.com.au</div></div></div>
+        <div class="rdesc">Weekly tech specials, price drops on TVs, laptops, phones, gaming and appliances.</div>
+        <div class="rfoot"><span class="rtag t-green">Electronics</span><span class="rlink">View specials →</span></div>
+      </a>
+
+      <a class="rcard" href="https://www.harveynorman.com.au/specials" target="_blank" rel="noopener">
+        <div class="rtop"><div class="ricon">🟠</div><div><div class="rname">Harvey Norman</div><div class="rdomain">harveynorman.com.au</div></div></div>
+        <div class="rdesc">Current specials on electronics, appliances, furniture and bedding.</div>
+        <div class="rfoot"><span class="rtag t-orange">Electronics</span><span class="rlink">View specials →</span></div>
+      </a>
+
+      <a class="rcard" href="https://www.thegoodguys.com.au/specials" target="_blank" rel="noopener">
+        <div class="rtop"><div class="ricon">🔵</div><div><div class="rname">The Good Guys</div><div class="rdomain">thegoodguys.com.au</div></div></div>
+        <div class="rdesc">Appliances, TVs and tech at Good Guys prices. Check weekly specials and Good Price promise.</div>
+        <div class="rfoot"><span class="rtag t-blue">Appliances</span><span class="rlink">View specials →</span></div>
+      </a>
+
+      <a class="rcard" href="https://www.officeworks.com.au/shop/officeworks/specials" target="_blank" rel="noopener">
+        <div class="rtop"><div class="ricon">📎</div><div><div class="rname">Officeworks</div><div class="rdomain">officeworks.com.au</div></div></div>
+        <div class="rdesc">Tech, stationery and office supplies specials. Price beat guarantee.</div>
+        <div class="rfoot"><span class="rtag t-blue">Office & Tech</span><span class="rlink">View specials →</span></div>
+      </a>
+
+      <a class="rcard" href="https://www.amazon.com.au/gp/goldbox" target="_blank" rel="noopener">
+        <span class="badge-live">Hourly</span>
+        <div class="rtop"><div class="ricon">📦</div><div><div class="rname">Amazon AU</div><div class="rdomain">amazon.com.au</div></div></div>
+        <div class="rdesc">Gold Box deals updated hourly — lightning deals and limited-time offers across all categories.</div>
+        <div class="rfoot"><span class="rtag t-orange">All categories</span><span class="rlink">View deals →</span></div>
+      </a>
+
+      <a class="rcard" href="https://www.kogan.com/au/shop/?feature_sale=1" target="_blank" rel="noopener">
+        <div class="rtop"><div class="ricon">💜</div><div><div class="rname">Kogan</div><div class="rdomain">kogan.com</div></div></div>
+        <div class="rdesc">Flash sales and discounts on electronics, appliances, furniture and more.</div>
+        <div class="rfoot"><span class="rtag t-purple">Flash sales</span><span class="rlink">View deals →</span></div>
+      </a>
+
+      <a class="rcard" href="https://www.catch.com.au/deals" target="_blank" rel="noopener">
+        <div class="rtop"><div class="ricon">🎣</div><div><div class="rname">Catch</div><div class="rdomain">catch.com.au</div></div></div>
+        <div class="rdesc">Daily deals across electronics, fashion, home, toys and more.</div>
+        <div class="rfoot"><span class="rtag t-orange">Daily deals</span><span class="rlink">View deals →</span></div>
+      </a>
+
+      <a class="rcard" href="https://www.ebay.com.au/deals" target="_blank" rel="noopener">
+        <div class="rtop"><div class="ricon">🔨</div><div><div class="rname">eBay AU</div><div class="rdomain">ebay.com.au</div></div></div>
+        <div class="rdesc">eBay AU daily deals and Plus exclusive offers. Use code for extra discounts.</div>
+        <div class="rfoot"><span class="rtag t-blue">Marketplace</span><span class="rlink">View deals →</span></div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- GENERAL RETAIL -->
+  <div class="section" id="retail">
+    <div class="sec-title">🏬 General Retail <span class="sec-sub">— department stores & variety</span></div>
+    <div class="rgrid">
+
+      <a class="rcard" href="https://www.bigw.com.au/category/sale-clearance" target="_blank" rel="noopener">
+        <div class="rtop"><div class="ricon">🔵</div><div><div class="rname">Big W</div><div class="rdomain">bigw.com.au</div></div></div>
+        <div class="rdesc">Sale and clearance on clothing, toys, electronics, homewares and groceries.</div>
+        <div class="rfoot"><span class="rtag t-blue">Sale</span><span class="rlink">View sale →</span></div>
+      </a>
+
+      <a class="rcard" href="https://www.kmart.com.au/category/on-sale" target="_blank" rel="noopener">
+        <div class="rtop"><div class="ricon">🟣</div><div><div class="rname">Kmart</div><div class="rdomain">kmart.com.au</div></div></div>
+        <div class="rdesc">On sale now — clothing, homewares, toys, baby products at low prices.</div>
+        <div class="rfoot"><span class="rtag t-purple">Sale</span><span class="rlink">View sale →</span></div>
+      </a>
+
+      <a class="rcard" href="https://www.target.com.au/sale" target="_blank" rel="noopener">
+        <div class="rtop"><div class="ricon">🎯</div><div><div class="rname">Target</div><div class="rdomain">target.com.au</div></div></div>
+        <div class="rdesc">Current sales on clothing, homewares, toys and baby. Weekly specials updated regularly.</div>
+        <div class="rfoot"><span class="rtag t-red">Sale</span><span class="rlink">View sale →</span></div>
+      </a>
+
+      <a class="rcard" href="https://www.myer.com.au/c/sale" target="_blank" rel="noopener">
+        <div class="rtop"><div class="ricon">🏛️</div><div><div class="rname">Myer</div><div class="rdomain">myer.com.au</div></div></div>
+        <div class="rdesc">Myer sale — fashion, beauty, homewares and gifts. MYER one members get extra discounts.</div>
+        <div class="rfoot"><span class="rtag t-orange">Department</span><span class="rlink">View sale →</span></div>
+      </a>
+
+      <a class="rcard" href="https://www.davidjones.com/sale" target="_blank" rel="noopener">
+        <div class="rtop"><div class="ricon">🏢</div><div><div class="rname">David Jones</div><div class="rdomain">davidjones.com</div></div></div>
+        <div class="rdesc">David Jones sale — premium fashion, beauty, food and homewares.</div>
+        <div class="rfoot"><span class="rtag t-blue">Premium</span><span class="rlink">View sale →</span></div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- HEALTH & BEAUTY -->
+  <div class="section" id="health">
+    <div class="sec-title">💊 Health & Beauty <span class="sec-sub">— half price specials</span></div>
+    <div class="rgrid">
+
+      <a class="rcard featured" href="https://www.chemistwarehouse.com.au/specials" target="_blank" rel="noopener">
+        <span class="badge-weekly">Weekly</span>
+        <div class="rtop"><div class="ricon">💊</div><div><div class="rname">Chemist Warehouse</div><div class="rdomain">chemistwarehouse.com.au</div></div></div>
+        <div class="rdesc">Half price vitamins, skincare, medicines and beauty products every week. Best health prices in AU.</div>
+        <div class="rfoot"><span class="rtag t-red">Health</span><span class="rlink">View specials →</span></div>
+      </a>
+
+      <a class="rcard" href="https://www.priceline.com.au/specials" target="_blank" rel="noopener">
+        <span class="badge-weekly">Weekly</span>
+        <div class="rtop"><div class="ricon">💗</div><div><div class="rname">Priceline</div><div class="rdomain">priceline.com.au</div></div></div>
+        <div class="rdesc">Half price beauty and health products weekly. Sister Club members get extra discounts.</div>
+        <div class="rfoot"><span class="rtag t-red">Beauty</span><span class="rlink">View specials →</span></div>
+      </a>
+
+      <a class="rcard" href="https://www.mychemist.com.au/specials.html" target="_blank" rel="noopener">
+        <div class="rtop"><div class="ricon">🏥</div><div><div class="rname">My Chemist</div><div class="rdomain">mychemist.com.au</div></div></div>
+        <div class="rdesc">Vitamins, skincare and pharmacy products at competitive prices.</div>
+        <div class="rfoot"><span class="rtag t-blue">Health</span><span class="rlink">View specials →</span></div>
+      </a>
+
+      <a class="rcard" href="https://www.sephora.com.au/sale" target="_blank" rel="noopener">
+        <div class="rtop"><div class="ricon">🧴</div><div><div class="rname">Sephora</div><div class="rdomain">sephora.com.au</div></div></div>
+        <div class="rdesc">Beauty sale — makeup, skincare, fragrance from premium brands.</div>
+        <div class="rfoot"><span class="rtag t-red">Beauty</span><span class="rlink">View sale →</span></div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- HOME & HARDWARE -->
+  <div class="section" id="home">
+    <div class="sec-title">🏠 Home, Garden & Hardware <span class="sec-sub">— current offers</span></div>
+    <div class="rgrid">
+
+      <a class="rcard" href="https://www.bunnings.com.au/our-range/building-hardware/specials" target="_blank" rel="noopener">
+        <div class="rtop"><div class="ricon">🔨</div><div><div class="rname">Bunnings</div><div class="rdomain">bunnings.com.au</div></div></div>
+        <div class="rdesc">Hardware, garden, painting and home improvement specials. Lowest prices guaranteed.</div>
+        <div class="rfoot"><span class="rtag t-green">Hardware</span><span class="rlink">View specials →</span></div>
+      </a>
+
+      <a class="rcard" href="https://www.ikea.com/au/en/offers/" target="_blank" rel="noopener">
+        <div class="rtop"><div class="ricon">🛋️</div><div><div class="rname">IKEA</div><div class="rdomain">ikea.com/au</div></div></div>
+        <div class="rdesc">Current IKEA offers and family card deals on furniture, storage and homewares.</div>
+        <div class="rfoot"><span class="rtag t-blue">Furniture</span><span class="rlink">View offers →</span></div>
+      </a>
+
+      <a class="rcard" href="https://www.templeandwebster.com.au/sale/" target="_blank" rel="noopener">
+        <div class="rtop"><div class="ricon">🏺</div><div><div class="rname">Temple & Webster</div><div class="rdomain">templeandwebster.com.au</div></div></div>
+        <div class="rdesc">Online furniture and homewares sale — up to 70% off across thousands of products.</div>
+        <div class="rfoot"><span class="rtag t-purple">Homewares</span><span class="rlink">View sale →</span></div>
+      </a>
+
+      <a class="rcard" href="https://www.babybunting.com.au/sale" target="_blank" rel="noopener">
+        <div class="rtop"><div class="ricon">👶</div><div><div class="rname">Baby Bunting</div><div class="rdomain">babybunting.com.au</div></div></div>
+        <div class="rdesc">Baby and toddler gear, prams, car seats and nursery products on sale.</div>
+        <div class="rfoot"><span class="rtag t-orange">Baby</span><span class="rlink">View sale →</span></div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- FASHION -->
+  <div class="section" id="fashion">
+    <div class="sec-title">👗 Fashion & Clothing <span class="sec-sub">— sale & clearance</span></div>
+    <div class="rgrid">
+
+      <a class="rcard" href="https://www.uniqlo.com/au/en/sale/" target="_blank" rel="noopener">
+        <div class="rtop"><div class="ricon">👕</div><div><div class="rname">Uniqlo</div><div class="rdomain">uniqlo.com/au</div></div></div>
+        <div class="rdesc">Uniqlo AU sale items — quality basics at discounted prices.</div>
+        <div class="rfoot"><span class="rtag t-red">Fashion</span><span class="rlink">View sale →</span></div>
+      </a>
+
+      <a class="rcard" href="https://www.cottonon.com/AU/sale/" target="_blank" rel="noopener">
+        <div class="rtop"><div class="ricon">🌿</div><div><div class="rname">Cotton On</div><div class="rdomain">cottonon.com</div></div></div>
+        <div class="rdesc">Cotton On Group sale — men, women, kids, body and stationery.</div>
+        <div class="rfoot"><span class="rtag t-green">Fashion</span><span class="rlink">View sale →</span></div>
+      </a>
+
+      <a class="rcard" href="https://www.theiconic.com.au/sale/" target="_blank" rel="noopener">
+        <div class="rtop"><div class="ricon">👠</div><div><div class="rname">THE ICONIC</div><div class="rdomain">theiconic.com.au</div></div></div>
+        <div class="rdesc">Australia's biggest fashion and lifestyle retailer. Up to 60% off in the sale.</div>
+        <div class="rfoot"><span class="rtag t-blue">Fashion</span><span class="rlink">View sale →</span></div>
+      </a>
+
+      <a class="rcard" href="https://www.glue-store.com.au/sale" target="_blank" rel="noopener">
+        <div class="rtop"><div class="ricon">🛹</div><div><div class="rname">Glue Store</div><div class="rdomain">glue-store.com.au</div></div></div>
+        <div class="rdesc">Streetwear and youth fashion on sale — Nike, Adidas, Champion and more.</div>
+        <div class="rfoot"><span class="rtag t-orange">Streetwear</span><span class="rlink">View sale →</span></div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- SPORTS -->
+  <div class="section" id="sports">
+    <div class="sec-title">⚽ Sports & Outdoors <span class="sec-sub">— current deals</span></div>
+    <div class="rgrid">
+
+      <a class="rcard" href="https://www.rebelsport.com.au/sale" target="_blank" rel="noopener">
+        <div class="rtop"><div class="ricon">⚽</div><div><div class="rname">Rebel Sport</div><div class="rdomain">rebelsport.com.au</div></div></div>
+        <div class="rdesc">Clothing, footwear and equipment for all sports. Rebel member exclusive deals.</div>
+        <div class="rfoot"><span class="rtag t-green">Sport</span><span class="rlink">View sale →</span></div>
+      </a>
+
+      <a class="rcard" href="https://www.anacondastores.com/specials" target="_blank" rel="noopener">
+        <div class="rtop"><div class="ricon">🏕️</div><div><div class="rname">Anaconda</div><div class="rdomain">anacondastores.com</div></div></div>
+        <div class="rdesc">Camping, hiking, fishing and outdoor gear specials. Adventure Club member prices.</div>
+        <div class="rfoot"><span class="rtag t-green">Outdoors</span><span class="rlink">View specials →</span></div>
+      </a>
+
+      <a class="rcard" href="https://www.bcf.com.au/content/specials" target="_blank" rel="noopener">
+        <div class="rtop"><div class="ricon">🎣</div><div><div class="rname">BCF</div><div class="rdomain">bcf.com.au</div></div></div>
+        <div class="rdesc">Boating, camping and fishing specials. BCF Club member exclusive offers.</div>
+        <div class="rfoot"><span class="rtag t-blue">Outdoors</span><span class="rlink">View specials →</span></div>
+      </a>
+
+      <a class="rcard" href="https://www.supercheapauto.com.au/on-sale" target="_blank" rel="noopener">
+        <div class="rtop"><div class="ricon">🔧</div><div><div class="rname">Supercheap Auto</div><div class="rdomain">supercheapauto.com.au</div></div></div>
+        <div class="rdesc">Auto parts, tools and accessories on sale. Club Plus member prices available.</div>
+        <div class="rfoot"><span class="rtag t-orange">Auto</span><span class="rlink">View sale →</span></div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- LIQUOR -->
+  <div class="section" id="liquor">
+    <div class="sec-title">🍷 Liquor & Drinks <span class="sec-sub">— specials & promotions</span></div>
+    <div class="rgrid">
+
+      <a class="rcard featured" href="https://www.danmurphys.com.au/specials" target="_blank" rel="noopener">
+        <span class="badge-weekly">Weekly</span>
+        <div class="rtop"><div class="ricon">🍷</div><div><div class="rname">Dan Murphy's</div><div class="rdomain">danmurphys.com.au</div></div></div>
+        <div class="rdesc">Australia's biggest liquor retailer. Weekly specials on wine, beer and spirits. My Dan's member prices.</div>
+        <div class="rfoot"><span class="rtag t-red">Liquor</span><span class="rlink">View specials →</span></div>
+      </a>
+
+      <a class="rcard" href="https://www.bws.com.au/specials" target="_blank" rel="noopener">
+        <span class="badge-weekly">Weekly</span>
+        <div class="rtop"><div class="ricon">🍺</div><div><div class="rname">BWS</div><div class="rdomain">bws.com.au</div></div></div>
+        <div class="rdesc">Beer, wine and spirits weekly specials. Everyday Rewards integration with Woolworths.</div>
+        <div class="rfoot"><span class="rtag t-green">Liquor</span><span class="rlink">View specials →</span></div>
+      </a>
+
+      <a class="rcard" href="https://www.liquorland.com.au/specials" target="_blank" rel="noopener">
+        <div class="rtop"><div class="ricon">🥂</div><div><div class="rname">Liquorland</div><div class="rdomain">liquorland.com.au</div></div></div>
+        <div class="rdesc">Weekly specials on wine, beer and spirits. Flybuys points integration with Coles.</div>
+        <div class="rfoot"><span class="rtag t-red">Liquor</span><span class="rlink">View specials →</span></div>
+      </a>
+
+      <a class="rcard" href="https://www.firstchoiceliquor.com.au/on-special" target="_blank" rel="noopener">
+        <div class="rtop"><div class="ricon">🏆</div><div><div class="rname">First Choice Liquor</div><div class="rdomain">firstchoiceliquor.com.au</div></div></div>
+        <div class="rdesc">First Choice weekly specials — big range, competitive prices on premium brands.</div>
+        <div class="rfoot"><span class="rtag t-purple">Liquor</span><span class="rlink">View specials →</span></div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- FUEL & AUTO -->
+  <div class="section" id="fuel">
+    <div class="sec-title">⛽ Fuel & Automotive <span class="sec-sub">— live prices & deals</span></div>
+    <div class="rgrid">
+
+      <a class="rcard featured" href="https://www.motormouth.com.au/fuel-price-map?postcode=3030" target="_blank" rel="noopener">
+        <span class="badge-live">Live</span>
+        <div class="rtop"><div class="ricon">🗺️</div><div><div class="rname">MotorMouth</div><div class="rdomain">motormouth.com.au</div></div></div>
+        <div class="rdesc">Live fuel price map for Melbourne & VIC. Find cheapest petrol near Point Cook right now.</div>
+        <div class="rfoot"><span class="rtag t-purple">Live prices</span><span class="rlink">Find fuel →</span></div>
+      </a>
+
+      <a class="rcard" href="https://www.gasbuddy.com/go/melbourne" target="_blank" rel="noopener">
+        <span class="badge-live">Live</span>
+        <div class="rtop"><div class="ricon">⛽</div><div><div class="rname">GasBuddy Melbourne</div><div class="rdomain">gasbuddy.com</div></div></div>
+        <div class="rdesc">Community-updated Melbourne fuel prices. Covers more stations than official apps.</div>
+        <div class="rfoot"><span class="rtag t-orange">Live prices</span><span class="rlink">Check prices →</span></div>
+      </a>
+
+      <a class="rcard" href="https://www.7eleven.com.au/fuel-prices" target="_blank" rel="noopener">
+        <span class="badge-live">Live</span>
+        <div class="rtop"><div class="ricon">7️⃣</div><div><div class="rname">7-Eleven Fuel</div><div class="rdomain">7eleven.com.au</div></div></div>
+        <div class="rdesc">Per-station live prices. Lock a price in the app up to 2 hours before you fill up.</div>
+        <div class="rfoot"><span class="rtag t-green">Live prices</span><span class="rlink">View prices →</span></div>
+      </a>
+
+      <a class="rcard" href="https://www.repco.com.au/repco/specials" target="_blank" rel="noopener">
+        <div class="rtop"><div class="ricon">🚗</div><div><div class="rname">Repco</div><div class="rdomain">repco.com.au</div></div></div>
+        <div class="rdesc">Auto parts and accessories specials. RepcoRewards member exclusive pricing.</div>
+        <div class="rfoot"><span class="rtag t-red">Auto</span><span class="rlink">View specials →</span></div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- FOOD DELIVERY -->
+  <div class="section" id="food">
+    <div class="sec-title">🍔 Food Delivery & Dining <span class="sec-sub">— promo codes & offers</span></div>
+    <div class="rgrid">
+
+      <a class="rcard" href="https://www.ubereats.com/au/promotions" target="_blank" rel="noopener">
+        <div class="rtop"><div class="ricon">🚗</div><div><div class="rname">Uber Eats</div><div class="rdomain">ubereats.com/au</div></div></div>
+        <div class="rdesc">Current Uber Eats promotions and promo codes. Free delivery deals available regularly.</div>
+        <div class="rfoot"><span class="rtag t-green">Food delivery</span><span class="rlink">View promos →</span></div>
+      </a>
+
+      <a class="rcard" href="https://www.menulog.com.au/deals" target="_blank" rel="noopener">
+        <div class="rtop"><div class="ricon">🍕</div><div><div class="rname">Menulog</div><div class="rdomain">menulog.com.au</div></div></div>
+        <div class="rdesc">Menulog deals and discount codes. Check for free delivery and percentage off offers.</div>
+        <div class="rfoot"><span class="rtag t-orange">Food delivery</span><span class="rlink">View deals →</span></div>
+      </a>
+
+      <a class="rcard" href="https://www.doordash.com/en-AU/promotions/" target="_blank" rel="noopener">
+        <div class="rtop"><div class="ricon">🛵</div><div><div class="rname">DoorDash</div><div class="rdomain">doordash.com</div></div></div>
+        <div class="rdesc">DoorDash AU promotions and first order deals. DashPass members get free delivery.</div>
+        <div class="rfoot"><span class="rtag t-red">Food delivery</span><span class="rlink">View promos →</span></div>
+      </a>
+
+      <a class="rcard" href="https://www.ozbargain.com.au/cat/food-drink/feed" target="_blank" rel="noopener">
+        <div class="rtop"><div class="ricon">🦘</div><div><div class="rname">OzBargain Food</div><div class="rdomain">ozbargain.com.au</div></div></div>
+        <div class="rdesc">Community-posted food and drink deals — restaurant offers, promo codes and freebies.</div>
+        <div class="rfoot"><span class="rtag t-green">All food</span><span class="rlink">Browse deals →</span></div>
+      </a>
+
+    </div>
+  </div>
+
+</div>
 </body>
 </html>
