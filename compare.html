@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>SmartSaver Connect — Price Comparison</title>
+<title>SmartSaver Connect — Compare & Find</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -17,104 +17,64 @@
   --danger:#e57373;--danger-bg:#2d0e0e;
 }}
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-.wrap{max-width:1020px;margin:0 auto;padding:1.5rem 1rem 4rem}
-
-/* Header */
-.header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:1.75rem}
+.wrap{max-width:960px;margin:0 auto;padding:1.5rem 1rem 4rem}
+.header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:2rem}
 .logo{font-size:20px;font-weight:800;letter-spacing:-.5px;text-decoration:none;color:var(--text)}
 .logo span{color:var(--accent)}
-.back{font-size:13px;color:var(--accent);text-decoration:none;display:flex;align-items:center;gap:4px}
+.back{font-size:13px;color:var(--accent);text-decoration:none}
 .back:hover{text-decoration:underline}
 
 /* Search */
-.search-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:22px;margin-bottom:1.5rem}
+.search-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:22px;margin-bottom:2rem}
 .search-card h1{font-size:19px;font-weight:700;margin-bottom:4px}
 .search-card p{font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.5}
 .search-row{display:flex;gap:10px}
-.search-input{flex:1;padding:11px 16px;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:15px}
-.search-input:focus{outline:none;border-color:var(--accent)}
-.search-btn{padding:11px 22px;background:var(--accent);color:#fff;border:0;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap}
-.search-btn:hover{opacity:.88}
-.search-btn:disabled{opacity:.5;cursor:not-allowed}
-
-/* Quick chips */
+.si{flex:1;padding:11px 16px;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:15px}
+.si:focus{outline:none;border-color:var(--accent)}
+.sb{padding:11px 22px;background:var(--accent);color:#fff;border:0;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer}
+.sb:hover{opacity:.88}
 .quick-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
 .qchip{padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:var(--bg);color:var(--muted);font-size:12px;cursor:pointer;transition:all .15s}
 .qchip:hover,.qchip.on{background:var(--accent-bg);color:var(--accent);border-color:var(--accent)}
 
-/* Source status */
-.sources{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1rem}
-.src{display:flex;align-items:center;gap:5px;font-size:12px;padding:4px 10px;border-radius:20px;background:var(--card);border:1px solid var(--border)}
-.src-dot{width:8px;height:8px;border-radius:50%;background:var(--hint)}
-.src-dot.loading{background:#f59e0b;animation:pulse 1s infinite}
-.src-dot.ok{background:var(--accent)}
-.src-dot.err{background:var(--danger)}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+/* Section heading */
+.sec-title{font-size:16px;font-weight:700;margin:2rem 0 1rem;display:flex;align-items:center;gap:8px}
+.sec-title span{font-size:12px;font-weight:400;color:var(--muted)}
 
-/* Stats */
-.stats-strip{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:1.25rem}
-.stat-pill{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 14px;font-size:13px;display:flex;align-items:center;gap:6px}
-.stat-num{font-weight:700;color:var(--accent)}
+/* External tool cards */
+.tool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-bottom:2rem}
+.tool-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;display:flex;flex-direction:column;gap:10px;text-decoration:none;color:var(--text);transition:border-color .15s,box-shadow .15s}
+.tool-card:hover{border-color:var(--accent);box-shadow:0 2px 12px rgba(0,0,0,.08)}
+.tool-top{display:flex;align-items:center;gap:10px}
+.tool-icon{font-size:24px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:10px;background:var(--bg);flex-shrink:0}
+.tool-name{font-size:15px;font-weight:600}
+.tool-domain{font-size:11px;color:var(--muted)}
+.tool-desc{font-size:13px;color:var(--muted);line-height:1.5}
+.tool-action{margin-top:auto;display:flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:var(--accent)}
+.tool-tag{display:inline-block;font-size:10px;padding:2px 7px;border-radius:10px;font-weight:600}
+.tag-free{background:var(--accent-bg);color:var(--accent)}
+.tag-au{background:#fff3e0;color:#e65100}
 
-/* Retailer filter */
-.filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem;align-items:center}
-.filter-lbl{font-size:12px;color:var(--muted)}
-.rpill{display:flex;align-items:center;gap:4px;padding:4px 12px;border-radius:20px;border:1px solid var(--border);background:var(--card);color:var(--muted);font-size:12px;cursor:pointer;transition:all .15s}
-.rpill.on{background:var(--accent-bg);color:var(--accent);border-color:var(--accent)}
-.rpill-dot{width:7px;height:7px;border-radius:50%;background:currentColor}
-
-/* Sort */
-.results-hdr{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:.75rem}
-.results-title{font-size:15px;font-weight:600}
-select{padding:6px 10px;border:1px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:13px;cursor:pointer}
-
-/* Table */
-.tbl-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;background:var(--card);border-radius:var(--radius);overflow:hidden}
-thead tr{background:var(--bg)}
-th{text-align:left;padding:10px 14px;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--border);white-space:nowrap}
-td{padding:12px 14px;border-bottom:1px solid var(--border);vertical-align:middle;font-size:13px}
-tr:last-child td{border-bottom:none}
-tr:hover td{background:var(--bg)}
-
+/* Local results */
+.results-section{margin-top:1rem}
+.deal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px;margin-top:.75rem}
+.deal-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:13px;display:flex;flex-direction:column;gap:7px}
 .vbadge{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px;white-space:nowrap}
 .v-ww{background:#e8f5e9;color:#2e7d32}.v-coles{background:#fce4ec;color:#c62828}
 .v-aldi{background:#e3f2fd;color:#1565c0}.v-amz{background:#fff3e0;color:#e65100}
-.v-bw{background:#e1f5fe;color:#01579b}.v-cw{background:#fbe9e7;color:#bf360c}
-.v-kog{background:#f3e5f5;color:#6a1b9a}.v-jb{background:#e8f5e9;color:#1b5e20}
-.v-cpn{background:#e0f7fa;color:#006064}.v-ins{background:#e8eaf6;color:#283593}
 .v-def{background:#f5f5f5;color:#424242}
 @media(prefers-color-scheme:dark){
   .v-ww{background:#0d2e12;color:#81c784}.v-coles{background:#2d0b10;color:#ef9a9a}
   .v-aldi{background:#0a1929;color:#90caf9}.v-amz{background:#1a1200;color:#ffcc80}
-  .v-bw{background:#001825;color:#81d4fa}.v-cw{background:#2a0e00;color:#ffab91}
-  .v-kog{background:#1a0e2a;color:#ce93d8}.v-jb{background:#0d2010;color:#a5d6a7}
-  .v-cpn{background:#00131a;color:#80deea}.v-ins{background:#0d0f2a;color:#9fa8da}
   .v-def{background:#2a2a2a;color:#bdbdbd}
 }
-
-.price-best{font-size:15px;font-weight:700;color:var(--accent)}
-.price-best::after{content:' ✓';font-size:11px}
-.price-norm{font-size:14px;font-weight:600}
-.pwas{font-size:11px;color:var(--hint);text-decoration:line-through;margin-left:4px}
-.save-badge{display:inline-block;font-size:11px;padding:2px 7px;border-radius:10px;background:var(--danger-bg);color:var(--danger)}
-.view-link{color:var(--accent);text-decoration:none;font-size:12px;white-space:nowrap}
-.view-link:hover{text-decoration:underline}
-.item-title{font-weight:500;line-height:1.4}
-.item-desc{font-size:11px;color:var(--muted);line-height:1.4;margin-top:2px}
-.type-badge{font-size:10px;padding:1px 6px;border-radius:8px;margin-left:4px;vertical-align:middle}
-
-/* Mobile cards */
-.cards{display:none;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
-@media(max-width:620px){.tbl-wrap{display:none}.cards{display:grid}}
-.cmp-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:13px;display:flex;flex-direction:column;gap:7px}
-.cmp-card.best{border-color:var(--accent);border-width:2px}
-.best-lbl{font-size:11px;font-weight:600;color:var(--accent)}
-
-/* States */
-.empty{text-align:center;padding:4rem 2rem;color:var(--muted)}
-.empty strong{display:block;font-size:17px;margin-bottom:6px;color:var(--text)}
-.err-msg{background:var(--danger-bg);color:var(--danger);border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:1rem}
+.deal-title{font-size:13px;font-weight:600;line-height:1.4}
+.deal-desc{font-size:11px;color:var(--muted);line-height:1.4}
+.deal-price{font-size:15px;font-weight:700}
+.deal-link{font-size:12px;color:var(--accent);text-decoration:none}
+.deal-link:hover{text-decoration:underline}
+.disc{font-size:11px;padding:2px 7px;border-radius:10px;background:var(--danger-bg);color:var(--danger);font-weight:600}
+.empty{color:var(--muted);font-size:13px;padding:.5rem 0}
 </style>
 </head>
 <body>
@@ -126,507 +86,351 @@ tr:hover td{background:var(--bg)}
   </div>
 
   <div class="search-card">
-    <h1>Live Price Comparison</h1>
-    <p>Searches Woolworths, Coles, and Kogan APIs in real-time for any product. Results come directly from each retailer — not just your saved deals.</p>
+    <h1>Price Compare & Find</h1>
+    <p>Search your saved deals below, then use the comparison tools to find the best price across all Australian retailers in real-time.</p>
     <div class="search-row">
-      <input class="search-input" id="searchInput" type="text"
-        placeholder="e.g. dishwashing liquid, protein powder, headphones…"
-        onkeydown="if(event.key==='Enter')doSearch()"/>
-      <button class="search-btn" id="searchBtn" onclick="doSearch()">Compare now</button>
+      <input class="si" id="searchInput" type="text" placeholder="Search saved deals e.g. milk, headphones…" oninput="searchLocal()"/>
+      <button class="sb" onclick="searchLocal()">Search</button>
     </div>
-    <div class="quick-row" id="quickRow">
+    <div class="quick-row">
       <span class="qchip" onclick="quick(this,'milk')">Milk</span>
       <span class="qchip" onclick="quick(this,'coffee')">Coffee</span>
-      <span class="qchip" onclick="quick(this,'protein powder')">Protein powder</span>
       <span class="qchip" onclick="quick(this,'headphones')">Headphones</span>
-      <span class="qchip" onclick="quick(this,'vitamin c')">Vitamin C</span>
-      <span class="qchip" onclick="quick(this,'washing powder')">Washing powder</span>
+      <span class="qchip" onclick="quick(this,'protein powder')">Protein</span>
+      <span class="qchip" onclick="quick(this,'vitamin')">Vitamins</span>
       <span class="qchip" onclick="quick(this,'nappies')">Nappies</span>
+      <span class="qchip" onclick="quick(this,'washing')">Washing</span>
       <span class="qchip" onclick="quick(this,'shampoo')">Shampoo</span>
-      <span class="qchip" onclick="quick(this,'pasta')">Pasta</span>
-      <span class="qchip" onclick="quick(this,'olive oil')">Olive oil</span>
     </div>
   </div>
 
-  <div id="errArea"></div>
-  <div class="sources" id="sourcesRow" style="display:none"></div>
-  <div class="stats-strip" id="statsStrip" style="display:none"></div>
-  <div class="filter-row" id="filterRow" style="display:none"></div>
-  <div class="results-hdr" id="resultsHdr" style="display:none">
-    <div class="results-title" id="resultsTitle"></div>
-    <select id="sortSel" onchange="renderResults()">
-      <option value="price_asc">Price: low to high</option>
-      <option value="price_desc">Price: high to low</option>
-      <option value="discount">Biggest discount</option>
-      <option value="retailer">Retailer A-Z</option>
-    </select>
+  <!-- Local saved deals results -->
+  <div class="results-section" id="localResults" style="display:none">
+    <div class="sec-title">From your saved deals <span>— stored in your Google Sheet</span></div>
+    <div class="deal-grid" id="dealGrid"></div>
   </div>
 
-  <div class="tbl-wrap" id="tblWrap">
-    <div class="empty">
-      <strong>Search any product</strong>
-      Live prices from Woolworths, Coles, Kogan and your saved deals.
-    </div>
+  <!-- Grocery comparison tools -->
+  <div class="sec-title" style="margin-top:1.5rem">🛒 Grocery Price Comparison <span>— live prices, all AU supermarkets</span></div>
+  <div class="tool-grid" id="groceryTools">
+    <a class="tool-card" id="trolleyLink" href="https://www.trolley.com.au" target="_blank" rel="noopener">
+      <div class="tool-top">
+        <div class="tool-icon">🛒</div>
+        <div><div class="tool-name">Trolley.com.au</div><div class="tool-domain">trolley.com.au</div></div>
+      </div>
+      <div class="tool-desc">Compares Woolworths and Coles prices on the exact same products side by side. Free, no login, updated daily.</div>
+      <div class="tool-action"><span class="tool-tag tag-free">Free</span><span class="tool-tag tag-au">AU</span>&nbsp; Search groceries →</div>
+    </a>
+    <a class="tool-card" href="https://www.woolworths.com.au/shop/specials/all" target="_blank" rel="noopener">
+      <div class="tool-top">
+        <div class="tool-icon">🟢</div>
+        <div><div class="tool-name">Woolworths Specials</div><div class="tool-domain">woolworths.com.au</div></div>
+      </div>
+      <div class="tool-desc">Official Woolworths weekly specials and half-price items. Browse directly on their site.</div>
+      <div class="tool-action"><span class="tool-tag tag-free">Free</span>&nbsp; View specials →</div>
+    </a>
+    <a class="tool-card" href="https://www.coles.com.au/on-special" target="_blank" rel="noopener">
+      <div class="tool-top">
+        <div class="tool-icon">🔴</div>
+        <div><div class="tool-name">Coles On Special</div><div class="tool-domain">coles.com.au</div></div>
+      </div>
+      <div class="tool-desc">Official Coles half-price and on-special items. Updated weekly.</div>
+      <div class="tool-action"><span class="tool-tag tag-free">Free</span>&nbsp; View specials →</div>
+    </a>
+    <a class="tool-card" href="https://www.aldi.com.au/en/special-buys/" target="_blank" rel="noopener">
+      <div class="tool-top">
+        <div class="tool-icon">🔵</div>
+        <div><div class="tool-name">ALDI Special Buys</div><div class="tool-domain">aldi.com.au</div></div>
+      </div>
+      <div class="tool-desc">ALDI's Wednesday and Saturday special buys. Limited stock, great prices.</div>
+      <div class="tool-action"><span class="tool-tag tag-free">Free</span>&nbsp; View buys →</div>
+    </a>
   </div>
-  <div class="cards" id="cardsWrap"></div>
+
+  <!-- Electronics / general price comparison -->
+  <div class="sec-title">💻 Electronics & General Price Comparison <span>— compare across all online retailers</span></div>
+  <div class="tool-grid">
+    <a class="tool-card" id="staticiceLink" href="https://www.staticice.com.au" target="_blank" rel="noopener">
+      <div class="tool-top">
+        <div class="tool-icon">❄️</div>
+        <div><div class="tool-name">StaticIce</div><div class="tool-domain">staticice.com.au</div></div>
+      </div>
+      <div class="tool-desc">Australian price comparison for electronics, tech, appliances. Searches Amazon AU, JB Hi-Fi, Mwave and more.</div>
+      <div class="tool-action"><span class="tool-tag tag-free">Free</span><span class="tool-tag tag-au">AU</span>&nbsp; Compare prices →</div>
+    </a>
+    <a class="tool-card" id="getpriceLink" href="https://www.getprice.com.au" target="_blank" rel="noopener">
+      <div class="tool-top">
+        <div class="tool-icon">🏷️</div>
+        <div><div class="tool-name">GetPrice</div><div class="tool-domain">getprice.com.au</div></div>
+      </div>
+      <div class="tool-desc">Australian price comparison across hundreds of retailers. Electronics, appliances, toys, sports and more.</div>
+      <div class="tool-action"><span class="tool-tag tag-free">Free</span><span class="tool-tag tag-au">AU</span>&nbsp; Compare prices →</div>
+    </a>
+    <a class="tool-card" id="priceSpyLink" href="https://pricespy.com.au" target="_blank" rel="noopener">
+      <div class="tool-top">
+        <div class="tool-icon">📈</div>
+        <div><div class="tool-name">PriceSpy</div><div class="tool-domain">pricespy.com.au</div></div>
+      </div>
+      <div class="tool-desc">Shows price history charts so you can see if a deal is genuinely good or artificially inflated.</div>
+      <div class="tool-action"><span class="tool-tag tag-free">Free</span><span class="tool-tag tag-au">AU</span>&nbsp; Check price history →</div>
+    </a>
+    <a class="tool-card" href="https://www.amazon.com.au/gp/goldbox" target="_blank" rel="noopener">
+      <div class="tool-top">
+        <div class="tool-icon">📦</div>
+        <div><div class="tool-name">Amazon AU Deals</div><div class="tool-domain">amazon.com.au</div></div>
+      </div>
+      <div class="tool-desc">Amazon AU's live Gold Box deals — lightning deals, limited-time offers updated hourly.</div>
+      <div class="tool-action"><span class="tool-tag tag-free">Free</span>&nbsp; View deals →</div>
+    </a>
+  </div>
+
+  <!-- Fuel -->
+  <div class="sec-title">⛽ Fuel Prices <span>— live VIC/AU prices</span></div>
+  <div class="tool-grid">
+    <a class="tool-card" href="https://www.motormouth.com.au/fuel-price-map" target="_blank" rel="noopener">
+      <div class="tool-top">
+        <div class="tool-icon">🗺️</div>
+        <div><div class="tool-name">MotorMouth</div><div class="tool-domain">motormouth.com.au</div></div>
+      </div>
+      <div class="tool-desc">Live fuel prices on a map for your area. VIC, NSW, QLD and more. Enter your postcode to find cheapest near you.</div>
+      <div class="tool-action"><span class="tool-tag tag-free">Free</span><span class="tool-tag tag-au">AU</span>&nbsp; Find fuel →</div>
+    </a>
+    <a class="tool-card" href="https://www.gasbuddy.com/go/melbourne" target="_blank" rel="noopener">
+      <div class="tool-top">
+        <div class="tool-icon">⛽</div>
+        <div><div class="tool-name">GasBuddy Melbourne</div><div class="tool-domain">gasbuddy.com</div></div>
+      </div>
+      <div class="tool-desc">Community-reported fuel prices for Melbourne. Updated in real time by drivers.</div>
+      <div class="tool-action"><span class="tool-tag tag-free">Free</span>&nbsp; Check prices →</div>
+    </a>
+    <a class="tool-card" href="https://www.7eleven.com.au/fuel-prices" target="_blank" rel="noopener">
+      <div class="tool-top">
+        <div class="tool-icon">7️⃣</div>
+        <div><div class="tool-name">7-Eleven Fuel Prices</div><div class="tool-domain">7eleven.com.au</div></div>
+      </div>
+      <div class="tool-desc">7-Eleven publish their live fuel prices per station. Lock in a price via the app before you arrive.</div>
+      <div class="tool-action"><span class="tool-tag tag-free">Free</span>&nbsp; View prices →</div>
+    </a>
+  </div>
+
+  <!-- Deals & Catalogues -->
+  <div class="sec-title">📰 Weekly Catalogues & Coupon Codes <span>— community deals</span></div>
+  <div class="tool-grid">
+    <a class="tool-card" href="https://www.ozbargain.com.au" target="_blank" rel="noopener">
+      <div class="tool-top">
+        <div class="tool-icon">🦘</div>
+        <div><div class="tool-name">OzBargain</div><div class="tool-domain">ozbargain.com.au</div></div>
+      </div>
+      <div class="tool-desc">Australia's best community deals site. Coupon codes, price drops, freebies across every retailer posted by the community.</div>
+      <div class="tool-action"><span class="tool-tag tag-free">Free</span><span class="tool-tag tag-au">AU</span>&nbsp; Browse deals →</div>
+    </a>
+    <a class="tool-card" href="https://www.lasoo.com.au" target="_blank" rel="noopener">
+      <div class="tool-top">
+        <div class="tool-icon">📖</div>
+        <div><div class="tool-name">Lasoo</div><div class="tool-domain">lasoo.com.au</div></div>
+      </div>
+      <div class="tool-desc">Weekly catalogues from Woolworths, Coles, Big W, JB Hi-Fi, Chemist Warehouse and more. Browse on your phone.</div>
+      <div class="tool-action"><span class="tool-tag tag-free">Free</span><span class="tool-tag tag-au">AU</span>&nbsp; Browse catalogues →</div>
+    </a>
+    <a class="tool-card" href="https://www.shopfully.com/au" target="_blank" rel="noopener">
+      <div class="tool-top">
+        <div class="tool-icon">🏪</div>
+        <div><div class="tool-name">Shopfully</div><div class="tool-domain">shopfully.com</div></div>
+      </div>
+      <div class="tool-desc">Digital catalogues and local store specials on your phone. Covers all major AU retailers.</div>
+      <div class="tool-action"><span class="tool-tag tag-free">Free</span>&nbsp; Browse →</div>
+    </a>
+    <a class="tool-card" href="https://www.cashrewards.com.au" target="_blank" rel="noopener">
+      <div class="tool-top">
+        <div class="tool-icon">💰</div>
+        <div><div class="tool-name">Cashrewards</div><div class="tool-domain">cashrewards.com.au</div></div>
+      </div>
+      <div class="tool-desc">Australian cashback site. Get money back on purchases from Woolworths, Chemist Warehouse, Amazon AU and 2000+ more.</div>
+      <div class="tool-action"><span class="tool-tag tag-free">Free</span><span class="tool-tag tag-au">AU</span>&nbsp; Earn cashback →</div>
+    </a>
+  </div>
+
+  <!-- Insurance -->
+  <div class="sec-title">🛡 Insurance Comparison <span>— AU comparison sites</span></div>
+  <div class="tool-grid">
+    <a class="tool-card" href="https://www.finder.com.au/insurance" target="_blank" rel="noopener">
+      <div class="tool-top">
+        <div class="tool-icon">🔍</div>
+        <div><div class="tool-name">Finder Insurance</div><div class="tool-domain">finder.com.au</div></div>
+      </div>
+      <div class="tool-desc">Compare car, home, health, pet, travel and life insurance quotes from all major AU insurers side by side.</div>
+      <div class="tool-action"><span class="tool-tag tag-free">Free</span><span class="tool-tag tag-au">AU</span>&nbsp; Compare now →</div>
+    </a>
+    <a class="tool-card" href="https://www.comparethemarket.com.au" target="_blank" rel="noopener">
+      <div class="tool-top">
+        <div class="tool-icon">🐕</div>
+        <div><div class="tool-name">Compare The Market</div><div class="tool-domain">comparethemarket.com.au</div></div>
+      </div>
+      <div class="tool-desc">Car, home, health and life insurance comparison. Get real quotes from multiple insurers in minutes.</div>
+      <div class="tool-action"><span class="tool-tag tag-free">Free</span><span class="tool-tag tag-au">AU</span>&nbsp; Get quotes →</div>
+    </a>
+    <a class="tool-card" href="https://www.iselect.com.au" target="_blank" rel="noopener">
+      <div class="tool-top">
+        <div class="tool-icon">🏥</div>
+        <div><div class="tool-name">iSelect</div><div class="tool-domain">iselect.com.au</div></div>
+      </div>
+      <div class="tool-desc">Health, car, home and life insurance comparison. Australian-specific with expert advice.</div>
+      <div class="tool-action"><span class="tool-tag tag-free">Free</span><span class="tool-tag tag-au">AU</span>&nbsp; Compare →</div>
+    </a>
+  </div>
 
 </div>
 <script>
 // ── Config ──────────────────────────────────────────────────────
-// Your Apps Script Web App URL (for stored deals/coupons fallback)
-// Leave as-is if you want live-only results — it still works
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz60iBo_PfKtmny2YmwFgjvCCIMDoXpHWf7KBPVDfUNBA8VtRybMCSwn7Ze9wvCdg8KHA/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz60iBo_PfKtmny2YmwFgjvCCIMDoXpHWf7KBPVDfUNBA8VtRybMCSwn7Ze9wvCdg8KHA/exec;
 const CACHE_KEY = 'ssc_v4';
+let allDeals = [], allCoupons = [], allInsurance = [];
 
-// ── State ────────────────────────────────────────────────────────
-let allResults  = [];   // merged results from all sources
-let activeVends = new Set();
-let lastQ       = '';
-
-// ── Sources config ───────────────────────────────────────────────
-// Each source has: id, label, search(q) -> Promise<product[]>
-const SOURCES = [
-  {
-    id: 'woolworths', label: 'Woolworths',
-    search: searchWoolworths,
-  },
-  {
-    id: 'coles', label: 'Coles',
-    search: searchColes,
-  },
-  {
-    id: 'kogan', label: 'Kogan',
-    search: searchKogan,
-  },
-  {
-    id: 'stored', label: 'Saved deals',
-    search: searchStored,
-  },
-];
-
-// ── Boot ─────────────────────────────────────────────────────────
+// ── Boot ────────────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', () => {
+  loadLocalData();
+  // Pre-fill search from URL param
   const urlQ = new URLSearchParams(location.search).get('q');
   if (urlQ) {
     document.getElementById('searchInput').value = urlQ;
-    doSearch();
+    searchLocal();
+    // Also update all the "search" links on the tool cards
+    updateToolLinks(urlQ);
   }
 });
 
-// ── Main search ──────────────────────────────────────────────────
-async function doSearch() {
-  const q = document.getElementById('searchInput').value.trim();
-  if (!q || q.length < 2) return;
-  lastQ = q;
-
-  history.replaceState(null,'','?q='+encodeURIComponent(q));
-  document.querySelectorAll('.qchip').forEach(c=>c.classList.remove('on'));
-
-  const btn = document.getElementById('searchBtn');
-  btn.disabled = true; btn.textContent = 'Searching…';
-
-  allResults = [];
-  showSourcesLoading();
-  document.getElementById('tblWrap').innerHTML = '';
-  document.getElementById('cardsWrap').innerHTML = '';
-  document.getElementById('resultsHdr').style.display = 'none';
-  document.getElementById('statsStrip').style.display = 'none';
-  document.getElementById('filterRow').style.display = 'none';
-  setErr(null);
-
-  // Fire all sources simultaneously
-  const promises = SOURCES.map(src => {
-    updateSourceDot(src.id, 'loading');
-    return src.search(q)
-      .then(results => {
-        updateSourceDot(src.id, 'ok', results.length);
-        allResults.push(...results);
-        renderResults(); // render incrementally as each source returns
-      })
-      .catch(err => {
-        console.warn(src.label + ':', err.message);
-        updateSourceDot(src.id, 'err');
-      });
-  });
-
-  await Promise.all(promises);
-
-  btn.disabled = false; btn.textContent = 'Compare now';
-
-  if (!allResults.length) {
-    document.getElementById('tblWrap').innerHTML =
-      '<div class="empty"><strong>No results found</strong>Try a different search term.</div>';
-  }
-}
-
-function quick(el, term) {
-  document.querySelectorAll('.qchip').forEach(c=>c.classList.remove('on'));
-  el.classList.add('on');
-  document.getElementById('searchInput').value = term;
-  doSearch();
-}
-
-// ── Retailer API searches ────────────────────────────────────────
-
-// Woolworths: their own public search API used by woolworths.com.au
-// Wrapped in JSONP because their API allows cross-origin via callback param
-async function searchWoolworths(q) {
-  // Woolworths search API - directly accessible from browser
-  const url = 'https://www.woolworths.com.au/apis/ui/Search/products' +
-    '?SearchTerm=' + encodeURIComponent(q) +
-    '&PageNumber=1&PageSize=24&SortType=TraderRelevance&IsSpecial=false&Filters=%5B%5D';
-
-  return new Promise((resolve) => {
-    // Use no-cors JSONP pattern via script tag
-    const ts = Date.now();
-    const cb = 'ww_cb_' + ts;
-    const script = document.createElement('script');
-    const timer = setTimeout(() => {
-      cleanup(); resolve([]);
-    }, 10000);
-
-    // Woolworths doesn't support JSONP natively, use fetch with no-cors workaround
-    // Instead, use their API with fetch — Woolworths actually allows this from browsers
-    clearTimeout(timer);
-    script.remove();
-
-    fetch(url, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Referer': 'https://www.woolworths.com.au/',
-      },
-      mode: 'cors',
-    })
-    .then(r => r.ok ? r.json() : null)
-    .then(data => {
-      if (!data) { resolve([]); return; }
-      const bundles = data.Bundles || data.Products || [];
-      const items = [];
-      bundles.forEach(b => b.Products ? items.push(...b.Products) : items.push(b));
-      const results = items.slice(0,20).map(p => {
-        const info = p.Product || p;
-        return {
-          vendor: 'Woolworths', category: 'woolworths',
-          title: info.Name || '',
-          description: info.CupString || info.Description || '',
-          priceNow: info.Price ? parseFloat(info.Price) : null,
-          priceWas: info.WasPrice ? parseFloat(info.WasPrice) : null,
-          discountPct: parseInt(info.PercentageSaved)||0,
-          dealUrl: 'https://www.woolworths.com.au/shop/productdetails/' + (info.Stockcode||''),
-          source: 'live',
-        };
-      }).filter(p => p.title);
-      resolve(results);
-    })
-    .catch(() => resolve([]));
-
-    function cleanup() { clearTimeout(timer); if (script.parentNode) script.remove(); }
-  });
-}
-
-// Coles: their public search API
-async function searchColes(q) {
-  const url = 'https://www.coles.com.au/api/2.0/page/search' +
-    '?slug=search&q=' + encodeURIComponent(q) + '&page=1&pageSize=24';
+function loadLocalData() {
   try {
-    const resp = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Referer': 'https://www.coles.com.au/',
-        'x-requested-with': 'XMLHttpRequest',
-      },
-      mode: 'cors',
-    });
-    if (!resp.ok) return [];
-    const data = await resp.json();
-    const results = data.results || (data.data && data.data.results) || [];
-    return results.slice(0,20).map(item => {
-      const p = item._source || item;
-      const pricing = p.pricing || {};
-      return {
-        vendor: 'Coles', category: 'coles',
-        title: p.name || '',
-        description: p.description || '',
-        priceNow: pricing.now ? parseFloat(pricing.now) : null,
-        priceWas: pricing.was ? parseFloat(pricing.was) : null,
-        discountPct: parseInt(pricing.savePercent)||0,
-        dealUrl: 'https://www.coles.com.au/product/' + (p.slug || p.id || ''),
-        source: 'live',
-      };
-    }).filter(p => p.title);
-  } catch(e) { return []; }
-}
-
-// Kogan: public product search API
-async function searchKogan(q) {
-  const url = 'https://www.kogan.com/api/v1/catalogue/search/?q=' +
-    encodeURIComponent(q) + '&limit=20&skip=0';
-  try {
-    const resp = await fetch(url, {
-      method: 'GET',
-      headers: { 'Accept': 'application/json', 'Referer': 'https://www.kogan.com/au/' },
-      mode: 'cors',
-    });
-    if (!resp.ok) return [];
-    const data = await resp.json();
-    return (data.objects || []).slice(0,20).map((p,i) => ({
-      vendor: 'Kogan', category: 'retail',
-      title: p.name || p.title || '',
-      description: p.short_description || '',
-      priceNow: p.price ? parseFloat(p.price)/100 : null,
-      priceWas: p.retail_price ? parseFloat(p.retail_price)/100 : null,
-      discountPct: 0,
-      dealUrl: p.url ? 'https://www.kogan.com' + p.url : 'https://www.kogan.com/au/',
-      source: 'live',
-    })).filter(p => p.title);
-  } catch(e) { return []; }
-}
-
-// Stored deals: search your Apps Script sheet data + localStorage cache
-async function searchStored(q) {
-  const qL = q.toLowerCase();
-  let pool = [];
-
-  // Try localStorage cache first (fastest)
-  try {
-    const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null');
-    if (cached) {
-      const deals = (cached.deals || []).map(d => ({
-        vendor: String(d.vendor||''), category: String(d.category||''),
-        title: String(d.title||''), description: String(d.description||''),
-        priceNow: pf(d.priceNow), priceWas: pf(d.priceWas),
-        discountPct: parseInt(d.discountPct)||0,
-        dealUrl: String(d.dealUrl||''), source: 'cache',
-      }));
-      const coupons = (cached.coupons || [])
-        .filter(c => c.code && c.code !== 'SEE_LINK')
-        .map(c => ({
-          vendor: String(c.vendor||'Various'), category: 'coupon',
-          title: c.code + (c.discountText ? ' — ' + c.discountText : ''),
-          description: String(c.description||''),
-          priceNow: null, priceWas: null,
-          discountPct: parseInt((c.discountText||'').match(/(\d+)%/)?.[1])||0,
-          dealUrl: String(c.dealUrl||''), source: 'cache',
-        }));
-      const ins = (cached.insurance || []).map(i => ({
-        vendor: String(i.insurer||'Various'), category: 'insurance',
-        title: String(i.title||''), description: String(i.description||''),
-        priceNow: null, priceWas: null,
-        discountPct: parseInt(i.discountPct)||0,
-        dealUrl: String(i.dealUrl||''), source: 'cache',
-      }));
-      pool = [...deals, ...coupons, ...ins];
+    const o = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null');
+    if (o && o.deals) {
+      allDeals     = (o.deals     || []).filter(d => d.title);
+      allCoupons   = (o.coupons   || []).filter(c => c.code && c.code !== 'SEE_LINK');
+      allInsurance = (o.insurance || []).filter(i => i.title);
+      return;
     }
   } catch(e) {}
 
-  // Also fetch fresh from Apps Script if URL is configured
-  if (APPS_SCRIPT_URL && !APPS_SCRIPT_URL.includes('YOUR_') && !pool.length) {
+  // Fetch fresh if URL configured
+  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes('YOUR_')) return;
+  const cb = 'ssc_cb_' + Date.now();
+  const s  = document.createElement('script');
+  const t  = setTimeout(() => { if(s.parentNode) s.remove(); delete window[cb]; }, 20000);
+  window[cb] = json => {
+    clearTimeout(t); s.remove(); delete window[cb];
+    if (!json || !json.ok) return;
+    const d = json.data || {};
+    allDeals     = (d.deals     || []).filter(r => r.title);
+    allCoupons   = (d.coupons   || []).filter(r => r.code && r.code !== 'SEE_LINK');
+    allInsurance = (d.insurance || []).filter(r => r.title);
+    // If search box has a query, re-run search now data is loaded
+    const q = document.getElementById('searchInput').value.trim();
+    if (q) searchLocal();
     try {
-      const data = await new Promise((resolve, reject) => {
-        const cb = 'ssc_cb_' + Date.now();
-        const script = document.createElement('script');
-        const timer = setTimeout(() => { cleanup(); reject(new Error('timeout')); }, 15000);
-        window[cb] = d => { cleanup(); resolve(d); };
-        script.onerror = () => { cleanup(); reject(new Error('load error')); };
-        script.src = APPS_SCRIPT_URL + '?callback=' + cb;
-        document.head.appendChild(script);
-        function cleanup() { clearTimeout(timer); delete window[cb]; if(script.parentNode) script.remove(); }
-      });
-      if (data && data.ok && data.data) {
-        const d = data.data;
-        pool = [
-          ...(d.deals||[]).map(r=>({vendor:String(r.vendor||''),category:String(r.category||''),
-            title:String(r.title||''),description:String(r.description||''),
-            priceNow:pf(r.priceNow),priceWas:pf(r.priceWas),
-            discountPct:parseInt(r.discountPct)||0,dealUrl:String(r.dealUrl||''),source:'sheet'})),
-          ...(d.coupons||[]).filter(c=>c.code&&c.code!=='SEE_LINK').map(c=>({
-            vendor:String(c.vendor||'Various'),category:'coupon',
-            title:c.code+(c.discountText?' — '+c.discountText:''),
-            description:String(c.description||''),priceNow:null,priceWas:null,
-            discountPct:parseInt((c.discountText||'').match(/(\d+)%/)?.[1])||0,
-            dealUrl:String(c.dealUrl||''),source:'sheet'})),
-          ...(d.insurance||[]).map(i=>({vendor:String(i.insurer||'Various'),category:'insurance',
-            title:String(i.title||''),description:String(i.description||''),
-            priceNow:null,priceWas:null,discountPct:parseInt(i.discountPct)||0,
-            dealUrl:String(i.dealUrl||''),source:'sheet'})),
-        ];
-      }
+      const ex = JSON.parse(localStorage.getItem(CACHE_KEY) || '{}');
+      Object.assign(ex, {deals:d.deals, coupons:d.coupons, insurance:d.insurance, ts:Date.now()});
+      localStorage.setItem(CACHE_KEY, JSON.stringify(ex));
     } catch(e) {}
-  }
-
-  return pool.filter(d => d.title &&
-    ((d.title||'').toLowerCase().includes(qL) ||
-     (d.description||'').toLowerCase().includes(qL) ||
-     (d.vendor||'').toLowerCase().includes(qL))
-  );
+  };
+  s.onerror = () => { clearTimeout(t); s.remove(); delete window[cb]; };
+  s.src = APPS_SCRIPT_URL + '?callback=' + cb;
+  document.head.appendChild(s);
 }
 
-// ── Sources UI ───────────────────────────────────────────────────
-function showSourcesLoading() {
-  const row = document.getElementById('sourcesRow');
-  row.style.display = 'flex';
-  row.innerHTML = SOURCES.map(s =>
-    `<div class="src" id="src_${s.id}">
-      <span class="src-dot loading" id="dot_${s.id}"></span>
-      <span id="lbl_${s.id}">${s.label}</span>
-    </div>`
-  ).join('');
-}
+// ── Search saved deals ───────────────────────────────────────────
+function searchLocal() {
+  const q  = (document.getElementById('searchInput').value || '').trim().toLowerCase();
+  const sec = document.getElementById('localResults');
+  const grid = document.getElementById('dealGrid');
 
-function updateSourceDot(id, state, count) {
-  const dot = document.getElementById('dot_'+id);
-  const lbl = document.getElementById('lbl_'+id);
-  if (!dot) return;
-  dot.className = 'src-dot ' + state;
-  if (state === 'ok' && count !== undefined) {
-    lbl.textContent = SOURCES.find(s=>s.id===id).label + ' (' + count + ')';
-  } else if (state === 'err') {
-    lbl.textContent = SOURCES.find(s=>s.id===id).label + ' (unavailable)';
-  }
-}
+  updateToolLinks(q);
 
-// ── Render ───────────────────────────────────────────────────────
-function renderResults() {
-  if (!allResults.length) return;
+  if (!q || q.length < 2) { sec.style.display = 'none'; return; }
 
-  const sort = document.getElementById('sortSel').value;
-  const vendors = [...new Set(allResults.map(d=>d.vendor).filter(Boolean))].sort();
-  if (!activeVends.size) activeVends = new Set(vendors);
+  const pool = [
+    ...allDeals.map(d => ({...d, _type:'deal'})),
+    ...allCoupons.map(c => ({
+      vendor: c.vendor || 'Various', category: 'coupon', _type: 'coupon',
+      title: c.code + (c.discountText ? ' — ' + c.discountText : ''),
+      description: c.description || '', priceNow: null, discountPct: 0,
+      dealUrl: c.dealUrl || '',
+    })),
+    ...allInsurance.map(i => ({
+      vendor: i.insurer || 'Various', category: 'insurance', _type: 'insurance',
+      title: i.title || '', description: i.description || '',
+      priceNow: null, discountPct: parseInt(i.discountPct)||0,
+      dealUrl: i.dealUrl || '',
+    })),
+  ];
 
-  // Render vendor pills
-  const frow = document.getElementById('filterRow');
-  frow.style.display = 'flex';
-  frow.innerHTML = '<span class="filter-lbl">Show:</span>' +
-    vendors.map(v =>
-      `<button class="rpill ${activeVends.has(v)?'on':''}" onclick="toggleVend(this,'${e(v)}')">
-        <span class="rpill-dot"></span>${e(v)}
-      </button>`
-    ).join('');
+  const results = pool.filter(d =>
+    (d.title     || '').toLowerCase().includes(q) ||
+    (d.description|| '').toLowerCase().includes(q) ||
+    (d.vendor    || '').toLowerCase().includes(q)
+  ).sort((a,b) => (b.discountPct||0) - (a.discountPct||0));
 
-  let items = allResults.filter(d => activeVends.has(d.vendor));
-
-  // Sort
-  if (sort === 'price_asc')  items.sort((a,b)=>(a.priceNow??99999)-(b.priceNow??99999));
-  if (sort === 'price_desc') items.sort((a,b)=>(b.priceNow??0)-(a.priceNow??0));
-  if (sort === 'discount')   items.sort((a,b)=>(b.discountPct||0)-(a.discountPct||0));
-  if (sort === 'retailer')   items.sort((a,b)=>a.vendor.localeCompare(b.vendor));
-
-  // Stats
-  const prices = items.map(d=>d.priceNow).filter(p=>p!=null&&p>0);
-  const minP = prices.length ? Math.min(...prices) : null;
-  const maxP = prices.length ? Math.max(...prices) : null;
-  const strip = document.getElementById('statsStrip');
-  strip.style.display = 'flex';
-  strip.innerHTML = [
-    `<div class="stat-pill"><span class="stat-num">${items.length}</span> results</div>`,
-    `<div class="stat-pill"><span class="stat-num">${vendors.length}</span> retailers</div>`,
-    minP ? `<div class="stat-pill">Lowest <span class="stat-num">$${minP.toFixed(2)}</span></div>` : '',
-    maxP && maxP !== minP ? `<div class="stat-pill">Highest <span class="stat-num">$${maxP.toFixed(2)}</span></div>` : '',
-    minP && maxP && maxP > minP ? `<div class="stat-pill">You could save <span class="stat-num">$${(maxP-minP).toFixed(2)}</span></div>` : '',
-  ].filter(Boolean).join('');
-
-  // Title
-  document.getElementById('resultsHdr').style.display = 'flex';
-  document.getElementById('resultsTitle').textContent =
-    items.length + ' results for "' + lastQ + '"';
-
-  if (!items.length) {
-    document.getElementById('tblWrap').innerHTML =
-      '<div class="empty"><strong>No results</strong>Try enabling more retailers above.</div>';
-    document.getElementById('cardsWrap').innerHTML = '';
+  if (!results.length) {
+    grid.innerHTML = '<div class="empty">No saved deals match "' + esc(q) + '". Use the comparison tools below to search live.</div>';
+    sec.style.display = 'block';
     return;
   }
 
-  // Table
-  document.getElementById('tblWrap').innerHTML = `
-    <div class="tbl-wrap"><table>
-      <thead><tr>
-        <th>Retailer</th><th>Product</th><th>Price</th><th>Saving</th><th>Source</th><th></th>
-      </tr></thead>
-      <tbody>${items.map(d => {
-        const isBest = minP && d.priceNow === minP;
-        const vc = vclass(d.vendor, d.category);
-        const typeBadge = d.category === 'coupon'
-          ? '<span class="type-badge v-cpn">Coupon</span>'
-          : d.category === 'insurance'
-            ? '<span class="type-badge v-ins">Insurance</span>' : '';
-        const priceCell = d.priceNow && d.priceNow > 0
-          ? `<span class="${isBest?'price-best':'price-norm'}">$${d.priceNow.toFixed(2)}</span>
-             ${d.priceWas && d.priceWas > d.priceNow ? '<span class="pwas">$'+d.priceWas.toFixed(2)+'</span>' : ''}`
-          : d.discountPct > 0 ? `<span style="color:var(--danger);font-size:13px">-${d.discountPct}% off</span>`
-          : '<span style="color:var(--muted);font-size:12px">—</span>';
-        const save = d.priceWas && d.priceNow && d.priceWas > d.priceNow
-          ? `<span class="save-badge">-$${(d.priceWas-d.priceNow).toFixed(2)}</span>`
-          : d.discountPct > 0 ? `<span class="save-badge">-${d.discountPct}%</span>` : '—';
-        const srcBadge = d.source === 'live'
-          ? '<span style="font-size:10px;color:var(--accent);font-weight:600">LIVE</span>'
-          : '<span style="font-size:10px;color:var(--muted)">Cached</span>';
-        return `<tr>
-          <td><span class="vbadge ${vc}">${e(d.vendor)}</span></td>
-          <td><div class="item-title">${e(d.title)}${typeBadge}</div>
-              ${d.description?'<div class="item-desc">'+e(d.description.slice(0,90))+'</div>':''}</td>
-          <td>${priceCell}</td>
-          <td>${save}</td>
-          <td>${srcBadge}</td>
-          <td>${d.dealUrl?`<a class="view-link" href="${e(d.dealUrl)}" target="_blank" rel="noopener">View →</a>`:'—'}</td>
-        </tr>`;
-      }).join('')}</tbody>
-    </table></div>`;
-
-  // Mobile cards
-  document.getElementById('cardsWrap').innerHTML = items.map(d => {
-    const isBest = minP && d.priceNow === minP;
+  grid.innerHTML = results.slice(0, 24).map(d => {
     const vc = vclass(d.vendor, d.category);
-    return `<div class="cmp-card ${isBest?'best':''}">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:6px">
-        <span class="vbadge ${vc}">${e(d.vendor)}</span>
-        ${isBest?'<span class="best-lbl">Lowest ✓</span>':''}
-        ${d.source==='live'?'<span style="font-size:10px;color:var(--accent);font-weight:600">LIVE</span>':''}
-      </div>
-      <div class="item-title">${e(d.title)}</div>
-      ${d.description?'<div class="item-desc">'+e(d.description.slice(0,80))+'</div>':''}
-      <div style="display:flex;align-items:baseline;gap:6px;margin-top:4px">
-        ${d.priceNow&&d.priceNow>0?'<span class="'+(isBest?'price-best':'price-norm')+'">$'+d.priceNow.toFixed(2)+'</span>':''}
-        ${d.priceWas&&d.priceWas>d.priceNow?'<span class="pwas">$'+d.priceWas.toFixed(2)+'</span>':''}
-      </div>
-      ${d.discountPct>0?'<span class="save-badge">-'+d.discountPct+'% off</span>':''}
-      ${d.dealUrl?`<a class="view-link" href="${e(d.dealUrl)}" target="_blank" rel="noopener">View at ${e(d.vendor)} →</a>`:''}
-    </div>`;
+    const price = d.priceNow && d.priceNow > 0
+      ? '<span class="deal-price">$' + parseFloat(d.priceNow).toFixed(2) + '</span>' : '';
+    const disc = d.discountPct > 0 ? '<span class="disc">-' + d.discountPct + '%</span>' : '';
+    const link = d.dealUrl
+      ? '<a class="deal-link" href="' + esc(d.dealUrl) + '" target="_blank" rel="noopener">View deal →</a>' : '';
+    return '<div class="deal-card">'
+      + '<div style="display:flex;align-items:center;justify-content:space-between;gap:6px">'
+      +   '<span class="vbadge ' + vc + '">' + esc(d.vendor) + '</span>' + disc
+      + '</div>'
+      + '<div class="deal-title">' + esc(d.title) + '</div>'
+      + (d.description ? '<div class="deal-desc">' + esc(d.description.slice(0,90)) + '</div>' : '')
+      + price + link
+      + '</div>';
   }).join('');
+  sec.style.display = 'block';
 }
 
-function toggleVend(el, vendor) {
-  if (activeVends.has(vendor)) {
-    if (activeVends.size === 1) return;
-    activeVends.delete(vendor);
-    el.classList.remove('on');
-  } else {
-    activeVends.add(vendor);
-    el.classList.add('on');
-  }
-  renderResults();
+// Update tool card links to include the search query
+function updateToolLinks(q) {
+  if (!q) return;
+  const enc = encodeURIComponent(q);
+
+  // Trolley
+  const tl = document.getElementById('trolleyLink');
+  if (tl) tl.href = 'https://www.trolley.com.au/search?q=' + enc;
+
+  // StaticIce
+  const si = document.getElementById('staticiceLink');
+  if (si) si.href = 'https://www.staticice.com.au/cgi-bin/search.cgi?q=' + enc + '&stype=1&etype=1&oc=Australia';
+
+  // GetPrice
+  const gp = document.getElementById('getpriceLink');
+  if (gp) gp.href = 'https://www.getprice.com.au/search.gpf?Type=SearchProduct&Search=' + enc;
+
+  // PriceSpy
+  const ps = document.getElementById('priceSpyLink');
+  if (ps) ps.href = 'https://pricespy.com.au/search?search=' + enc;
 }
 
-// ── Helpers ──────────────────────────────────────────────────────
+function quick(el, term) {
+  document.querySelectorAll('.qchip').forEach(c => c.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('searchInput').value = term;
+  searchLocal();
+}
+
 function vclass(v, cat) {
   const n = (v||'').toLowerCase();
   if (n.includes('woolworths')) return 'v-ww';
   if (n.includes('coles'))      return 'v-coles';
   if (n.includes('aldi'))       return 'v-aldi';
   if (n.includes('amazon'))     return 'v-amz';
-  if (n.includes('big w')||n.includes('bigw')) return 'v-bw';
-  if (n.includes('chemist'))    return 'v-cw';
-  if (n.includes('kogan'))      return 'v-kog';
-  if (n.includes('jb'))         return 'v-jb';
-  if (cat === 'coupon')         return 'v-cpn';
-  if (cat === 'insurance')      return 'v-ins';
   return 'v-def';
 }
-function e(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-function pf(v){ const n=parseFloat(v); return isNaN(n)?null:n; }
-function setErr(msg){ document.getElementById('errArea').innerHTML = msg ? '<div class="err-msg">'+msg+'</div>' : ''; }
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 </script>
 </body>
 </html>
