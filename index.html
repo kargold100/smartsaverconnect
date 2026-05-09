@@ -130,42 +130,42 @@ select{padding:9px 12px;border:1px solid var(--border);border-radius:8px;backgro
   <div class="header">
     <div>
       <div class="logo">SmartSaver<span>Connect</span></div>
-      <div class="header-sub" id="hdrSub">Woolworths · Coles · ALDI · Amazon AU · Retail · Fuel · Insurance</div>
+      <div class="header-sub" id="hdrSub">Woolworths Â· Coles Â· ALDI Â· Amazon AU Â· Retail Â· Fuel Â· Insurance</div>
     </div>
     <div class="hdr-actions">
       <span id="liveInd"></span>
-      <a class="btn btn-accent" href="compare.html" target="_blank">⚖ Compare prices</a>
+      <a class="btn btn-accent" href="compare.html" target="_blank">âš– Compare prices</a>
       <button class="btn" id="refreshBtn" onclick="doRefresh()">
-        <span id="refreshIcon">↻</span> Refresh
+        <span id="refreshIcon">â†»</span> Refresh
       </button>
     </div>
   </div>
 
   <!-- Banners -->
   <div id="setupBanner" class="banner" style="display:none">
-    ⚠ <strong>Setup needed:</strong> Open <code>index.html</code> and replace <code>YOUR_APPS_SCRIPT_WEB_APP_URL_HERE</code> with your Apps Script Web App URL. <a href="SETUP.md">See SETUP.md</a>
+    âš  <strong>Setup needed:</strong> Open <code>index.html</code> and replace <code>YOUR_APPS_SCRIPT_WEB_APP_URL_HERE</code> with your Apps Script Web App URL. <a href="SETUP.md">See SETUP.md</a>
   </div>
   <div id="errArea"></div>
 
   <!-- Stats -->
   <div class="stats">
-    <div class="stat"><div class="stat-num" id="sTot">—</div><div class="stat-lbl">Deals</div></div>
-    <div class="stat"><div class="stat-num" id="sDisc">—</div><div class="stat-lbl">Avg discount</div></div>
-    <div class="stat"><div class="stat-num" id="sFuel">—</div><div class="stat-lbl">Best ULP ¢/L</div></div>
-    <div class="stat"><div class="stat-num" id="sCpn">—</div><div class="stat-lbl">Coupons</div></div>
-    <div class="stat"><div class="stat-num" id="sIns">—</div><div class="stat-lbl">Insurance offers</div></div>
+    <div class="stat"><div class="stat-num" id="sTot">â€”</div><div class="stat-lbl">Deals</div></div>
+    <div class="stat"><div class="stat-num" id="sDisc">â€”</div><div class="stat-lbl">Avg discount</div></div>
+    <div class="stat"><div class="stat-num" id="sFuel">â€”</div><div class="stat-lbl">Best ULP Â¢/L</div></div>
+    <div class="stat"><div class="stat-num" id="sCpn">â€”</div><div class="stat-lbl">Coupons</div></div>
+    <div class="stat"><div class="stat-num" id="sIns">â€”</div><div class="stat-lbl">Insurance offers</div></div>
   </div>
 
   <!-- Controls -->
   <div class="controls">
     <div class="search-wrap">
-      <span class="s-icon">🔍</span>
-      <input type="text" id="searchInput" placeholder="Search deals, products, stores…" oninput="onSearch()"/>
+      <span class="s-icon">ðŸ”</span>
+      <input type="text" id="searchInput" placeholder="Search deals, products, storesâ€¦" oninput="onSearch()"/>
     </div>
     <select id="sortSel" onchange="renderDeals()">
       <option value="discount">Highest discount</option>
-      <option value="price_asc">Price ↑</option>
-      <option value="price_desc">Price ↓</option>
+      <option value="price_asc">Price â†‘</option>
+      <option value="price_desc">Price â†“</option>
       <option value="newest">Newest first</option>
     </select>
   </div>
@@ -186,7 +186,7 @@ select{padding:9px 12px;border:1px solid var(--border);border-radius:8px;backgro
   <!-- Compare bar (appears when searching) -->
   <div class="cmp-bar" id="cmpBar">
     <span class="cmp-bar-text" id="cmpBarText">Compare across retailers</span>
-    <button class="cmp-bar-btn" onclick="goCompare()">Compare prices →</button>
+    <button class="cmp-bar-btn" onclick="goCompare()">Compare prices â†’</button>
   </div>
 
   <!-- Main content -->
@@ -200,17 +200,17 @@ select{padding:9px 12px;border:1px solid var(--border);border-radius:8px;backgro
 
 </div>
 <script>
-// ── Config ─────────────────────────────────────────────────────
+// â”€â”€ Config â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Replace YOUR_APPS_SCRIPT_WEB_APP_URL_HERE with your actual URL
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz60iBo_PfKtmny2YmwFgjvCCIMDoXpHWf7KBPVDfUNBA8VtRybMCSwn7Ze9wvCdg8KHA/exec';
 const CACHE_KEY = 'ssc_v4';
 const CACHE_TTL = 2 * 60 * 60 * 1000;
 
-// ── State ───────────────────────────────────────────────────────
+// â”€â”€ State â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 let deals = [], coupons = [], fuel = [], insurance = [];
 let activeFilter = 'all';
 
-// ── Boot ────────────────────────────────────────────────────────
+// â”€â”€ Boot â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 window.addEventListener('DOMContentLoaded', () => {
   if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes('YOUR_')) {
     document.getElementById('setupBanner').style.display = 'block';
@@ -224,7 +224,7 @@ window.addEventListener('DOMContentLoaded', () => {
     fuel = cached.fuel || [];
     insurance = cached.insurance || [];
     updateStats(); renderDeals();
-    document.getElementById('lastUpdated').textContent = 'Cached · ' + fmtTime(cached.ts);
+    document.getElementById('lastUpdated').textContent = 'Cached Â· ' + fmtTime(cached.ts);
     if (Date.now() - cached.ts > CACHE_TTL) loadFresh(false);
   } else {
     showSkeletons();
@@ -241,36 +241,40 @@ function showSkeletons() {
     </div>`).join('');
 }
 
-// ── Fetch ───────────────────────────────────────────────────────
+// â”€â”€ Fetch (JSONP â€” no CORS issues) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 async function loadFresh(showSpinner) {
   const btn = document.getElementById('refreshBtn');
   const ico = document.getElementById('refreshIcon');
   if (showSpinner) { btn.disabled = true; ico.classList.add('spin'); }
   setErr(null);
 
-  try {
-    const ctrl = new AbortController();
-    const t = setTimeout(() => ctrl.abort(), 25000);
-    const resp = await fetch(APPS_SCRIPT_URL + '?tab=all', {
-      cache: 'no-store', signal: ctrl.signal,
-    });
-    clearTimeout(t);
+  loadJsonp(APPS_SCRIPT_URL, function(json, err) {
+    btn.disabled = false; ico.classList.remove('spin');
+    document.getElementById('liveInd').innerHTML = '<span class="pulse" title="Auto-refreshes"></span>';
 
-    const text = await resp.text();
-    let json;
-    try { json = JSON.parse(text); }
-    catch(e) { throw new Error('Invalid response from Apps Script — check it is deployed correctly'); }
+    if (err) {
+      if (deals.length) {
+        document.getElementById('lastUpdated').textContent = 'Showing cached data (' + err + ')';
+      } else {
+        document.getElementById('dealGrid').innerHTML = '';
+        setErr(err + ' â€” Make sure the Web App is deployed as "Anyone can access"');
+      }
+      return;
+    }
 
-    if (!json.ok) throw new Error(json.error || 'Apps Script error');
+    if (!json || !json.ok) {
+      const msg = (json && json.error) || 'Unknown error from Apps Script';
+      setErr(msg); return;
+    }
+
     const d = json.data || {};
-
     deals     = normDeals(d.deals       || []);
     fuel      = normFuel(d.fuel         || []);
     coupons   = normCoupons(d.coupons   || []);
     insurance = normIns(d.insurance     || []);
 
     if (!deals.length && !coupons.length) {
-      setErr('Connected but no data yet. Open your Google Sheet → SmartSaver Connect menu → Test scrapers, then run each one.');
+      setErr('Connected but no data yet. Open your Google Sheet â†’ SmartSaver Connect menu â†’ run each scraper.');
     }
 
     saveCache();
@@ -278,28 +282,14 @@ async function loadFresh(showSpinner) {
     renderDeals();
     const lr = d.lastRun;
     document.getElementById('lastUpdated').textContent = lr && lr.source
-      ? 'Last run: ' + lr.source + ' · ' + deals.length + ' deals'
-      : 'Updated ' + fmtTime(Date.now()) + ' · ' + deals.length + ' deals';
-
-  } catch(err) {
-    const msg = err.name === 'AbortError'
-      ? 'Timed out — Apps Script cold start can take ~30s, try refreshing'
-      : err.message;
-    if (deals.length) {
-      document.getElementById('lastUpdated').textContent = 'Showing cached data (' + msg + ')';
-    } else {
-      document.getElementById('dealGrid').innerHTML = '';
-      setErr('Could not load: ' + msg + ' — Is your Web App URL correct and deployed as "Anyone can access"?');
-    }
-  } finally {
-    btn.disabled = false; ico.classList.remove('spin');
-    document.getElementById('liveInd').innerHTML = '<span class="pulse" title="Auto-refreshes"></span>';
-  }
+      ? 'Last run: ' + lr.source + ' Â· ' + deals.length + ' deals'
+      : 'Updated ' + fmtTime(Date.now()) + ' Â· ' + deals.length + ' deals';
+  });
 }
 
 function doRefresh() { showSkeletons(); loadFresh(true); }
 
-// ── Normalise ───────────────────────────────────────────────────
+// â”€â”€ Normalise â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function normDeals(rows) {
   return rows.filter(r => r.title).map(r => ({
     vendor: str(r.vendor), category: str(r.category).toLowerCase(),
@@ -332,7 +322,7 @@ function normIns(rows) {
   }));
 }
 
-// ── Render ───────────────────────────────────────────────────────
+// â”€â”€ Render â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function renderDeals() {
   const q    = (document.getElementById('searchInput').value || '').toLowerCase().trim();
   const sort = document.getElementById('sortSel').value;
@@ -376,7 +366,7 @@ function renderDeals() {
 
   const grid = document.getElementById('dealGrid');
   if (!items.length) {
-    grid.innerHTML = '<div class="no-results">No deals match — try clearing the search.</div>';
+    grid.innerHTML = '<div class="no-results">No deals match â€” try clearing the search.</div>';
     return;
   }
   grid.innerHTML = items.slice(0,20).map(dealCard).join('');
@@ -394,7 +384,7 @@ function dealCard(d) {
   const price = d.priceNow != null && d.priceNow > 0
     ? `<span class="pnow">$${d.priceNow.toFixed(2)}</span>${d.priceWas > 0 ? `<span class="pwas">$${d.priceWas.toFixed(2)}</span>` : ''}`
     : '';
-  const link = d.dealUrl ? `<a class="dlink" href="${e(d.dealUrl)}" target="_blank" rel="noopener">View deal →</a>` : '';
+  const link = d.dealUrl ? `<a class="dlink" href="${e(d.dealUrl)}" target="_blank" rel="noopener">View deal â†’</a>` : '';
   const copy = d._coupon ? `<button class="cpybtn" onclick="cpyCode('${e(d.code||'')}',this)">Copy ${e(d.code||'')}</button>` : '';
   return `<div class="deal">
     <div class="deal-top"><span class="vbadge ${vc}">${e(d.vendor)}</span>${disc}</div>
@@ -411,7 +401,7 @@ function renderFuelView(q) {
     || (f.brand||'').toLowerCase().includes(q)
     || (f.fuelType||'').toLowerCase().includes(q));
   if (!items.length) {
-    document.getElementById('fuelSec').innerHTML = '<div class="no-results">No fuel prices yet — run the fuel scraper first.</div>'; return;
+    document.getElementById('fuelSec').innerHTML = '<div class="no-results">No fuel prices yet â€” run the fuel scraper first.</div>'; return;
   }
   const byType = {};
   items.forEach(f => { if (!byType[f.fuelType]||f.priceCents<byType[f.fuelType].priceCents) byType[f.fuelType]=f; });
@@ -433,7 +423,7 @@ function renderFuelSummary() {
 function fuelCard(f) {
   return `<div class="fuel-card">
     <div class="fuel-type">${e(f.fuelType)}</div>
-    <div class="fuel-price">${f.priceCents}¢/L</div>
+    <div class="fuel-price">${f.priceCents}Â¢/L</div>
     <div class="fuel-meta">${e(f.brand||f.stationName)}<br>${e(f.stationName)}<br>${[f.suburb,f.postcode].filter(Boolean).map(e).join(', ')}</div>
   </div>`;
 }
@@ -460,7 +450,7 @@ function renderInsView(q) {
 function insCard(o) {
   const disc = o.discountPct > 0 ? `<span class="disc">-${o.discountPct}%</span>`
     : o.saveDollars > 0 ? `<span class="disc">Save $${o.saveDollars}</span>` : '';
-  const link = o.dealUrl ? `<a class="dlink" href="${e(o.dealUrl)}" target="_blank" rel="noopener">View offer →</a>` : '';
+  const link = o.dealUrl ? `<a class="dlink" href="${e(o.dealUrl)}" target="_blank" rel="noopener">View offer â†’</a>` : '';
   return `<div class="ins-card">
     <div class="ins-top"><span class="vbadge v-ins">${e(o.insurer)}</span><span class="ins-type">${e(o.type)}</span>${disc}</div>
     <div class="ins-title">${e(o.title)}</div>
@@ -469,19 +459,19 @@ function insCard(o) {
   </div>`;
 }
 
-// ── Stats ────────────────────────────────────────────────────────
+// â”€â”€ Stats â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function updateStats() {
-  document.getElementById('sTot').textContent  = deals.length || '—';
+  document.getElementById('sTot').textContent  = deals.length || 'â€”';
   const discs = deals.filter(d=>d.discountPct>0).map(d=>d.discountPct);
   document.getElementById('sDisc').textContent = discs.length
-    ? Math.round(discs.reduce((a,b)=>a+b,0)/discs.length)+'%' : '—';
+    ? Math.round(discs.reduce((a,b)=>a+b,0)/discs.length)+'%' : 'â€”';
   const ulp = fuel.filter(f=>f.fuelType==='ULP'||f.fuelType==='E10');
-  document.getElementById('sFuel').textContent  = ulp.length ? Math.min(...ulp.map(f=>f.priceCents)) : '—';
-  document.getElementById('sCpn').textContent   = coupons.length || '—';
-  document.getElementById('sIns').textContent   = insurance.length || '—';
+  document.getElementById('sFuel').textContent  = ulp.length ? Math.min(...ulp.map(f=>f.priceCents)) : 'â€”';
+  document.getElementById('sCpn').textContent   = coupons.length || 'â€”';
+  document.getElementById('sIns').textContent   = insurance.length || 'â€”';
 }
 
-// ── Helpers ──────────────────────────────────────────────────────
+// â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function setFilter(el) {
   document.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
   el.classList.add('on');
@@ -499,8 +489,8 @@ function onSearch() {
       (d.description||'').toLowerCase().includes(q.toLowerCase())
     ).map(d=>d.vendor).filter(Boolean))];
     document.getElementById('cmpBarText').textContent = vendors.length > 1
-      ? `Found at ${vendors.length} retailers — compare prices`
-      : `Search results — open comparison view`;
+      ? `Found at ${vendors.length} retailers â€” compare prices`
+      : `Search results â€” open comparison view`;
     bar.classList.add('show');
   } else {
     bar.classList.remove('show');
@@ -563,6 +553,38 @@ function saveCache() {
     }));
   } catch {}
 }
+
+// â”€â”€ Data loader (JSONP â€” bypasses CORS completely) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// fetch() to script.google.com is always blocked by browsers (CORS).
+// JSONP loads the response as a <script> tag â€” no CORS applies.
+function loadJsonp(url, callback) {
+  const cbName = 'ssc_cb_' + Date.now();
+  const script = document.createElement('script');
+  const timer  = setTimeout(() => {
+    cleanup();
+    callback(null, 'Timed out â€” Apps Script cold start can take ~30s, try refreshing');
+  }, 30000);
+
+  window[cbName] = function(data) {
+    cleanup();
+    callback(data, null);
+  };
+
+  function cleanup() {
+    clearTimeout(timer);
+    delete window[cbName];
+    if (script.parentNode) script.parentNode.removeChild(script);
+  }
+
+  script.onerror = function() {
+    cleanup();
+    callback(null, 'Script load failed â€” check your Apps Script URL');
+  };
+
+  script.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + cbName;
+  document.head.appendChild(script);
+}
+
 </script>
 </body>
 </html>
