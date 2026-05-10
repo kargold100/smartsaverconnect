@@ -116,6 +116,25 @@ select{padding:9px 12px;border:1px solid var(--border);border-radius:8px;backgro
 .pulse{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 
+/* Live specials panel */
+.live-panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:0;overflow:hidden;margin-bottom:1rem}
+.live-panel-header{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.live-panel-title{font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px}
+.live-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#e65100;animation:pulse 1.5s infinite}
+.live-tabs{display:flex;gap:6px;flex-wrap:wrap}
+.live-tab{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:var(--bg);color:var(--muted);font-size:12px;cursor:pointer;transition:all .15s;font-weight:500}
+.live-tab:hover,.live-tab.on{background:var(--accent-bg);color:var(--accent);border-color:var(--accent)}
+.live-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;padding:14px}
+.live-card{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:7px;text-decoration:none;color:var(--text);transition:border-color .15s}
+.live-card:hover{border-color:var(--accent)}
+.live-retailer{font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px;align-self:flex-start}
+.live-name{font-size:13px;font-weight:600;line-height:1.4}
+.live-price{font-size:16px;font-weight:700;color:var(--accent)}
+.live-was{font-size:11px;color:var(--hint);text-decoration:line-through;margin-left:4px}
+.live-save{font-size:11px;color:var(--danger);font-weight:600}
+.live-loading{padding:2rem;text-align:center;color:var(--muted);font-size:13px;grid-column:1/-1}
+.live-note{padding:10px 14px;font-size:11px;color:var(--muted);border-top:1px solid var(--border);background:var(--bg)}
+
 /* Skeleton */
 .skel{pointer-events:none}
 .skel-line{border-radius:6px;background:linear-gradient(90deg,var(--border) 25%,rgba(128,128,128,.12) 50%,var(--border) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;height:14px}
@@ -179,15 +198,46 @@ select{padding:9px 12px;border:1px solid var(--border);border-radius:8px;backgro
     <button class="chip"    data-cat="aldi"       onclick="setFilter(this)">ALDI</button>
     <button class="chip"    data-cat="amazon"     onclick="setFilter(this)">Amazon AU</button>
     <button class="chip"    data-cat="retail"     onclick="setFilter(this)">Retail</button>
+    <button class="chip"    data-cat="chemist"    onclick="setFilter(this)">Health</button>
+    <button class="chip"    data-cat="telco"      onclick="setFilter(this)">Mobile</button>
+    <button class="chip"    data-cat="nbn"        onclick="setFilter(this)">NBN</button>
+    <button class="chip"    data-cat="energy"     onclick="setFilter(this)">Energy</button>
     <button class="chip"    data-cat="coupon"     onclick="setFilter(this)">Coupons</button>
     <button class="chip"    data-cat="fuel"       onclick="setFilter(this)">Fuel</button>
     <button class="chip"    data-cat="insurance"  onclick="setFilter(this)">Insurance</button>
+    <button class="chip"    data-cat="live"       onclick="setFilter(this)">🔴 Live Specials</button>
   </div>
 
   <!-- Compare bar (appears when searching) -->
   <div class="cmp-bar" id="cmpBar">
     <span class="cmp-bar-text" id="cmpBarText">Compare across retailers</span>
     <button class="cmp-bar-btn" onclick="goCompare()">Compare prices →</button>
+  </div>
+
+  <!-- Live Specials Panel (shown when Live Specials chip is active) -->
+  <div class="live-panel" id="livePanel" style="display:none">
+    <div class="live-panel-header">
+      <div class="live-panel-title">
+        <span class="live-dot"></span> Live Specials — direct from retailers
+      </div>
+      <div class="live-tabs">
+        <button class="live-tab on" onclick="loadLive('woolworths',this)">Woolworths</button>
+        <button class="live-tab"    onclick="loadLive('coles',this)">Coles</button>
+        <button class="live-tab"    onclick="loadLive('aldi',this)">ALDI</button>
+        <button class="live-tab"    onclick="loadLive('chemist',this)">Chemist WH</button>
+        <button class="live-tab"    onclick="loadLive('amazon',this)">Amazon</button>
+        <button class="live-tab"    onclick="loadLive('jbhifi',this)">JB Hi-Fi</button>
+        <button class="live-tab"    onclick="loadLive('bigw',this)">Big W</button>
+        <button class="live-tab"    onclick="loadLive('kmart',this)">Kmart</button>
+      </div>
+    </div>
+    <div class="live-grid" id="liveGrid">
+      <div class="live-loading">Select a retailer tab above to load their current specials</div>
+    </div>
+    <div class="live-note">
+      ℹ These open directly from each retailer's website in real time. Prices and availability are accurate as of right now.
+      <a href="catalogues.html" style="color:var(--accent);margin-left:8px">View all catalogues →</a>
+    </div>
   </div>
 
   <!-- Main content -->
@@ -584,6 +634,194 @@ function loadJsonp(url, callback) {
 
   script.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + cbName;
   document.head.appendChild(script);
+}
+
+
+// ── Live Specials ─────────────────────────────────────────────
+// Each retailer config: their specials page URL + how to parse
+// Browser fetches directly — no Apps Script, no CORS for same-origin
+// For cross-origin pages we open in new tab; for our own data we show cards
+
+const LIVE_RETAILERS = {
+  woolworths: {
+    name:'Woolworths', color:'#2e7d32', bg:'#e8f5e9',
+    url:'https://www.woolworths.com.au/shop/specials/all',
+    // Woolworths blocks iframe — show their specials via direct link cards
+    mode:'links',
+    links:[
+      {name:'Half Price Specials',      url:'https://www.woolworths.com.au/shop/browse/specials/half-price'},
+      {name:'New Specials This Week',   url:'https://www.woolworths.com.au/shop/browse/specials/new-specials'},
+      {name:'Everyday Rewards Offers',  url:'https://www.woolworths.com.au/shop/browse/specials/everyday-rewards-offers'},
+      {name:'Fresh Produce Specials',   url:'https://www.woolworths.com.au/shop/browse/fruit-veg/specials'},
+      {name:'Meat & Seafood Specials',  url:'https://www.woolworths.com.au/shop/browse/meat-seafood/specials'},
+      {name:'Bakery Specials',          url:'https://www.woolworths.com.au/shop/browse/bakery/specials'},
+      {name:'Pantry Specials',          url:'https://www.woolworths.com.au/shop/browse/pantry/specials'},
+      {name:'Snacks & Confectionery',   url:'https://www.woolworths.com.au/shop/browse/snacks-confectionery/specials'},
+      {name:'Drinks Specials',          url:'https://www.woolworths.com.au/shop/browse/drinks/specials'},
+      {name:'Frozen Food Specials',     url:'https://www.woolworths.com.au/shop/browse/frozen/specials'},
+      {name:'Dairy & Eggs Specials',    url:'https://www.woolworths.com.au/shop/browse/dairy-eggs-fridge/specials'},
+      {name:'Deli Specials',            url:'https://www.woolworths.com.au/shop/browse/deli/specials'},
+      {name:'Health & Beauty Specials', url:'https://www.woolworths.com.au/shop/browse/health-beauty/specials'},
+      {name:'Baby Specials',            url:'https://www.woolworths.com.au/shop/browse/baby/specials'},
+      {name:'Cleaning Specials',        url:'https://www.woolworths.com.au/shop/browse/cleaning-pest/specials'},
+      {name:'Pet Specials',             url:'https://www.woolworths.com.au/shop/browse/pet/specials'},
+    ]
+  },
+  coles: {
+    name:'Coles', color:'#c62828', bg:'#fce4ec',
+    url:'https://www.coles.com.au/on-special',
+    mode:'links',
+    links:[
+      {name:'All On Special',           url:'https://www.coles.com.au/on-special'},
+      {name:'Half Price',               url:'https://www.coles.com.au/on-special?sortBy=priceAsc&filters=halfPrice'},
+      {name:'Fresh Produce',            url:'https://www.coles.com.au/on-special/fruit-vegetables'},
+      {name:'Meat & Seafood',           url:'https://www.coles.com.au/on-special/deli-meat-seafood'},
+      {name:'Dairy & Eggs',             url:'https://www.coles.com.au/on-special/dairy-eggs-fridge'},
+      {name:'Pantry & Dry Goods',       url:'https://www.coles.com.au/on-special/pantry'},
+      {name:'Snacks & Confectionery',   url:'https://www.coles.com.au/on-special/snacks-confectionery'},
+      {name:'Drinks & Beverages',       url:'https://www.coles.com.au/on-special/drinks'},
+      {name:'Frozen Foods',             url:'https://www.coles.com.au/on-special/frozen'},
+      {name:'Bakery',                   url:'https://www.coles.com.au/on-special/bakery'},
+      {name:'Health & Beauty',          url:'https://www.coles.com.au/on-special/health-beauty'},
+      {name:'Baby & Child',             url:'https://www.coles.com.au/on-special/baby-child'},
+      {name:'Household & Cleaning',     url:'https://www.coles.com.au/on-special/household'},
+      {name:'Pet',                      url:'https://www.coles.com.au/on-special/pet'},
+      {name:'Liquor Specials',          url:'https://liquor.coles.com.au/specials'},
+      {name:'Flybuys Bonus Points',     url:'https://www.coles.com.au/on-special?filters=flybuys'},
+    ]
+  },
+  aldi: {
+    name:'ALDI', color:'#1565c0', bg:'#e3f2fd',
+    url:'https://www.aldi.com.au/en/special-buys/',
+    mode:'links',
+    links:[
+      {name:'This Week's Special Buys', url:'https://www.aldi.com.au/en/special-buys/'},
+      {name:'Next Week's Special Buys', url:'https://www.aldi.com.au/en/special-buys/next-week/'},
+      {name:'Home & Garden',             url:'https://www.aldi.com.au/en/special-buys/home-garden/'},
+      {name:'Clothing & Footwear',       url:'https://www.aldi.com.au/en/special-buys/clothing-footwear/'},
+      {name:'Tools & DIY',               url:'https://www.aldi.com.au/en/special-buys/tools-diy/'},
+      {name:'Electronics',               url:'https://www.aldi.com.au/en/special-buys/electronics/'},
+      {name:'Outdoor & Sport',           url:'https://www.aldi.com.au/en/special-buys/outdoor-sport/'},
+      {name:'Toys & Kids',               url:'https://www.aldi.com.au/en/special-buys/toys-kids/'},
+      {name:'Food & Beverages',          url:'https://www.aldi.com.au/en/specials/'},
+      {name:'Health & Beauty',           url:'https://www.aldi.com.au/en/specials/health-beauty/'},
+    ]
+  },
+  chemist: {
+    name:'Chemist Warehouse', color:'#bf360c', bg:'#fbe9e7',
+    mode:'links',
+    links:[
+      {name:'All Specials',              url:'https://www.chemistwarehouse.com.au/specials'},
+      {name:'Half Price',                url:'https://www.chemistwarehouse.com.au/half-price-sale'},
+      {name:'Vitamins & Supplements',   url:'https://www.chemistwarehouse.com.au/buy/vitamins-supplements/specials'},
+      {name:'Skincare',                  url:'https://www.chemistwarehouse.com.au/buy/skincare/specials'},
+      {name:'Hair Care',                 url:'https://www.chemistwarehouse.com.au/buy/hair-care/specials'},
+      {name:'Fragrances',                url:'https://www.chemistwarehouse.com.au/buy/fragrance/specials'},
+      {name:'Baby & Kids',               url:'https://www.chemistwarehouse.com.au/buy/baby-kids/specials'},
+      {name:'Weight Management',         url:'https://www.chemistwarehouse.com.au/buy/weight-management/specials'},
+      {name:'Cold & Flu',               url:'https://www.chemistwarehouse.com.au/buy/cold-flu/specials'},
+      {name:'Dental Care',               url:'https://www.chemistwarehouse.com.au/buy/dental-care/specials'},
+    ]
+  },
+  amazon: {
+    name:'Amazon AU', color:'#e65100', bg:'#fff3e0',
+    mode:'links',
+    links:[
+      {name:'Today's Deals (Gold Box)', url:'https://www.amazon.com.au/gp/goldbox'},
+      {name:'Lightning Deals',           url:'https://www.amazon.com.au/gp/goldbox?deals-widget=%7B%22version%22%3A1%2C%22dealTypes%22%3A%5B%22LIMITED_TIME_DEAL%22%5D%7D'},
+      {name:'Electronics Deals',         url:'https://www.amazon.com.au/gp/goldbox?deals-widget=%7B%22version%22%3A1%2C%22browseNodeIds%22%3A%5B%226728488031%22%5D%7D'},
+      {name:'Kitchen & Home Deals',      url:'https://www.amazon.com.au/gp/goldbox?deals-widget=%7B%22version%22%3A1%2C%22browseNodeIds%22%3A%5B%22967656031%22%5D%7D'},
+      {name:'Toys & Games Deals',        url:'https://www.amazon.com.au/gp/goldbox?deals-widget=%7B%22version%22%3A1%2C%22browseNodeIds%22%3A%5B%221254604031%22%5D%7D'},
+      {name:'Books Deals',               url:'https://www.amazon.com.au/gp/goldbox?deals-widget=%7B%22version%22%3A1%2C%22browseNodeIds%22%3A%5B%22720606031%22%5D%7D'},
+      {name:'Sports & Outdoors',         url:'https://www.amazon.com.au/gp/goldbox?deals-widget=%7B%22version%22%3A1%2C%22browseNodeIds%22%3A%5B%221520523031%22%5D%7D'},
+      {name:'Fashion Deals',             url:'https://www.amazon.com.au/gp/goldbox?deals-widget=%7B%22version%22%3A1%2C%22browseNodeIds%22%3A%5B%225765668031%22%5D%7D'},
+      {name:'Beauty Deals',              url:'https://www.amazon.com.au/gp/goldbox?deals-widget=%7B%22version%22%3A1%2C%22browseNodeIds%22%3A%5B%221975558031%22%5D%7D'},
+      {name:'Gaming Deals',              url:'https://www.amazon.com.au/gp/goldbox?deals-widget=%7B%22version%22%3A1%2C%22browseNodeIds%22%3A%5B%22823836031%22%5D%7D'},
+      {name:'Pet Supplies Deals',        url:'https://www.amazon.com.au/gp/goldbox?deals-widget=%7B%22version%22%3A1%2C%22browseNodeIds%22%3A%5B%221922888031%22%5D%7D'},
+      {name:'Subscribe & Save Deals',    url:'https://www.amazon.com.au/gp/subscribe-and-save/details/'},
+    ]
+  },
+  jbhifi: {
+    name:'JB Hi-Fi', color:'#1b5e20', bg:'#e8f5e9',
+    mode:'links',
+    links:[
+      {name:'Weekly Specials',           url:'https://www.jbhifi.com.au/pages/weekly-specials'},
+      {name:'TV Specials',               url:'https://www.jbhifi.com.au/collections/tv-specials'},
+      {name:'Laptop Specials',           url:'https://www.jbhifi.com.au/collections/laptop-specials'},
+      {name:'Phone Specials',            url:'https://www.jbhifi.com.au/collections/phone-specials'},
+      {name:'Audio Specials',            url:'https://www.jbhifi.com.au/collections/audio-specials'},
+      {name:'Gaming Specials',           url:'https://www.jbhifi.com.au/collections/gaming-specials'},
+      {name:'Appliance Specials',        url:'https://www.jbhifi.com.au/collections/appliance-specials'},
+      {name:'Camera Specials',           url:'https://www.jbhifi.com.au/collections/camera-specials'},
+    ]
+  },
+  bigw: {
+    name:'Big W', color:'#01579b', bg:'#e1f5fe',
+    mode:'links',
+    links:[
+      {name:'Sale & Clearance',          url:'https://www.bigw.com.au/category/sale-clearance'},
+      {name:'Toys On Sale',              url:'https://www.bigw.com.au/category/sale-clearance/toys'},
+      {name:'Clothing On Sale',          url:'https://www.bigw.com.au/category/sale-clearance/clothing'},
+      {name:'Electronics On Sale',       url:'https://www.bigw.com.au/category/sale-clearance/electronics'},
+      {name:'Home On Sale',              url:'https://www.bigw.com.au/category/sale-clearance/home'},
+      {name:'Baby On Sale',              url:'https://www.bigw.com.au/category/sale-clearance/baby'},
+      {name:'Sports On Sale',            url:'https://www.bigw.com.au/category/sale-clearance/sports'},
+      {name:'Books On Sale',             url:'https://www.bigw.com.au/category/sale-clearance/books-music-movies'},
+    ]
+  },
+  kmart: {
+    name:'Kmart', color:'#6a1b9a', bg:'#f3e5f5',
+    mode:'links',
+    links:[
+      {name:'On Sale Now',               url:'https://www.kmart.com.au/category/on-sale/'},
+      {name:'Home On Sale',              url:'https://www.kmart.com.au/category/on-sale/home/'},
+      {name:'Clothing On Sale',          url:'https://www.kmart.com.au/category/on-sale/clothing/'},
+      {name:'Toys On Sale',              url:'https://www.kmart.com.au/category/on-sale/toys/'},
+      {name:'Baby & Kids On Sale',       url:'https://www.kmart.com.au/category/on-sale/baby-kids/'},
+      {name:'Electronics On Sale',       url:'https://www.kmart.com.au/category/on-sale/electronics/'},
+      {name:'Outdoor On Sale',           url:'https://www.kmart.com.au/category/on-sale/outdoor/'},
+      {name:'Sports On Sale',            url:'https://www.kmart.com.au/category/on-sale/sport/'},
+    ]
+  },
+};
+
+function loadLive(retailerId, tabEl) {
+  // Update tab UI
+  document.querySelectorAll('.live-tab').forEach(t => t.classList.remove('on'));
+  if (tabEl) tabEl.classList.add('on');
+
+  const r = LIVE_RETAILERS[retailerId];
+  if (!r) return;
+
+  const grid = document.getElementById('liveGrid');
+
+  if (r.mode === 'links') {
+    // Show category cards that link directly to the retailer
+    grid.innerHTML = r.links.map(link => `
+      <a class="live-card" href="${esc(link.url)}" target="_blank" rel="noopener">
+        <span class="live-retailer" style="background:${r.bg};color:${r.color}">${esc(r.name)}</span>
+        <div class="live-name">${esc(link.name)}</div>
+        <div style="font-size:12px;color:var(--accent);margin-top:auto">Browse live deals →</div>
+      </a>`).join('');
+  }
+}
+
+// Show/hide live panel based on filter
+const _origSetFilter = setFilter;
+function setFilter(el) {
+  _origSetFilter(el);
+  const cat = el.dataset.cat;
+  const panel = document.getElementById('livePanel');
+  if (cat === 'live') {
+    panel.style.display = 'block';
+    document.getElementById('mainContent').style.display = 'none';
+    document.getElementById('fuelSec').style.display = 'none';
+    loadLive('woolworths', document.querySelector('.live-tab.on') || document.querySelector('.live-tab'));
+  } else {
+    panel.style.display = 'none';
+    document.getElementById('mainContent').style.display = 'block';
+    document.getElementById('fuelSec').style.display = 'block';
+  }
 }
 
 </script>
