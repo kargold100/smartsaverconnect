@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SmartSaver Connect &#8212; Cashback &amp; Rewards</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#f5f4f0;--card:#fff;--text:#1a1a18;--muted:#6b6a65;--hint:#9e9d98;--border:rgba(0,0,0,.09);--accent:#1a6b3c;--accent-bg:#e8f5ee;--danger:#c0392b;--danger-bg:#fde8e6;--radius:12px;}
+@media(prefers-color-scheme:dark){:root{--bg:#18181a;--card:#232325;--text:#e8e6df;--muted:#9a9890;--hint:#6a6860;--border:rgba(255,255,255,.09);--accent:#4caf7a;--accent-bg:#0e2d1a;--danger:#e57373;--danger-bg:#2d0e0e;}}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.wrap{max-width:980px;margin:0 auto;padding:1.5rem 1rem 4rem}
+.header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:1.75rem}
+.logo{font-size:20px;font-weight:800;letter-spacing:-.5px;text-decoration:none;color:var(--text)}.logo span{color:var(--accent)}
+.nav{display:flex;gap:10px;flex-wrap:wrap}
+.back{font-size:13px;color:var(--accent);text-decoration:none}.back:hover{text-decoration:underline}
+
+/* Hero */
+.hero{background:linear-gradient(135deg,var(--accent-bg) 0%,var(--card) 100%);border:1px solid var(--accent);border-radius:var(--radius);padding:24px;margin-bottom:2rem}
+.hero h1{font-size:22px;font-weight:800;margin-bottom:6px}
+.hero p{font-size:14px;color:var(--muted);line-height:1.6;max-width:600px}
+
+/* Live deals section */
+.live-sec{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:0;margin-bottom:2rem;overflow:hidden}
+.live-head{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.live-head h2{font-size:16px;font-weight:700}
+.live-head p{font-size:12px;color:var(--muted);margin-top:2px}
+.load-btn{padding:8px 18px;background:var(--accent);color:#fff;border:0;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer}
+.load-btn:hover{opacity:.88}
+.load-btn:disabled{opacity:.5;cursor:not-allowed}
+.deals-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;padding:16px}
+.deal-card{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:13px;display:flex;flex-direction:column;gap:7px}
+.deal-card a{font-size:12px;color:var(--accent);text-decoration:none;margin-top:auto}
+.deal-card a:hover{text-decoration:underline}
+.deal-title{font-size:13px;font-weight:600;line-height:1.4}
+.deal-desc{font-size:11px;color:var(--muted);line-height:1.5}
+.platform-badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px}
+.p-tc{background:#fff3e0;color:#e65100}
+.p-cr{background:#e8f5e9;color:#2e7d32}
+.p-sb{background:#e3f2fd;color:#1565c0}
+.p-oz{background:#fce4ec;color:#c62828}
+.p-def{background:#f5f5f5;color:#424242}
+@media(prefers-color-scheme:dark){
+  .p-tc{background:#1a1200;color:#ffcc80}.p-cr{background:#0d2e12;color:#81c784}
+  .p-sb{background:#0a1929;color:#90caf9}.p-oz{background:#2d0b10;color:#ef9a9a}
+  .p-def{background:#2a2a2a;color:#bdbdbd}
+}
+.loading-msg{padding:2rem;text-align:center;color:var(--muted);font-size:13px}
+.empty-msg{padding:1.5rem;text-align:center;color:var(--muted);font-size:13px}
+
+/* Platform cards */
+.sec-title{font-size:17px;font-weight:700;margin:2rem 0 1rem}
+.sec-sub{font-size:12px;color:var(--muted);font-weight:400;margin-left:6px}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-bottom:2rem}
+.pcard{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:18px;display:flex;flex-direction:column;gap:10px;text-decoration:none;color:var(--text);transition:all .15s}
+.pcard:hover{border-color:var(--accent);transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,0,0,.08)}
+.pcard.star{border-color:var(--accent)}
+.ptop{display:flex;align-items:center;gap:12px}
+.picon{font-size:28px;width:52px;height:52px;border-radius:12px;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pname{font-size:16px;font-weight:700}
+.pdomain{font-size:11px;color:var(--muted)}
+.pdesc{font-size:13px;color:var(--muted);line-height:1.6;flex:1}
+.pfoot{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-top:auto}
+.plink{font-size:13px;font-weight:600;color:var(--accent)}
+.ptag{display:inline-block;font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600}
+.t-green{background:var(--accent-bg);color:var(--accent)}
+.t-orange{background:#fff3e0;color:#e65100}
+
+/* Store rates table */
+.rates-table{width:100%;border-collapse:collapse;background:var(--card);border-radius:var(--radius);overflow:hidden;margin-bottom:2rem}
+.rates-table th{text-align:left;padding:10px 14px;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--border);background:var(--bg)}
+.rates-table td{padding:11px 14px;border-bottom:1px solid var(--border);font-size:13px}
+.rates-table tr:last-child td{border-bottom:none}
+.rates-table tr:hover td{background:var(--bg)}
+.rate-val{font-weight:700;color:var(--accent)}
+.store-name{font-weight:600}
+
+/* Tips */
+.tips-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:2rem}
+.tips-card h2{font-size:16px;font-weight:700;margin-bottom:14px}
+.tips-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.tip{display:flex;gap:10px}
+.tip-num{font-size:18px;flex-shrink:0}
+.tip-title{font-size:13px;font-weight:600;margin-bottom:3px}
+.tip-body{font-size:12px;color:var(--muted);line-height:1.5}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header">
+    <a class="logo" href="index.html">SmartSaver<span>Connect</span></a>
+    <div class="nav">
+      <a class="back" href="index.html">&#8592; Deals</a>
+      <a class="back" href="compare.html">&#9878; Compare</a>
+      <a class="back" href="catalogues.html">&#128214; Catalogues</a>
+    </div>
+  </div>
+
+  <div class="hero">
+    <h1>&#128176; Cashback &amp; Rewards</h1>
+    <p>Earn money back on purchases you were going to make anyway. TopCashback, Cashrewards and ShopBack all work on top of existing sale prices &#8212; stack them for maximum savings.</p>
+  </div>
+
+  <!-- Live deals from OzBargain -->
+  <div class="live-sec">
+    <div class="live-head">
+      <div>
+        <h2>&#128308; Live Cashback Deals</h2>
+        <p>Community-posted cashback deals from OzBargain, loaded fresh from your browser</p>
+      </div>
+      <button class="load-btn" id="loadBtn" onclick="loadLiveDeals()">Load live deals</button>
+    </div>
+    <div id="liveContent">
+      <div class="loading-msg">Click "Load live deals" to fetch current cashback offers from OzBargain</div>
+    </div>
+  </div>
+
+  <!-- Platform cards -->
+  <div class="sec-title">&#127942; Cashback Platforms <span class="sec-sub">&#8212; join all three for maximum coverage</span></div>
+  <div class="pgrid">
+
+    <a class="pcard star" href="https://www.topcashback.com.au" target="_blank" rel="noopener">
+      <div class="ptop"><div class="picon">&#127942;</div><div><div class="pname">TopCashback AU</div><div class="pdomain">topcashback.com.au</div></div></div>
+      <div class="pdesc">Australia's highest cashback rates. Often beats Cashrewards on rate for the same store. 3,000+ retailers including Woolworths, Amazon AU, Chemist Warehouse, eBay, JB Hi-Fi, Kogan. Free to join, no fees.</div>
+      <div class="pfoot"><span class="ptag t-green">Free</span><a class="plink" onclick="event.stopPropagation()">Join free &#8594;</a></div>
+    </a>
+
+    <a class="pcard star" href="https://www.cashrewards.com.au" target="_blank" rel="noopener">
+      <div class="ptop"><div class="picon">&#128179;</div><div><div class="pname">Cashrewards</div><div class="pdomain">cashrewards.com.au</div></div></div>
+      <div class="pdesc">Australia's largest cashback platform with 2,000+ retailers. Strong on grocery (Woolworths online), pharmacy and insurance switching. Frequent bonus cashback events and EOFY specials.</div>
+      <div class="pfoot"><span class="ptag t-green">Free</span><a class="plink" onclick="event.stopPropagation()">Join free &#8594;</a></div>
+    </a>
+
+    <a class="pcard" href="https://www.shopback.com.au" target="_blank" rel="noopener">
+      <div class="ptop"><div class="picon">&#128717;&#65039;</div><div><div class="pname">ShopBack AU</div><div class="pdomain">shopback.com.au</div></div></div>
+      <div class="pdesc">Best for fashion, travel and food delivery. Covers THE ICONIC, Booking.com, Menulog, Cotton On, Sephora and more. PayLater option available on some purchases.</div>
+      <div class="pfoot"><span class="ptag t-green">Free</span><a class="plink" onclick="event.stopPropagation()">Join free &#8594;</a></div>
+    </a>
+
+    <a class="pcard" href="https://www.topcashback.com.au/cashback-stores/" target="_blank" rel="noopener">
+      <div class="ptop"><div class="picon">&#128196;</div><div><div class="pname">TopCashback &#8212; All Stores</div><div class="pdomain">topcashback.com.au</div></div></div>
+      <div class="pdesc">Browse all TopCashback AU stores with current rates. Use this to check the rate before any online purchase.</div>
+      <div class="pfoot"><span class="ptag t-orange">Check rates</span><a class="plink" onclick="event.stopPropagation()">Browse &#8594;</a></div>
+    </a>
+
+    <a class="pcard" href="https://www.cashrewards.com.au/trending-stores" target="_blank" rel="noopener">
+      <div class="ptop"><div class="picon">&#128293;</div><div><div class="pname">Cashrewards &#8212; Trending</div><div class="pdomain">cashrewards.com.au</div></div></div>
+      <div class="pdesc">Boosted rates and time-limited cashback events. Check this before any big purchase &#8212; rates can jump to 15-25% during events.</div>
+      <div class="pfoot"><span class="ptag t-orange">Boosted rates</span><a class="plink" onclick="event.stopPropagation()">View trending &#8594;</a></div>
+    </a>
+
+    <a class="pcard" href="https://www.shopback.com.au/all-stores" target="_blank" rel="noopener">
+      <div class="ptop"><div class="picon">&#128203;</div><div><div class="pname">ShopBack &#8212; All Stores</div><div class="pdomain">shopback.com.au</div></div></div>
+      <div class="pdesc">Browse all ShopBack partner stores and current cashback rates. Filter by category to find cashback on what you need.</div>
+      <div class="pfoot"><span class="ptag t-orange">Check rates</span><a class="plink" onclick="event.stopPropagation()">Browse &#8594;</a></div>
+    </a>
+
+  </div>
+
+  <!-- Store rates guide -->
+  <div class="sec-title">&#128203; Typical Cashback Rates by Store <span class="sec-sub">&#8212; rates vary, always check before buying</span></div>
+  <div style="overflow-x:auto;margin-bottom:2rem">
+  <table class="rates-table">
+    <thead><tr>
+      <th>Store</th>
+      <th>TopCashback AU</th>
+      <th>Cashrewards</th>
+      <th>ShopBack AU</th>
+      <th>Best use case</th>
+    </tr></thead>
+    <tbody>
+      <tr><td class="store-name">Woolworths (online)</td><td class="rate-val">1&#8211;3%</td><td class="rate-val">1&#8211;2%</td><td>&#8212;</td><td>Grocery orders over $100</td></tr>
+      <tr><td class="store-name">Chemist Warehouse</td><td class="rate-val">4&#8211;8%</td><td class="rate-val">3&#8211;6%</td><td class="rate-val">3&#8211;5%</td><td>Stack with 50% off sale &#8212; big wins</td></tr>
+      <tr><td class="store-name">Amazon AU</td><td class="rate-val">3&#8211;5%</td><td class="rate-val">2&#8211;4%</td><td class="rate-val">2&#8211;4%</td><td>Electronics and household items</td></tr>
+      <tr><td class="store-name">eBay</td><td class="rate-val">3&#8211;6%</td><td class="rate-val">2&#8211;5%</td><td class="rate-val">2&#8211;4%</td><td>Second-hand and bulk purchases</td></tr>
+      <tr><td class="store-name">Kogan</td><td class="rate-val">4&#8211;7%</td><td class="rate-val">3&#8211;5%</td><td class="rate-val">3&#8211;5%</td><td>Appliances and electronics</td></tr>
+      <tr><td class="store-name">THE ICONIC</td><td class="rate-val">5&#8211;8%</td><td class="rate-val">4&#8211;6%</td><td class="rate-val">5&#8211;9%</td><td>Fashion &#8212; use ShopBack here</td></tr>
+      <tr><td class="store-name">Booking.com</td><td class="rate-val">4&#8211;7%</td><td class="rate-val">3&#8211;5%</td><td class="rate-val">5&#8211;8%</td><td>Hotel bookings &#8212; use ShopBack</td></tr>
+      <tr><td class="store-name">Car/Home Insurance</td><td class="rate-val">$50&#8211;$150</td><td class="rate-val">$30&#8211;$100</td><td class="rate-val">$20&#8211;$80</td><td>Switching insurers &#8212; huge cashback</td></tr>
+      <tr><td class="store-name">NBN / Internet switch</td><td class="rate-val">$50&#8211;$100</td><td class="rate-val">$30&#8211;$80</td><td>&#8212;</td><td>Switching providers &#8212; free money</td></tr>
+      <tr><td class="store-name">JB Hi-Fi</td><td class="rate-val">1&#8211;3%</td><td class="rate-val">1&#8211;2%</td><td>&#8212;</td><td>Electronics and appliances</td></tr>
+      <tr><td class="store-name">Priceline</td><td class="rate-val">4&#8211;7%</td><td class="rate-val">3&#8211;6%</td><td class="rate-val">3&#8211;5%</td><td>Stack with half-price beauty sale</td></tr>
+      <tr><td class="store-name">Cotton On</td><td class="rate-val">5&#8211;8%</td><td class="rate-val">4&#8211;6%</td><td class="rate-val">5&#8211;8%</td><td>Kids clothing during sales</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p style="font-size:12px;color:var(--muted);margin-bottom:2rem">&#9432; Rates are approximate and change frequently. Always check the cashback platform before purchasing. Rates are higher during bonus events.</p>
+
+  <!-- Tips -->
+  <div class="tips-card">
+    <h2>&#128161; How to Maximise Cashback</h2>
+    <div class="tips-list">
+      <div class="tip">
+        <div class="tip-num">1&#65039;&#8419;</div>
+        <div><div class="tip-title">Always check before buying</div><div class="tip-body">Open TopCashback and Cashrewards before any online purchase. Even 3% on a $300 grocery order is $9 free.</div></div>
+      </div>
+      <div class="tip">
+        <div class="tip-num">2&#65039;&#8419;</div>
+        <div><div class="tip-title">Compare rates across all three</div><div class="tip-body">TopCashback, Cashrewards and ShopBack have different rates for the same store. Takes 30 seconds to check all three.</div></div>
+      </div>
+      <div class="tip">
+        <div class="tip-num">3&#65039;&#8419;</div>
+        <div><div class="tip-title">Stack cashback with sale prices</div><div class="tip-body">Cashback works on top of existing discounts. Chemist Warehouse 50% off vitamins + 8% cashback = both apply.</div></div>
+      </div>
+      <div class="tip">
+        <div class="tip-num">4&#65039;&#8419;</div>
+        <div><div class="tip-title">Watch for bonus events</div><div class="tip-body">Cashrewards and TopCashback run 10x cashback days and EOFY specials. Sign up for email alerts from both.</div></div>
+      </div>
+      <div class="tip">
+        <div class="tip-num">5&#65039;&#8419;</div>
+        <div><div class="tip-title">Use for insurance &amp; energy switching</div><div class="tip-body">Platforms pay $50&#8211;$150 for switching insurers or energy providers through their links. Same policy, free money.</div></div>
+      </div>
+      <div class="tip">
+        <div class="tip-num">6&#65039;&#8419;</div>
+        <div><div class="tip-title">Do not apply outside coupon codes</div><div class="tip-body">Using a third-party coupon code after clicking a cashback link usually voids the cashback. Only use codes the platform itself provides.</div></div>
+      </div>
+      <div class="tip">
+        <div class="tip-num">7&#65039;&#8419;</div>
+        <div><div class="tip-title">Install the browser extension</div><div class="tip-body">TopCashback and Cashrewards both have browser extensions that alert you automatically when you visit a store that has cashback available.</div></div>
+      </div>
+      <div class="tip">
+        <div class="tip-num">8&#65039;&#8419;</div>
+        <div><div class="tip-title">Do not use incognito mode</div><div class="tip-body">Cashback tracking uses cookies. Incognito windows clear cookies so your cashback will not be tracked. Use a normal browser window.</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<script>
+async function loadLiveDeals() {
+  var btn     = document.getElementById('loadBtn');
+  var content = document.getElementById('liveContent');
+  btn.disabled = true;
+  btn.textContent = 'Loading...';
+  content.innerHTML = '<div class="loading-msg">Fetching live cashback deals from OzBargain...</div>';
+
+  var CB_KW = ['cashback','cash back','topcashback','cashrewards','shopback',
+    'rewards','bonus cash','earn cash','rebate','% back'];
+
+  try {
+    // Fetch OzBargain deals + finance feeds via CORS proxy
+    var results = await Promise.allSettled([
+      fetchRSS('https://www.ozbargain.com.au/deals/feed'),
+      fetchRSS('https://www.ozbargain.com.au/cat/finance/feed'),
+    ]);
+
+    var items = [];
+    results.forEach(function(r) {
+      if (r.status === 'fulfilled') items = items.concat(r.value);
+    });
+
+    var filtered = items.filter(function(d) {
+      var text = (d.title + ' ' + d.desc).toLowerCase();
+      return CB_KW.some(function(k){ return text.indexOf(k) !== -1; });
+    });
+
+    // Dedupe by title
+    var seen = {};
+    var deduped = filtered.filter(function(d) {
+      var k = d.title.toLowerCase().slice(0, 40);
+      if (seen[k]) return false; seen[k] = true; return true;
+    });
+
+    if (!deduped.length) {
+      content.innerHTML = '<div class="empty-msg">No cashback deals found right now on OzBargain. Check the platforms below for current rates and boosted events.</div>';
+    } else {
+      var html = '<div class="deals-grid">';
+      deduped.slice(0, 24).forEach(function(d) {
+        var platform = d.title.toLowerCase().indexOf('topcashback') !== -1 ? 'TopCashback'
+          : d.title.toLowerCase().indexOf('cashrewards') !== -1 ? 'Cashrewards'
+          : d.title.toLowerCase().indexOf('shopback') !== -1 ? 'ShopBack'
+          : d.desc.toLowerCase().indexOf('topcashback') !== -1 ? 'TopCashback'
+          : d.desc.toLowerCase().indexOf('cashrewards') !== -1 ? 'Cashrewards'
+          : d.desc.toLowerCase().indexOf('shopback') !== -1 ? 'ShopBack'
+          : 'OzBargain';
+        var cls = platform === 'TopCashback' ? 'p-tc'
+          : platform === 'Cashrewards' ? 'p-cr'
+          : platform === 'ShopBack' ? 'p-sb'
+          : platform === 'OzBargain' ? 'p-oz' : 'p-def';
+        html += '<div class="deal-card">'
+          + '<span class="platform-badge ' + cls + '">' + platform + '</span>'
+          + '<div class="deal-title">' + esc(d.title) + '</div>'
+          + (d.desc ? '<div class="deal-desc">' + esc(d.desc.slice(0, 120)) + '</div>' : '')
+          + (d.link ? '<a href="' + esc(d.link) + '" target="_blank" rel="noopener">View deal &#8594;</a>' : '')
+          + '</div>';
+      });
+      html += '</div>';
+      content.innerHTML = html;
+    }
+  } catch(e) {
+    content.innerHTML = '<div class="empty-msg">Could not fetch deals. Check OzBargain.com.au directly for cashback posts.</div>';
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Refresh deals';
+}
+
+function fetchRSS(url) {
+  // Use a CORS proxy to fetch OzBargain RSS from browser
+  // allorigins.win is a free public CORS proxy
+  var proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent(url);
+  return fetch(proxyUrl)
+    .then(function(r){ return r.json(); })
+    .then(function(data) {
+      var xml = data.contents || '';
+      var parser = new DOMParser();
+      var doc = parser.parseFromString(xml, 'text/xml');
+      var items = Array.from(doc.querySelectorAll('item'));
+      return items.map(function(item) {
+        return {
+          title: item.querySelector('title') ? item.querySelector('title').textContent : '',
+          link:  item.querySelector('link')  ? item.querySelector('link').textContent  : '',
+          desc:  item.querySelector('description')
+            ? item.querySelector('description').textContent.replace(/<[^>]+>/g, ' ').trim().slice(0, 200)
+            : '',
+        };
+      }).filter(function(d){ return d.title; });
+    });
+}
+
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>
