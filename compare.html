@@ -96,6 +96,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
       <span class="qchip" onclick="q('mobile plan',this)">Mobile plan</span>
       <span class="qchip" onclick="q('nbn',this)">NBN</span>
       <span class="qchip" onclick="q('electricity',this)">Electricity</span>
+      <span class="qchip" onclick="q('cashback',this)">Cashback</span>
     </div>
   </div>
 
@@ -215,7 +216,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
   </div>
 
   <!-- Mobile Plans & NBN -->
-  <div class="sec-title">📱 Mobile Plans <span class="sec-sub">— compare SIM-only & prepaid plans</span></div>
+  <div class="sec-title" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+    <span>📱 Mobile Plans <span class="sec-sub">— compare SIM-only & prepaid</span></span>
+    <button class="sb" style="font-size:12px;padding:7px 16px" onclick="loadLiveMobile()">🔄 Load live deals</button>
+  </div>
+  <div id="mobileLiveResults" style="margin-bottom:1rem;display:none">
+    <div id="mobileCards" class="dgrid"></div>
+  </div>
+  <div id="mobileLoading" style="display:none;color:var(--muted);font-size:13px;padding:.5rem 0;margin-bottom:.75rem">
+    Fetching live mobile plan deals…
+  </div>
   <div class="tgrid">
     <a class="tcard featured" href="https://www.finder.com.au/mobile-phone-plans" target="_blank" rel="noopener">
       <div class="ttop"><div class="ticon">📱</div><div><div class="tname">Finder Mobile Plans</div><div class="tdomain">finder.com.au</div></div></div>
@@ -259,7 +269,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
     </a>
   </div>
 
-  <div class="sec-title">🌐 NBN & Internet Plans <span class="sec-sub">— compare broadband providers</span></div>
+  <div class="sec-title" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+    <span>🌐 NBN & Internet Plans <span class="sec-sub">— live deals from providers</span></span>
+    <button class="sb" style="font-size:12px;padding:7px 16px" onclick="loadLiveNBN()">🔄 Load live deals</button>
+  </div>
+
+  <!-- Live NBN deals loaded from public provider pages -->
+  <div id="nbnLiveResults" style="margin-bottom:1rem;display:none">
+    <div id="nbnCards" class="dgrid"></div>
+  </div>
+  <div id="nbnLoading" style="display:none;color:var(--muted);font-size:13px;padding:.5rem 0;margin-bottom:.75rem">
+    Fetching live NBN deals from providers…
+  </div>
   <div class="tgrid">
     <a class="tcard featured" href="https://www.finder.com.au/broadband" target="_blank" rel="noopener">
       <div class="ttop"><div class="ticon">🌐</div><div><div class="tname">Finder NBN</div><div class="tdomain">finder.com.au</div></div></div>
@@ -303,7 +324,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
     </a>
   </div>
 
-  <div class="sec-title">⚡ Electricity & Gas Offers <span class="sec-sub">— compare energy plans across Australia</span></div>
+  <div class="sec-title" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+    <span>⚡ Electricity & Gas Offers <span class="sec-sub">— compare energy plans</span></span>
+    <button class="sb" style="font-size:12px;padding:7px 16px" onclick="loadLiveEnergy()">🔄 Load live deals</button>
+  </div>
+  <div id="energyLiveResults" style="margin-bottom:1rem;display:none">
+    <div id="energyCards" class="dgrid"></div>
+  </div>
+  <div id="energyLoading" style="display:none;color:var(--muted);font-size:13px;padding:.5rem 0;margin-bottom:.75rem">
+    Fetching live energy deals…
+  </div>
   <div class="tgrid">
     <a class="tcard featured" href="https://www.energymadeeasy.gov.au" target="_blank" rel="noopener">
       <div class="ttop"><div class="ticon">🏛️</div><div><div class="tname">Energy Made Easy</div><div class="tdomain">energymadeeasy.gov.au</div></div></div>
@@ -365,6 +395,109 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
       <div class="tdesc">VIC Government solar panel and battery rebates — up to $1,400 off solar installation. Check eligibility and apply online.</div>
       <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-au">VIC rebate</span> Check eligibility →</div>
     </a>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="sec-title" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+    <span>💰 Cashback & Rewards <span class="sec-sub">— earn money back on top of any deal</span></span>
+    <button class="sb" id="cbLoadBtn" style="font-size:12px;padding:7px 16px" onclick="loadLiveCashback()">🔄 Load live cashback deals</button>
+  </div>
+  <div id="cbLoading" style="display:none;color:var(--muted);font-size:13px;padding:.5rem 0">Fetching live cashback deals…</div>
+  <div id="cbResults" style="display:none;margin-bottom:1rem"><div id="cbGrid" class="dgrid"></div></div>
+  <div class="tgrid">
+
+    <a class="tcard featured" href="https://www.topcashback.com.au" target="_blank" rel="noopener">
+      <div class="ttop"><div class="ticon">🏆</div><div><div class="tname">TopCashback AU</div><div class="tdomain">topcashback.com.au</div></div></div>
+      <div class="tdesc">Australia's highest cashback rates. Covers Woolworths, Coles, Amazon, Chemist Warehouse, eBay, JB Hi-Fi, Kogan, The Iconic and 3000+ more. Often beats Cashrewards on rates. Free to join.</div>
+      <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-au">AU</span> Earn cashback →</div>
+    </a>
+
+    <a class="tcard featured" href="https://www.cashrewards.com.au" target="_blank" rel="noopener">
+      <div class="ttop"><div class="ticon">💳</div><div><div class="tname">Cashrewards</div><div class="tdomain">cashrewards.com.au</div></div></div>
+      <div class="tdesc">Australia's largest cashback platform. Woolworths, Amazon AU, Chemist Warehouse, Kogan, ASOS and 2000+ retailers. Frequent bonus cashback events stacking with sales.</div>
+      <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-au">AU</span> Earn cashback →</div>
+    </a>
+
+    <a class="tcard" href="https://www.shopback.com.au" target="_blank" rel="noopener">
+      <div class="ttop"><div class="ticon">🛍️</div><div><div class="tname">ShopBack</div><div class="tdomain">shopback.com.au</div></div></div>
+      <div class="tdesc">ShopBack AU cashback — strong on fashion, travel and food delivery. Covers Menulog, Uber Eats, THE ICONIC, Cotton On, Booking.com and more. PayLater feature available.</div>
+      <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-au">AU</span> Earn cashback →</div>
+    </a>
+
+    <a class="tcard" href="https://www.shopback.com.au/all-stores" target="_blank" rel="noopener">
+      <div class="ttop"><div class="ticon">🗂️</div><div><div class="tname">ShopBack — All Stores</div><div class="tdomain">shopback.com.au</div></div></div>
+      <div class="tdesc">Browse all ShopBack AU partner stores with current cashback rates. Filter by category to find cashback on groceries, travel, insurance and more.</div>
+      <div class="taction"><span class="tag tag-free">Free</span> Browse stores →</div>
+    </a>
+
+    <a class="tcard" href="https://www.cashrewards.com.au/trending-stores" target="_blank" rel="noopener">
+      <div class="ttop"><div class="ticon">🔥</div><div><div class="tname">Cashrewards — Trending</div><div class="tdomain">cashrewards.com.au</div></div></div>
+      <div class="tdesc">Current trending cashback deals and boosted rates — often time-limited. Check before any online purchase to stack cashback with sale prices.</div>
+      <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-live">Live rates</span> View trending →</div>
+    </a>
+
+    <a class="tcard" href="https://www.topcashback.com.au/cashback-stores/" target="_blank" rel="noopener">
+      <div class="ttop"><div class="ticon">📋</div><div><div class="tname">TopCashback — All Stores</div><div class="tdomain">topcashback.com.au</div></div></div>
+      <div class="tdesc">Browse all TopCashback AU stores with current rates. Includes many stores not on other platforms. Compare rates between platforms before buying.</div>
+      <div class="taction"><span class="tag tag-free">Free</span> Browse stores →</div>
+    </a>
+
+  </div>
+
+  <div class="sec-title">💡 Cashback Tips <span class="sec-sub">— how to maximise your savings</span></div>
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;margin-bottom:2rem">
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px">
+
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <span style="font-size:20px;flex-shrink:0">1️⃣</span>
+        <div>
+          <div style="font-size:13px;font-weight:600;margin-bottom:3px">Always check cashback before buying</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.5">Before any online purchase, check TopCashback and Cashrewards. Even 2–5% back on a $500 appliance is $10–25 for free.</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <span style="font-size:20px;flex-shrink:0">2️⃣</span>
+        <div>
+          <div style="font-size:13px;font-weight:600;margin-bottom:3px">Compare rates across platforms</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.5">TopCashback, Cashrewards and ShopBack often have different rates for the same store. Check all three and use whichever is highest.</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <span style="font-size:20px;flex-shrink:0">3️⃣</span>
+        <div>
+          <div style="font-size:13px;font-weight:600;margin-bottom:3px">Stack cashback with sale prices</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.5">Cashback stacks with existing discounts. If Chemist Warehouse has 50% off vitamins AND 8% cashback via TopCashback — you get both.</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <span style="font-size:20px;flex-shrink:0">4️⃣</span>
+        <div>
+          <div style="font-size:13px;font-weight:600;margin-bottom:3px">Watch for bonus cashback events</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.5">Cashrewards and TopCashback run boosted-rate events (10x cashback days, EOFY specials). Sign up for email alerts from both.</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <span style="font-size:20px;flex-shrink:0">5️⃣</span>
+        <div>
+          <div style="font-size:13px;font-weight:600;margin-bottom:3px">Use for insurance & energy switching</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.5">Cashback platforms often pay $50–150 for switching insurance or energy providers through their links — same policy, free money.</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <span style="font-size:20px;flex-shrink:0">6️⃣</span>
+        <div>
+          <div style="font-size:13px;font-weight:600;margin-bottom:3px">Don't use coupon codes via cashback</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.5">Applying a third-party coupon code after clicking through a cashback link often voids the cashback. Only use codes the platform itself provides.</div>
+        </div>
+      </div>
+
+    </div>
   </div>
 </div>
 
@@ -491,6 +624,234 @@ function vclass(v,cat){
   return 'v-def';
 }
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+// ── Live deal fetching ──────────────────────────────────────────
+// Uses JSONP-style script loading to pull OzBargain RSS category feeds
+// directly in the browser — these work cross-origin via RSS
+
+function ozbRSS(category) {
+  // OzBargain has RSS feeds for every category — load via fetch in browser
+  // Browser can access these; Apps Script server IPs were blocked
+  return fetch('https://www.ozbargain.com.au/cat/' + category + '/feed', {
+    headers: { 'Accept': 'application/rss+xml, text/xml, */*' }
+  })
+  .then(r => r.text())
+  .then(text => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(text, 'text/xml');
+    return Array.from(doc.querySelectorAll('item')).map(item => ({
+      title:       item.querySelector('title')?.textContent || '',
+      link:        item.querySelector('link')?.textContent  || '',
+      description: (item.querySelector('description')?.textContent || '').replace(/<[^>]+>/g,' ').trim(),
+      vendor:      detectVendorBrowser(item.querySelector('title')?.textContent + ' ' + item.querySelector('description')?.textContent),
+    })).filter(d => d.title);
+  })
+  .catch(() => []);
+}
+
+function detectVendorBrowser(text) {
+  const t = (text||'').toLowerCase();
+  const rules = [
+    [/aussie\s*broadband/, 'Aussie Broadband'], [/superloop/, 'Superloop'],
+    [/tpg/, 'TPG'], [/iinet/, 'iiNet'], [/internode/, 'Internode'],
+    [/spintel/, 'Spintel'], [/skymesh/, 'SkyMesh'], [/nbn/, 'NBN Deal'],
+    [/telstra/, 'Telstra'], [/optus/, 'Optus'], [/vodafone/, 'Vodafone'],
+    [/aldi\s*mobile/, 'ALDI Mobile'], [/boost\s*mobile/, 'Boost Mobile'],
+    [/kogan\s*mobile/, 'Kogan Mobile'], [/lebara/, 'Lebara'],
+    [/amaysim/, 'amaysim'], [/agl/, 'AGL'], [/origin\s*energy/, 'Origin Energy'],
+    [/reamped/, 'ReAmped'], [/amber\s*electric/, 'Amber Electric'],
+    [/powershop/, 'Powershop'], [/alinta/, 'Alinta Energy'],
+  ];
+  for (const [re, name] of rules) { if (t.match(re)) return name; }
+  return null;
+}
+
+function xPriceBrowser(t) {
+  const m = (t||'').match(/\$\s*([\d,]+\.?\d*)\s*(?:\/mo|\/month|per\s*month|p\/m)?/i);
+  return m ? parseFloat(m[1].replace(/,','')) : null;
+}
+
+function renderLiveCards(items, containerId, sectionId, emptyMsg) {
+  const sec = document.getElementById(sectionId);
+  const grid = document.getElementById(containerId);
+  if (!items.length) {
+    grid.innerHTML = '<div class="empty">' + emptyMsg + '</div>';
+  } else {
+    grid.innerHTML = items.slice(0, 24).map(d => {
+      const price = xPriceBrowser(d.title + ' ' + d.description);
+      const vname = d.vendor || 'Deal';
+      const vc = vname.toLowerCase().includes('telstra') ? 'v-ww'
+        : vname.toLowerCase().includes('optus') ? 'v-coles'
+        : vname.toLowerCase().includes('agl') ? 'v-aldi'
+        : 'v-def';
+      return '<div class="dcard">'
+        + '<div class="dtop"><span class="vbadge ' + vc + '">' + esc(vname) + '</span></div>'
+        + '<div class="dtitle">' + esc(d.title) + '</div>'
+        + (d.description ? '<div class="ddesc">' + esc(d.description.slice(0,100)) + '</div>' : '')
+        + (price ? '<div class="dprice">$' + price.toFixed(2) + '/mo</div>' : '')
+        + (d.link ? '<a class="dlink" href="' + esc(d.link) + '" target="_blank" rel="noopener">View deal →</a>' : '')
+        + '</div>';
+    }).join('');
+  }
+  sec.style.display = 'block';
+}
+
+async function loadLiveNBN() {
+  const loading = document.getElementById('nbnLoading');
+  loading.style.display = 'block';
+  document.getElementById('nbnLiveResults').style.display = 'none';
+
+  // Fetch internet + main feed filtered to NBN/broadband
+  const [internetItems, mainItems] = await Promise.all([
+    ozbRSS('internet'),
+    ozbRSS('deals'),
+  ]);
+
+  const NBN_KEYWORDS = ['nbn','broadband','internet plan','home internet',
+    'aussie broadband','superloop','tpg','iinet','internode','spintel',
+    'skymesh','starlink','5g home'];
+
+  const combined = [
+    ...internetItems,
+    ...mainItems.filter(d => NBN_KEYWORDS.some(k =>
+      (d.title + d.description).toLowerCase().includes(k)))
+  ];
+
+  // Dedupe by title
+  const seen = new Set();
+  const deduped = combined.filter(d => {
+    const k = d.title.toLowerCase().slice(0, 40);
+    if (seen.has(k)) return false;
+    seen.add(k); return true;
+  });
+
+  loading.style.display = 'none';
+  renderLiveCards(deduped, 'nbnCards', 'nbnLiveResults',
+    'No NBN deals found right now. Check the comparison tools below or visit OzBargain directly.');
+}
+
+async function loadLiveMobile() {
+  const loading = document.getElementById('mobileLoading');
+  loading.style.display = 'block';
+  document.getElementById('mobileLiveResults').style.display = 'none';
+
+  const [mobileItems, mainItems] = await Promise.all([
+    ozbRSS('mobile'),
+    ozbRSS('deals'),
+  ]);
+
+  const MOB_KEYWORDS = ['sim','mobile plan','prepaid','postpaid','gb data',
+    'telstra','optus','vodafone','aldi mobile','boost mobile','kogan mobile',
+    'lebara','amaysim','spintel','unlimited data','phone plan'];
+
+  const combined = [
+    ...mobileItems,
+    ...mainItems.filter(d => MOB_KEYWORDS.some(k =>
+      (d.title + d.description).toLowerCase().includes(k)))
+  ];
+
+  const seen = new Set();
+  const deduped = combined.filter(d => {
+    const k = d.title.toLowerCase().slice(0, 40);
+    if (seen.has(k)) return false;
+    seen.add(k); return true;
+  });
+
+  loading.style.display = 'none';
+  renderLiveCards(deduped, 'mobileCards', 'mobileLiveResults',
+    'No mobile plan deals found right now. Check comparison tools below.');
+}
+
+async function loadLiveEnergy() {
+  const loading = document.getElementById('energyLoading');
+  loading.style.display = 'block';
+  document.getElementById('energyLiveResults').style.display = 'none';
+
+  // OzBargain finance category covers energy deals
+  const [financeItems, mainItems] = await Promise.all([
+    ozbRSS('finance'),
+    ozbRSS('deals'),
+  ]);
+
+  const ENERGY_KEYWORDS = ['electricity','energy plan','power bill','gas plan',
+    'energy offer','solar rebate','agl','origin energy','energy australia',
+    'reamped','powershop','alinta','amber electric','momentum energy',
+    'energy discount','electricity rates'];
+
+  const combined = [
+    ...financeItems.filter(d => ENERGY_KEYWORDS.some(k =>
+      (d.title + d.description).toLowerCase().includes(k))),
+    ...mainItems.filter(d => ENERGY_KEYWORDS.some(k =>
+      (d.title + d.description).toLowerCase().includes(k)))
+  ];
+
+  const seen = new Set();
+  const deduped = combined.filter(d => {
+    const k = d.title.toLowerCase().slice(0, 40);
+    if (seen.has(k)) return false;
+    seen.add(k); return true;
+  });
+
+  loading.style.display = 'none';
+  renderLiveCards(deduped, 'energyCards', 'energyLiveResults',
+    'No energy deals found right now. Use the government comparison tools below for best results.');
+}
+
+
+// ── Live Cashback Offers ─────────────────────────────────────────
+// Fetches OzBargain cashback category + filters for cashback deals
+// Also shows current cashback rates from each platform
+
+async function loadLiveCashback() {
+  const btn = document.getElementById('cbLoadBtn');
+  const loading = document.getElementById('cbLoading');
+  const results = document.getElementById('cbResults');
+  if (btn) btn.disabled = true;
+  loading.style.display = 'block';
+  results.style.display = 'none';
+
+  // Fetch OzBargain deals filtered to cashback
+  const CB_KEYWORDS = ['cashback','cash back','topcashback','cashrewards',
+    'shopback','rewards','bonus cash','earn cash','rebate'];
+
+  const [mainItems, financeItems] = await Promise.all([
+    ozbRSS('deals'),
+    ozbRSS('finance'),
+  ]);
+
+  const combined = [...mainItems, ...financeItems].filter(d =>
+    CB_KEYWORDS.some(k => (d.title + ' ' + d.description).toLowerCase().includes(k))
+  );
+
+  const seen = new Set();
+  const deduped = combined.filter(d => {
+    const k = d.title.toLowerCase().slice(0, 40);
+    if (seen.has(k)) return false; seen.add(k); return true;
+  });
+
+  loading.style.display = 'none';
+  if (btn) btn.disabled = false;
+
+  const grid = document.getElementById('cbGrid');
+  if (!deduped.length) {
+    grid.innerHTML = '<div class="empty">No cashback deals on OzBargain right now. Check the platforms below for current rates.</div>';
+  } else {
+    grid.innerHTML = deduped.slice(0, 20).map(d => {
+      const cbPlatform = d.title.toLowerCase().includes('topcashback') ? 'TopCashback'
+        : d.title.toLowerCase().includes('cashrewards') ? 'Cashrewards'
+        : d.title.toLowerCase().includes('shopback') ? 'ShopBack'
+        : 'Cashback Deal';
+      return '<div class="dcard">'
+        + '<div class="dtop"><span class="vbadge v-def">' + esc(cbPlatform) + '</span></div>'
+        + '<div class="dtitle">' + esc(d.title) + '</div>'
+        + (d.description ? '<div class="ddesc">' + esc(d.description.slice(0, 100)) + '</div>' : '')
+        + (d.link ? '<a class="dlink" href="' + esc(d.link) + '" target="_blank" rel="noopener">View deal →</a>' : '')
+        + '</div>';
+    }).join('');
+  }
+  results.style.display = 'block';
+}
+
 </script>
 </body>
 </html>
