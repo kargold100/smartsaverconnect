@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SmartSaver Connect &#8212; Catalogue Search</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f5f4f0;--card:#fff;--text:#1a1a18;--muted:#6b6a65;--hint:#9e9d98;
+  --border:rgba(0,0,0,.09);--accent:#1a6b3c;--accent-bg:#e8f5ee;
+  --danger:#c0392b;--danger-bg:#fde8e6;--radius:12px;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#18181a;--card:#232325;--text:#e8e6df;--muted:#9a9890;--hint:#6a6860;
+  --border:rgba(255,255,255,.09);--accent:#4caf7a;--accent-bg:#0e2d1a;
+  --danger:#e57373;--danger-bg:#2d0e0e;
+}}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.wrap{max-width:1100px;margin:0 auto;padding:1.5rem 1rem 4rem}
+
+/* Header */
+.header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:1.75rem}
+.logo{font-size:20px;font-weight:800;letter-spacing:-.5px;text-decoration:none;color:var(--text)}.logo span{color:var(--accent)}
+.nav{display:flex;gap:10px;flex-wrap:wrap}
+.back{font-size:13px;color:var(--accent);text-decoration:none}.back:hover{text-decoration:underline}
+
+/* Search hero */
+.search-hero{background:linear-gradient(135deg,var(--accent-bg),var(--card));border:1px solid var(--accent);border-radius:var(--radius);padding:24px;margin-bottom:1.5rem}
+.search-hero h1{font-size:21px;font-weight:800;margin-bottom:6px}
+.search-hero p{font-size:13px;color:var(--muted);margin-bottom:18px;line-height:1.6;max-width:620px}
+.srow{display:flex;gap:10px}
+.si{flex:1;padding:12px 16px;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:16px}
+.si:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(26,107,60,.12)}
+.sb{padding:12px 24px;background:var(--accent);color:#fff;border:0;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap}
+.sb:hover{opacity:.88}
+.qrow{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px}
+.qchip{padding:5px 13px;border-radius:20px;border:1px solid var(--border);background:var(--bg);color:var(--muted);font-size:12px;cursor:pointer;transition:all .15s}
+.qchip:hover,.qchip.on{background:var(--accent-bg);color:var(--accent);border-color:var(--accent)}
+
+/* Category tabs */
+.cat-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.5rem}
+.ctab{padding:7px 16px;border-radius:20px;border:1px solid var(--border);background:var(--card);color:var(--muted);font-size:13px;cursor:pointer;transition:all .15s;font-weight:500}
+.ctab:hover,.ctab.on{background:var(--accent-bg);color:var(--accent);border-color:var(--accent)}
+
+/* Results grid */
+.results-section{display:none;margin-bottom:2rem}
+.results-title{font-size:16px;font-weight:700;margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+.rtag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:10px;background:var(--accent-bg);color:var(--accent);font-weight:600}
+.retailer-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+
+/* Retailer result card */
+.ret-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column}
+.ret-card.best{border-color:var(--accent)}
+.ret-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--border)}
+.ret-name{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px}
+.ret-icon{font-size:20px}
+.best-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:var(--accent);color:#fff}
+.ret-body{padding:12px 14px;flex:1;display:flex;flex-direction:column;gap:8px}
+.ret-status{font-size:12px;color:var(--muted)}
+.ret-price-row{display:flex;align-items:baseline;gap:8px}
+.ret-price{font-size:22px;font-weight:800;color:var(--accent)}
+.ret-was{font-size:13px;color:var(--hint);text-decoration:line-through}
+.ret-save{font-size:12px;font-weight:600;color:var(--danger);padding:2px 8px;border-radius:8px;background:var(--danger-bg)}
+.ret-note{font-size:12px;color:var(--muted);line-height:1.5}
+.ret-footer{padding:10px 14px;border-top:1px solid var(--border);display:flex;gap:8px}
+.ret-btn{flex:1;padding:8px;border-radius:7px;border:0;font-size:12px;font-weight:600;cursor:pointer;text-decoration:none;text-align:center;transition:opacity .15s}
+.ret-btn:hover{opacity:.85}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-secondary{background:var(--bg);color:var(--text);border:1px solid var(--border)}
+
+/* Loading state */
+.loading-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.loading-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;height:160px}
+.skel{border-radius:6px;background:linear-gradient(90deg,var(--border) 25%,rgba(128,128,128,.1) 50%,var(--border) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;margin-bottom:10px}
+@keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
+
+/* Tips panel */
+.tip-panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;margin-bottom:1.5rem;font-size:13px;color:var(--muted);line-height:1.6}
+.tip-panel strong{color:var(--text)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header">
+    <a class="logo" href="index.html">SmartSaver<span>Connect</span></a>
+    <div class="nav">
+      <a class="back" href="index.html">&#8592; Deals</a>
+      <a class="back" href="compare.html">&#9878; Compare</a>
+      <a class="back" href="catalogues.html">&#128214; Catalogues</a>
+    </div>
+  </div>
+
+  <div class="search-hero">
+    <h1>&#128269; Catalogue Price Search</h1>
+    <p>Search any product and instantly see links to that product's catalogue page across Woolworths, Coles, ALDI, Chemist Warehouse, Big W, Kmart and more. Find who has it cheapest this week.</p>
+    <div class="srow">
+      <input class="si" id="searchInput" type="text"
+        placeholder="e.g. milk, kettle chips, headphones, nappies, shampoo..."
+        onkeydown="if(event.key==='Enter')doSearch()"/>
+      <button class="sb" onclick="doSearch()">Search catalogues</button>
+    </div>
+    <div class="qrow" id="qrow">
+      <span class="qchip" onclick="quick(this,'milk')">Milk</span>
+      <span class="qchip" onclick="quick(this,'kettle chips')">Kettle Chips</span>
+      <span class="qchip" onclick="quick(this,'coffee')">Coffee</span>
+      <span class="qchip" onclick="quick(this,'nappies')">Nappies</span>
+      <span class="qchip" onclick="quick(this,'shampoo')">Shampoo</span>
+      <span class="qchip" onclick="quick(this,'olive oil')">Olive oil</span>
+      <span class="qchip" onclick="quick(this,'protein powder')">Protein</span>
+      <span class="qchip" onclick="quick(this,'washing powder')">Washing powder</span>
+      <span class="qchip" onclick="quick(this,'vitamin c')">Vitamin C</span>
+      <span class="qchip" onclick="quick(this,'headphones')">Headphones</span>
+      <span class="qchip" onclick="quick(this,'tv')">TV</span>
+      <span class="qchip" onclick="quick(this,'ipad')">iPad</span>
+    </div>
+  </div>
+
+  <!-- Category filter tabs -->
+  <div class="cat-tabs">
+    <button class="ctab on" data-cat="all"       onclick="setCat(this)">All retailers</button>
+    <button class="ctab"     data-cat="grocery"   onclick="setCat(this)">&#128722; Grocery</button>
+    <button class="ctab"     data-cat="health"    onclick="setCat(this)">&#128138; Health &amp; Beauty</button>
+    <button class="ctab"     data-cat="retail"    onclick="setCat(this)">&#127978; Retail</button>
+    <button class="ctab"     data-cat="electronics" onclick="setCat(this)">&#128187; Electronics</button>
+  </div>
+
+  <div class="tip-panel" id="tipPanel">
+    <strong>&#128161; How it works:</strong> Search any product and each retailer card shows a direct link to search that product in their current catalogue or specials. For grocery items, <strong>Trolley.com.au</strong> gives you a live side-by-side Woolworths vs Coles price comparison instantly.
+  </div>
+
+  <!-- Results -->
+  <div class="results-section" id="resultsSection">
+    <div class="results-title">
+      Results for "<span id="queryLabel"></span>"
+      <span class="rtag" id="countLabel"></span>
+    </div>
+    <div id="resultsGrid" class="retailer-grid"></div>
+  </div>
+
+</div>
+
+<script>
+// ── Retailer catalogue search config ────────────────────────────
+// Each retailer: name, icon, colour, category, and a function
+// that builds the search URL for a given query
+var RETAILERS = [
+
+  // ── GROCERY ───────────────────────────────────────────────────
+  {
+    id: 'trolley', name: 'Trolley.com.au', icon: '&#9878;', cat: 'grocery',
+    color: '#1a6b3c', bg: '#e8f5ee',
+    note: 'Live WW vs Coles side-by-side comparison',
+    featured: true,
+    searchUrl: function(q) { return 'https://www.trolley.com.au/search?q=' + enc(q); },
+    ctaLabel: 'Compare WW vs Coles',
+  },
+  {
+    id: 'woolworths', name: 'Woolworths', icon: '&#129001;', cat: 'grocery',
+    color: '#2e7d32', bg: '#e8f5e9',
+    note: 'Current Woolworths specials & products',
+    searchUrl: function(q) { return 'https://www.woolworths.com.au/shop/search/products?searchTerm=' + enc(q); },
+    specialsUrl: function(q) { return 'https://www.woolworths.com.au/shop/search/products?searchTerm=' + enc(q) + '&IsSpecial=true'; },
+    ctaLabel: 'Search Woolworths',
+    ctaAlt: 'Specials only',
+  },
+  {
+    id: 'coles', name: 'Coles', icon: '&#128308;', cat: 'grocery',
+    color: '#c62828', bg: '#fce4ec',
+    note: 'Current Coles products and on-special items',
+    searchUrl: function(q) { return 'https://www.coles.com.au/search?q=' + enc(q); },
+    specialsUrl: function(q) { return 'https://www.coles.com.au/search?q=' + enc(q) + '&filter=Special'; },
+    ctaLabel: 'Search Coles',
+    ctaAlt: 'On special only',
+  },
+  {
+    id: 'aldi', name: 'ALDI', icon: '&#128309;', cat: 'grocery',
+    color: '#1565c0', bg: '#e3f2fd',
+    note: 'ALDI Special Buys and grocery specials',
+    searchUrl: function(q) { return 'https://www.aldi.com.au/en/search/?text=' + enc(q); },
+    specialsUrl: function(q) { return 'https://www.aldi.com.au/en/special-buys/'; },
+    ctaLabel: 'Search ALDI',
+    ctaAlt: 'Special Buys',
+  },
+  {
+    id: 'iga', name: 'IGA', icon: '&#127978;', cat: 'grocery',
+    color: '#e65100', bg: '#fff3e0',
+    note: 'IGA weekly specials',
+    searchUrl: function(q) { return 'https://www.iga.com.au/search/?q=' + enc(q); },
+    specialsUrl: function(q) { return 'https://www.iga.com.au/specials/'; },
+    ctaLabel: 'Search IGA',
+    ctaAlt: 'View specials',
+  },
+
+  // ── HEALTH & BEAUTY ───────────────────────────────────────────
+  {
+    id: 'chemist', name: 'Chemist Warehouse', icon: '&#128138;', cat: 'health',
+    color: '#bf360c', bg: '#fbe9e7',
+    note: 'Half-price specials and health products',
+    searchUrl: function(q) { return 'https://www.chemistwarehouse.com.au/search?q=' + enc(q); },
+    specialsUrl: function(q) { return 'https://www.chemistwarehouse.com.au/search?q=' + enc(q) + '&OnSpecial=true'; },
+    ctaLabel: 'Search CW',
+    ctaAlt: 'On special only',
+  },
+  {
+    id: 'priceline', name: 'Priceline', icon: '&#128149;', cat: 'health',
+    color: '#880e4f', bg: '#fce4ec',
+    note: 'Beauty and health half-price specials',
+    searchUrl: function(q) { return 'https://www.priceline.com.au/search?q=' + enc(q); },
+    specialsUrl: function(q) { return 'https://www.priceline.com.au/specials'; },
+    ctaLabel: 'Search Priceline',
+    ctaAlt: 'View specials',
+  },
+
+  // ── RETAIL ────────────────────────────────────────────────────
+  {
+    id: 'bigw', name: 'Big W', icon: '&#128309;', cat: 'retail',
+    color: '#01579b', bg: '#e1f5fe',
+    note: 'Sale, clearance and weekly specials',
+    searchUrl: function(q) { return 'https://www.bigw.com.au/search?q=' + enc(q); },
+    specialsUrl: function(q) { return 'https://www.bigw.com.au/search?q=' + enc(q) + '&isOnSale=true'; },
+    ctaLabel: 'Search Big W',
+    ctaAlt: 'On sale only',
+  },
+  {
+    id: 'kmart', name: 'Kmart', icon: '&#127991;', cat: 'retail',
+    color: '#6a1b9a', bg: '#f3e5f5',
+    note: 'On-sale items and clearance',
+    searchUrl: function(q) { return 'https://www.kmart.com.au/search?q=' + enc(q); },
+    specialsUrl: function(q) { return 'https://www.kmart.com.au/search?q=' + enc(q) + '&isOnSale=true'; },
+    ctaLabel: 'Search Kmart',
+    ctaAlt: 'On sale only',
+  },
+  {
+    id: 'target', name: 'Target', icon: '&#127919;', cat: 'retail',
+    color: '#b71c1c', bg: '#fce4ec',
+    note: 'Sale items and weekly specials',
+    searchUrl: function(q) { return 'https://www.target.com.au/search?SearchTerm=' + enc(q); },
+    specialsUrl: function(q) { return 'https://www.target.com.au/sale'; },
+    ctaLabel: 'Search Target',
+    ctaAlt: 'View sale',
+  },
+  {
+    id: 'myer', name: 'Myer', icon: '&#127978;', cat: 'retail',
+    color: '#e65100', bg: '#fff3e0',
+    note: 'Sale and clearance items',
+    searchUrl: function(q) { return 'https://www.myer.com.au/search?q=' + enc(q); },
+    specialsUrl: function(q) { return 'https://www.myer.com.au/c/sale?q=' + enc(q); },
+    ctaLabel: 'Search Myer',
+    ctaAlt: 'Sale only',
+  },
+
+  // ── ELECTRONICS ───────────────────────────────────────────────
+  {
+    id: 'jbhifi', name: 'JB Hi-Fi', icon: '&#128187;', cat: 'electronics',
+    color: '#1b5e20', bg: '#e8f5e9',
+    note: 'Weekly specials and price drops',
+    searchUrl: function(q) { return 'https://www.jbhifi.com.au/search?q=' + enc(q); },
+    specialsUrl: function(q) { return 'https://www.jbhifi.com.au/pages/weekly-specials'; },
+    ctaLabel: 'Search JB Hi-Fi',
+    ctaAlt: 'Weekly specials',
+  },
+  {
+    id: 'hn', name: 'Harvey Norman', icon: '&#128250;', cat: 'electronics',
+    color: '#bf360c', bg: '#fbe9e7',
+    note: 'Current specials and promotions',
+    searchUrl: function(q) { return 'https://www.harveynorman.com.au/search/?q=' + enc(q); },
+    specialsUrl: function(q) { return 'https://www.harveynorman.com.au/specials'; },
+    ctaLabel: 'Search Harvey Norman',
+    ctaAlt: 'View specials',
+  },
+  {
+    id: 'officeworks', name: 'Officeworks', icon: '&#128203;', cat: 'electronics',
+    color: '#1565c0', bg: '#e3f2fd',
+    note: 'Tech, stationery and office specials',
+    searchUrl: function(q) { return 'https://www.officeworks.com.au/shop/officeworks/search?q=' + enc(q); },
+    specialsUrl: function(q) { return 'https://www.officeworks.com.au/shop/officeworks/search?q=' + enc(q) + '&view=grid&page=1&sortby=tmp_priceSort&ascending=true&inStockOnly=false&priceTo=&isOnPromotion=true'; },
+    ctaLabel: 'Search Officeworks',
+    ctaAlt: 'Promotions only',
+  },
+  {
+    id: 'amazon', name: 'Amazon AU', icon: '&#128230;', cat: 'electronics',
+    color: '#e65100', bg: '#fff3e0',
+    note: "Today's deals and best sellers",
+    searchUrl: function(q) { return 'https://www.amazon.com.au/s?k=' + enc(q); },
+    specialsUrl: function(q) { return 'https://www.amazon.com.au/gp/goldbox?deals-widget=%7B%22version%22%3A1%7D'; },
+    ctaLabel: 'Search Amazon',
+    ctaAlt: "Today's deals",
+  },
+  {
+    id: 'staticice', name: 'StaticIce', icon: '&#10052;&#65039;', cat: 'electronics',
+    color: '#01579b', bg: '#e1f5fe',
+    note: 'Live price comparison across 50+ AU retailers',
+    featured: true,
+    searchUrl: function(q) { return 'https://www.staticice.com.au/cgi-bin/search.cgi?q=' + enc(q) + '&stype=1&etype=1&oc=Australia'; },
+    ctaLabel: 'Compare prices live',
+  },
+  {
+    id: 'kogan', name: 'Kogan', icon: '&#128156;', cat: 'electronics',
+    color: '#6a1b9a', bg: '#f3e5f5',
+    note: 'Flash sales and deals',
+    searchUrl: function(q) { return 'https://www.kogan.com/au/shop/?q=' + enc(q); },
+    specialsUrl: function(q) { return 'https://www.kogan.com/au/shop/?q=' + enc(q) + '&feature_sale=1'; },
+    ctaLabel: 'Search Kogan',
+    ctaAlt: 'Sale only',
+  },
+];
+
+// ── State ─────────────────────────────────────────────────────────
+var currentCat = 'all';
+var currentQuery = '';
+
+// ── Boot ──────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', function() {
+  var urlQ = new URLSearchParams(location.search).get('q');
+  if (urlQ) {
+    document.getElementById('searchInput').value = urlQ;
+    doSearch();
+  }
+});
+
+// ── Search ────────────────────────────────────────────────────────
+function doSearch() {
+  var q = document.getElementById('searchInput').value.trim();
+  if (!q || q.length < 2) return;
+  currentQuery = q;
+  history.replaceState(null, '', '?q=' + encodeURIComponent(q));
+  document.querySelectorAll('.qchip').forEach(function(c){ c.classList.remove('on'); });
+  document.getElementById('queryLabel').textContent = q;
+  document.getElementById('tipPanel').style.display = 'none';
+  renderResults(q);
+}
+
+function quick(el, term) {
+  document.querySelectorAll('.qchip').forEach(function(c){ c.classList.remove('on'); });
+  el.classList.add('on');
+  document.getElementById('searchInput').value = term;
+  doSearch();
+}
+
+function setCat(el) {
+  document.querySelectorAll('.ctab').forEach(function(c){ c.classList.remove('on'); });
+  el.classList.add('on');
+  currentCat = el.dataset.cat;
+  if (currentQuery) renderResults(currentQuery);
+}
+
+// ── Render ────────────────────────────────────────────────────────
+function renderResults(q) {
+  var retailers = RETAILERS.filter(function(r) {
+    return currentCat === 'all' || r.cat === currentCat;
+  });
+
+  // Featured (Trolley, StaticIce) always at top
+  retailers.sort(function(a, b) {
+    if (a.featured && !b.featured) return -1;
+    if (!a.featured && b.featured) return 1;
+    return 0;
+  });
+
+  document.getElementById('countLabel').textContent = retailers.length + ' retailers';
+  document.getElementById('resultsSection').style.display = 'block';
+
+  var html = '';
+  retailers.forEach(function(r) {
+    var searchUrl    = r.searchUrl(q);
+    var specialsUrl  = r.specialsUrl ? r.specialsUrl(q) : searchUrl;
+    var hasAlt       = r.ctaAlt && r.specialsUrl;
+
+    html += '<div class="ret-card' + (r.featured ? ' best' : '') + '">'
+      + '<div class="ret-header">'
+      +   '<div class="ret-name">'
+      +     '<span class="ret-icon">' + r.icon + '</span>'
+      +     '<span style="color:' + r.color + '">' + r.name + '</span>'
+      +   '</div>'
+      +   (r.featured ? '<span class="best-badge">&#9733; Best tool</span>' : '')
+      + '</div>'
+      + '<div class="ret-body">'
+      +   '<div class="ret-status">' + r.note + '</div>'
+      +   '<div style="font-size:13px;color:var(--muted);margin-top:4px;line-height:1.5">'
+      +     'Searching for <strong>"' + esc(q) + '"</strong> in their catalogue'
+      +   '</div>'
+      + '</div>'
+      + '<div class="ret-footer">'
+      +   '<a class="ret-btn btn-primary" href="' + esc(searchUrl) + '" target="_blank" rel="noopener">'
+      +     (r.ctaLabel || 'Search') + ' &#8594;'
+      +   '</a>'
+      +   (hasAlt ? '<a class="ret-btn btn-secondary" href="' + esc(specialsUrl) + '" target="_blank" rel="noopener">' + r.ctaAlt + '</a>' : '')
+      + '</div>'
+      + '</div>';
+  });
+
+  document.getElementById('resultsGrid').innerHTML = html;
+}
+
+// ── Helpers ───────────────────────────────────────────────────────
+function enc(s) { return encodeURIComponent(s || ''); }
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>
