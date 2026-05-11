@@ -97,10 +97,24 @@ select{padding:9px 12px;border:1px solid var(--border);border-radius:8px;backgro
 
 /* Fuel */
 .fuel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
-.fuel-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:12px}
-.fuel-price{font-size:22px;font-weight:700;color:var(--accent)}
+.fuel-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:12px;position:relative;transition:border-color .15s}
+.fuel-card.cheapest{border-color:var(--accent);background:var(--accent-bg)}
+.fuel-card.cheapest .fuel-price{color:var(--accent)}
+.fuel-price{font-size:22px;font-weight:700;color:var(--text)}
 .fuel-type{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:12px;background:var(--accent-bg);color:var(--accent);margin-bottom:6px}
+.fuel-type.ulp{background:#e8f5e9;color:#2e7d32}
+.fuel-type.e10{background:#e3f2fd;color:#1565c0}
+.fuel-type.p95{background:#fff3e0;color:#e65100}
+.fuel-type.p98{background:#fce4ec;color:#c62828}
+.fuel-type.diesel{background:#ede7f6;color:#4527a0}
+.fuel-type.lpg{background:#f3e5f5;color:#6a1b9a}
+.fuel-cheapest-badge{position:absolute;top:8px;right:8px;font-size:9px;font-weight:700;padding:2px 7px;border-radius:8px;background:var(--accent);color:#fff}
 .fuel-meta{font-size:12px;color:var(--muted);line-height:1.6}
+.fuel-sec-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin:1.75rem 0 .75rem}
+.fuel-sec-title{font-size:16px;font-weight:600}
+.fuel-legend{display:flex;gap:8px;flex-wrap:wrap}
+.fuel-legend-item{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--muted)}
+.fuel-legend-dot{width:8px;height:8px;border-radius:50%}
 
 /* Insurance */
 .ins-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
@@ -480,40 +494,113 @@ function dealCard(d) {
     + '</div>';
 }
 
+function fuelTypeClass(t) {
+  var tl = (t||'').toLowerCase();
+  if (tl==='ulp')    return 'ulp';
+  if (tl==='e10')    return 'e10';
+  if (tl==='p95')    return 'p95';
+  if (tl==='p98')    return 'p98';
+  if (tl==='diesel') return 'diesel';
+  if (tl==='lpg')    return 'lpg';
+  return '';
+}
+
+function buildFuelCard(f, isCheapest) {
+  var tc = fuelTypeClass(f.fuelType);
+  return '<div class="fuel-card' + (isCheapest ? ' cheapest' : '') + '">'
+    + (isCheapest ? '<span class="fuel-cheapest-badge">&#9733; Cheapest</span>' : '')
+    + '<div class="fuel-type ' + tc + '">' + e(f.fuelType) + '</div>'
+    + '<div class="fuel-price">' + f.priceCents.toFixed(1) + '&cent;/L</div>'
+    + '<div class="fuel-meta">'
+    +   '<strong>' + e(f.brand||f.stationName) + '</strong><br>'
+    +   e(f.stationName) + '<br>'
+    +   [f.suburb, f.postcode].filter(Boolean).map(e).join(', ')
+    + '</div>'
+    + '</div>';
+}
+
 function renderFuel(q) {
-  var items = fuel.filter(function(f){
-    return !q || f.stationName.toLowerCase().indexOf(q)!==-1
-      || (f.brand||'').toLowerCase().indexOf(q)!==-1
-      || (f.fuelType||'').toLowerCase().indexOf(q)!==-1;
+  var items = fuel.filter(function(f) {
+    return !q
+      || (f.stationName||'').toLowerCase().indexOf(q) !== -1
+      || (f.brand||'').toLowerCase().indexOf(q) !== -1
+      || (f.fuelType||'').toLowerCase().indexOf(q) !== -1
+      || (f.suburb||'').toLowerCase().indexOf(q) !== -1;
   });
   if (!items.length) {
-    document.getElementById('fuelSec').innerHTML = '<div class="no-results">No fuel prices. Run the fuel scraper first.</div>';
+    document.getElementById('fuelSec').innerHTML =
+      '<div class="no-results">No fuel prices. Run the fuel scraper first.</div>';
     return;
   }
-  items.sort(function(a,b){ return a.priceCents-b.priceCents; });
-  var html = '<div class="sec-title">Fuel Prices (VIC)</div><div class="fuel-grid">';
-  items.slice(0,20).forEach(function(f) {
-    html += '<div class="fuel-card">'
-      + '<div class="fuel-type">'+e(f.fuelType)+'</div>'
-      + '<div class="fuel-price">'+f.priceCents+'&cent;/L</div>'
-      + '<div class="fuel-meta">'+e(f.brand||f.stationName)+'<br>'+e(f.stationName)+'<br>'+[f.suburb,f.postcode].filter(Boolean).map(e).join(', ')+'</div>'
-      + '</div>';
+
+  // Group by fuel type, find cheapest per type
+  var byType = {};
+  items.forEach(function(f) {
+    if (!byType[f.fuelType]) byType[f.fuelType] = [];
+    byType[f.fuelType].push(f);
+  });
+  Object.keys(byType).forEach(function(t) {
+    byType[t].sort(function(a,b){ return a.priceCents - b.priceCents; });
+  });
+
+  // Type order for display
+  var typeOrder = ['ULP','E10','P95','P98','Diesel','LPG'];
+  var allTypes = typeOrder.filter(function(t){ return byType[t]; })
+    .concat(Object.keys(byType).filter(function(t){ return typeOrder.indexOf(t)===-1; }));
+
+  var html = '<div class="fuel-sec-header">'
+    + '<div class="fuel-sec-title">Fuel Prices &mdash; VIC</div>'
+    + '<div class="fuel-legend">'
+    + '<div class="fuel-legend-item"><div class="fuel-legend-dot" style="background:#2e7d32"></div>ULP</div>'
+    + '<div class="fuel-legend-item"><div class="fuel-legend-dot" style="background:#1565c0"></div>E10</div>'
+    + '<div class="fuel-legend-item"><div class="fuel-legend-dot" style="background:#e65100"></div>P95</div>'
+    + '<div class="fuel-legend-item"><div class="fuel-legend-dot" style="background:#c62828"></div>P98</div>'
+    + '<div class="fuel-legend-item"><div class="fuel-legend-dot" style="background:#4527a0"></div>Diesel</div>'
+    + '<div class="fuel-legend-item"><div class="fuel-legend-dot" style="background:#6a1b9a"></div>LPG</div>'
+    + '</div></div>';
+
+  // Best price per type section
+  html += '<div class="sec-title" style="margin-top:0;margin-bottom:.6rem;font-size:14px;color:var(--muted)">Cheapest per fuel type</div>';
+  html += '<div class="fuel-grid" style="margin-bottom:1.5rem">';
+  allTypes.forEach(function(t) {
+    html += buildFuelCard(byType[t][0], true);
   });
   html += '</div>';
+
+  // All stations grouped by type
+  allTypes.forEach(function(t) {
+    html += '<div class="sec-title" style="font-size:14px;margin-bottom:.6rem">'
+      + '<span class="fuel-type ' + fuelTypeClass(t) + '" style="margin-right:6px">' + e(t) + '</span>'
+      + 'All ' + e(t) + ' stations (' + byType[t].length + ')'
+      + '</div>';
+    html += '<div class="fuel-grid" style="margin-bottom:1.25rem">';
+    byType[t].forEach(function(f, i) {
+      html += buildFuelCard(f, i === 0);
+    });
+    html += '</div>';
+  });
+
   document.getElementById('fuelSec').innerHTML = html;
 }
 
 function renderFuelSummary() {
-  var ulp = fuel.filter(function(f){ return f.fuelType==='ULP'||f.fuelType==='E10'; })
-    .sort(function(a,b){ return a.priceCents-b.priceCents; }).slice(0,4);
-  if (!ulp.length) return;
-  var html = '<div class="sec-title">Best ULP near you</div><div class="fuel-grid">';
-  ulp.forEach(function(f){
-    html += '<div class="fuel-card">'
-      + '<div class="fuel-type">'+e(f.fuelType)+'</div>'
-      + '<div class="fuel-price">'+f.priceCents+'&cent;/L</div>'
-      + '<div class="fuel-meta">'+e(f.brand||f.stationName)+'<br>'+e(f.suburb||'')+'</div>'
-      + '</div>';
+  // On main 'All' view: show cheapest of each type in one compact row
+  var byType = {};
+  fuel.forEach(function(f) {
+    if (!byType[f.fuelType] || f.priceCents < byType[f.fuelType].priceCents) {
+      byType[f.fuelType] = f;
+    }
+  });
+  var typeOrder = ['ULP','E10','P95','P98','Diesel','LPG'];
+  var best = typeOrder.filter(function(t){ return byType[t]; }).map(function(t){ return byType[t]; });
+  if (!best.length) return;
+
+  var html = '<div class="fuel-sec-header" style="margin-top:1.5rem">'
+    + '<div class="fuel-sec-title">&#9981; Best fuel prices near you</div>'
+    + '</div>'
+    + '<div class="fuel-grid">';
+  best.forEach(function(f) {
+    html += buildFuelCard(f, true);
   });
   html += '</div>';
   document.getElementById('fuelSec').innerHTML = html;
