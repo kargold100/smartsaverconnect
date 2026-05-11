@@ -193,6 +193,8 @@ select{padding:9px 12px;border:1px solid var(--border);border-radius:8px;backgro
     <button class="chip"     data-cat="telco"      onclick="setFilter(this)">Mobile</button>
     <button class="chip"     data-cat="nbn"        onclick="setFilter(this)">NBN</button>
     <button class="chip"     data-cat="energy"     onclick="setFilter(this)">Energy</button>
+    <button class="chip"     data-cat="travel"     onclick="setFilter(this)">Travel &#9992;</button>
+    <button class="chip"     data-cat="travel"     onclick="setFilter(this)">&#9992; Travel</button>
     <button class="chip"     data-cat="coupon"     onclick="setFilter(this)">Coupons</button>
     <button class="chip"     data-cat="fuel"       onclick="setFilter(this)">Fuel</button>
     <button class="chip"     data-cat="insurance"  onclick="setFilter(this)">Insurance</button>
@@ -432,6 +434,8 @@ function renderDeals() {
       : activeFilter === 'telco'   ? (d.category === 'telco')
       : activeFilter === 'nbn'     ? (d.category === 'nbn')
       : activeFilter === 'energy'  ? (d.category === 'energy')
+      : activeFilter === 'travel'  ? (d.category === 'travel')
+      : activeFilter === 'travel'  ? (d.category === 'travel')
       : d.category === activeFilter;
     var qOk = !q
       || d.title.toLowerCase().indexOf(q) !== -1
@@ -620,7 +624,10 @@ function vclass(v, cat) {
   if (n.indexOf('amazon')!==-1)     return 'v-amz';
   if (n.indexOf('big w')!==-1||n.indexOf('bigw')!==-1) return 'v-bw';
   if (n.indexOf('chemist')!==-1)    return 'v-cw';
+  if (n.indexOf('qantas')!==-1||n.indexOf('jetstar')!==-1||n.indexOf('virgin aus')!==-1||n.indexOf('airbnb')!==-1||n.indexOf('wotif')!==-1||n.indexOf('expedia')!==-1||n.indexOf('booking')!==-1) return 'v-telco';
+  if (cat === 'travel')             return 'v-telco';
   if (cat === 'fuel')               return 'v-fuel';
+  if (cat === 'travel')             return 'v-fuel';
   if (cat === 'coupon')             return 'v-cpn';
   if (cat === 'insurance')          return 'v-ins';
   if (cat === 'energy')             return 'v-energy';
