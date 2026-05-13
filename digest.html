@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SmartSaver Connect &#8212; Weekly Deals Digest</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f5f4f0;--card:#fff;--text:#1a1a18;--muted:#6b6a65;--hint:#9e9d98;
+  --border:rgba(0,0,0,.09);--accent:#1a6b3c;--accent-bg:#e8f5ee;
+  --danger:#c0392b;--danger-bg:#fde8e6;--radius:12px;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#18181a;--card:#232325;--text:#e8e6df;--muted:#9a9890;--hint:#6a6860;
+  --border:rgba(255,255,255,.09);--accent:#4caf7a;--accent-bg:#0e2d1a;
+  --danger:#e57373;--danger-bg:#2d0e0e;
+}}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.wrap{max-width:1080px;margin:0 auto;padding:1.5rem 1rem 4rem}
+
+/* Header */
+.header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:1.5rem}
+.logo{font-size:20px;font-weight:800;letter-spacing:-.5px;text-decoration:none;color:var(--text)}.logo span{color:var(--accent)}
+.nav{display:flex;gap:8px;flex-wrap:wrap}
+.back{font-size:13px;color:var(--accent);text-decoration:none}.back:hover{text-decoration:underline}
+
+/* Hero */
+.hero{background:linear-gradient(135deg,var(--accent-bg),var(--card));border:1px solid var(--accent);border-radius:var(--radius);padding:20px 22px;margin-bottom:1.5rem;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.hero-left h1{font-size:20px;font-weight:800;margin-bottom:4px}
+.hero-left p{font-size:13px;color:var(--muted);line-height:1.5;max-width:540px}
+.hero-meta{font-size:12px;color:var(--muted);margin-top:6px}
+.refresh-btn{padding:9px 18px;background:var(--accent);color:#fff;border:0;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;align-self:flex-start}
+.refresh-btn:hover{opacity:.88}
+.refresh-btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* Loading */
+.loading{display:none;padding:3rem;text-align:center;color:var(--muted)}
+.spinner{width:32px;height:32px;border:2.5px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 14px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-label{font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px}
+.loading-sub{font-size:12px;color:var(--muted)}
+
+/* Section */
+.section{margin-bottom:2.5rem}
+.sec-hdr{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:.9rem}
+.sec-title{font-size:17px;font-weight:700;display:flex;align-items:center;gap:8px}
+.sec-count{font-size:12px;color:var(--muted);font-weight:400}
+.sec-link{font-size:12px;color:var(--accent);text-decoration:none}.sec-link:hover{text-decoration:underline}
+
+/* Deal cards */
+.deal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+@media(max-width:500px){.deal-grid{grid-template-columns:1fr}}
+.deal-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:13px;display:flex;flex-direction:column;gap:7px;transition:border-color .15s}
+.deal-card:hover{border-color:var(--accent)}
+.deal-top{display:flex;align-items:flex-start;justify-content:space-between;gap:6px}
+.vbadge{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px;white-space:nowrap}
+.v-ww{background:#e8f5e9;color:#2e7d32}.v-coles{background:#fce4ec;color:#c62828}
+.v-aldi{background:#e3f2fd;color:#1565c0}.v-amz{background:#fff3e0;color:#e65100}
+.v-bw{background:#e1f5fe;color:#01579b}.v-cw{background:#fbe9e7;color:#bf360c}
+.v-cpn{background:#e0f7fa;color:#006064}.v-ins{background:#e8eaf6;color:#283593}
+.v-fuel{background:#ede7f6;color:#4527a0}.v-def{background:#f5f5f5;color:#424242}
+@media(prefers-color-scheme:dark){
+  .v-ww{background:#0d2e12;color:#81c784}.v-coles{background:#2d0b10;color:#ef9a9a}
+  .v-aldi{background:#0a1929;color:#90caf9}.v-amz{background:#1a1200;color:#ffcc80}
+  .v-bw{background:#001825;color:#81d4fa}.v-cw{background:#2a0e00;color:#ffab91}
+  .v-cpn{background:#00131a;color:#80deea}.v-ins{background:#0d0f2a;color:#9fa8da}
+  .v-fuel{background:#1a0e2a;color:#ce93d8}.v-def{background:#2a2a2a;color:#bdbdbd}
+}
+.disc{font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px;background:var(--danger-bg);color:var(--danger)}
+.deal-title{font-size:13px;font-weight:600;line-height:1.4}
+.deal-desc{font-size:11px;color:var(--muted);line-height:1.5}
+.deal-price{font-size:15px;font-weight:700}
+.deal-was{font-size:11px;color:var(--hint);text-decoration:line-through;margin-left:4px}
+.deal-link{font-size:12px;color:var(--accent);text-decoration:none;margin-top:auto}.deal-link:hover{text-decoration:underline}
+.copy-btn{font-size:11px;padding:3px 8px;border:1px solid var(--border);border-radius:6px;background:transparent;color:var(--muted);cursor:pointer}
+
+/* Link cards (for cinema, streaming etc) */
+.link-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.link-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--text);transition:border-color .15s}
+.link-card:hover{border-color:var(--accent)}
+.link-icon{font-size:22px;flex-shrink:0}
+.link-body .link-name{font-size:13px;font-weight:600}
+.link-body .link-detail{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.4}
+.link-arrow{margin-left:auto;font-size:14px;color:var(--accent);flex-shrink:0}
+
+/* Fuel summary */
+.fuel-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}
+.fuel-mini{background:var(--card);border:1.5px solid var(--border);border-radius:10px;padding:11px;position:relative}
+.fuel-mini.best{border-color:var(--accent);background:var(--accent-bg)}
+.fuel-mini-badge{position:absolute;top:7px;right:7px;font-size:9px;font-weight:700;padding:1px 5px;border-radius:6px;background:var(--accent);color:#fff}
+.fuel-mini-type{font-size:10px;font-weight:700;padding:2px 7px;border-radius:8px;display:inline-block;margin-bottom:5px}
+.ft-ulp{background:#e8f5e9;color:#2e7d32}
+.ft-e10{background:#e3f2fd;color:#1565c0}
+.ft-p95{background:#fff3e0;color:#e65100}
+.ft-p98{background:#fce4ec;color:#c62828}
+.ft-diesel{background:#ede7f6;color:#4527a0}
+.ft-lpg{background:#f3e5f5;color:#6a1b9a}
+.fuel-mini-price{font-size:20px;font-weight:800;color:var(--accent)}
+.fuel-mini-meta{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.4}
+
+/* Cashback highlights */
+.cb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}
+.cb-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;display:flex;gap:12px;text-decoration:none;color:var(--text);transition:border-color .15s}
+.cb-card:hover{border-color:var(--accent)}
+.cb-icon{font-size:24px;flex-shrink:0}
+.cb-body .cb-name{font-size:13px;font-weight:600}
+.cb-body .cb-desc{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.5}
+.cb-rate{font-size:14px;font-weight:700;color:var(--accent);margin-top:4px}
+
+/* Empty state */
+.empty{padding:1.5rem;text-align:center;color:var(--muted);font-size:13px;background:var(--card);border-radius:var(--radius);border:1px solid var(--border)}
+
+/* Status bar */
+.status-bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:1.5rem}
+.status-pill{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:7px 13px;font-size:12px;display:flex;align-items:center;gap:6px}
+.status-num{font-weight:700;color:var(--accent);font-size:15px}
+.dot-live{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite;flex-shrink:0}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header">
+    <a class="logo" href="index.html">SmartSaver<span>Connect</span></a>
+    <div class="nav">
+      <a class="back" href="index.html">&#8592; Deals</a>
+      <a class="back" href="compare.html">&#9878; Compare</a>
+      <a class="back" href="catalogue-search.html">&#128269; Search</a>
+      <a class="back" href="catalogues.html">&#128214; Catalogues</a>
+      <a class="back" href="cashback.html">&#128176; Cashback</a>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="hero-left">
+      <h1>&#128240; Weekly Deals Digest</h1>
+      <p>Everything worth knowing this week &#8212; top deals, cashback highlights, movie offers, fuel prices and more. All in one place, updated automatically.</p>
+      <div class="hero-meta" id="heroMeta">Loading&#8230;</div>
+    </div>
+    <button class="refresh-btn" id="refreshBtn" onclick="loadAll()">&#8635; Refresh all</button>
+  </div>
+
+  <!-- Status pills -->
+  <div class="status-bar" id="statusBar" style="display:none"></div>
+
+  <!-- Loading state -->
+  <div class="loading" id="loadingDiv">
+    <div class="spinner"></div>
+    <div class="loading-label">Loading this week&#8217;s digest&#8230;</div>
+    <div class="loading-sub">Fetching deals, fuel prices and offers</div>
+  </div>
+
+  <!-- Content (shown after load) -->
+  <div id="contentDiv" style="display:none">
+
+    <!-- TOP DEALS this week -->
+    <div class="section" id="topDealsSection">
+      <div class="sec-hdr">
+        <div class="sec-title">&#127942; Top Deals This Week</div>
+        <a class="sec-link" href="index.html">All deals &#8594;</a>
+      </div>
+      <div class="deal-grid" id="topDealsGrid"></div>
+    </div>
+
+    <!-- GROCERY SPECIALS -->
+    <div class="section" id="grocerySection">
+      <div class="sec-hdr">
+        <div class="sec-title">&#128722; Grocery Specials <span class="sec-count" id="groceryCount"></span></div>
+        <a class="sec-link" href="catalogue-search.html?q=specials">Search catalogues &#8594;</a>
+      </div>
+      <div class="deal-grid" id="groceryGrid"></div>
+      <!-- Direct links to live specials -->
+      <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+        <a href="https://www.woolworths.com.au/shop/browse/specials/half-price" target="_blank" rel="noopener"
+           style="font-size:12px;padding:6px 13px;border-radius:20px;background:#e8f5e9;color:#2e7d32;text-decoration:none;font-weight:600">
+          &#129001; WW Half Price &#8594;</a>
+        <a href="https://www.coles.com.au/on-special" target="_blank" rel="noopener"
+           style="font-size:12px;padding:6px 13px;border-radius:20px;background:#fce4ec;color:#c62828;text-decoration:none;font-weight:600">
+          &#128308; Coles On Special &#8594;</a>
+        <a href="https://www.aldi.com.au/en/special-buys/" target="_blank" rel="noopener"
+           style="font-size:12px;padding:6px 13px;border-radius:20px;background:#e3f2fd;color:#1565c0;text-decoration:none;font-weight:600">
+          &#128309; ALDI Buys &#8594;</a>
+        <a href="https://www.trolley.com.au" target="_blank" rel="noopener"
+           style="font-size:12px;padding:6px 13px;border-radius:20px;background:var(--accent-bg);color:var(--accent);text-decoration:none;font-weight:600">
+          &#9878; Compare WW vs Coles &#8594;</a>
+      </div>
+    </div>
+
+    <!-- FUEL PRICES -->
+    <div class="section" id="fuelSection">
+      <div class="sec-hdr">
+        <div class="sec-title">&#9981; Best Fuel Prices &#8212; VIC</div>
+        <a class="sec-link" href="https://www.motormouth.com.au/fuel-price-map?postcode=3030" target="_blank" rel="noopener">Live map &#8594;</a>
+      </div>
+      <div class="fuel-row" id="fuelGrid"></div>
+    </div>
+
+    <!-- HEALTH & BEAUTY -->
+    <div class="section" id="healthSection">
+      <div class="sec-hdr">
+        <div class="sec-title">&#128138; Health &amp; Beauty Deals <span class="sec-count" id="healthCount"></span></div>
+        <a class="sec-link" href="https://www.chemistwarehouse.com.au/specials" target="_blank" rel="noopener">CW Specials &#8594;</a>
+      </div>
+      <div class="deal-grid" id="healthGrid"></div>
+    </div>
+
+    <!-- TECH & ELECTRONICS -->
+    <div class="section" id="techSection">
+      <div class="sec-hdr">
+        <div class="sec-title">&#128187; Tech &amp; Electronics Deals <span class="sec-count" id="techCount"></span></div>
+        <a class="sec-link" href="https://www.staticice.com.au" target="_blank" rel="noopener">Compare prices &#8594;</a>
+      </div>
+      <div class="deal-grid" id="techGrid"></div>
+    </div>
+
+    <!-- COUPONS -->
+    <div class="section" id="couponSection">
+      <div class="sec-hdr">
+        <div class="sec-title">&#127981; Active Coupon Codes <span class="sec-count" id="couponCount"></span></div>
+        <a class="sec-link" href="index.html">All coupons &#8594;</a>
+      </div>
+      <div class="deal-grid" id="couponGrid"></div>
+    </div>
+
+    <!-- MOVIES & ENTERTAINMENT -->
+    <div class="section">
+      <div class="sec-hdr">
+        <div class="sec-title">&#127916; Movies &amp; Entertainment</div>
+        <a class="sec-link" href="compare.html">More offers &#8594;</a>
+      </div>
+      <div class="link-grid">
+        <a class="link-card" href="https://www.eventcinemas.com.au/deals/cheap-tuesday" target="_blank" rel="noopener">
+          <div class="link-icon">&#127916;</div>
+          <div class="link-body">
+            <div class="link-name">Event Cinemas</div>
+            <div class="link-detail">Cheap Tuesday &#8212; $12 tickets all day. Any session, any cinema.</div>
+          </div>
+          <div class="link-arrow">&#8594;</div>
+        </a>
+        <a class="link-card" href="https://www.villagecinemas.com.au/offers/monday-movies" target="_blank" rel="noopener">
+          <div class="link-icon">&#127916;</div>
+          <div class="link-body">
+            <div class="link-name">Village Cinemas</div>
+            <div class="link-detail">Monday Movies &#8212; $12 tickets. Gold Class and Vmax deals available.</div>
+          </div>
+          <div class="link-arrow">&#8594;</div>
+        </a>
+        <a class="link-card" href="https://www.hoyts.com.au/offers/discount-tuesday" target="_blank" rel="noopener">
+          <div class="link-icon">&#127916;</div>
+          <div class="link-body">
+            <div class="link-name">Hoyts Cinemas</div>
+            <div class="link-detail">Discount Tuesdays &#8212; cheap tickets and combo deals. Check Hoyts X for premium.</div>
+          </div>
+          <div class="link-arrow">&#8594;</div>
+        </a>
+        <a class="link-card" href="https://www.scoopon.com.au/search/?q=movie" target="_blank" rel="noopener">
+          <div class="link-icon">&#127981;</div>
+          <div class="link-body">
+            <div class="link-name">Scoopon Movie Deals</div>
+            <div class="link-detail">Discounted movie tickets and experience packages. Often 2-for-1 deals.</div>
+          </div>
+          <div class="link-arrow">&#8594;</div>
+        </a>
+        <a class="link-card" href="https://www.groupon.com.au/local/melbourne/movie-tickets" target="_blank" rel="noopener">
+          <div class="link-icon">&#127981;</div>
+          <div class="link-body">
+            <div class="link-name">Groupon Movie Tickets</div>
+            <div class="link-detail">Discounted cinema and entertainment vouchers for Melbourne.</div>
+          </div>
+          <div class="link-arrow">&#8594;</div>
+        </a>
+        <a class="link-card" href="https://www.ozbargain.com.au/tag/movies" target="_blank" rel="noopener">
+          <div class="link-icon">&#129432;</div>
+          <div class="link-body">
+            <div class="link-name">OzBargain Movie Deals</div>
+            <div class="link-detail">Community-posted movie offers, free tickets, promo codes and streaming deals.</div>
+          </div>
+          <div class="link-arrow">&#8594;</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- STREAMING DEALS -->
+    <div class="section">
+      <div class="sec-hdr">
+        <div class="sec-title">&#127909; Streaming Offers</div>
+      </div>
+      <div class="link-grid">
+        <a class="link-card" href="https://www.netflix.com/au/signup" target="_blank" rel="noopener">
+          <div class="link-icon">&#127917;</div>
+          <div class="link-body"><div class="link-name">Netflix AU</div><div class="link-detail">Current plans from $7.99/mo. Ad-supported plan is cheapest.</div></div>
+          <div class="link-arrow">&#8594;</div>
+        </a>
+        <a class="link-card" href="https://www.disneyplus.com/en-au" target="_blank" rel="noopener">
+          <div class="link-icon">&#129513;</div>
+          <div class="link-body"><div class="link-name">Disney+</div><div class="link-detail">Star Wars, Marvel, Pixar and more. Check for current signup deals.</div></div>
+          <div class="link-arrow">&#8594;</div>
+        </a>
+        <a class="link-card" href="https://binge.com.au" target="_blank" rel="noopener">
+          <div class="link-icon">&#128250;</div>
+          <div class="link-body"><div class="link-name">Binge</div><div class="link-detail">HBO content in Australia. Frequently has 2-month free trials for new subscribers.</div></div>
+          <div class="link-arrow">&#8594;</div>
+        </a>
+        <a class="link-card" href="https://www.stan.com.au" target="_blank" rel="noopener">
+          <div class="link-icon">&#127909;</div>
+          <div class="link-body"><div class="link-name">Stan</div><div class="link-detail">Australian streaming with Paramount content. Monthly free trial for new members.</div></div>
+          <div class="link-arrow">&#8594;</div>
+        </a>
+        <a class="link-card" href="https://kayosports.com.au" target="_blank" rel="noopener">
+          <div class="link-icon">&#9917;</div>
+          <div class="link-body"><div class="link-name">Kayo Sports</div><div class="link-detail">AFL, NRL, cricket, F1 and more. Free trial available for new subscribers.</div></div>
+          <div class="link-arrow">&#8594;</div>
+        </a>
+        <a class="link-card" href="https://www.ozbargain.com.au/tag/streaming" target="_blank" rel="noopener">
+          <div class="link-icon">&#129432;</div>
+          <div class="link-body"><div class="link-name">OzBargain Streaming</div><div class="link-detail">Community deals on streaming &#8212; free trials, promo codes, discounts.</div></div>
+          <div class="link-arrow">&#8594;</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- TRAVEL DEALS -->
+    <div class="section" id="travelSection">
+      <div class="sec-hdr">
+        <div class="sec-title">&#9992; Travel Deals <span class="sec-count" id="travelCount"></span></div>
+        <a class="sec-link" href="compare.html#travel">More travel &#8594;</a>
+      </div>
+      <div class="deal-grid" id="travelGrid"></div>
+      <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+        <a href="https://www.webjet.com.au/deals/" target="_blank" rel="noopener"
+           style="font-size:12px;padding:6px 13px;border-radius:20px;background:var(--accent-bg);color:var(--accent);text-decoration:none;font-weight:600">
+          &#9992; Webjet deals &#8594;</a>
+        <a href="https://www.skyscanner.com.au" target="_blank" rel="noopener"
+           style="font-size:12px;padding:6px 13px;border-radius:20px;background:#e3f2fd;color:#1565c0;text-decoration:none;font-weight:600">
+          &#127752; Skyscanner &#8594;</a>
+        <a href="https://www.qantas.com/au/en/deals.html" target="_blank" rel="noopener"
+           style="font-size:12px;padding:6px 13px;border-radius:20px;background:#fce4ec;color:#c62828;text-decoration:none;font-weight:600">
+          &#128308; Qantas deals &#8594;</a>
+      </div>
+    </div>
+
+    <!-- CASHBACK HIGHLIGHTS -->
+    <div class="section">
+      <div class="sec-hdr">
+        <div class="sec-title">&#128176; Cashback Highlights</div>
+        <a class="sec-link" href="cashback.html">Full cashback page &#8594;</a>
+      </div>
+      <div class="cb-grid">
+        <a class="cb-card" href="https://www.topcashback.com.au/cashback-stores/" target="_blank" rel="noopener">
+          <div class="cb-icon">&#127942;</div>
+          <div class="cb-body">
+            <div class="cb-name">TopCashback AU</div>
+            <div class="cb-desc">Check current rates before any online purchase. Frequently beats other platforms on rate.</div>
+            <div class="cb-rate">Up to 25% cashback</div>
+          </div>
+        </a>
+        <a class="cb-card" href="https://www.cashrewards.com.au/trending-stores" target="_blank" rel="noopener">
+          <div class="cb-icon">&#128179;</div>
+          <div class="cb-body">
+            <div class="cb-name">Cashrewards &#8212; Trending</div>
+            <div class="cb-desc">Time-limited boosted cashback rates. Check before purchasing from major retailers.</div>
+            <div class="cb-rate">Boosted rates this week</div>
+          </div>
+        </a>
+        <a class="cb-card" href="https://www.shopback.com.au/all-stores" target="_blank" rel="noopener">
+          <div class="cb-icon">&#128717;&#65039;</div>
+          <div class="cb-body">
+            <div class="cb-name">ShopBack AU</div>
+            <div class="cb-desc">Best for fashion, travel and food delivery. Booking.com, THE ICONIC, Menulog.</div>
+            <div class="cb-rate">Up to 15% cashback</div>
+          </div>
+        </a>
+        <a class="cb-card" href="cashback.html" target="_blank">
+          <div class="cb-icon">&#128161;</div>
+          <div class="cb-body">
+            <div class="cb-name">Cashback Tips</div>
+            <div class="cb-desc">How to stack cashback with sale prices, switch energy/insurance for $50-$150 bonuses.</div>
+            <div class="cb-rate">Read the guide &#8594;</div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- INSURANCE OFFERS -->
+    <div class="section" id="insSection">
+      <div class="sec-hdr">
+        <div class="sec-title">&#128737; Insurance &amp; Finance Offers <span class="sec-count" id="insCount"></span></div>
+        <a class="sec-link" href="compare.html">Compare insurance &#8594;</a>
+      </div>
+      <div class="deal-grid" id="insGrid"></div>
+    </div>
+
+  </div><!-- /contentDiv -->
+</div>
+
+<script>
+var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz60iBo_PfKtmny2YmwFgjvCCIMDoXpHWf7KBPVDfUNBA8VtRybMCSwn7Ze9wvCdg8KHA/exec';
+var CACHE_KEY = 'ssc_v4';
+
+var allDeals = [], allCoupons = [], allFuel = [], allIns = [];
+
+window.addEventListener('DOMContentLoaded', loadAll);
+
+function loadAll() {
+  var btn = document.getElementById('refreshBtn');
+  btn.disabled = true; btn.textContent = 'Loading\u2026';
+  document.getElementById('loadingDiv').style.display  = 'block';
+  document.getElementById('contentDiv').style.display  = 'none';
+  document.getElementById('statusBar').style.display   = 'none';
+
+  // Try cache first for instant display
+  try {
+    var cached = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null');
+    if (cached && cached.deals && cached.deals.length) {
+      allDeals   = cached.deals     || [];
+      allCoupons = cached.coupons   || [];
+      allFuel    = cached.fuel      || [];
+      allIns     = cached.insurance || [];
+      renderAll();
+      document.getElementById('heroMeta').textContent =
+        'From cache \u2014 last updated ' + fmtDate(cached.ts);
+      btn.disabled = false; btn.textContent = '\u21BB Refresh all';
+      return;
+    }
+  } catch(ex) {}
+
+  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.indexOf('YOUR_') !== -1) {
+    document.getElementById('loadingDiv').style.display = 'none';
+    document.getElementById('contentDiv').style.display = 'block';
+    document.getElementById('heroMeta').textContent = 'Setup needed \u2014 add your Apps Script URL to this file.';
+    renderAll(); // renders with empty data — static sections still show
+    btn.disabled = false; btn.textContent = '\u21BB Refresh all';
+    return;
+  }
+
+  // Fetch fresh
+  var cb = 'dg_cb_' + Date.now();
+  var sc = document.createElement('script');
+  var timer = setTimeout(function() {
+    if (sc.parentNode) sc.parentNode.removeChild(sc);
+    delete window[cb];
+    document.getElementById('loadingDiv').style.display = 'none';
+    document.getElementById('contentDiv').style.display = 'block';
+    document.getElementById('heroMeta').textContent = 'Could not refresh \u2014 showing cached or empty data.';
+    renderAll();
+    btn.disabled = false; btn.textContent = '\u21BB Refresh all';
+  }, 30000);
+
+  window[cb] = function(json) {
+    clearTimeout(timer);
+    if (sc.parentNode) sc.parentNode.removeChild(sc);
+    delete window[cb];
+    btn.disabled = false; btn.textContent = '\u21BB Refresh all';
+    if (json && json.ok && json.data) {
+      var d = json.data;
+      allDeals   = d.deals     || [];
+      allCoupons = d.coupons   || [];
+      allFuel    = d.fuel      || [];
+      allIns     = d.insurance || [];
+    }
+    document.getElementById('heroMeta').textContent =
+      'Updated ' + fmtDate(Date.now()) + ' \u2014 ' + allDeals.length + ' deals loaded';
+    renderAll();
+  };
+  sc.onerror = function() {
+    clearTimeout(timer);
+    if (sc.parentNode) sc.parentNode.removeChild(sc);
+    delete window[cb];
+    btn.disabled = false; btn.textContent = '\u21BB Refresh all';
+    renderAll();
+  };
+  sc.src = APPS_SCRIPT_URL + '?callback=' + cb;
+  document.head.appendChild(sc);
+}
+
+function renderAll() {
+  document.getElementById('loadingDiv').style.display = 'none';
+  document.getElementById('contentDiv').style.display = 'block';
+
+  var deals = allDeals.filter(function(d){ return d.title; }).map(function(d) {
+    return {
+      vendor: str(d.vendor), category: str(d.category).toLowerCase(),
+      title: str(d.title), description: str(d.description),
+      priceNow: pf(d.priceNow), priceWas: pf(d.priceWas),
+      discountPct: parseInt(d.discountPct)||0,
+      dealUrl: str(d.dealUrl), scrapedAt: str(d.scrapedAt),
+    };
+  });
+  var coupons = (allCoupons||[]).filter(function(c){ return c.code && c.code !== 'SEE_LINK'; });
+  var fuel    = (allFuel||[]).filter(function(f){ return f.priceCents; });
+  var ins     = (allIns||[]).filter(function(i){ return i.title; });
+
+  // Status bar
+  var sb = document.getElementById('statusBar');
+  sb.style.display = 'flex';
+  sb.innerHTML =
+    pill(deals.length, 'deals') +
+    pill(coupons.length, 'coupons') +
+    pill(fuel.length, 'fuel prices') +
+    pill(ins.length, 'insurance offers') +
+    '<div class="status-pill"><span class="dot-live"></span> Live</div>';
+
+  // Top deals (highest discount, max 8)
+  var top = deals.slice().sort(function(a,b){ return (b.discountPct||0)-(a.discountPct||0); }).slice(0,8);
+  document.getElementById('topDealsGrid').innerHTML = top.length
+    ? top.map(dealCard).join('') : empty('Run scrapers to load deals');
+
+  // Grocery
+  var groc = deals.filter(function(d){
+    return ['woolworths','coles','aldi','grocery','other'].indexOf(d.category) !== -1;
+  }).slice(0,6);
+  document.getElementById('groceryCount').textContent = groc.length ? '(' + groc.length + ')' : '';
+  document.getElementById('groceryGrid').innerHTML = groc.length
+    ? groc.map(dealCard).join('')
+    : empty('No grocery deals in database yet \u2014 use the live links below');
+
+  // Health/beauty
+  var health = deals.filter(function(d){ return d.category === 'chemist'; }).slice(0,6);
+  document.getElementById('healthCount').textContent = health.length ? '(' + health.length + ')' : '';
+  document.getElementById('healthGrid').innerHTML = health.length
+    ? health.map(dealCard).join('') : empty('No health deals yet');
+
+  // Tech
+  var tech = deals.filter(function(d){
+    return ['retail','amazon','computing','gaming','electronics'].indexOf(d.category) !== -1;
+  }).slice(0,8);
+  document.getElementById('techCount').textContent = tech.length ? '(' + tech.length + ')' : '';
+  document.getElementById('techGrid').innerHTML = tech.length
+    ? tech.map(dealCard).join('') : empty('No tech deals yet');
+
+  // Travel
+  var travel = deals.filter(function(d){ return d.category === 'travel'; }).slice(0,6);
+  document.getElementById('travelCount').textContent = travel.length ? '(' + travel.length + ')' : '';
+  document.getElementById('travelGrid').innerHTML = travel.length
+    ? travel.map(dealCard).join('') : empty('No travel deals in database \u2014 use the links below');
+
+  // Coupons
+  var cpns = coupons.slice(0,8);
+  document.getElementById('couponCount').textContent = cpns.length ? '(' + cpns.length + ')' : '';
+  document.getElementById('couponGrid').innerHTML = cpns.length
+    ? cpns.map(function(c){
+        return dealCard({
+          vendor: c.vendor||'Various', category:'coupon',
+          title: (c.code||'') + (c.discountText ? ' \u2014 ' + c.discountText : ''),
+          description: c.description||'', priceNow:null, priceWas:null,
+          discountPct:0, dealUrl:c.dealUrl||'', _coupon:true, _code:c.code||''
+        });
+      }).join('') : empty('No coupon codes yet');
+
+  // Insurance
+  var insItems = ins.slice(0,6);
+  document.getElementById('insCount').textContent = insItems.length ? '(' + insItems.length + ')' : '';
+  document.getElementById('insGrid').innerHTML = insItems.length
+    ? insItems.map(function(o){
+        return dealCard({
+          vendor: o.insurer||'Various', category:'insurance',
+          title: o.title||'', description: o.description||'',
+          priceNow:null, priceWas:null,
+          discountPct: parseInt(o.discountPct)||0,
+          dealUrl: o.dealUrl||''
+        });
+      }).join('') : empty('No insurance offers yet');
+
+  // Fuel
+  var byType = {};
+  fuel.forEach(function(f) {
+    if (!byType[f.fuelType] || f.priceCents < byType[f.fuelType].priceCents) byType[f.fuelType] = f;
+  });
+  var typeOrder = ['ULP','E10','P95','P98','Diesel','LPG'];
+  var bestFuel = typeOrder.filter(function(t){ return byType[t]; }).map(function(t){ return byType[t]; });
+  document.getElementById('fuelGrid').innerHTML = bestFuel.length
+    ? bestFuel.map(function(f){
+        var tc = f.fuelType.toLowerCase().replace(/[^a-z0-9]/g,'');
+        return '<div class="fuel-mini best">'
+          + '<span class="fuel-mini-badge">&#9733; Best</span>'
+          + '<div class="fuel-mini-type ft-' + tc + '">' + esc(f.fuelType) + '</div>'
+          + '<div class="fuel-mini-price">' + parseFloat(f.priceCents).toFixed(1) + '&cent;</div>'
+          + '<div class="fuel-mini-meta"><strong>' + esc(f.brand||f.stationName) + '</strong><br>' + esc(f.suburb||'') + '</div>'
+          + '</div>';
+      }).join('')
+    : '<div class="empty">No fuel data yet. Add VIC_FUEL_API_KEY to Script Properties for live prices.</div>';
+}
+
+function dealCard(d) {
+  var vc = vclass(d.vendor, d.category);
+  var disc = d.discountPct > 0 ? '<span class="disc">-'+d.discountPct+'%</span>' : '';
+  var price = d.priceNow && d.priceNow > 0
+    ? '<span class="deal-price">$'+d.priceNow.toFixed(2)+'</span>'
+      + (d.priceWas && d.priceWas > d.priceNow ? '<span class="deal-was">$'+d.priceWas.toFixed(2)+'</span>' : '') : '';
+  var link = d.dealUrl ? '<a class="deal-link" href="'+esc(d.dealUrl)+'" target="_blank" rel="noopener">View deal &#8594;</a>' : '';
+  var copy = d._coupon && d._code
+    ? '<button class="copy-btn" onclick="cpyCd(\''+esc(d._code)+'\',this)">Copy '+esc(d._code)+'</button>' : '';
+  return '<div class="deal-card">'
+    + '<div class="deal-top"><span class="vbadge '+vc+'">'+esc(d.vendor)+'</span>'+disc+'</div>'
+    + '<div class="deal-title">'+esc(d.title)+'</div>'
+    + (d.description ? '<div class="deal-desc">'+esc((d.description||'').slice(0,90))+'</div>' : '')
+    + (price ? '<div>'+price+'</div>' : '')
+    + copy + link
+    + '</div>';
+}
+
+function pill(n, label) {
+  return '<div class="status-pill"><span class="status-num">'+(n||0)+'</span> '+label+'</div>';
+}
+function empty(msg) { return '<div class="empty">'+msg+'</div>'; }
+
+function vclass(v, cat) {
+  var n = (v||'').toLowerCase();
+  if (n.indexOf('woolworths')!==-1) return 'v-ww';
+  if (n.indexOf('coles')!==-1)      return 'v-coles';
+  if (n.indexOf('aldi')!==-1)       return 'v-aldi';
+  if (n.indexOf('amazon')!==-1)     return 'v-amz';
+  if (n.indexOf('big w')!==-1||n.indexOf('bigw')!==-1) return 'v-bw';
+  if (n.indexOf('chemist')!==-1)    return 'v-cw';
+  if (cat==='coupon')               return 'v-cpn';
+  if (cat==='insurance'||cat==='finance') return 'v-ins';
+  if (cat==='fuel')                 return 'v-fuel';
+  return 'v-def';
+}
+function cpyCd(code, btn) {
+  navigator.clipboard.writeText(code).then(function() {
+    btn.textContent = 'Copied!';
+    setTimeout(function(){ btn.textContent = 'Copy '+code; }, 1800);
+  });
+}
+function str(v) { return String(v||''); }
+function pf(v)  { var n=parseFloat(v); return isNaN(n)?null:n; }
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function fmtDate(ts) {
+  return new Date(ts).toLocaleString('en-AU',{hour:'2-digit',minute:'2-digit',day:'numeric',month:'short'});
+}
+</script>
+</body>
+</html>

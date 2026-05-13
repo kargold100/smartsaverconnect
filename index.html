@@ -25,7 +25,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .logo{font-size:24px;font-weight:800;letter-spacing:-.5px}
 .logo span{color:var(--accent)}
 .hdr-sub{font-size:13px;color:var(--muted);margin-top:3px}
-.hdr-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.hdr-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
 .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-size:13px;cursor:pointer;white-space:nowrap;transition:opacity .15s;text-decoration:none}
 .btn:hover{opacity:.75}
 .btn:disabled{opacity:.4;cursor:not-allowed}
@@ -182,6 +182,10 @@ select{padding:9px 12px;border:1px solid var(--border);border-radius:8px;backgro
     <div class="stat"><div class="stat-num" id="sFuel">&#8212;</div><div class="stat-lbl">Best ULP &cent;/L</div></div>
     <div class="stat"><div class="stat-num" id="sCpn">&#8212;</div><div class="stat-lbl">Coupons</div></div>
     <div class="stat"><div class="stat-num" id="sIns">&#8212;</div><div class="stat-lbl">Insurance</div></div>
+    <div class="stat" style="cursor:pointer" onclick="window.open('digest.html','_blank')" title="Open weekly deals digest">
+      <div class="stat-num">&#128240;</div>
+      <div class="stat-lbl">Weekly Digest</div>
+    </div>
   </div>
 
   <div class="controls">
@@ -213,6 +217,7 @@ select{padding:9px 12px;border:1px solid var(--border);border-radius:8px;backgro
     <button class="chip"     data-cat="coupon"     onclick="setFilter(this)">Coupons</button>
     <button class="chip"     data-cat="fuel"       onclick="setFilter(this)">Fuel</button>
     <button class="chip"     data-cat="insurance"  onclick="setFilter(this)">Insurance</button>
+    <button class="chip"     data-cat="entertainment" onclick="setFilter(this)">&#127916; Movies &amp; Fun</button>
     <button class="chip"     data-cat="live"       onclick="setFilter(this)">&#128308; Live Specials</button>
   </div>
 
@@ -234,6 +239,8 @@ select{padding:9px 12px;border:1px solid var(--border);border-radius:8px;backgro
         <button class="live-tab"     onclick="loadLive('jbhifi',this)">JB Hi-Fi</button>
         <button class="live-tab"     onclick="loadLive('bigw',this)">Big W</button>
         <button class="live-tab"     onclick="loadLive('kmart',this)">Kmart</button>
+        <button class="live-tab"     onclick="loadLive('movies',this)">&#127916; Movies</button>
+        <button class="live-tab"     onclick="loadLive('streaming',this)">&#127909; Streaming</button>
       </div>
     </div>
     <div class="live-grid" id="liveGrid">
@@ -451,6 +458,7 @@ function renderDeals() {
       : activeFilter === 'energy'  ? (d.category === 'energy')
       : activeFilter === 'travel'  ? (d.category === 'travel')
       : activeFilter === 'travel'  ? (d.category === 'travel')
+      : activeFilter === 'entertainment' ? (d.category === 'entertainment' || d.category === 'food')
       : d.category === activeFilter;
     var qOk = !q
       || d.title.toLowerCase().indexOf(q) !== -1
@@ -716,6 +724,7 @@ function vclass(v, cat) {
   if (cat === 'travel')             return 'v-telco';
   if (cat === 'fuel')               return 'v-fuel';
   if (cat === 'travel')             return 'v-fuel';
+  if (cat === 'entertainment')       return 'v-cpn';
   if (cat === 'coupon')             return 'v-cpn';
   if (cat === 'insurance')          return 'v-ins';
   if (cat === 'energy')             return 'v-energy';
@@ -813,6 +822,34 @@ var LIVE = {
     {n:'Electronics On Sale',      u:'https://www.bigw.com.au/category/sale-clearance/electronics'},
     {n:'Home On Sale',             u:'https://www.bigw.com.au/category/sale-clearance/home'},
     {n:'Baby On Sale',             u:'https://www.bigw.com.au/category/sale-clearance/baby'},
+  ]},
+  movies: { name:'Movie Deals', color:'#c62828', bg:'#fce4ec', links:[
+    {n:'Event Cinemas &#8212; Current Offers',    u:'https://www.eventcinemas.com.au/offers'},
+    {n:'Event Cinemas &#8212; Cheap Tuesday $12', u:'https://www.eventcinemas.com.au/deals/cheap-tuesday'},
+    {n:'Village Cinemas &#8212; Deals',           u:'https://www.villagecinemas.com.au/offers'},
+    {n:'Village &#8212; Monday Movies $12',       u:'https://www.villagecinemas.com.au/offers/monday-movies'},
+    {n:'Hoyts &#8212; Current Offers',            u:'https://www.hoyts.com.au/offers'},
+    {n:'Hoyts &#8212; Discount Tuesdays',         u:'https://www.hoyts.com.au/offers/discount-tuesday'},
+    {n:'Reading Cinemas &#8212; Offers',          u:'https://readingcinemas.com.au/promotions/'},
+    {n:'IMAX Melbourne &#8212; Tickets',          u:'https://www.imax.com.au/sessions/melbourne'},
+    {n:'Hoyts eGift Cards &#8212; Buy online',   u:'https://www.hoyts.com.au/gift-cards'},
+    {n:'Movie vouchers on Groupon',               u:'https://www.groupon.com.au/local/melbourne/movie-tickets'},
+    {n:'Movie vouchers on Scoopon',               u:'https://www.scoopon.com.au/search/?q=movie'},
+    {n:'OzBargain &#8212; Movie deals',           u:'https://www.ozbargain.com.au/tag/movies'},
+  ]},
+  streaming: { name:'Streaming Deals', color:'#1565c0', bg:'#e3f2fd', links:[
+    {n:'Netflix &#8212; Plans &amp; pricing',    u:'https://www.netflix.com/au/signup'},
+    {n:'Disney+ &#8212; Current offers',         u:'https://www.disneyplus.com/en-au'},
+    {n:'Stan &#8212; Start free trial',          u:'https://www.stan.com.au'},
+    {n:'Binge &#8212; Current plans',            u:'https://binge.com.au'},
+    {n:'Paramount+ &#8212; Free trial',          u:'https://www.paramountplus.com/au/'},
+    {n:'Apple TV+ &#8212; Free trial',           u:'https://tv.apple.com/au'},
+    {n:'Amazon Prime Video &#8212; AU',          u:'https://www.primevideo.com'},
+    {n:'Kayo Sports &#8212; Sports streaming',   u:'https://kayosports.com.au'},
+    {n:'YouTube Premium &#8212; AU',             u:'https://www.youtube.com/premium'},
+    {n:'Spotify Premium &#8212; AU plans',       u:'https://www.spotify.com/au/premium/'},
+    {n:'OzBargain &#8212; Streaming deals',      u:'https://www.ozbargain.com.au/tag/streaming'},
+    {n:'ShopBack &#8212; Streaming cashback',    u:'https://www.shopback.com.au/entertainment'},
   ]},
   kmart: { name:'Kmart', color:'#6a1b9a', bg:'#f3e5f5', links:[
     {n:'On Sale Now',              u:'https://www.kmart.com.au/category/on-sale/'},
