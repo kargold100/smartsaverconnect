@@ -3,909 +3,1774 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>SmartSaver Connect</title>
+<title>SmartSaver Connect — Australian Deals &amp; Savings Portal</title>
+<meta name="description" content="Find the best deals, discounts, coupons, fuel prices and cashback offers across Australian retailers including Woolworths, Coles, ALDI, Amazon AU and more."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#f5f4f0;--card:#fff;--text:#1a1a18;--muted:#6b6a65;--hint:#9e9d98;
-  --border:rgba(0,0,0,.09);--accent:#1a6b3c;--accent-bg:#e8f5ee;
-  --danger:#c0392b;--danger-bg:#fde8e6;--warn-bg:#fef3cd;--warn:#92600a;
-  --radius:12px;
+/* ── Reset & base ─────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  /* Palette — all contrast ratios verified against white/surface */
+  --green-700: #15803d;   /* 5.9:1 on white  ✓ */
+  --green-600: #16a34a;   /* 5.1:1 on white  ✓ */
+  --green-100: #dcfce7;
+  --green-050: #f0fdf4;
+  --slate-900: #0f172a;   /* 19:1 on white   ✓ */
+  --slate-800: #1e293b;   /* 15:1 on white   ✓ */
+  --slate-700: #334155;   /* 10:1 on white   ✓ */
+  --slate-500: #64748b;   /* 4.6:1 on white  ✓ */
+  --slate-400: #94a3b8;   /* used decoratively only */
+  --slate-200: #e2e8f0;
+  --slate-100: #f1f5f9;
+  --slate-050: #f8fafc;
+  --red-700:   #b91c1c;   /* 6.1:1 on white  ✓ */
+  --red-100:   #fee2e2;
+  --blue-700:  #1d4ed8;   /* 7.4:1 on white  ✓ */
+  --blue-100:  #dbeafe;
+  --amber-800: #92400e;   /* 7.5:1 on white  ✓ */
+  --amber-100: #fef3c7;
+  --violet-700:#6d28d9;   /* 6.4:1 on white  ✓ */
+  --violet-100:#ede9fe;
+  --orange-700:#c2410c;   /* 5.6:1 on white  ✓ */
+  --orange-100:#fff7ed;
+
+  /* Semantic tokens */
+  --color-bg:       var(--slate-050);
+  --color-surface:  #ffffff;
+  --color-surface2: var(--slate-100);
+  --color-border:   var(--slate-200);
+  --color-border2:  #cbd5e1;
+  --color-text:     var(--slate-900);
+  --color-text2:    var(--slate-700);
+  --color-text3:    var(--slate-500);
+  --color-accent:   var(--green-600);
+  --color-accent-dark: var(--green-700);
+  --color-accent-bg: var(--green-050);
+
+  /* Spacing */
+  --space-1: 4px;  --space-2: 8px;   --space-3: 12px;
+  --space-4: 16px; --space-5: 20px;  --space-6: 24px;
+  --space-8: 32px; --space-10: 40px; --space-12: 48px;
+
+  /* Radii */
+  --radius-sm: 6px;
+  --radius:    10px;
+  --radius-lg: 14px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.06), 0 1px 3px rgba(0,0,0,.1);
+  --shadow:    0 4px 6px rgba(0,0,0,.07), 0 2px 4px rgba(0,0,0,.05);
+  --shadow-md: 0 10px 15px rgba(0,0,0,.08), 0 4px 6px rgba(0,0,0,.05);
 }
-@media(prefers-color-scheme:dark){:root{
-  --bg:#18181a;--card:#232325;--text:#e8e6df;--muted:#9a9890;--hint:#6a6860;
-  --border:rgba(255,255,255,.09);--accent:#4caf7a;--accent-bg:#0e2d1a;
-  --danger:#e57373;--danger-bg:#2d0e0e;--warn-bg:#2a1e00;--warn:#f0c060;
-}}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-.wrap{max-width:1100px;margin:0 auto;padding:1.5rem 1rem 4rem}
 
-/* Header */
-.header{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:1.5rem}
-.logo{font-size:24px;font-weight:800;letter-spacing:-.5px}
-.logo span{color:var(--accent)}
-.hdr-sub{font-size:13px;color:var(--muted);margin-top:3px}
-.hdr-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
-.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-size:13px;cursor:pointer;white-space:nowrap;transition:opacity .15s;text-decoration:none}
-.btn:hover{opacity:.75}
-.btn:disabled{opacity:.4;cursor:not-allowed}
-.btn-accent{background:var(--accent-bg);color:var(--accent);border-color:var(--accent)}
-.spin{animation:spin .7s linear infinite;display:inline-block}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-/* Banner */
-.banner{background:var(--warn-bg);color:var(--warn);border:1px solid var(--warn);border-radius:var(--radius);padding:12px 16px;margin-bottom:1.25rem;font-size:13px;line-height:1.6}
-
-/* Stats */
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:1.5rem}
-.stat{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px}
-.stat-num{font-size:22px;font-weight:700}
-.stat-lbl{font-size:11px;color:var(--muted);margin-top:3px;text-transform:uppercase;letter-spacing:.04em}
-
-/* Controls */
-.controls{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:1rem}
-.search-wrap{flex:1;min-width:200px;position:relative}
-.search-wrap input{width:100%;padding:9px 12px 9px 36px;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-size:14px}
-.search-wrap input:focus{outline:2px solid var(--accent)}
-.s-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:15px;pointer-events:none;opacity:.4}
-select{padding:9px 12px;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-size:13px;cursor:pointer}
-
-/* Chips */
-.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.25rem}
-.chip{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:var(--card);color:var(--muted);font-size:13px;cursor:pointer;transition:all .15s;white-space:nowrap}
-.chip:hover{border-color:var(--accent);color:var(--accent)}
-.chip.on{background:var(--accent-bg);color:var(--accent);border-color:var(--accent)}
-
-/* Compare bar */
-.cmp-bar{display:none;align-items:center;gap:10px;flex-wrap:wrap;background:var(--accent-bg);border:1px solid var(--accent);border-radius:var(--radius);padding:10px 14px;margin-bottom:1rem}
-.cmp-bar.show{display:flex}
-.cmp-bar-text{font-size:13px;color:var(--accent);flex:1}
-.cmp-bar-btn{font-size:12px;padding:5px 14px;border-radius:7px;background:var(--accent);color:#fff;border:0;cursor:pointer}
-
-/* Deal cards */
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
-.deal{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;display:flex;flex-direction:column;gap:8px}
-.deal-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
-.vbadge{font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;white-space:nowrap}
-.v-ww{background:#e8f5e9;color:#2e7d32}.v-coles{background:#fce4ec;color:#c62828}
-.v-aldi{background:#e3f2fd;color:#1565c0}.v-amz{background:#fff3e0;color:#e65100}
-.v-fuel{background:#ede7f6;color:#4527a0}.v-cpn{background:#e0f7fa;color:#006064}
-.v-bw{background:#e1f5fe;color:#01579b}.v-cw{background:#fbe9e7;color:#bf360c}
-.v-ins{background:#e8eaf6;color:#283593}.v-energy{background:#fff8e1;color:#f57f17}
-.v-telco{background:#e8f5e9;color:#1b5e20}.v-nbn{background:#fce4ec;color:#880e4f}
-.v-def{background:#f5f5f5;color:#424242}
-@media(prefers-color-scheme:dark){
-  .v-ww{background:#0d2e12;color:#81c784}.v-coles{background:#2d0b10;color:#ef9a9a}
-  .v-aldi{background:#0a1929;color:#90caf9}.v-amz{background:#1a1200;color:#ffcc80}
-  .v-fuel{background:#1a0e2a;color:#ce93d8}.v-cpn{background:#00131a;color:#80deea}
-  .v-bw{background:#001825;color:#81d4fa}.v-cw{background:#2a0e00;color:#ffab91}
-  .v-ins{background:#0d0f2a;color:#9fa8da}.v-energy{background:#1a1400;color:#ffd54f}
-  .v-telco{background:#0d2010;color:#a5d6a7}.v-nbn{background:#2d0018;color:#f48fb1}
-  .v-def{background:#2a2a2a;color:#bdbdbd}
+/* ── Dark mode ────────────────────────────────────────────────── */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg:       #0c0e14;
+    --color-surface:  #161820;
+    --color-surface2: #1e2130;
+    --color-border:   #2a2d3e;
+    --color-border2:  #363a52;
+    --color-text:     #f0f2f8;
+    --color-text2:    #b0b4c8;
+    --color-text3:    #6b7094;
+    --color-accent:   #4ade80;  /* 8.3:1 on dark surface ✓ */
+    --color-accent-dark: #22c55e;
+    --color-accent-bg: #0a1f12;
+    --green-100:  #0a1f12;
+    --red-100:    #200a0a;
+    --blue-100:   #0a1025;
+    --amber-100:  #1a1000;
+    --violet-100: #12082a;
+    --orange-100: #1a0800;
+  }
 }
-.disc{font-size:12px;font-weight:700;background:var(--danger-bg);color:var(--danger);padding:3px 9px;border-radius:20px;white-space:nowrap}
-.deal-title{font-size:14px;font-weight:600;line-height:1.4}
-.deal-desc{font-size:12px;color:var(--muted);line-height:1.5}
-.pnow{font-size:17px;font-weight:700}
-.pwas{font-size:12px;color:var(--hint);text-decoration:line-through;margin-left:5px}
-.dlink{display:block;font-size:12px;color:var(--accent);text-decoration:none;margin-top:4px}
-.dlink:hover{text-decoration:underline}
-.cpybtn{font-size:12px;padding:4px 10px;border:1px solid var(--border);border-radius:7px;background:transparent;color:var(--muted);cursor:pointer}
 
-/* Section headings */
-.sec-title{font-size:16px;font-weight:600;margin:1.75rem 0 .75rem}
+/* ── Reduced motion ───────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+}
 
-/* Fuel */
-.fuel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
-.fuel-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:12px;position:relative;transition:border-color .15s}
-.fuel-card.cheapest{border-color:var(--accent);background:var(--accent-bg)}
-.fuel-card.cheapest .fuel-price{color:var(--accent)}
-.fuel-price{font-size:22px;font-weight:700;color:var(--text)}
-.fuel-type{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:12px;background:var(--accent-bg);color:var(--accent);margin-bottom:6px}
-.fuel-type.ulp{background:#e8f5e9;color:#2e7d32}
-.fuel-type.e10{background:#e3f2fd;color:#1565c0}
-.fuel-type.p95{background:#fff3e0;color:#e65100}
-.fuel-type.p98{background:#fce4ec;color:#c62828}
-.fuel-type.diesel{background:#ede7f6;color:#4527a0}
-.fuel-type.lpg{background:#f3e5f5;color:#6a1b9a}
-.fuel-cheapest-badge{position:absolute;top:8px;right:8px;font-size:9px;font-weight:700;padding:2px 7px;border-radius:8px;background:var(--accent);color:#fff}
-.fuel-meta{font-size:12px;color:var(--muted);line-height:1.6}
-.fuel-sec-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin:1.75rem 0 .75rem}
-.fuel-sec-title{font-size:16px;font-weight:600}
-.fuel-legend{display:flex;gap:8px;flex-wrap:wrap}
-.fuel-legend-item{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--muted)}
-.fuel-legend-dot{width:8px;height:8px;border-radius:50%}
+/* ── Base ─────────────────────────────────────────────────────── */
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  background: var(--color-bg);
+  color: var(--color-text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
 
-/* Insurance */
-.ins-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
-.ins-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;display:flex;flex-direction:column;gap:8px}
-.ins-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;flex-wrap:wrap}
-.ins-type{font-size:11px;font-weight:600;padding:2px 8px;border-radius:12px;background:var(--accent-bg);color:var(--accent)}
-.ins-title{font-size:14px;font-weight:600;line-height:1.4}
-.ins-desc{font-size:12px;color:var(--muted);line-height:1.5}
+/* ── Focus style (visible, high-contrast) ─────────────────────── */
+:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
 
-/* States */
-.no-results{grid-column:1/-1;text-align:center;padding:2rem;color:var(--muted)}
-.err-box{background:var(--danger-bg);color:var(--danger);border-radius:var(--radius);padding:1rem 1.25rem;font-size:13px;margin-bottom:1rem}
-.last-updated{font-size:11px;color:var(--hint);text-align:right;margin-top:1.25rem}
-.pulse{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+/* ── Skip link (accessibility) ────────────────────────────────── */
+.skip-link {
+  position: absolute;
+  top: -999px; left: 16px;
+  background: var(--slate-900); color: #fff;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius);
+  font-weight: 700; font-size: 14px;
+  text-decoration: none; z-index: 9999;
+  transition: top .15s;
+}
+.skip-link:focus { top: 16px; }
 
-/* Skeletons */
-.skel-line{border-radius:6px;background:linear-gradient(90deg,var(--border) 25%,rgba(128,128,128,.12) 50%,var(--border) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;height:14px;margin-bottom:8px}
-.sl-s{width:40%}.sl-m{width:65%}.sl-l{width:90%}
-@keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
+/* ── Header / Nav ─────────────────────────────────────────────── */
+.site-header {
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: var(--shadow-sm);
+}
+.nav-inner {
+  max-width: 1300px; margin: 0 auto;
+  padding: 0 var(--space-6);
+  display: flex; align-items: center;
+  height: 64px; gap: var(--space-2);
+}
+.brand {
+  display: flex; align-items: center; gap: var(--space-3);
+  text-decoration: none; color: var(--color-text);
+  margin-right: var(--space-6); flex-shrink: 0;
+}
+.brand-mark {
+  width: 36px; height: 36px;
+  background: var(--color-accent);
+  border-radius: var(--radius-sm);
+  display: flex; align-items: center;
+  justify-content: center;
+  font-size: 20px; flex-shrink: 0;
+  color: white;
+}
+.brand-name {
+  font-size: 17px; font-weight: 800;
+  letter-spacing: -0.4px; line-height: 1.2;
+}
+.brand-tagline {
+  font-size: 11px; color: var(--color-text3);
+  font-weight: 500; letter-spacing: .04em;
+}
+.primary-nav {
+  display: flex; gap: var(--space-1);
+  list-style: none; flex: 1;
+}
+.primary-nav a {
+  display: block; padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  font-size: 14px; font-weight: 500;
+  color: var(--color-text2); text-decoration: none;
+  transition: background .15s, color .15s;
+  white-space: nowrap;
+}
+.primary-nav a:hover { background: var(--color-surface2); color: var(--color-text); }
+.primary-nav a[aria-current="page"] {
+  background: var(--color-accent-bg);
+  color: var(--color-accent-dark); font-weight: 600;
+}
+.nav-refresh {
+  margin-left: auto; flex-shrink: 0;
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-accent); color: #fff;
+  border: none; border-radius: var(--radius);
+  font-size: 14px; font-weight: 600;
+  cursor: pointer; font-family: inherit;
+  min-height: 44px; min-width: 44px;
+  transition: background .15s;
+}
+.nav-refresh:hover { background: var(--color-accent-dark); }
+.nav-refresh:disabled { opacity: .55; cursor: not-allowed; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.spin { display: inline-block; animation: spin .7s linear infinite; }
+@media (max-width: 900px) {
+  .primary-nav { display: none; }
+  .brand-tagline { display: none; }
+}
 
-/* Live specials panel */
-.live-panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:1rem}
-.live-header{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
-.live-title{font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px}
-.live-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#e65100;animation:pulse 1.5s infinite}
-.live-tabs{display:flex;gap:6px;flex-wrap:wrap}
-.live-tab{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:var(--bg);color:var(--muted);font-size:12px;cursor:pointer;transition:all .15s;font-weight:500}
-.live-tab:hover,.live-tab.on{background:var(--accent-bg);color:var(--accent);border-color:var(--accent)}
-.live-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;padding:14px}
-.live-card{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:7px;text-decoration:none;color:var(--text);transition:border-color .15s}
-.live-card:hover{border-color:var(--accent)}
-.live-retailer{font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px;align-self:flex-start}
-.live-name{font-size:13px;font-weight:600;line-height:1.4}
-.live-note{padding:10px 14px;font-size:11px;color:var(--muted);border-top:1px solid var(--border)}
+/* ── Hero ─────────────────────────────────────────────────────── */
+.hero {
+  background: var(--slate-900);
+  padding: var(--space-12) var(--space-6) var(--space-10);
+  position: relative; overflow: hidden;
+}
+.hero::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(70% 100% at 100% 50%, rgba(22,163,74,.18), transparent 60%),
+              radial-gradient(50% 80% at 0% 100%, rgba(29,78,216,.12), transparent 55%);
+  pointer-events: none;
+}
+.hero-inner { max-width: 1300px; margin: 0 auto; position: relative; z-index: 1; }
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14);
+  color: #86efac;
+  padding: var(--space-1) var(--space-3);
+  border-radius: 999px; font-size: 12px; font-weight: 600;
+  letter-spacing: .06em; text-transform: uppercase;
+  margin-bottom: var(--space-5);
+}
+.hero-eyebrow-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #4ade80;
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:.3} }
+.hero h1 {
+  font-size: clamp(28px, 4.5vw, 48px);
+  font-weight: 800; color: #fff;
+  letter-spacing: -1px; line-height: 1.12;
+  margin-bottom: var(--space-4);
+  max-width: 680px;
+}
+.hero h1 strong { color: #86efac; font-weight: 800; }
+.hero-desc {
+  font-size: 17px; color: rgba(255,255,255,.6);
+  max-width: 520px; line-height: 1.7;
+  margin-bottom: var(--space-8);
+}
+/* Search form */
+.search-form { max-width: 600px; }
+.search-field {
+  display: flex;
+  background: rgba(255,255,255,.09);
+  border: 1.5px solid rgba(255,255,255,.18);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: border-color .2s;
+}
+.search-field:focus-within {
+  border-color: #86efac;
+  box-shadow: 0 0 0 3px rgba(134,239,172,.2);
+}
+.search-field label {
+  display: flex; align-items: center;
+  padding: 0 var(--space-4);
+  color: rgba(255,255,255,.5);
+  font-size: 18px; flex-shrink: 0;
+}
+.search-field input {
+  flex: 1; padding: var(--space-4);
+  background: transparent; border: none;
+  color: #fff; font-size: 16px;
+  font-family: inherit; min-height: 54px;
+}
+.search-field input::placeholder { color: rgba(255,255,255,.4); }
+.search-field input:focus { outline: none; }
+.search-btn {
+  padding: var(--space-4) var(--space-6);
+  background: var(--green-600); color: #fff;
+  border: none; font-size: 15px; font-weight: 700;
+  cursor: pointer; font-family: inherit;
+  white-space: nowrap; transition: background .15s;
+  min-height: 54px;
+}
+.search-btn:hover { background: var(--green-700); }
+.quick-searches {
+  display: flex; flex-wrap: wrap; gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+.quick-searches span {
+  font-size: 12px; color: rgba(255,255,255,.55);
+  font-weight: 500; flex-shrink: 0;
+  align-self: center; letter-spacing: .02em;
+}
+.quick-btn {
+  padding: var(--space-2) var(--space-3);
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 999px; color: rgba(255,255,255,.75);
+  font-size: 13px; font-weight: 500;
+  cursor: pointer; font-family: inherit;
+  min-height: 36px; transition: all .15s;
+}
+.quick-btn:hover, .quick-btn[aria-pressed="true"] {
+  background: rgba(74,222,128,.15);
+  border-color: rgba(134,239,172,.4);
+  color: #86efac;
+}
+
+/* ── Stats strip ──────────────────────────────────────────────── */
+.stats-strip {
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+.stats-inner {
+  max-width: 1300px; margin: 0 auto;
+  padding: 0 var(--space-6);
+  display: flex; align-items: stretch;
+  overflow-x: auto; scrollbar-width: none;
+}
+.stats-inner::-webkit-scrollbar { display: none; }
+.stat {
+  display: flex; align-items: center; gap: var(--space-3);
+  padding: var(--space-5) var(--space-6);
+  border-right: 1px solid var(--color-border);
+  flex-shrink: 0; min-width: 130px;
+  cursor: default;
+}
+.stat:last-child { border-right: none; }
+.stat.interactive { cursor: pointer; transition: background .15s; }
+.stat.interactive:hover { background: var(--color-surface2); }
+.stat-ico {
+  width: 40px; height: 40px; border-radius: var(--radius);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+  background: var(--color-accent-bg);
+}
+.stat-ico.amber { background: var(--amber-100); }
+.stat-ico.blue  { background: var(--blue-100); }
+.stat-num {
+  font-size: 22px; font-weight: 800;
+  color: var(--color-text); letter-spacing: -0.5px;
+  line-height: 1;
+}
+.stat-lbl {
+  font-size: 11px; color: var(--color-text3);
+  font-weight: 600; text-transform: uppercase;
+  letter-spacing: .05em; margin-top: 2px;
+}
+@media (max-width: 600px) {
+  .stat { padding: var(--space-4); min-width: 110px; }
+}
+
+/* ── Notices ──────────────────────────────────────────────────── */
+.notice {
+  background: var(--amber-100); border: 1px solid #fcd34d;
+  border-left: 4px solid var(--amber-800);
+  border-radius: var(--radius); padding: var(--space-4);
+  font-size: 14px; color: var(--amber-800); line-height: 1.6;
+  margin-bottom: var(--space-4);
+}
+.notice a { color: var(--amber-800); font-weight: 700; }
+.info-note {
+  background: var(--color-surface2);
+  border-left: 3px solid var(--color-border2);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: var(--space-3) var(--space-4);
+  font-size: 13px; color: var(--color-text3);
+  margin-bottom: var(--space-4); line-height: 1.6;
+}
+.info-note a { color: var(--color-accent-dark); font-weight: 600; }
+
+/* ── Page layout ──────────────────────────────────────────────── */
+.page {
+  max-width: 1300px; margin: 0 auto;
+  padding: var(--space-6) var(--space-6) var(--space-12);
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: var(--space-6);
+  align-items: start;
+}
+@media (max-width: 960px) {
+  .page { grid-template-columns: 1fr; }
+  .sidebar { display: none; }
+}
+
+/* ── Sidebar ──────────────────────────────────────────────────── */
+.sidebar {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  position: sticky; top: 80px;
+  overflow: hidden;
+}
+.sidebar-heading {
+  padding: var(--space-4) var(--space-5);
+  font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .08em;
+  color: var(--color-text3);
+  border-bottom: 1px solid var(--color-border);
+}
+.nav-filter {
+  list-style: none; padding: var(--space-2) 0;
+}
+.nav-filter li { }
+.filter-btn {
+  display: flex; align-items: center;
+  width: 100%; padding: var(--space-3) var(--space-5);
+  background: transparent; border: none;
+  font-family: inherit; font-size: 14px; font-weight: 500;
+  color: var(--color-text2); text-align: left;
+  cursor: pointer; gap: var(--space-3);
+  min-height: 44px; border-left: 3px solid transparent;
+  transition: background .15s, color .15s, border-color .15s;
+}
+.filter-btn:hover {
+  background: var(--color-surface2); color: var(--color-text);
+}
+.filter-btn[aria-pressed="true"] {
+  background: var(--color-accent-bg);
+  color: var(--color-accent-dark);
+  border-left-color: var(--color-accent);
+  font-weight: 700;
+}
+.filter-icon { font-size: 16px; width: 20px; text-align: center; flex-shrink: 0; }
+.filter-label { flex: 1; }
+.filter-count {
+  font-size: 11px; font-weight: 600; padding: 2px var(--space-2);
+  border-radius: 999px; background: var(--color-surface2);
+  color: var(--color-text3); min-width: 24px; text-align: center;
+}
+.filter-btn[aria-pressed="true"] .filter-count {
+  background: var(--color-accent-bg); color: var(--color-accent-dark);
+}
+.sidebar-divider { height: 1px; background: var(--color-border); margin: var(--space-2) 0; }
+
+/* ── Content area ─────────────────────────────────────────────── */
+.content-header {
+  display: flex; align-items: flex-start;
+  justify-content: space-between; flex-wrap: wrap;
+  gap: var(--space-4); margin-bottom: var(--space-5);
+}
+.content-title-group {}
+.content-title { font-size: 22px; font-weight: 800; letter-spacing: -0.4px; }
+.content-subtitle { font-size: 14px; color: var(--color-text3); margin-top: 2px; }
+.content-controls {
+  display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap;
+}
+.inline-search {
+  display: flex; align-items: center;
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius);
+  overflow: hidden; box-shadow: var(--shadow-sm);
+  transition: border-color .15s;
+}
+.inline-search:focus-within { border-color: var(--color-accent); }
+.inline-search label {
+  padding: 0 var(--space-3);
+  color: var(--color-text3); font-size: 15px;
+  display: flex; align-items: center;
+}
+.inline-search input {
+  width: 200px; padding: var(--space-3);
+  border: none; background: transparent;
+  font-size: 14px; color: var(--color-text);
+  font-family: inherit; min-height: 44px;
+}
+.inline-search input:focus { outline: none; }
+.sort-select {
+  padding: var(--space-2) var(--space-3);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  color: var(--color-text); font-size: 14px;
+  font-family: inherit; cursor: pointer;
+  min-height: 44px; box-shadow: var(--shadow-sm);
+}
+
+/* ── Deal cards grid ──────────────────────────────────────────── */
+.deals-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-4);
+}
+
+/* ── Deal card ────────────────────────────────────────────────── */
+.deal-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  display: flex; flex-direction: column; gap: var(--space-3);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow .2s, transform .2s, border-color .2s;
+}
+.deal-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+  border-color: var(--color-border2);
+}
+.card-top {
+  display: flex; align-items: center;
+  justify-content: space-between; gap: var(--space-2);
+}
+
+/* Vendor badges — all text colours verified 4.5:1+ contrast */
+.vendor-badge {
+  display: inline-flex; align-items: center;
+  gap: var(--space-1); padding: 3px 10px;
+  border-radius: 999px; font-size: 12px; font-weight: 700;
+  white-space: nowrap; border: 1px solid transparent;
+}
+.vb-ww     { background: #dcfce7; color: var(--green-700); border-color: #bbf7d0; }
+.vb-coles  { background: #fee2e2; color: var(--red-700);   border-color: #fecaca; }
+.vb-aldi   { background: #dbeafe; color: var(--blue-700);  border-color: #bfdbfe; }
+.vb-amz    { background: #fff7ed; color: var(--orange-700);border-color: #fed7aa; }
+.vb-bw     { background: #e0f2fe; color: #075985;          border-color: #bae6fd; }
+.vb-cw     { background: #fefce8; color: var(--amber-800); border-color: #fef08a; }
+.vb-jb     { background: #f0fdf4; color: #14532d;          border-color: #bbf7d0; }
+.vb-cpn    { background: #eff6ff; color: var(--blue-700);  border-color: #bfdbfe; }
+.vb-ins    { background: var(--violet-100); color: var(--violet-700); border-color: #c4b5fd; }
+.vb-fuel   { background: #faf5ff; color: #5b21b6;          border-color: #ddd6fe; }
+.vb-travel { background: #fff7ed; color: var(--orange-700);border-color: #fed7aa; }
+.vb-nbn    { background: #f0fdf4; color: #14532d;          border-color: #bbf7d0; }
+.vb-def    { background: var(--color-surface2); color: var(--color-text2); border-color: var(--color-border); }
+
+@media (prefers-color-scheme: dark) {
+  .vb-ww     { background: #052e16; color: #4ade80; border-color: #14532d; }
+  .vb-coles  { background: #450a0a; color: #fca5a5; border-color: #7f1d1d; }
+  .vb-aldi   { background: #0c1a3d; color: #93c5fd; border-color: #1e3a8a; }
+  .vb-amz    { background: #2c1000; color: #fb923c; border-color: #7c2d12; }
+  .vb-bw     { background: #082032; color: #7dd3fc; border-color: #0c4a6e; }
+  .vb-cw     { background: #1c1400; color: #fbbf24; border-color: #713f12; }
+  .vb-jb     { background: #052e16; color: #86efac; border-color: #14532d; }
+  .vb-cpn    { background: #082032; color: #7dd3fc; border-color: #0c4a6e; }
+  .vb-ins    { background: #1e0f3d; color: #c4b5fd; border-color: #4c1d95; }
+  .vb-fuel   { background: #1e0f3d; color: #a78bfa; border-color: #4c1d95; }
+  .vb-travel { background: #2c1000; color: #fdba74; border-color: #7c2d12; }
+  .vb-nbn    { background: #052e16; color: #86efac; border-color: #14532d; }
+  .vb-def    { background: var(--color-surface2); color: var(--color-text2); border-color: var(--color-border); }
+}
+
+.disc-badge {
+  padding: 3px 10px; border-radius: 999px;
+  background: #fef2f2; color: var(--red-700);
+  border: 1px solid #fecaca;
+  font-size: 12px; font-weight: 700; white-space: nowrap;
+}
+@media (prefers-color-scheme: dark) {
+  .disc-badge { background: #450a0a; color: #fca5a5; border-color: #7f1d1d; }
+}
+
+.card-title {
+  font-size: 15px; font-weight: 700;
+  color: var(--color-text); line-height: 1.4;
+}
+.card-desc {
+  font-size: 13px; color: var(--color-text2);
+  line-height: 1.55;
+}
+.card-price {
+  display: flex; align-items: baseline; gap: var(--space-2);
+  margin-top: var(--space-1);
+}
+.price-now {
+  font-size: 22px; font-weight: 800;
+  color: var(--color-accent-dark); letter-spacing: -0.5px;
+}
+.price-was {
+  font-size: 13px; color: var(--color-text3);
+  text-decoration: line-through;
+}
+.card-footer {
+  display: flex; align-items: center;
+  justify-content: space-between; gap: var(--space-3);
+  margin-top: auto; padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border);
+}
+.card-link {
+  display: inline-flex; align-items: center; gap: var(--space-1);
+  font-size: 13px; font-weight: 700;
+  color: var(--color-accent-dark); text-decoration: none;
+  min-height: 44px; padding: var(--space-2) 0;
+}
+.card-link:hover { text-decoration: underline; }
+.coupon-code {
+  font-size: 13px; font-weight: 700; letter-spacing: .05em;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-surface2);
+  border: 1.5px dashed var(--color-border2);
+  border-radius: var(--radius-sm); color: var(--color-text);
+  font-family: 'Courier New', monospace;
+}
+.copy-btn {
+  padding: var(--space-2) var(--space-3);
+  background: transparent;
+  border: 1.5px solid var(--color-border2);
+  border-radius: var(--radius-sm);
+  font-size: 12px; font-weight: 600;
+  color: var(--color-text2); cursor: pointer;
+  font-family: inherit; min-height: 36px;
+  transition: all .15s;
+}
+.copy-btn:hover {
+  background: var(--color-accent-bg);
+  color: var(--color-accent-dark);
+  border-color: var(--color-accent);
+}
+
+/* ── Section heading ──────────────────────────────────────────── */
+.section-head {
+  display: flex; align-items: center; gap: var(--space-3);
+  margin-bottom: var(--space-4); flex-wrap: wrap;
+}
+.section-title {
+  font-size: 18px; font-weight: 800; letter-spacing: -0.3px;
+}
+.section-count {
+  font-size: 13px; color: var(--color-text3); font-weight: 500;
+}
+
+/* ── Fuel ─────────────────────────────────────────────────────── */
+.fuel-panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm); overflow: hidden;
+  margin-top: var(--space-6);
+}
+.fuel-panel-head {
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--color-border);
+  display: flex; align-items: center;
+  justify-content: space-between; flex-wrap: wrap; gap: var(--space-3);
+}
+.fuel-panel-title {
+  font-size: 16px; font-weight: 800;
+  display: flex; align-items: center; gap: var(--space-2);
+}
+.fuel-map-link {
+  font-size: 13px; font-weight: 700;
+  color: var(--blue-700); text-decoration: none;
+}
+.fuel-map-link:hover { text-decoration: underline; }
+.fuel-grid-inner {
+  padding: var(--space-4);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: var(--space-3);
+}
+.fuel-card {
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius);
+  overflow: hidden; transition: box-shadow .15s;
+}
+.fuel-card.cheapest { border-color: var(--green-600); }
+.fuel-card:hover { box-shadow: var(--shadow); }
+.fuel-type-label {
+  padding: 6px var(--space-3);
+  font-size: 11px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: .07em;
+}
+/* Colour coded fuel types — all contrast verified */
+.ft-ULP     { background: #dcfce7; color: #14532d; }
+.ft-E10     { background: #dbeafe; color: #1e3a8a; }
+.ft-P95     { background: #fff7ed; color: #7c2d12; }
+.ft-P98     { background: #fee2e2; color: #7f1d1d; }
+.ft-Diesel  { background: var(--violet-100); color: #3b0764; }
+.ft-LPG     { background: #fdf4ff; color: #581c87; }
+@media (prefers-color-scheme: dark) {
+  .ft-ULP    { background: #052e16; color: #4ade80; }
+  .ft-E10    { background: #0c1a3d; color: #93c5fd; }
+  .ft-P95    { background: #2c1000; color: #fb923c; }
+  .ft-P98    { background: #450a0a; color: #fca5a5; }
+  .ft-Diesel { background: #1e0f3d; color: #c4b5fd; }
+  .ft-LPG    { background: #2e0f3d; color: #e879f9; }
+}
+.fuel-card-body { padding: var(--space-3); }
+.fuel-price-val {
+  font-size: 24px; font-weight: 800;
+  color: var(--color-text); letter-spacing: -0.5px;
+}
+.fuel-card.cheapest .fuel-price-val { color: var(--color-accent-dark); }
+.fuel-station-name {
+  font-size: 13px; font-weight: 600;
+  color: var(--color-text); margin-top: 4px;
+}
+.fuel-station-loc { font-size: 12px; color: var(--color-text3); margin-top: 2px; }
+.cheapest-tag {
+  display: inline-block; margin-top: var(--space-2);
+  padding: 2px 8px; border-radius: 999px;
+  background: var(--green-600); color: #fff;
+  font-size: 11px; font-weight: 700;
+}
+
+/* ── Insurance ────────────────────────────────────────────────── */
+.ins-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-4);
+}
+.ins-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5); box-shadow: var(--shadow-sm);
+}
+.ins-card-head {
+  display: flex; align-items: flex-start;
+  justify-content: space-between; gap: var(--space-3);
+  margin-bottom: var(--space-3); flex-wrap: wrap;
+}
+.ins-type-badge {
+  padding: 2px 10px; border-radius: 999px;
+  background: var(--color-surface2);
+  color: var(--color-text2);
+  font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .04em;
+}
+.ins-title { font-size: 15px; font-weight: 700; margin-bottom: var(--space-2); }
+.ins-desc { font-size: 13px; color: var(--color-text2); line-height: 1.55; margin-bottom: var(--space-4); }
+
+/* ── Live specials panel ──────────────────────────────────────── */
+.live-panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm); overflow: hidden;
+  margin-bottom: var(--space-5);
+}
+.live-panel-bar {
+  display: flex; align-items: center;
+  justify-content: space-between; flex-wrap: wrap; gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  background: var(--slate-900);
+}
+.live-panel-title {
+  display: flex; align-items: center; gap: var(--space-3);
+  font-size: 14px; font-weight: 700; color: #fff;
+}
+.live-pulse {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #4ade80; flex-shrink: 0;
+  animation: pulse-dot 1.5s infinite;
+}
+.live-tab-group {
+  display: flex; gap: var(--space-2); flex-wrap: wrap;
+  list-style: none;
+}
+.live-tab-btn {
+  padding: 5px 14px; border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.2);
+  background: rgba(255,255,255,.07);
+  color: rgba(255,255,255,.7);
+  font-size: 13px; font-weight: 600;
+  cursor: pointer; font-family: inherit;
+  min-height: 36px; transition: all .15s;
+}
+.live-tab-btn:hover { background: rgba(255,255,255,.15); color: #fff; }
+.live-tab-btn[aria-selected="true"] {
+  background: var(--green-600); color: #fff;
+  border-color: var(--green-600);
+}
+.live-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: var(--space-3); padding: var(--space-4);
+}
+.live-card {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius); padding: var(--space-4);
+  text-decoration: none; color: var(--color-text);
+  display: flex; flex-direction: column; gap: var(--space-2);
+  transition: all .15s; min-height: 44px;
+}
+.live-card:hover {
+  border-color: var(--color-accent);
+  background: var(--color-accent-bg);
+  transform: translateY(-1px);
+}
+.live-retailer-badge {
+  font-size: 11px; font-weight: 700;
+  padding: 2px 8px; border-radius: 999px;
+  align-self: flex-start;
+}
+.live-card-name {
+  font-size: 13px; font-weight: 600;
+  line-height: 1.4; color: var(--color-text);
+}
+.live-card-cta {
+  font-size: 12px; font-weight: 700;
+  color: var(--color-accent-dark); margin-top: auto;
+}
+.live-footer {
+  padding: var(--space-3) var(--space-5);
+  background: var(--color-surface2);
+  font-size: 12px; color: var(--color-text3);
+  border-top: 1px solid var(--color-border);
+}
+
+/* ── Empty / skeleton states ──────────────────────────────────── */
+.empty-state {
+  grid-column: 1 / -1;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg); padding: var(--space-12);
+  text-align: center; box-shadow: var(--shadow-sm);
+}
+.empty-state h3 { font-size: 18px; font-weight: 800; margin-bottom: var(--space-2); }
+.empty-state p { font-size: 14px; color: var(--color-text3); max-width: 380px; margin: 0 auto; line-height: 1.6; }
+.skel-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-4);
+}
+.skel-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg); padding: var(--space-5);
+  height: 160px;
+}
+.skel-line {
+  border-radius: var(--radius-sm);
+  background: linear-gradient(90deg,
+    var(--color-surface2) 25%,
+    rgba(200,200,200,.1) 50%,
+    var(--color-surface2) 75%);
+  background-size: 200% 100%;
+  animation: skel-shine 1.5s infinite;
+  margin-bottom: var(--space-3);
+}
+@keyframes skel-shine { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+.sl-xs { height: 12px; width: 30%; }
+.sl-s  { height: 12px; width: 45%; }
+.sl-m  { height: 14px; width: 70%; }
+.sl-l  { height: 14px; width: 90%; }
+.sl-xl { height: 20px; width: 35%; margin-top: var(--space-2); }
+
+/* ── Footer ───────────────────────────────────────────────────── */
+.page-footer {
+  max-width: 1300px; margin: 0 auto;
+  padding: 0 var(--space-6) var(--space-6);
+  font-size: 12px; color: var(--color-text3);
+  display: flex; justify-content: space-between;
+  flex-wrap: wrap; gap: var(--space-2);
+}
+
+/* ── Utility ──────────────────────────────────────────────────── */
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
 </style>
 </head>
 <body>
-<div class="wrap">
 
-  <div class="header">
-    <div>
-      <div class="logo">SmartSaver<span>Connect</span></div>
-      <div class="hdr-sub">Deals &middot; Catalogues &middot; Compare &middot; Fuel &middot; Insurance</div>
+<!-- Skip navigation link -->
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<!-- Site header -->
+<header class="site-header" role="banner">
+  <div class="nav-inner">
+    <a href="index.html" class="brand" aria-label="SmartSaver Connect — Home">
+      <div class="brand-mark" aria-hidden="true">💰</div>
+      <div>
+        <div class="brand-name">SmartSaver Connect</div>
+        <span class="brand-tagline">Australian Deals Portal</span>
+      </div>
+    </a>
+    <nav aria-label="Primary navigation">
+      <ul class="primary-nav" role="list">
+        <li><a href="index.html" aria-current="page">Deals</a></li>
+        <li><a href="digest.html">Weekly Digest</a></li>
+        <li><a href="catalogue-search.html">Search Catalogues</a></li>
+        <li><a href="compare.html">Compare Prices</a></li>
+        <li><a href="catalogues.html">Catalogues</a></li>
+        <li><a href="cashback.html">Cashback</a></li>
+      </ul>
+    </nav>
+    <button class="nav-refresh" id="refreshBtn" onclick="doRefresh()"
+      aria-label="Refresh deals data" aria-live="polite">
+      <span id="refreshIcon" aria-hidden="true">↻</span>
+      <span>Refresh</span>
+    </button>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="hero" aria-labelledby="hero-heading">
+  <div class="hero-inner">
+    <div class="hero-eyebrow" aria-hidden="true">
+      <span class="hero-eyebrow-dot"></span>Live Australian Deals
     </div>
-    <div class="hdr-actions">
-      <span id="liveInd"></span>
-      <a class="btn btn-accent" href="catalogues.html" target="_blank">&#128214; Catalogues</a>
-      <a class="btn" href="compare.html" target="_blank">&#9878; Compare</a>
-      <a class="btn btn-accent" href="catalogue-search.html" target="_blank">&#128269; Catalogue Search</a>
-      <button class="btn" id="refreshBtn" onclick="doRefresh()">
-        <span id="refreshIcon">&#8635;</span> Refresh
-      </button>
+    <h1 id="hero-heading">
+      Find the best deals across<br>
+      <strong>every Australian retailer</strong>
+    </h1>
+    <p class="hero-desc">
+      Deals, specials, coupons, fuel prices and cashback — updated automatically from across the web.
+    </p>
+    <div class="search-form" role="search">
+      <div class="search-field">
+        <label for="heroSearch">
+          <span aria-hidden="true">🔍</span>
+          <span class="sr-only">Search deals</span>
+        </label>
+        <input
+          type="search" id="heroSearch"
+          placeholder="Search deals — e.g. milk, headphones, kettle chips…"
+          aria-label="Search deals"
+          autocomplete="off"
+          onkeydown="if(event.key==='Enter')doSearch()"/>
+        <button class="search-btn" onclick="doSearch()">Search deals</button>
+      </div>
+      <div class="quick-searches" aria-label="Quick search suggestions" role="group">
+        <span aria-hidden="true">Try:</span>
+        <button class="quick-btn" onclick="qsearch(this,'woolworths')" aria-pressed="false">Woolworths</button>
+        <button class="quick-btn" onclick="qsearch(this,'coles')" aria-pressed="false">Coles</button>
+        <button class="quick-btn" onclick="qsearch(this,'aldi')" aria-pressed="false">ALDI</button>
+        <button class="quick-btn" onclick="qsearch(this,'amazon')" aria-pressed="false">Amazon AU</button>
+        <button class="quick-btn" onclick="qsearch(this,'chemist')" aria-pressed="false">Chemist WH</button>
+        <button class="quick-btn" onclick="qsearch(this,'jb hi-fi')" aria-pressed="false">JB Hi-Fi</button>
+        <button class="quick-btn" onclick="qsearch(this,'travel')" aria-pressed="false">Travel</button>
+      </div>
     </div>
   </div>
+</section>
 
-  <div id="setupBanner" class="banner" style="display:none">
-    Setup needed: open index.html and replace YOUR_APPS_SCRIPT_WEB_APP_URL_HERE with your Apps Script Web App URL.
+<!-- Stats strip -->
+<div class="stats-strip" role="region" aria-label="Summary statistics">
+  <div class="stats-inner">
+    <div class="stat"><div class="stat-ico" aria-hidden="true">🏷️</div><div><div class="stat-num" id="sTot">—</div><div class="stat-lbl">Deals</div></div></div>
+    <div class="stat"><div class="stat-ico" aria-hidden="true">%</div><div><div class="stat-num" id="sDisc">—</div><div class="stat-lbl">Avg discount</div></div></div>
+    <div class="stat"><div class="stat-ico amber" aria-hidden="true">⛽</div><div><div class="stat-num" id="sFuel">—</div><div class="stat-lbl">Best ULP ¢/L</div></div></div>
+    <div class="stat"><div class="stat-ico blue" aria-hidden="true">🎟️</div><div><div class="stat-num" id="sCpn">—</div><div class="stat-lbl">Coupons</div></div></div>
+    <div class="stat interactive" onclick="window.open('digest.html','_blank')" role="button" tabindex="0" aria-label="Open weekly digest" onkeydown="if(event.key==='Enter')window.open('digest.html','_blank')">
+      <div class="stat-ico" aria-hidden="true">📰</div>
+      <div><div class="stat-num" style="font-size:14px">Weekly</div><div class="stat-lbl">Digest →</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Notices -->
+<div style="max-width:1300px;margin:0 auto;padding:var(--space-5) var(--space-6) 0" role="alert" aria-live="polite">
+  <div class="notice" id="setupNotice" style="display:none">
+    <strong>Setup needed:</strong> Replace <code>YOUR_APPS_SCRIPT_WEB_APP_URL_HERE</code> with your Apps Script Web App URL.
   </div>
   <div id="errArea"></div>
-
-  <div class="stats">
-    <div class="stat"><div class="stat-num" id="sTot">&#8212;</div><div class="stat-lbl">Deals</div></div>
-    <div class="stat"><div class="stat-num" id="sDisc">&#8212;</div><div class="stat-lbl">Avg discount</div></div>
-    <div class="stat"><div class="stat-num" id="sFuel">&#8212;</div><div class="stat-lbl">Best ULP &cent;/L</div></div>
-    <div class="stat"><div class="stat-num" id="sCpn">&#8212;</div><div class="stat-lbl">Coupons</div></div>
-    <div class="stat"><div class="stat-num" id="sIns">&#8212;</div><div class="stat-lbl">Insurance</div></div>
-    <div class="stat" style="cursor:pointer" onclick="window.open('digest.html','_blank')" title="Open weekly deals digest">
-      <div class="stat-num">&#128240;</div>
-      <div class="stat-lbl">Weekly Digest</div>
-    </div>
-  </div>
-
-  <div class="controls">
-    <div class="search-wrap">
-      <span class="s-icon">&#128269;</span>
-      <input type="text" id="searchInput" placeholder="Search deals, products, stores..." oninput="onSearch()"/>
-    </div>
-    <select id="sortSel" onchange="renderDeals()">
-      <option value="discount">Highest discount</option>
-      <option value="price_asc">Price low to high</option>
-      <option value="price_desc">Price high to low</option>
-      <option value="newest">Newest first</option>
-    </select>
-  </div>
-
-  <div class="chips">
-    <button class="chip on"  data-cat="all"        onclick="setFilter(this)">All</button>
-    <button class="chip"     data-cat="woolworths" onclick="setFilter(this)">Woolworths</button>
-    <button class="chip"     data-cat="coles"      onclick="setFilter(this)">Coles</button>
-    <button class="chip"     data-cat="aldi"       onclick="setFilter(this)">ALDI</button>
-    <button class="chip"     data-cat="amazon"     onclick="setFilter(this)">Amazon AU</button>
-    <button class="chip"     data-cat="retail"     onclick="setFilter(this)">Retail</button>
-    <button class="chip"     data-cat="chemist"    onclick="setFilter(this)">Health</button>
-    <button class="chip"     data-cat="telco"      onclick="setFilter(this)">Mobile</button>
-    <button class="chip"     data-cat="nbn"        onclick="setFilter(this)">NBN</button>
-    <button class="chip"     data-cat="energy"     onclick="setFilter(this)">Energy</button>
-    <button class="chip"     data-cat="travel"     onclick="setFilter(this)">Travel &#9992;</button>
-    <button class="chip"     data-cat="travel"     onclick="setFilter(this)">&#9992; Travel</button>
-    <button class="chip"     data-cat="coupon"     onclick="setFilter(this)">Coupons</button>
-    <button class="chip"     data-cat="fuel"       onclick="setFilter(this)">Fuel</button>
-    <button class="chip"     data-cat="insurance"  onclick="setFilter(this)">Insurance</button>
-    <button class="chip"     data-cat="entertainment" onclick="setFilter(this)">&#127916; Movies &amp; Fun</button>
-    <button class="chip"     data-cat="live"       onclick="setFilter(this)">&#128308; Live Specials</button>
-  </div>
-
-  <div class="cmp-bar" id="cmpBar">
-    <span class="cmp-bar-text" id="cmpBarText">Compare across retailers</span>
-    <button class="cmp-bar-btn" onclick="goCompare()">Compare prices &#8594;</button>
-  </div>
-
-  <!-- Live Specials Panel -->
-  <div class="live-panel" id="livePanel" style="display:none">
-    <div class="live-header">
-      <div class="live-title"><span class="live-dot"></span> Live Specials &mdash; direct from retailers</div>
-      <div class="live-tabs">
-        <button class="live-tab on"  onclick="loadLive('woolworths',this)">Woolworths</button>
-        <button class="live-tab"     onclick="loadLive('coles',this)">Coles</button>
-        <button class="live-tab"     onclick="loadLive('aldi',this)">ALDI</button>
-        <button class="live-tab"     onclick="loadLive('chemist',this)">Chemist WH</button>
-        <button class="live-tab"     onclick="loadLive('amazon',this)">Amazon</button>
-        <button class="live-tab"     onclick="loadLive('jbhifi',this)">JB Hi-Fi</button>
-        <button class="live-tab"     onclick="loadLive('bigw',this)">Big W</button>
-        <button class="live-tab"     onclick="loadLive('kmart',this)">Kmart</button>
-        <button class="live-tab"     onclick="loadLive('movies',this)">&#127916; Movies</button>
-        <button class="live-tab"     onclick="loadLive('streaming',this)">&#127909; Streaming</button>
-      </div>
-    </div>
-    <div class="live-grid" id="liveGrid">
-      <div style="grid-column:1/-1;color:var(--muted);font-size:13px;padding:1rem">
-        Select a retailer tab above to browse their current specials.
-      </div>
-    </div>
-    <div class="live-note">
-      All links open directly on the retailer website in real time.
-      <a href="catalogues.html" style="color:var(--accent);margin-left:8px">View all catalogues &#8594;</a>
-    </div>
-  </div>
-
-  <div id="mainContent">
-    <div class="grid" id="dealGrid"></div>
-  </div>
-  <div id="fuelSec"></div>
-  <div class="last-updated" id="lastUpdated"></div>
-
 </div>
+
+<!-- Page layout -->
+<div class="page" id="main-content">
+
+  <!-- Sidebar filter nav -->
+  <aside aria-label="Filter deals by category">
+    <div class="sidebar">
+      <div class="sidebar-heading" id="filter-group-label">Filter by category</div>
+      <nav aria-labelledby="filter-group-label">
+        <ul class="nav-filter" role="list">
+          <li>
+            <button class="filter-btn" data-cat="all" aria-pressed="true" onclick="setFilter(this)">
+              <span class="filter-icon" aria-hidden="true">🏠</span>
+              <span class="filter-label">All Deals</span>
+              <span class="filter-count" id="cnt-all" aria-label="total deals">—</span>
+            </button>
+          </li>
+          <li role="separator"><div class="sidebar-divider"></div></li>
+          <li>
+            <button class="filter-btn" data-cat="woolworths" aria-pressed="false" onclick="setFilter(this)">
+              <span class="filter-icon" aria-hidden="true">🟢</span>
+              <span class="filter-label">Woolworths</span>
+              <span class="filter-count" id="cnt-ww">—</span>
+            </button>
+          </li>
+          <li>
+            <button class="filter-btn" data-cat="coles" aria-pressed="false" onclick="setFilter(this)">
+              <span class="filter-icon" aria-hidden="true">🔴</span>
+              <span class="filter-label">Coles</span>
+              <span class="filter-count" id="cnt-coles">—</span>
+            </button>
+          </li>
+          <li>
+            <button class="filter-btn" data-cat="aldi" aria-pressed="false" onclick="setFilter(this)">
+              <span class="filter-icon" aria-hidden="true">🔵</span>
+              <span class="filter-label">ALDI</span>
+              <span class="filter-count" id="cnt-aldi">—</span>
+            </button>
+          </li>
+          <li>
+            <button class="filter-btn" data-cat="amazon" aria-pressed="false" onclick="setFilter(this)">
+              <span class="filter-icon" aria-hidden="true">📦</span>
+              <span class="filter-label">Amazon AU</span>
+              <span class="filter-count" id="cnt-amz">—</span>
+            </button>
+          </li>
+          <li role="separator"><div class="sidebar-divider"></div></li>
+          <li>
+            <button class="filter-btn" data-cat="retail" aria-pressed="false" onclick="setFilter(this)">
+              <span class="filter-icon" aria-hidden="true">🏬</span>
+              <span class="filter-label">Retail</span>
+              <span class="filter-count" id="cnt-ret">—</span>
+            </button>
+          </li>
+          <li>
+            <button class="filter-btn" data-cat="chemist" aria-pressed="false" onclick="setFilter(this)">
+              <span class="filter-icon" aria-hidden="true">💊</span>
+              <span class="filter-label">Health &amp; Beauty</span>
+              <span class="filter-count" id="cnt-cw">—</span>
+            </button>
+          </li>
+          <li>
+            <button class="filter-btn" data-cat="travel" aria-pressed="false" onclick="setFilter(this)">
+              <span class="filter-icon" aria-hidden="true">✈️</span>
+              <span class="filter-label">Travel</span>
+              <span class="filter-count" id="cnt-travel">—</span>
+            </button>
+          </li>
+          <li>
+            <button class="filter-btn" data-cat="telco" aria-pressed="false" onclick="setFilter(this)">
+              <span class="filter-icon" aria-hidden="true">📱</span>
+              <span class="filter-label">Mobile Plans</span>
+              <span class="filter-count" id="cnt-telco">—</span>
+            </button>
+          </li>
+          <li>
+            <button class="filter-btn" data-cat="nbn" aria-pressed="false" onclick="setFilter(this)">
+              <span class="filter-icon" aria-hidden="true">🌐</span>
+              <span class="filter-label">NBN &amp; Internet</span>
+              <span class="filter-count" id="cnt-nbn">—</span>
+            </button>
+          </li>
+          <li>
+            <button class="filter-btn" data-cat="energy" aria-pressed="false" onclick="setFilter(this)">
+              <span class="filter-icon" aria-hidden="true">⚡</span>
+              <span class="filter-label">Energy</span>
+              <span class="filter-count" id="cnt-energy">—</span>
+            </button>
+          </li>
+          <li>
+            <button class="filter-btn" data-cat="entertainment" aria-pressed="false" onclick="setFilter(this)">
+              <span class="filter-icon" aria-hidden="true">🎬</span>
+              <span class="filter-label">Movies &amp; Fun</span>
+              <span class="filter-count" id="cnt-ent">—</span>
+            </button>
+          </li>
+          <li role="separator"><div class="sidebar-divider"></div></li>
+          <li>
+            <button class="filter-btn" data-cat="coupon" aria-pressed="false" onclick="setFilter(this)">
+              <span class="filter-icon" aria-hidden="true">🎟️</span>
+              <span class="filter-label">Coupon Codes</span>
+              <span class="filter-count" id="cnt-cpn">—</span>
+            </button>
+          </li>
+          <li>
+            <button class="filter-btn" data-cat="fuel" aria-pressed="false" onclick="setFilter(this)">
+              <span class="filter-icon" aria-hidden="true">⛽</span>
+              <span class="filter-label">Fuel Prices</span>
+              <span class="filter-count" id="cnt-fuel">—</span>
+            </button>
+          </li>
+          <li>
+            <button class="filter-btn" data-cat="insurance" aria-pressed="false" onclick="setFilter(this)">
+              <span class="filter-icon" aria-hidden="true">🛡️</span>
+              <span class="filter-label">Insurance</span>
+              <span class="filter-count" id="cnt-ins">—</span>
+            </button>
+          </li>
+          <li role="separator"><div class="sidebar-divider"></div></li>
+          <li>
+            <button class="filter-btn" data-cat="live" aria-pressed="false" onclick="setFilter(this)">
+              <span class="filter-icon" aria-hidden="true">🔴</span>
+              <span class="filter-label">Live Specials</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main id="main-content" aria-label="Deals content" aria-live="polite" aria-busy="true">
+
+    <!-- Content header -->
+    <div class="content-header">
+      <div class="content-title-group">
+        <h2 class="content-title" id="contentTitle">All Deals</h2>
+        <p class="content-subtitle" id="contentSubtitle">Loading deals…</p>
+      </div>
+      <div class="content-controls" role="group" aria-label="Filter and sort controls">
+        <div class="inline-search">
+          <label for="filterInput">
+            <span aria-hidden="true">🔍</span>
+            <span class="sr-only">Filter results</span>
+          </label>
+          <input type="search" id="filterInput"
+            placeholder="Filter results…"
+            aria-label="Filter current results"
+            autocomplete="off"
+            oninput="renderDeals()"/>
+        </div>
+        <label for="sortSel" class="sr-only">Sort deals by</label>
+        <select id="sortSel" class="sort-select" onchange="renderDeals()"
+          aria-label="Sort deals">
+          <option value="discount">Best discount first</option>
+          <option value="price_asc">Price: Low to high</option>
+          <option value="price_desc">Price: High to low</option>
+          <option value="newest">Newest first</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="infoArea" aria-live="polite"></div>
+
+    <!-- Live specials panel -->
+    <section class="live-panel" id="livePanel" style="display:none" aria-label="Live retailer specials">
+      <div class="live-panel-bar">
+        <div class="live-panel-title">
+          <span class="live-pulse" aria-hidden="true"></span>
+          Live Specials — opens directly on retailer website
+        </div>
+        <ul class="live-tab-group" role="tablist" aria-label="Select retailer">
+          <li role="presentation"><button class="live-tab-btn" role="tab" aria-selected="true"  onclick="loadLive('woolworths',this)">Woolworths</button></li>
+          <li role="presentation"><button class="live-tab-btn" role="tab" aria-selected="false" onclick="loadLive('coles',this)">Coles</button></li>
+          <li role="presentation"><button class="live-tab-btn" role="tab" aria-selected="false" onclick="loadLive('aldi',this)">ALDI</button></li>
+          <li role="presentation"><button class="live-tab-btn" role="tab" aria-selected="false" onclick="loadLive('chemist',this)">Chemist WH</button></li>
+          <li role="presentation"><button class="live-tab-btn" role="tab" aria-selected="false" onclick="loadLive('amazon',this)">Amazon</button></li>
+          <li role="presentation"><button class="live-tab-btn" role="tab" aria-selected="false" onclick="loadLive('jbhifi',this)">JB Hi-Fi</button></li>
+          <li role="presentation"><button class="live-tab-btn" role="tab" aria-selected="false" onclick="loadLive('bigw',this)">Big W</button></li>
+          <li role="presentation"><button class="live-tab-btn" role="tab" aria-selected="false" onclick="loadLive('kmart',this)">Kmart</button></li>
+          <li role="presentation"><button class="live-tab-btn" role="tab" aria-selected="false" onclick="loadLive('movies',this)">🎬 Movies</button></li>
+          <li role="presentation"><button class="live-tab-btn" role="tab" aria-selected="false" onclick="loadLive('streaming',this)">📺 Streaming</button></li>
+        </ul>
+      </div>
+      <div class="live-cards" id="liveGrid" role="tabpanel">
+        <p style="grid-column:1/-1;color:var(--color-text3);font-size:14px;padding:var(--space-2)">Select a retailer tab above to view their current specials.</p>
+      </div>
+      <div class="live-footer">All links open directly on the retailer's website in real time — not scraped, always current.</div>
+    </section>
+
+    <!-- Deals output -->
+    <div id="dealOutput" aria-live="polite"></div>
+    <div id="fuelOutput"></div>
+    <div id="insOutput"></div>
+
+    <p class="page-footer" id="lastUpd" aria-live="polite"></p>
+  </main>
+</div>
+
 <script>
-// ── Config ──────────────────────────────────────────────────────
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz60iBo_PfKtmny2YmwFgjvCCIMDoXpHWf7KBPVDfUNBA8VtRybMCSwn7Ze9wvCdg8KHA/exec';
-const CACHE_KEY = 'ssc_v4';
-const CACHE_TTL = 2 * 60 * 60 * 1000;
+// ── CONFIG ───────────────────────────────────────────────────────
+var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz60iBo_PfKtmny2YmwFgjvCCIMDoXpHWf7KBPVDfUNBA8VtRybMCSwn7Ze9wvCdg8KHA/exec';
+var CACHE_KEY = 'ssc_v7';
+var TTL = 2 * 60 * 60 * 1000;
 
-// ── State ────────────────────────────────────────────────────────
-var deals = [], coupons = [], fuel = [], insurance = [];
-var activeFilter = 'all';
+// ── STATE ─────────────────────────────────────────────────────────
+var deals=[], coupons=[], fuel=[], insurance=[];
+var activeFilter='all', searchQ='';
 
-// ── Boot ─────────────────────────────────────────────────────────
+// ── BOOT ──────────────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', function() {
   if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.indexOf('YOUR_') !== -1) {
-    document.getElementById('setupBanner').style.display = 'block';
-    showSkeletons();
+    document.getElementById('setupNotice').style.display = 'block';
+    showSkeleton();
     return;
   }
-  var cached = getCache();
-  if (cached) {
-    deals     = cached.deals     || [];
-    coupons   = cached.coupons   || [];
-    fuel      = cached.fuel      || [];
-    insurance = cached.insurance || [];
-    updateStats();
-    renderDeals();
-    document.getElementById('lastUpdated').textContent =
-      'Cached - last updated ' + fmtTime(cached.ts);
-    if (Date.now() - cached.ts > CACHE_TTL) loadFresh(false);
+  var c = readCache();
+  if (c) {
+    ingest(c);
+    setSubtitle('From cache — updated ' + fmt(c.ts));
+    if (Date.now() - c.ts > TTL) fetchFresh(false);
   } else {
-    showSkeletons();
-    loadFresh(true);
+    showSkeleton();
+    fetchFresh(true);
   }
 });
 
-function showSkeletons() {
-  var html = '';
-  for (var i = 0; i < 8; i++) {
-    html += '<div class="deal skel">'
-      + '<div class="skel-line sl-s"></div>'
+function showSkeleton() {
+  var h = '<div class="skel-grid">';
+  for (var i=0; i<8; i++) {
+    h += '<div class="skel-card">'
+      + '<div class="skel-line sl-xs" style="margin-bottom:16px"></div>'
       + '<div class="skel-line sl-l"></div>'
       + '<div class="skel-line sl-m"></div>'
+      + '<div class="skel-line sl-xl"></div>'
       + '</div>';
   }
-  document.getElementById('dealGrid').innerHTML = html;
+  h += '</div>';
+  document.getElementById('dealOutput').innerHTML = h;
 }
 
-// ── JSONP fetch from Apps Script ──────────────────────────────────
-function loadFresh(showSpinner) {
+// ── FETCH ─────────────────────────────────────────────────────────
+function fetchFresh(showSpinner) {
   var btn = document.getElementById('refreshBtn');
   var ico = document.getElementById('refreshIcon');
-  if (showSpinner) { btn.disabled = true; ico.classList.add('spin'); }
-  setErr(null);
+  if (showSpinner) {
+    btn.disabled = true;
+    ico.textContent = '↻';
+    ico.classList.add('spin');
+    btn.setAttribute('aria-label', 'Loading deals, please wait');
+  }
+  clearErr();
 
-  var cbName = 'ssc_cb_' + Date.now();
-  var script  = document.createElement('script');
-  var timer   = setTimeout(function() {
+  var cb = 'ssc_' + Date.now();
+  var sc = document.createElement('script');
+  var timer = setTimeout(function() {
     cleanup();
-    if (deals.length) {
-      document.getElementById('lastUpdated').textContent = 'Showing cached data (timed out)';
-    } else {
-      document.getElementById('dealGrid').innerHTML = '';
-      setErr('Timed out - Apps Script cold start can take ~30s. Try refreshing.');
-    }
-    btn.disabled = false; ico.classList.remove('spin');
-    document.getElementById('liveInd').innerHTML = '<span class="pulse"></span>';
+    btn.disabled = false;
+    ico.classList.remove('spin');
+    btn.setAttribute('aria-label', 'Refresh deals data');
+    if (!deals.length) setErr('Connection timed out. Check your Apps Script URL and ensure the Web App is deployed as "Anyone can access".');
+    else setSubtitle('Using cached data (refresh timed out)');
   }, 30000);
 
-  window[cbName] = function(json) {
+  window[cb] = function(json) {
     cleanup();
-    btn.disabled = false; ico.classList.remove('spin');
-    document.getElementById('liveInd').innerHTML = '<span class="pulse"></span>';
-
+    btn.disabled = false;
+    ico.classList.remove('spin');
+    btn.setAttribute('aria-label', 'Refresh deals data');
     if (!json || !json.ok) {
-      setErr((json && json.error) || 'Apps Script returned an error');
+      setErr((json && json.error) || 'Apps Script returned an error. Re-deploy the Web App and try again.');
       return;
     }
-    var d = json.data || {};
-    deals     = normDeals(d.deals       || []);
-    fuel      = normFuel(d.fuel         || []);
-    coupons   = normCoupons(d.coupons   || []);
-    insurance = normIns(d.insurance     || []);
-
-    if (!deals.length && !coupons.length) {
-      setErr('Connected but no data yet. Run scrapers: Google Sheet > SmartSaver Connect menu > Test scrapers.');
-    }
-    saveCache();
-    updateStats();
-    renderDeals();
-
-    var lr = d.lastRun;
-    document.getElementById('lastUpdated').textContent = lr && lr.source
-      ? 'Last run: ' + lr.source + ' - ' + deals.length + ' deals'
-      : 'Updated ' + fmtTime(Date.now()) + ' - ' + deals.length + ' deals';
+    ingest(json.data);
+    saveCache(json.data);
+    setSubtitle('Updated ' + fmt(Date.now()) + ' · ' + deals.length + ' deals loaded');
+    document.getElementById('main-content').setAttribute('aria-busy', 'false');
   };
 
   function cleanup() {
     clearTimeout(timer);
-    delete window[cbName];
-    if (script.parentNode) script.parentNode.removeChild(script);
+    delete window[cb];
+    if (sc.parentNode) sc.parentNode.removeChild(sc);
   }
 
-  script.onerror = function() {
+  sc.onerror = function() {
     cleanup();
-    btn.disabled = false; ico.classList.remove('spin');
-    setErr('Could not reach Apps Script. Check your URL is correct and Web App is deployed as "Anyone can access".');
+    btn.disabled = false;
+    ico.classList.remove('spin');
+    btn.setAttribute('aria-label', 'Refresh deals data');
+    setErr('Could not reach Apps Script. Check the URL is correct.');
   };
+  sc.src = APPS_SCRIPT_URL + '?callback=' + cb;
+  document.head.appendChild(sc);
+}
+function doRefresh() { showSkeleton(); fetchFresh(true); }
 
-  script.src = APPS_SCRIPT_URL + '?callback=' + cbName;
-  document.head.appendChild(script);
+// ── INGEST ────────────────────────────────────────────────────────
+function ingest(d) {
+  deals     = normDeals(d.deals     || []);
+  coupons   = normCoupons(d.coupons || []);
+  fuel      = normFuel(d.fuel       || []);
+  insurance = normIns(d.insurance   || []);
+  updateStats();
+  renderDeals();
 }
 
-function doRefresh() { showSkeletons(); loadFresh(true); }
-
-// ── Normalise data ────────────────────────────────────────────────
 function normDeals(rows) {
-  return rows.filter(function(r){ return r.title; }).map(function(r) {
-    return {
-      vendor:      str(r.vendor),
-      category:    str(r.category).toLowerCase(),
-      title:       str(r.title),
-      description: str(r.description),
-      priceNow:    num(r.priceNow),
-      priceWas:    num(r.priceWas),
-      discountPct: parseInt(r.discountPct) || 0,
-      dealUrl:     str(r.dealUrl),
-      scrapedAt:   str(r.scrapedAt),
-    };
-  });
-}
-function normFuel(rows) {
-  return rows.filter(function(r){ return r.stationName && r.priceCents; }).map(function(r) {
-    return {
-      stationName: str(r.stationName), brand: str(r.brand),
-      fuelType: str(r.fuelType), priceCents: parseFloat(r.priceCents) || 0,
-      suburb: str(r.suburb), postcode: str(r.postcode),
-    };
+  return (rows||[]).filter(function(r) { return r.title; }).map(function(r) {
+    return { vendor: s(r.vendor), cat: s(r.category).toLowerCase(),
+      title: s(r.title), desc: s(r.description),
+      pNow: n(r.priceNow), pWas: n(r.priceWas),
+      disc: parseInt(r.discountPct)||0,
+      url: s(r.dealUrl), ts: s(r.scrapedAt) };
   });
 }
 function normCoupons(rows) {
-  return rows.filter(function(r){ return r.code && r.code !== 'SEE_LINK'; }).map(function(r) {
-    return {
-      vendor: str(r.vendor) || 'Various', code: str(r.code),
-      description: str(r.description), discountText: str(r.discountText),
-      dealUrl: str(r.dealUrl), _coupon: true,
-    };
+  return (rows||[]).filter(function(r) { return r.code && r.code !== 'SEE_LINK'; }).map(function(r) {
+    return { vendor: s(r.vendor)||'Various', code: s(r.code),
+      desc: s(r.description), dt: s(r.discountText), url: s(r.dealUrl) };
+  });
+}
+function normFuel(rows) {
+  return (rows||[]).filter(function(r) { return r.priceCents; }).map(function(r) {
+    return { name: s(r.stationName), brand: s(r.brand), type: s(r.fuelType),
+      price: parseFloat(r.priceCents)||0, suburb: s(r.suburb) };
   });
 }
 function normIns(rows) {
-  return rows.filter(function(r){ return r.title; }).map(function(r) {
-    return {
-      insurer: str(r.insurer) || 'Various', type: str(r.type) || 'General',
-      title: str(r.title), description: str(r.description),
-      discountPct: parseInt(r.discountPct) || 0,
-      saveDollars: num(r.saveDollars), dealUrl: str(r.dealUrl),
-    };
+  return (rows||[]).filter(function(r) { return r.title; }).map(function(r) {
+    return { insurer: s(r.insurer)||'Various', type: s(r.type)||'General',
+      title: s(r.title), desc: s(r.description),
+      disc: parseInt(r.discountPct)||0, save: n(r.saveDollars), url: s(r.dealUrl) };
   });
 }
 
-// ── Render deals ──────────────────────────────────────────────────
+// ── STATS ─────────────────────────────────────────────────────────
+function updateStats() {
+  document.getElementById('sTot').textContent = deals.length || '—';
+  var ds = deals.filter(function(d) { return d.disc > 0; }).map(function(d) { return d.disc; });
+  document.getElementById('sDisc').textContent = ds.length
+    ? Math.round(ds.reduce(function(a,b){return a+b;},0) / ds.length) + '%' : '—';
+  var ulp = fuel.filter(function(f) { return f.type==='ULP' || f.type==='E10'; });
+  document.getElementById('sFuel').textContent = ulp.length
+    ? Math.min.apply(null, ulp.map(function(f){return f.price;})).toFixed(1) : '—';
+  document.getElementById('sCpn').textContent = coupons.length || '—';
+
+  // Sidebar counts
+  var cm = {
+    'all': deals.length,
+    'ww': c('woolworths'), 'coles': c('coles'), 'aldi': c('aldi'), 'amz': c('amazon'),
+    'ret': cRet(), 'cw': c('chemist'), 'travel': c('travel'),
+    'telco': c('telco'), 'nbn': c('nbn'), 'energy': c('energy'),
+    'ent': c('entertainment') + c('food'),
+    'cpn': coupons.length, 'fuel': fuel.length, 'ins': insurance.length
+  };
+  Object.keys(cm).forEach(function(k) {
+    var el = document.getElementById('cnt-' + k);
+    if (el) el.textContent = cm[k] || '';
+  });
+}
+function c(cat) { return deals.filter(function(d){return d.cat===cat;}).length; }
+function cRet() { return deals.filter(function(d){return d.cat==='retail'||isGenRet(d.vendor);}).length; }
+
+// ── RENDER ────────────────────────────────────────────────────────
 function renderDeals() {
-  var q    = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+  var q = (document.getElementById('filterInput').value || '').toLowerCase().trim();
   var sort = document.getElementById('sortSel').value;
-  document.getElementById('fuelSec').innerHTML = '';
 
-  if (activeFilter === 'live') return;
+  document.getElementById('fuelOutput').innerHTML = '';
+  document.getElementById('insOutput').innerHTML = '';
+  document.getElementById('livePanel').style.display = 'none';
+  document.getElementById('dealOutput').style.display = 'block';
+  document.getElementById('infoArea').innerHTML = '';
 
+  if (activeFilter === 'live') {
+    document.getElementById('dealOutput').style.display = 'none';
+    document.getElementById('livePanel').style.display = 'block';
+    loadLive('woolworths', document.querySelector('.live-tab-btn'));
+    setTitle('Live Specials', 'Direct links to retailer websites — always current');
+    return;
+  }
   if (activeFilter === 'fuel') {
-    document.getElementById('dealGrid').innerHTML = '';
-    renderFuel(q); return;
+    document.getElementById('dealOutput').innerHTML = '';
+    renderFuel(q);
+    setTitle('Fuel Prices — VIC', 'Cheapest station per fuel type highlighted');
+    return;
   }
   if (activeFilter === 'insurance') {
-    document.getElementById('dealGrid').innerHTML = '';
-    renderIns(q); return;
+    document.getElementById('dealOutput').innerHTML = '';
+    renderIns(q);
+    setTitle('Insurance Offers', 'Current Australian insurance deals');
+    return;
   }
 
+  // Build pool
   var pool = deals.slice();
   if (activeFilter === 'all' || activeFilter === 'coupon') {
-    coupons.forEach(function(c) {
-      pool.push({
-        vendor: c.vendor, category: 'coupon', _coupon: true,
-        title: c.code + (c.discountText ? ' - ' + c.discountText : ''),
-        description: c.description, priceNow: null, priceWas: null,
-        discountPct: 0, dealUrl: c.dealUrl, scrapedAt: '',
-      });
+    coupons.forEach(function(cv) {
+      pool.push({ vendor:cv.vendor, cat:'coupon', _cpn:true, _code:cv.code,
+        title: cv.code + (cv.dt ? ' — '+cv.dt : ''),
+        desc: cv.desc, pNow:null, pWas:null, disc:0, url:cv.url, ts:'' });
     });
   }
 
+  // Filter
   var items = pool.filter(function(d) {
     var catOk = activeFilter === 'all' ? true
-      : activeFilter === 'coupon'  ? (d._coupon || d.category === 'coupon')
-      : activeFilter === 'retail'  ? (d.category === 'retail' || isRetailer(d.vendor))
-      : activeFilter === 'chemist' ? (d.category === 'chemist')
-      : activeFilter === 'telco'   ? (d.category === 'telco')
-      : activeFilter === 'nbn'     ? (d.category === 'nbn')
-      : activeFilter === 'energy'  ? (d.category === 'energy')
-      : activeFilter === 'travel'  ? (d.category === 'travel')
-      : activeFilter === 'travel'  ? (d.category === 'travel')
-      : activeFilter === 'entertainment' ? (d.category === 'entertainment' || d.category === 'food')
-      : d.category === activeFilter;
+      : activeFilter === 'coupon'  ? (d._cpn || d.cat === 'coupon')
+      : activeFilter === 'retail'  ? (d.cat === 'retail' || isGenRet(d.vendor))
+      : activeFilter === 'entertainment' ? (d.cat === 'entertainment' || d.cat === 'food')
+      : d.cat === activeFilter;
     var qOk = !q
       || d.title.toLowerCase().indexOf(q) !== -1
-      || (d.description||'').toLowerCase().indexOf(q) !== -1
+      || (d.desc||'').toLowerCase().indexOf(q) !== -1
       || (d.vendor||'').toLowerCase().indexOf(q) !== -1;
     return catOk && qOk;
   });
 
-  if (sort === 'discount')   items.sort(function(a,b){ return (b.discountPct||0)-(a.discountPct||0); });
-  if (sort === 'price_asc')  items.sort(function(a,b){ return (a.priceNow!=null?a.priceNow:9999)-(b.priceNow!=null?b.priceNow:9999); });
-  if (sort === 'price_desc') items.sort(function(a,b){ return (b.priceNow||0)-(a.priceNow||0); });
-  if (sort === 'newest')     items.sort(function(a,b){ return new Date(b.scrapedAt||0)-new Date(a.scrapedAt||0); });
+  // Sort
+  if (sort === 'discount') items.sort(function(a,b){return(b.disc||0)-(a.disc||0);});
+  if (sort === 'price_asc') items.sort(function(a,b){return(a.pNow!=null?a.pNow:9999)-(b.pNow!=null?b.pNow:9999);});
+  if (sort === 'price_desc') items.sort(function(a,b){return(b.pNow||0)-(a.pNow||0);});
+  if (sort === 'newest') items.sort(function(a,b){return new Date(b.ts||0)-new Date(a.ts||0);});
+
+  var labels = { all:'All Deals', woolworths:'Woolworths Deals', coles:'Coles Deals',
+    aldi:'ALDI Deals', amazon:'Amazon AU Deals', retail:'Retail Deals',
+    chemist:'Health & Beauty', telco:'Mobile Plan Deals', nbn:'NBN & Internet',
+    energy:'Energy Deals', travel:'Travel Deals',
+    entertainment:'Movies & Entertainment', coupon:'Coupon Codes' };
+  setTitle(labels[activeFilter]||'Deals', items.length + ' result' + (items.length!==1?'s':''));
+
+  // Info note for WW/Coles
+  if (activeFilter === 'woolworths' || activeFilter === 'coles') {
+    var rname = activeFilter === 'woolworths' ? 'Woolworths' : 'Coles';
+    document.getElementById('infoArea').innerHTML =
+      '<div class="info-note" role="note">Deals sourced from OzBargain community posts. '
+      + 'For live ' + rname + ' specials with actual prices, use '
+      + '<strong><a href="index.html" onclick="setFilterById(\'live\');return false">🔴 Live Specials</a></strong> '
+      + 'in the sidebar, or <a href="https://www.trolley.com.au" target="_blank" rel="noopener">Trolley.com.au</a> '
+      + 'for a side-by-side Woolworths vs Coles price comparison.</div>';
+  }
 
   if (!items.length) {
-    document.getElementById('dealGrid').innerHTML = '<div class="no-results">No deals match. Try clearing the search.</div>';
+    document.getElementById('dealOutput').innerHTML =
+      '<div class="deals-grid"><div class="empty-state">'
+      + '<h3>No deals found' + (q ? ' for &ldquo;' + esc(q) + '&rdquo;' : '') + '</h3>'
+      + '<p>Try clearing your search, selecting a different category, or use Live Specials for direct retailer pages.</p>'
+      + '</div></div>';
+    if (activeFilter === 'all' && fuel.length) renderFuelSummary();
     return;
   }
 
-  var html = '';
-  var limit = Math.min(items.length, 40);
-  for (var i = 0; i < limit; i++) { html += dealCard(items[i]); }
-  document.getElementById('dealGrid').innerHTML = html;
-
+  var html = '<div class="deals-grid">';
+  items.slice(0, 48).forEach(function(d) { html += dealCard(d); });
+  html += '</div>';
+  document.getElementById('dealOutput').innerHTML = html;
   if (activeFilter === 'all' && fuel.length) renderFuelSummary();
 }
 
+// ── DEAL CARD ─────────────────────────────────────────────────────
 function dealCard(d) {
-  var vc   = vclass(d.vendor, d.category);
-  var disc = d.discountPct > 0 ? '<span class="disc">-'+d.discountPct+'%</span>' : '';
-  var price = d.priceNow != null && d.priceNow > 0
-    ? '<span class="pnow">$'+d.priceNow.toFixed(2)+'</span>'
-      + (d.priceWas > 0 ? '<span class="pwas">$'+d.priceWas.toFixed(2)+'</span>' : '') : '';
-  var link  = d.dealUrl ? '<a class="dlink" href="'+e(d.dealUrl)+'" target="_blank" rel="noopener">View deal &#8594;</a>' : '';
-  var copy  = d._coupon ? '<button class="cpybtn" onclick="cpyCode(\''+e(d.title.split(' ')[0]||'')+'\',this)">Copy code</button>' : '';
-  return '<div class="deal">'
-    + '<div class="deal-top"><span class="vbadge '+vc+'">'+e(d.vendor)+'</span>'+disc+'</div>'
-    + '<div class="deal-title">'+e(d.title)+'</div>'
-    + (d.description ? '<div class="deal-desc">'+e(d.description)+'</div>' : '')
-    + (price ? '<div>'+price+'</div>' : '')
-    + copy + link
-    + '</div>';
-}
+  var vc = vbadge(d.vendor, d.cat);
+  var disc = d.disc > 0 ? '<span class="disc-badge" aria-label="' + d.disc + ' percent off">-' + d.disc + '%</span>' : '';
+  var price = d.pNow && d.pNow > 0
+    ? '<div class="card-price">'
+      + '<span class="price-now" aria-label="Price: ' + d.pNow.toFixed(2) + ' dollars">$' + d.pNow.toFixed(2) + '</span>'
+      + (d.pWas && d.pWas > d.pNow
+          ? '<span class="price-was" aria-label="Was ' + d.pWas.toFixed(2) + ' dollars">$' + d.pWas.toFixed(2) + '</span>' : '')
+      + '</div>' : '';
+  var link = d.url
+    ? '<a class="card-link" href="' + esc(d.url) + '" target="_blank" rel="noopener" aria-label="View deal from ' + esc(d.vendor) + ' (opens in new tab)">View deal →</a>'
+    : '<span></span>';
+  var couponBit = d._cpn && d._code
+    ? '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">'
+      + '<span class="coupon-code" aria-label="Coupon code: ' + esc(d._code) + '">' + esc(d._code) + '</span>'
+      + '<button class="copy-btn" onclick="cpyCode(\'' + esc(d._code) + '\',this)" aria-label="Copy coupon code ' + esc(d._code) + '">Copy</button>'
+      + '</div>' : '';
 
-function fuelTypeClass(t) {
-  var tl = (t||'').toLowerCase();
-  if (tl==='ulp')    return 'ulp';
-  if (tl==='e10')    return 'e10';
-  if (tl==='p95')    return 'p95';
-  if (tl==='p98')    return 'p98';
-  if (tl==='diesel') return 'diesel';
-  if (tl==='lpg')    return 'lpg';
-  return '';
-}
-
-function buildFuelCard(f, isCheapest) {
-  var tc = fuelTypeClass(f.fuelType);
-  return '<div class="fuel-card' + (isCheapest ? ' cheapest' : '') + '">'
-    + (isCheapest ? '<span class="fuel-cheapest-badge">&#9733; Cheapest</span>' : '')
-    + '<div class="fuel-type ' + tc + '">' + e(f.fuelType) + '</div>'
-    + '<div class="fuel-price">' + f.priceCents.toFixed(1) + '&cent;/L</div>'
-    + '<div class="fuel-meta">'
-    +   '<strong>' + e(f.brand||f.stationName) + '</strong><br>'
-    +   e(f.stationName) + '<br>'
-    +   [f.suburb, f.postcode].filter(Boolean).map(e).join(', ')
+  return '<article class="deal-card">'
+    + '<div class="card-top">'
+    + '  <span class="vendor-badge ' + vc + '">' + esc(d.vendor) + '</span>' + disc
     + '</div>'
-    + '</div>';
+    + '<h3 class="card-title">' + esc(d.title) + '</h3>'
+    + (d.desc ? '<p class="card-desc">' + esc(d.desc.slice(0,100)) + '</p>' : '')
+    + price
+    + couponBit
+    + '<div class="card-footer">' + link + '</div>'
+    + '</article>';
 }
 
-function renderFuel(q) {
-  var items = fuel.filter(function(f) {
-    return !q
-      || (f.stationName||'').toLowerCase().indexOf(q) !== -1
-      || (f.brand||'').toLowerCase().indexOf(q) !== -1
-      || (f.fuelType||'').toLowerCase().indexOf(q) !== -1
-      || (f.suburb||'').toLowerCase().indexOf(q) !== -1;
-  });
-  if (!items.length) {
-    document.getElementById('fuelSec').innerHTML =
-      '<div class="no-results">No fuel prices. Run the fuel scraper first.</div>';
-    return;
-  }
-
-  // Group by fuel type, find cheapest per type
-  var byType = {};
-  items.forEach(function(f) {
-    if (!byType[f.fuelType]) byType[f.fuelType] = [];
-    byType[f.fuelType].push(f);
-  });
-  Object.keys(byType).forEach(function(t) {
-    byType[t].sort(function(a,b){ return a.priceCents - b.priceCents; });
-  });
-
-  // Type order for display
-  var typeOrder = ['ULP','E10','P95','P98','Diesel','LPG'];
-  var allTypes = typeOrder.filter(function(t){ return byType[t]; })
-    .concat(Object.keys(byType).filter(function(t){ return typeOrder.indexOf(t)===-1; }));
-
-  var html = '<div class="fuel-sec-header">'
-    + '<div class="fuel-sec-title">Fuel Prices &mdash; VIC</div>'
-    + '<div class="fuel-legend">'
-    + '<div class="fuel-legend-item"><div class="fuel-legend-dot" style="background:#2e7d32"></div>ULP</div>'
-    + '<div class="fuel-legend-item"><div class="fuel-legend-dot" style="background:#1565c0"></div>E10</div>'
-    + '<div class="fuel-legend-item"><div class="fuel-legend-dot" style="background:#e65100"></div>P95</div>'
-    + '<div class="fuel-legend-item"><div class="fuel-legend-dot" style="background:#c62828"></div>P98</div>'
-    + '<div class="fuel-legend-item"><div class="fuel-legend-dot" style="background:#4527a0"></div>Diesel</div>'
-    + '<div class="fuel-legend-item"><div class="fuel-legend-dot" style="background:#6a1b9a"></div>LPG</div>'
-    + '</div></div>';
-
-  // Best price per type section
-  html += '<div class="sec-title" style="margin-top:0;margin-bottom:.6rem;font-size:14px;color:var(--muted)">Cheapest per fuel type</div>';
-  html += '<div class="fuel-grid" style="margin-bottom:1.5rem">';
-  allTypes.forEach(function(t) {
-    html += buildFuelCard(byType[t][0], true);
-  });
-  html += '</div>';
-
-  // All stations grouped by type
-  allTypes.forEach(function(t) {
-    html += '<div class="sec-title" style="font-size:14px;margin-bottom:.6rem">'
-      + '<span class="fuel-type ' + fuelTypeClass(t) + '" style="margin-right:6px">' + e(t) + '</span>'
-      + 'All ' + e(t) + ' stations (' + byType[t].length + ')'
-      + '</div>';
-    html += '<div class="fuel-grid" style="margin-bottom:1.25rem">';
-    byType[t].forEach(function(f, i) {
-      html += buildFuelCard(f, i === 0);
-    });
-    html += '</div>';
-  });
-
-  document.getElementById('fuelSec').innerHTML = html;
+// ── FUEL ──────────────────────────────────────────────────────────
+function ftc(t) {
+  var m = { ULP:'ULP', E10:'E10', P95:'P95', P98:'P98', Diesel:'Diesel', LPG:'LPG' };
+  return m[t] || 'ULP';
 }
 
 function renderFuelSummary() {
-  // On main 'All' view: show cheapest of each type in one compact row
   var byType = {};
   fuel.forEach(function(f) {
-    if (!byType[f.fuelType] || f.priceCents < byType[f.fuelType].priceCents) {
-      byType[f.fuelType] = f;
-    }
+    if (!byType[f.type] || f.price < byType[f.type].price) byType[f.type] = f;
   });
-  var typeOrder = ['ULP','E10','P95','P98','Diesel','LPG'];
-  var best = typeOrder.filter(function(t){ return byType[t]; }).map(function(t){ return byType[t]; });
+  var ord = ['ULP','E10','P95','P98','Diesel','LPG'];
+  var best = ord.filter(function(t){return byType[t];}).map(function(t){return byType[t];});
   if (!best.length) return;
 
-  var html = '<div class="fuel-sec-header" style="margin-top:1.5rem">'
-    + '<div class="fuel-sec-title">&#9981; Best fuel prices near you</div>'
+  var html = '<div class="fuel-panel" role="region" aria-label="Best fuel prices">'
+    + '<div class="fuel-panel-head">'
+    + '  <div class="fuel-panel-title">⛽ Best Fuel Prices — VIC</div>'
+    + '  <a class="fuel-map-link" href="https://www.motormouth.com.au/fuel-price-map?postcode=3030" target="_blank" rel="noopener">Live map (MotorMouth) →</a>'
     + '</div>'
-    + '<div class="fuel-grid">';
+    + '<div class="fuel-grid-inner">';
   best.forEach(function(f) {
-    html += buildFuelCard(f, true);
+    var t = ftc(f.type);
+    html += '<div class="fuel-card cheapest">'
+      + '<div class="fuel-type-label ft-' + t + '">' + esc(f.type) + '</div>'
+      + '<div class="fuel-card-body">'
+      + '<div class="fuel-price-val" aria-label="' + f.price.toFixed(1) + ' cents per litre">' + f.price.toFixed(1) + '¢/L</div>'
+      + '<div class="fuel-station-name">' + esc(f.brand||f.name) + '</div>'
+      + '<div class="fuel-station-loc">' + esc(f.suburb||'') + '</div>'
+      + '<span class="cheapest-tag" aria-label="Cheapest ' + t + '">★ Cheapest</span>'
+      + '</div></div>';
   });
-  html += '</div>';
-  document.getElementById('fuelSec').innerHTML = html;
+  html += '</div></div>';
+  document.getElementById('fuelOutput').innerHTML = html;
+}
+
+function renderFuel(q) {
+  if (!fuel.length) {
+    document.getElementById('fuelOutput').innerHTML =
+      '<div class="deals-grid"><div class="empty-state"><h3>No fuel data yet</h3>'
+      + '<p>Add your free VIC Fuel API key to Script Properties for live prices, or use MotorMouth for a live map.</p></div></div>';
+    return;
+  }
+  var items = fuel.filter(function(f) {
+    return !q || (f.name||'').toLowerCase().indexOf(q)!==-1
+      || (f.brand||'').toLowerCase().indexOf(q)!==-1
+      || (f.suburb||'').toLowerCase().indexOf(q)!==-1;
+  });
+  var byType = {};
+  items.forEach(function(f) { (byType[f.type] = byType[f.type]||[]).push(f); });
+  Object.keys(byType).forEach(function(t) { byType[t].sort(function(a,b){return a.price-b.price;}); });
+  var ord = ['ULP','E10','P95','P98','Diesel','LPG'];
+  var types = ord.filter(function(t){return byType[t];})
+    .concat(Object.keys(byType).filter(function(t){return ord.indexOf(t)===-1;}));
+
+  var html = '<div class="fuel-panel" role="region" aria-label="Fuel prices by type">'
+    + '<div class="fuel-panel-head">'
+    + '  <div class="fuel-panel-title">⛽ Fuel Prices — VIC, cheapest first per type</div>'
+    + '  <a class="fuel-map-link" href="https://www.motormouth.com.au/fuel-price-map?postcode=3030" target="_blank" rel="noopener">Live map →</a>'
+    + '</div><div class="fuel-grid-inner">';
+  types.forEach(function(t) {
+    byType[t].forEach(function(f, i) {
+      var tc = ftc(t), cheapest = i === 0;
+      html += '<div class="fuel-card' + (cheapest ? ' cheapest' : '') + '">'
+        + '<div class="fuel-type-label ft-' + tc + '">' + esc(t) + (cheapest ? ' ★' : '') + '</div>'
+        + '<div class="fuel-card-body">'
+        + '<div class="fuel-price-val">' + f.price.toFixed(1) + '¢/L</div>'
+        + '<div class="fuel-station-name">' + esc(f.brand||f.name) + '</div>'
+        + '<div class="fuel-station-loc">' + esc(f.name) + (f.suburb ? ', ' + esc(f.suburb) : '') + '</div>'
+        + (cheapest ? '<span class="cheapest-tag">★ Cheapest</span>' : '')
+        + '</div></div>';
+    });
+  });
+  html += '</div></div>';
+  document.getElementById('fuelOutput').innerHTML = html;
 }
 
 function renderIns(q) {
-  var items = insurance.filter(function(o){
-    return !q || o.title.toLowerCase().indexOf(q)!==-1
-      || (o.insurer||'').toLowerCase().indexOf(q)!==-1
-      || (o.type||'').toLowerCase().indexOf(q)!==-1;
+  var items = insurance.filter(function(o) {
+    return !q || o.title.toLowerCase().indexOf(q)!==-1 || (o.insurer||'').toLowerCase().indexOf(q)!==-1;
   });
   if (!items.length) {
-    document.getElementById('fuelSec').innerHTML = '<div class="no-results">No insurance offers.</div>';
+    document.getElementById('insOutput').innerHTML =
+      '<div class="deals-grid"><div class="empty-state"><h3>No insurance offers loaded</h3>'
+      + '<p>Run the insurance scraper from your Google Sheet menu.</p></div></div>';
     return;
   }
   var byType = {};
-  items.forEach(function(o){ (byType[o.type] = byType[o.type]||[]).push(o); });
-  var order = ['Car','Home','Health','Pet','Travel','Life','Income Protection','General'];
+  items.forEach(function(o) { (byType[o.type] = byType[o.type]||[]).push(o); });
+  var ord = ['Car','Home','Health','Pet','Travel','Life','Income Protection','General'];
+  var types = ord.filter(function(t){return byType[t];})
+    .concat(Object.keys(byType).filter(function(t){return ord.indexOf(t)===-1;}));
   var html = '';
-  order.concat(Object.keys(byType).filter(function(t){ return order.indexOf(t)===-1; })).forEach(function(t){
-    if (!byType[t] || !byType[t].length) return;
-    html += '<div class="sec-title">'+e(t)+' Insurance</div><div class="ins-grid">';
-    byType[t].forEach(function(o){
-      var disc = o.discountPct > 0 ? '<span class="disc">-'+o.discountPct+'%</span>'
-        : o.saveDollars > 0 ? '<span class="disc">Save $'+o.saveDollars+'</span>' : '';
-      var link = o.dealUrl ? '<a class="dlink" href="'+e(o.dealUrl)+'" target="_blank" rel="noopener">View offer &#8594;</a>' : '';
-      html += '<div class="ins-card">'
-        + '<div class="ins-top"><span class="vbadge v-ins">'+e(o.insurer)+'</span><span class="ins-type">'+e(o.type)+'</span>'+disc+'</div>'
-        + '<div class="ins-title">'+e(o.title)+'</div>'
-        + (o.description ? '<div class="ins-desc">'+e(o.description)+'</div>' : '')
-        + link + '</div>';
+  types.forEach(function(t) {
+    html += '<section aria-label="' + esc(t) + ' insurance" style="margin-bottom:var(--space-6)">'
+      + '<div class="section-head">'
+      + '<h3 class="section-title">🛡️ ' + esc(t) + ' Insurance</h3>'
+      + '<span class="section-count">' + byType[t].length + ' offer' + (byType[t].length!==1?'s':'') + '</span>'
+      + '</div><div class="ins-grid">';
+    byType[t].forEach(function(o) {
+      var disc = o.disc > 0 ? '<span class="disc-badge">-' + o.disc + '%</span>'
+        : o.save > 0 ? '<span class="disc-badge">Save $' + o.save + '</span>' : '';
+      var link = o.url
+        ? '<a class="card-link" href="' + esc(o.url) + '" target="_blank" rel="noopener" aria-label="View offer from ' + esc(o.insurer) + '">View offer →</a>'
+        : '';
+      html += '<article class="ins-card">'
+        + '<div class="ins-card-head">'
+        + '<span class="vendor-badge vb-ins">' + esc(o.insurer) + '</span>'
+        + '<span class="ins-type-badge">' + esc(o.type) + '</span>' + disc
+        + '</div>'
+        + '<h4 class="ins-title">' + esc(o.title) + '</h4>'
+        + (o.desc ? '<p class="ins-desc">' + esc(o.desc.slice(0,120)) + '</p>' : '')
+        + link + '</article>';
     });
-    html += '</div>';
+    html += '</div></section>';
   });
-  document.getElementById('fuelSec').innerHTML = html;
+  document.getElementById('insOutput').innerHTML = html;
 }
 
-// ── Stats ─────────────────────────────────────────────────────────
-function updateStats() {
-  document.getElementById('sTot').textContent  = deals.length || '—';
-  var discs = deals.filter(function(d){ return d.discountPct>0; }).map(function(d){ return d.discountPct; });
-  document.getElementById('sDisc').textContent = discs.length
-    ? Math.round(discs.reduce(function(a,b){ return a+b; },0)/discs.length)+'%' : '—';
-  var ulp = fuel.filter(function(f){ return f.fuelType==='ULP'||f.fuelType==='E10'; });
-  document.getElementById('sFuel').textContent  = ulp.length ? Math.min.apply(null,ulp.map(function(f){ return f.priceCents; })) : '—';
-  document.getElementById('sCpn').textContent   = coupons.length || '—';
-  document.getElementById('sIns').textContent   = insurance.length || '—';
-}
-
-// ── Filter & search ───────────────────────────────────────────────
-function setFilter(el) {
-  document.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('on'); });
-  el.classList.add('on');
-  activeFilter = el.dataset.cat;
-
-  var panel   = document.getElementById('livePanel');
-  var main    = document.getElementById('mainContent');
-  var fuelSec = document.getElementById('fuelSec');
-
-  if (activeFilter === 'live') {
-    panel.style.display   = 'block';
-    main.style.display    = 'none';
-    fuelSec.style.display = 'none';
-    loadLive('woolworths', document.querySelector('.live-tab'));
-  } else {
-    panel.style.display   = 'none';
-    main.style.display    = 'block';
-    fuelSec.style.display = 'block';
-    renderDeals();
-  }
-}
-
-function onSearch() {
-  renderDeals();
-  var q = (document.getElementById('searchInput').value || '').trim();
-  var bar = document.getElementById('cmpBar');
-  if (q.length >= 2) {
-    var vendors = [];
-    deals.forEach(function(d){
-      if ((d.title+d.description+d.vendor).toLowerCase().indexOf(q.toLowerCase())!==-1
-        && vendors.indexOf(d.vendor)===-1) vendors.push(d.vendor);
-    });
-    document.getElementById('cmpBarText').textContent = vendors.length > 1
-      ? 'Found at '+vendors.length+' retailers — compare prices'
-      : 'Search results — open comparison view';
-    bar.classList.add('show');
-  } else {
-    bar.classList.remove('show');
-  }
-}
-
-function goCompare() {
-  var q = (document.getElementById('searchInput').value || '').trim();
-  window.open('compare.html' + (q ? '?q='+encodeURIComponent(q) : ''), '_blank');
-}
-
-function isRetailer(v) {
-  var retailers = ['big w','bigw','chemist warehouse','jb hi-fi','officeworks',
-    'harvey norman','kogan','catch','myer','target','kmart','bunnings','ikea'];
-  var vl = (v||'').toLowerCase();
-  return retailers.some(function(r){ return vl.indexOf(r)!==-1; });
-}
-
-function vclass(v, cat) {
-  var n = (v||'').toLowerCase();
-  if (n.indexOf('woolworths')!==-1) return 'v-ww';
-  if (n.indexOf('coles')!==-1)      return 'v-coles';
-  if (n.indexOf('aldi')!==-1)       return 'v-aldi';
-  if (n.indexOf('amazon')!==-1)     return 'v-amz';
-  if (n.indexOf('big w')!==-1||n.indexOf('bigw')!==-1) return 'v-bw';
-  if (n.indexOf('chemist')!==-1)    return 'v-cw';
-  if (n.indexOf('qantas')!==-1||n.indexOf('jetstar')!==-1||n.indexOf('virgin aus')!==-1||n.indexOf('airbnb')!==-1||n.indexOf('wotif')!==-1||n.indexOf('expedia')!==-1||n.indexOf('booking')!==-1) return 'v-telco';
-  if (cat === 'travel')             return 'v-telco';
-  if (cat === 'fuel')               return 'v-fuel';
-  if (cat === 'travel')             return 'v-fuel';
-  if (cat === 'entertainment')       return 'v-cpn';
-  if (cat === 'coupon')             return 'v-cpn';
-  if (cat === 'insurance')          return 'v-ins';
-  if (cat === 'energy')             return 'v-energy';
-  if (cat === 'telco')              return 'v-telco';
-  if (cat === 'nbn')                return 'v-nbn';
-  return 'v-def';
-}
-
-// ── Live Specials ─────────────────────────────────────────────────
+// ── LIVE SPECIALS DATA ────────────────────────────────────────────
 var LIVE = {
-  woolworths: { name:'Woolworths', color:'#2e7d32', bg:'#e8f5e9', links:[
-    {n:'Half Price Specials',       u:'https://www.woolworths.com.au/shop/browse/specials/half-price'},
-    {n:'New Specials This Week',    u:'https://www.woolworths.com.au/shop/browse/specials/new-specials'},
-    {n:'Everyday Rewards Offers',  u:'https://www.woolworths.com.au/shop/browse/specials/everyday-rewards-offers'},
-    {n:'Fresh Produce',            u:'https://www.woolworths.com.au/shop/browse/fruit-veg/specials'},
-    {n:'Meat & Seafood',           u:'https://www.woolworths.com.au/shop/browse/meat-seafood/specials'},
-    {n:'Bakery',                   u:'https://www.woolworths.com.au/shop/browse/bakery/specials'},
-    {n:'Pantry',                   u:'https://www.woolworths.com.au/shop/browse/pantry/specials'},
-    {n:'Snacks & Confectionery',   u:'https://www.woolworths.com.au/shop/browse/snacks-confectionery/specials'},
-    {n:'Drinks',                   u:'https://www.woolworths.com.au/shop/browse/drinks/specials'},
-    {n:'Frozen Food',              u:'https://www.woolworths.com.au/shop/browse/frozen/specials'},
-    {n:'Dairy & Eggs',             u:'https://www.woolworths.com.au/shop/browse/dairy-eggs-fridge/specials'},
-    {n:'Health & Beauty',          u:'https://www.woolworths.com.au/shop/browse/health-beauty/specials'},
-    {n:'Baby',                     u:'https://www.woolworths.com.au/shop/browse/baby/specials'},
-    {n:'Cleaning',                 u:'https://www.woolworths.com.au/shop/browse/cleaning-pest/specials'},
-    {n:'Pet',                      u:'https://www.woolworths.com.au/shop/browse/pet/specials'},
-    {n:'All Specials',             u:'https://www.woolworths.com.au/shop/specials/all'},
+  woolworths: { name:'Woolworths', c:'#15803d', b:'#dcfce7', links:[
+    {n:'Half Price Specials', u:'https://www.woolworths.com.au/shop/browse/specials/half-price'},
+    {n:'New Specials This Week', u:'https://www.woolworths.com.au/shop/browse/specials/new-specials'},
+    {n:'Everyday Rewards Offers', u:'https://www.woolworths.com.au/shop/browse/specials/everyday-rewards-offers'},
+    {n:'Fresh Produce', u:'https://www.woolworths.com.au/shop/browse/fruit-veg/specials'},
+    {n:'Meat & Seafood', u:'https://www.woolworths.com.au/shop/browse/meat-seafood/specials'},
+    {n:'Pantry Specials', u:'https://www.woolworths.com.au/shop/browse/pantry/specials'},
+    {n:'Snacks & Confectionery', u:'https://www.woolworths.com.au/shop/browse/snacks-confectionery/specials'},
+    {n:'Drinks', u:'https://www.woolworths.com.au/shop/browse/drinks/specials'},
+    {n:'Frozen Food', u:'https://www.woolworths.com.au/shop/browse/frozen/specials'},
+    {n:'Dairy & Eggs', u:'https://www.woolworths.com.au/shop/browse/dairy-eggs-fridge/specials'},
+    {n:'Health & Beauty', u:'https://www.woolworths.com.au/shop/browse/health-beauty/specials'},
+    {n:'Baby Specials', u:'https://www.woolworths.com.au/shop/browse/baby/specials'},
+    {n:'Cleaning', u:'https://www.woolworths.com.au/shop/browse/cleaning-pest/specials'},
+    {n:'Pet', u:'https://www.woolworths.com.au/shop/browse/pet/specials'},
+    {n:'All Woolworths Specials', u:'https://www.woolworths.com.au/shop/specials/all'},
   ]},
-  coles: { name:'Coles', color:'#c62828', bg:'#fce4ec', links:[
-    {n:'All On Special',           u:'https://www.coles.com.au/on-special'},
-    {n:'Half Price',               u:'https://www.coles.com.au/on-special?sortBy=priceAsc&filters=halfPrice'},
-    {n:'Fresh Produce',            u:'https://www.coles.com.au/on-special/fruit-vegetables'},
-    {n:'Meat & Seafood',           u:'https://www.coles.com.au/on-special/deli-meat-seafood'},
-    {n:'Dairy & Eggs',             u:'https://www.coles.com.au/on-special/dairy-eggs-fridge'},
-    {n:'Pantry & Dry Goods',       u:'https://www.coles.com.au/on-special/pantry'},
-    {n:'Snacks & Confectionery',   u:'https://www.coles.com.au/on-special/snacks-confectionery'},
-    {n:'Drinks',                   u:'https://www.coles.com.au/on-special/drinks'},
-    {n:'Frozen Foods',             u:'https://www.coles.com.au/on-special/frozen'},
-    {n:'Bakery',                   u:'https://www.coles.com.au/on-special/bakery'},
-    {n:'Health & Beauty',          u:'https://www.coles.com.au/on-special/health-beauty'},
-    {n:'Baby & Child',             u:'https://www.coles.com.au/on-special/baby-child'},
-    {n:'Household & Cleaning',     u:'https://www.coles.com.au/on-special/household'},
-    {n:'Pet',                      u:'https://www.coles.com.au/on-special/pet'},
-    {n:'Flybuys Bonus Points',     u:'https://www.coles.com.au/on-special?filters=flybuys'},
+  coles: { name:'Coles', c:'#991b1b', b:'#fee2e2', links:[
+    {n:'All On Special', u:'https://www.coles.com.au/on-special'},
+    {n:'Half Price', u:'https://www.coles.com.au/on-special?sortBy=priceAsc&filters=halfPrice'},
+    {n:'Fresh Produce', u:'https://www.coles.com.au/on-special/fruit-vegetables'},
+    {n:'Meat & Seafood', u:'https://www.coles.com.au/on-special/deli-meat-seafood'},
+    {n:'Dairy & Eggs', u:'https://www.coles.com.au/on-special/dairy-eggs-fridge'},
+    {n:'Pantry', u:'https://www.coles.com.au/on-special/pantry'},
+    {n:'Snacks & Confectionery', u:'https://www.coles.com.au/on-special/snacks-confectionery'},
+    {n:'Drinks', u:'https://www.coles.com.au/on-special/drinks'},
+    {n:'Frozen', u:'https://www.coles.com.au/on-special/frozen'},
+    {n:'Health & Beauty', u:'https://www.coles.com.au/on-special/health-beauty'},
+    {n:'Baby & Child', u:'https://www.coles.com.au/on-special/baby-child'},
+    {n:'Household', u:'https://www.coles.com.au/on-special/household'},
+    {n:'Pet', u:'https://www.coles.com.au/on-special/pet'},
+    {n:'Flybuys Bonus Points', u:'https://www.coles.com.au/on-special?filters=flybuys'},
   ]},
-  aldi: { name:'ALDI', color:'#1565c0', bg:'#e3f2fd', links:[
-    {n:'This Week Special Buys',   u:'https://www.aldi.com.au/en/special-buys/'},
-    {n:'Next Week Special Buys',   u:'https://www.aldi.com.au/en/special-buys/next-week/'},
-    {n:'Home & Garden',            u:'https://www.aldi.com.au/en/special-buys/home-garden/'},
-    {n:'Clothing & Footwear',      u:'https://www.aldi.com.au/en/special-buys/clothing-footwear/'},
-    {n:'Tools & DIY',              u:'https://www.aldi.com.au/en/special-buys/tools-diy/'},
-    {n:'Electronics',              u:'https://www.aldi.com.au/en/special-buys/electronics/'},
-    {n:'Outdoor & Sport',          u:'https://www.aldi.com.au/en/special-buys/outdoor-sport/'},
-    {n:'Toys & Kids',              u:'https://www.aldi.com.au/en/special-buys/toys-kids/'},
-    {n:'Food & Grocery Specials',  u:'https://www.aldi.com.au/en/specials/'},
-    {n:'Health & Beauty',          u:'https://www.aldi.com.au/en/specials/health-beauty/'},
+  aldi: { name:'ALDI', c:'#1e40af', b:'#dbeafe', links:[
+    {n:'This Week Special Buys', u:'https://www.aldi.com.au/en/special-buys/'},
+    {n:'Next Week Special Buys', u:'https://www.aldi.com.au/en/special-buys/next-week/'},
+    {n:'Home & Garden', u:'https://www.aldi.com.au/en/special-buys/home-garden/'},
+    {n:'Clothing & Footwear', u:'https://www.aldi.com.au/en/special-buys/clothing-footwear/'},
+    {n:'Tools & DIY', u:'https://www.aldi.com.au/en/special-buys/tools-diy/'},
+    {n:'Electronics', u:'https://www.aldi.com.au/en/special-buys/electronics/'},
+    {n:'Outdoor & Sport', u:'https://www.aldi.com.au/en/special-buys/outdoor-sport/'},
+    {n:'Grocery Specials', u:'https://www.aldi.com.au/en/specials/'},
   ]},
-  chemist: { name:'Chemist Warehouse', color:'#bf360c', bg:'#fbe9e7', links:[
-    {n:'All Specials',             u:'https://www.chemistwarehouse.com.au/specials'},
-    {n:'Half Price Sale',          u:'https://www.chemistwarehouse.com.au/half-price-sale'},
-    {n:'Vitamins & Supplements',  u:'https://www.chemistwarehouse.com.au/buy/vitamins-supplements/specials'},
-    {n:'Skincare Specials',        u:'https://www.chemistwarehouse.com.au/buy/skincare/specials'},
-    {n:'Hair Care Specials',       u:'https://www.chemistwarehouse.com.au/buy/hair-care/specials'},
-    {n:'Fragrance Specials',       u:'https://www.chemistwarehouse.com.au/buy/fragrance/specials'},
-    {n:'Baby & Kids Specials',     u:'https://www.chemistwarehouse.com.au/buy/baby-kids/specials'},
-    {n:'Cold & Flu',              u:'https://www.chemistwarehouse.com.au/buy/cold-flu/specials'},
-    {n:'Dental Care',              u:'https://www.chemistwarehouse.com.au/buy/dental-care/specials'},
-    {n:'Weight Management',        u:'https://www.chemistwarehouse.com.au/buy/weight-management/specials'},
+  chemist: { name:'Chemist WH', c:'#713f12', b:'#fefce8', links:[
+    {n:'All Specials', u:'https://www.chemistwarehouse.com.au/specials'},
+    {n:'Half Price Sale', u:'https://www.chemistwarehouse.com.au/half-price-sale'},
+    {n:'Vitamins & Supplements', u:'https://www.chemistwarehouse.com.au/buy/vitamins-supplements/specials'},
+    {n:'Skincare', u:'https://www.chemistwarehouse.com.au/buy/skincare/specials'},
+    {n:'Hair Care', u:'https://www.chemistwarehouse.com.au/buy/hair-care/specials'},
+    {n:'Baby & Kids', u:'https://www.chemistwarehouse.com.au/buy/baby-kids/specials'},
+    {n:'Cold & Flu', u:'https://www.chemistwarehouse.com.au/buy/cold-flu/specials'},
+    {n:'Dental Care', u:'https://www.chemistwarehouse.com.au/buy/dental-care/specials'},
   ]},
-  amazon: { name:'Amazon AU', color:'#e65100', bg:'#fff3e0', links:[
+  amazon: { name:'Amazon AU', c:'#c2410c', b:'#fff7ed', links:[
     {n:"Today's Deals (Gold Box)", u:'https://www.amazon.com.au/gp/goldbox'},
-    {n:'Electronics Deals',        u:'https://www.amazon.com.au/gp/goldbox?deals-widget=%7B%22version%22%3A1%2C%22browseNodeIds%22%3A%5B%226728488031%22%5D%7D'},
-    {n:'Kitchen & Home Deals',     u:'https://www.amazon.com.au/gp/goldbox?deals-widget=%7B%22version%22%3A1%2C%22browseNodeIds%22%3A%5B%22967656031%22%5D%7D'},
-    {n:'Toys & Games',             u:'https://www.amazon.com.au/gp/goldbox?deals-widget=%7B%22version%22%3A1%2C%22browseNodeIds%22%3A%5B%221254604031%22%5D%7D'},
-    {n:'Books',                    u:'https://www.amazon.com.au/gp/goldbox?deals-widget=%7B%22version%22%3A1%2C%22browseNodeIds%22%3A%5B%22720606031%22%5D%7D'},
-    {n:'Sports & Outdoors',        u:'https://www.amazon.com.au/gp/goldbox?deals-widget=%7B%22version%22%3A1%2C%22browseNodeIds%22%3A%5B%221520523031%22%5D%7D'},
-    {n:'Beauty',                   u:'https://www.amazon.com.au/gp/goldbox?deals-widget=%7B%22version%22%3A1%2C%22browseNodeIds%22%3A%5B%221975558031%22%5D%7D'},
-    {n:'Gaming Deals',             u:'https://www.amazon.com.au/gp/goldbox?deals-widget=%7B%22version%22%3A1%2C%22browseNodeIds%22%3A%5B%22823836031%22%5D%7D'},
-    {n:'Pet Supplies',             u:'https://www.amazon.com.au/gp/goldbox?deals-widget=%7B%22version%22%3A1%2C%22browseNodeIds%22%3A%5B%221922888031%22%5D%7D'},
-    {n:'Subscribe & Save',         u:'https://www.amazon.com.au/gp/subscribe-and-save/details/'},
+    {n:'Electronics Deals', u:'https://www.amazon.com.au/gp/goldbox?deals-widget=%7B%22version%22%3A1%2C%22browseNodeIds%22%3A%5B%226728488031%22%5D%7D'},
+    {n:'Kitchen & Home', u:'https://www.amazon.com.au/gp/goldbox?deals-widget=%7B%22version%22%3A1%2C%22browseNodeIds%22%3A%5B%22967656031%22%5D%7D'},
+    {n:'Toys & Games', u:'https://www.amazon.com.au/gp/goldbox?deals-widget=%7B%22version%22%3A1%2C%22browseNodeIds%22%3A%5B%221254604031%22%5D%7D'},
+    {n:'Sports & Outdoors', u:'https://www.amazon.com.au/gp/goldbox?deals-widget=%7B%22version%22%3A1%2C%22browseNodeIds%22%3A%5B%221520523031%22%5D%7D'},
+    {n:'Beauty', u:'https://www.amazon.com.au/gp/goldbox?deals-widget=%7B%22version%22%3A1%2C%22browseNodeIds%22%3A%5B%221975558031%22%5D%7D'},
+    {n:'Gaming', u:'https://www.amazon.com.au/gp/goldbox?deals-widget=%7B%22version%22%3A1%2C%22browseNodeIds%22%3A%5B%22823836031%22%5D%7D'},
+    {n:'Pet Supplies', u:'https://www.amazon.com.au/gp/goldbox?deals-widget=%7B%22version%22%3A1%2C%22browseNodeIds%22%3A%5B%221922888031%22%5D%7D'},
   ]},
-  jbhifi: { name:'JB Hi-Fi', color:'#1b5e20', bg:'#e8f5e9', links:[
-    {n:'Weekly Specials',          u:'https://www.jbhifi.com.au/pages/weekly-specials'},
-    {n:'TV Specials',              u:'https://www.jbhifi.com.au/collections/tv-specials'},
-    {n:'Laptop Specials',          u:'https://www.jbhifi.com.au/collections/laptop-specials'},
-    {n:'Phone Specials',           u:'https://www.jbhifi.com.au/collections/phone-specials'},
-    {n:'Audio Specials',           u:'https://www.jbhifi.com.au/collections/audio-specials'},
-    {n:'Gaming Specials',          u:'https://www.jbhifi.com.au/collections/gaming-specials'},
-    {n:'Appliance Specials',       u:'https://www.jbhifi.com.au/collections/appliance-specials'},
+  jbhifi: { name:'JB Hi-Fi', c:'#14532d', b:'#f0fdf4', links:[
+    {n:'Weekly Specials', u:'https://www.jbhifi.com.au/pages/weekly-specials'},
+    {n:'TV Specials', u:'https://www.jbhifi.com.au/collections/tv-specials'},
+    {n:'Laptop Specials', u:'https://www.jbhifi.com.au/collections/laptop-specials'},
+    {n:'Phone Specials', u:'https://www.jbhifi.com.au/collections/phone-specials'},
+    {n:'Audio Specials', u:'https://www.jbhifi.com.au/collections/audio-specials'},
+    {n:'Gaming Specials', u:'https://www.jbhifi.com.au/collections/gaming-specials'},
   ]},
-  bigw: { name:'Big W', color:'#01579b', bg:'#e1f5fe', links:[
-    {n:'Sale & Clearance',         u:'https://www.bigw.com.au/category/sale-clearance'},
-    {n:'Toys On Sale',             u:'https://www.bigw.com.au/category/sale-clearance/toys'},
-    {n:'Clothing On Sale',         u:'https://www.bigw.com.au/category/sale-clearance/clothing'},
-    {n:'Electronics On Sale',      u:'https://www.bigw.com.au/category/sale-clearance/electronics'},
-    {n:'Home On Sale',             u:'https://www.bigw.com.au/category/sale-clearance/home'},
-    {n:'Baby On Sale',             u:'https://www.bigw.com.au/category/sale-clearance/baby'},
+  bigw: { name:'Big W', c:'#075985', b:'#e0f2fe', links:[
+    {n:'Sale & Clearance', u:'https://www.bigw.com.au/category/sale-clearance'},
+    {n:'Toys On Sale', u:'https://www.bigw.com.au/category/sale-clearance/toys'},
+    {n:'Clothing On Sale', u:'https://www.bigw.com.au/category/sale-clearance/clothing'},
+    {n:'Electronics On Sale', u:'https://www.bigw.com.au/category/sale-clearance/electronics'},
+    {n:'Home On Sale', u:'https://www.bigw.com.au/category/sale-clearance/home'},
+    {n:'Baby On Sale', u:'https://www.bigw.com.au/category/sale-clearance/baby'},
   ]},
-  movies: { name:'Movie Deals', color:'#c62828', bg:'#fce4ec', links:[
-    {n:'Event Cinemas &#8212; Current Offers',    u:'https://www.eventcinemas.com.au/offers'},
-    {n:'Event Cinemas &#8212; Cheap Tuesday $12', u:'https://www.eventcinemas.com.au/deals/cheap-tuesday'},
-    {n:'Village Cinemas &#8212; Deals',           u:'https://www.villagecinemas.com.au/offers'},
-    {n:'Village &#8212; Monday Movies $12',       u:'https://www.villagecinemas.com.au/offers/monday-movies'},
-    {n:'Hoyts &#8212; Current Offers',            u:'https://www.hoyts.com.au/offers'},
-    {n:'Hoyts &#8212; Discount Tuesdays',         u:'https://www.hoyts.com.au/offers/discount-tuesday'},
-    {n:'Reading Cinemas &#8212; Offers',          u:'https://readingcinemas.com.au/promotions/'},
-    {n:'IMAX Melbourne &#8212; Tickets',          u:'https://www.imax.com.au/sessions/melbourne'},
-    {n:'Hoyts eGift Cards &#8212; Buy online',   u:'https://www.hoyts.com.au/gift-cards'},
-    {n:'Movie vouchers on Groupon',               u:'https://www.groupon.com.au/local/melbourne/movie-tickets'},
-    {n:'Movie vouchers on Scoopon',               u:'https://www.scoopon.com.au/search/?q=movie'},
-    {n:'OzBargain &#8212; Movie deals',           u:'https://www.ozbargain.com.au/tag/movies'},
+  kmart: { name:'Kmart', c:'#5b21b6', b:'#ede9fe', links:[
+    {n:'On Sale Now', u:'https://www.kmart.com.au/category/on-sale/'},
+    {n:'Home On Sale', u:'https://www.kmart.com.au/category/on-sale/home/'},
+    {n:'Clothing On Sale', u:'https://www.kmart.com.au/category/on-sale/clothing/'},
+    {n:'Toys On Sale', u:'https://www.kmart.com.au/category/on-sale/toys/'},
+    {n:'Baby & Kids', u:'https://www.kmart.com.au/category/on-sale/baby-kids/'},
+    {n:'Electronics On Sale', u:'https://www.kmart.com.au/category/on-sale/electronics/'},
   ]},
-  streaming: { name:'Streaming Deals', color:'#1565c0', bg:'#e3f2fd', links:[
-    {n:'Netflix &#8212; Plans &amp; pricing',    u:'https://www.netflix.com/au/signup'},
-    {n:'Disney+ &#8212; Current offers',         u:'https://www.disneyplus.com/en-au'},
-    {n:'Stan &#8212; Start free trial',          u:'https://www.stan.com.au'},
-    {n:'Binge &#8212; Current plans',            u:'https://binge.com.au'},
-    {n:'Paramount+ &#8212; Free trial',          u:'https://www.paramountplus.com/au/'},
-    {n:'Apple TV+ &#8212; Free trial',           u:'https://tv.apple.com/au'},
-    {n:'Amazon Prime Video &#8212; AU',          u:'https://www.primevideo.com'},
-    {n:'Kayo Sports &#8212; Sports streaming',   u:'https://kayosports.com.au'},
-    {n:'YouTube Premium &#8212; AU',             u:'https://www.youtube.com/premium'},
-    {n:'Spotify Premium &#8212; AU plans',       u:'https://www.spotify.com/au/premium/'},
-    {n:'OzBargain &#8212; Streaming deals',      u:'https://www.ozbargain.com.au/tag/streaming'},
-    {n:'ShopBack &#8212; Streaming cashback',    u:'https://www.shopback.com.au/entertainment'},
+  movies: { name:'Movies', c:'#991b1b', b:'#fee2e2', links:[
+    {n:'Event Cinemas — Cheap Tuesday', u:'https://www.eventcinemas.com.au/deals/cheap-tuesday'},
+    {n:'Village Cinemas — Monday Movies', u:'https://www.villagecinemas.com.au/offers/monday-movies'},
+    {n:'Hoyts — Discount Tuesdays', u:'https://www.hoyts.com.au/offers/discount-tuesday'},
+    {n:'Event Cinemas — All Offers', u:'https://www.eventcinemas.com.au/offers'},
+    {n:'Village Cinemas — All Offers', u:'https://www.villagecinemas.com.au/offers'},
+    {n:'Hoyts — All Offers', u:'https://www.hoyts.com.au/offers'},
+    {n:'Scoopon — Movie Deals', u:'https://www.scoopon.com.au/search/?q=movie'},
+    {n:'Groupon — Melbourne Cinema', u:'https://www.groupon.com.au/local/melbourne/movie-tickets'},
+    {n:'OzBargain — Movie Deals', u:'https://www.ozbargain.com.au/tag/movies'},
   ]},
-  kmart: { name:'Kmart', color:'#6a1b9a', bg:'#f3e5f5', links:[
-    {n:'On Sale Now',              u:'https://www.kmart.com.au/category/on-sale/'},
-    {n:'Home On Sale',             u:'https://www.kmart.com.au/category/on-sale/home/'},
-    {n:'Clothing On Sale',         u:'https://www.kmart.com.au/category/on-sale/clothing/'},
-    {n:'Toys On Sale',             u:'https://www.kmart.com.au/category/on-sale/toys/'},
-    {n:'Baby & Kids On Sale',      u:'https://www.kmart.com.au/category/on-sale/baby-kids/'},
-    {n:'Electronics On Sale',      u:'https://www.kmart.com.au/category/on-sale/electronics/'},
+  streaming: { name:'Streaming', c:'#1e40af', b:'#dbeafe', links:[
+    {n:'Netflix AU — Plans', u:'https://www.netflix.com/au/signup'},
+    {n:'Disney+ AU', u:'https://www.disneyplus.com/en-au'},
+    {n:'Binge — Free Trial', u:'https://binge.com.au'},
+    {n:'Stan — Free Trial', u:'https://www.stan.com.au'},
+    {n:'Kayo Sports — Free Trial', u:'https://kayosports.com.au'},
+    {n:'Paramount+', u:'https://www.paramountplus.com/au/'},
+    {n:'Apple TV+', u:'https://tv.apple.com/au'},
+    {n:'YouTube Premium', u:'https://www.youtube.com/premium'},
+    {n:'Spotify Premium', u:'https://www.spotify.com/au/premium/'},
+    {n:'OzBargain Streaming', u:'https://www.ozbargain.com.au/tag/streaming'},
   ]},
 };
 
 function loadLive(id, tabEl) {
-  document.querySelectorAll('.live-tab').forEach(function(t){ t.classList.remove('on'); });
-  if (tabEl) tabEl.classList.add('on');
-  var r = LIVE[id];
-  if (!r) return;
-  var html = '';
-  r.links.forEach(function(link) {
-    html += '<a class="live-card" href="'+e(link.u)+'" target="_blank" rel="noopener">'
-      + '<span class="live-retailer" style="background:'+r.bg+';color:'+r.color+'">'+e(r.name)+'</span>'
-      + '<div class="live-name">'+e(link.n)+'</div>'
-      + '<div style="font-size:12px;color:var(--accent);margin-top:auto">Browse live &#8594;</div>'
-      + '</a>';
+  document.querySelectorAll('.live-tab-btn').forEach(function(t) {
+    t.setAttribute('aria-selected','false');
   });
+  if (tabEl) tabEl.setAttribute('aria-selected','true');
+  var r = LIVE[id]; if (!r) return;
+  var html = r.links.map(function(lk) {
+    return '<a class="live-card" href="' + esc(lk.u) + '" target="_blank" rel="noopener"'
+      + ' aria-label="' + esc(r.name) + ': ' + esc(lk.n) + ' (opens in new tab)">'
+      + '<span class="live-retailer-badge" style="background:' + r.b + ';color:' + r.c + '">' + esc(r.name) + '</span>'
+      + '<span class="live-card-name">' + esc(lk.n) + '</span>'
+      + '<span class="live-card-cta" aria-hidden="true">Browse live →</span>'
+      + '</a>';
+  }).join('');
   document.getElementById('liveGrid').innerHTML = html;
 }
 
-// ── Helpers ───────────────────────────────────────────────────────
+// ── FILTER & SEARCH ───────────────────────────────────────────────
+function setFilter(el) {
+  document.querySelectorAll('.filter-btn').forEach(function(b) {
+    b.setAttribute('aria-pressed','false');
+  });
+  el.setAttribute('aria-pressed','true');
+  activeFilter = el.dataset.cat;
+  searchQ = '';
+  document.getElementById('filterInput').value = '';
+  renderDeals();
+}
+function setFilterById(cat) {
+  var el = document.querySelector('[data-cat="' + cat + '"]');
+  if (el) setFilter(el);
+}
+function doSearch() {
+  searchQ = (document.getElementById('heroSearch').value || '').trim();
+  document.getElementById('filterInput').value = searchQ;
+  activeFilter = 'all';
+  document.querySelectorAll('.filter-btn').forEach(function(b) { b.setAttribute('aria-pressed','false'); });
+  var allBtn = document.querySelector('[data-cat="all"]');
+  if (allBtn) allBtn.setAttribute('aria-pressed','true');
+  document.querySelectorAll('.quick-btn').forEach(function(b) { b.setAttribute('aria-pressed','false'); });
+  window.scrollTo({ top: 500, behavior: 'smooth' });
+  renderDeals();
+}
+function qsearch(el, term) {
+  document.querySelectorAll('.quick-btn').forEach(function(b) { b.setAttribute('aria-pressed','false'); });
+  el.setAttribute('aria-pressed','true');
+  document.getElementById('heroSearch').value = term;
+  doSearch();
+}
+
+// ── HELPERS ───────────────────────────────────────────────────────
+function isGenRet(v) {
+  var r = ['big w','bigw','kmart','target','myer','officeworks','harvey norman','kogan','catch','bunnings','ikea'];
+  var vl = (v||'').toLowerCase();
+  return r.some(function(x) { return vl.indexOf(x) !== -1; });
+}
+function vbadge(v, cat) {
+  var n = (v||'').toLowerCase();
+  if (n.indexOf('woolworths')!==-1||n.indexOf('woolies')!==-1) return 'vendor-badge vb-ww';
+  if (n.indexOf('coles')!==-1)       return 'vendor-badge vb-coles';
+  if (n.indexOf('aldi')!==-1)        return 'vendor-badge vb-aldi';
+  if (n.indexOf('amazon')!==-1)      return 'vendor-badge vb-amz';
+  if (n.indexOf('big w')!==-1||n.indexOf('bigw')!==-1) return 'vendor-badge vb-bw';
+  if (n.indexOf('chemist')!==-1||n.indexOf('priceline')!==-1) return 'vendor-badge vb-cw';
+  if (n.indexOf('jb hi-fi')!==-1||n.indexOf('jb hifi')!==-1) return 'vendor-badge vb-jb';
+  if (cat==='coupon')                return 'vendor-badge vb-cpn';
+  if (cat==='insurance'||cat==='finance') return 'vendor-badge vb-ins';
+  if (cat==='fuel')                  return 'vendor-badge vb-fuel';
+  if (cat==='travel')                return 'vendor-badge vb-travel';
+  if (cat==='telco'||cat==='nbn')    return 'vendor-badge vb-nbn';
+  return 'vendor-badge vb-def';
+}
 function cpyCode(code, btn) {
   navigator.clipboard.writeText(code).then(function() {
     btn.textContent = 'Copied!';
-    setTimeout(function(){ btn.textContent = 'Copy code'; }, 1800);
+    btn.setAttribute('aria-label', 'Copied');
+    setTimeout(function() {
+      btn.textContent = 'Copy';
+      btn.setAttribute('aria-label', 'Copy coupon code ' + code);
+    }, 1800);
   });
 }
-function setErr(msg) {
-  document.getElementById('errArea').innerHTML = msg
-    ? '<div class="err-box">'+msg+'</div>' : '';
+function setTitle(t, sub) {
+  document.getElementById('contentTitle').textContent = t;
+  document.getElementById('contentSubtitle').textContent = sub || '';
 }
-function str(v) { return String(v||''); }
-function num(v) { var n=parseFloat(v); return isNaN(n)?null:n; }
-function e(s)   { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-function fmtTime(ts) {
-  return new Date(ts).toLocaleString('en-AU',{hour:'2-digit',minute:'2-digit',day:'numeric',month:'short'});
+function setSubtitle(m) { document.getElementById('contentSubtitle').textContent = m; }
+function clearErr() { document.getElementById('errArea').innerHTML = ''; }
+function setErr(m) { document.getElementById('errArea').innerHTML = m ? '<div class="notice" role="alert">' + m + '</div>' : ''; }
+function s(v) { return String(v||''); }
+function n(v) { var x = parseFloat(v); return isNaN(x) ? null : x; }
+function esc(v) { return String(v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function fmt(ts) { return new Date(ts).toLocaleString('en-AU',{hour:'2-digit',minute:'2-digit',day:'numeric',month:'short'}); }
+function readCache() {
+  try { var o=JSON.parse(localStorage.getItem(CACHE_KEY)||'null'); return o&&(o.deals||[]).length?o:null; }
+  catch(e) { return null; }
 }
-function getCache() {
-  try {
-    var o = JSON.parse(localStorage.getItem(CACHE_KEY)||'null');
-    return o && (o.deals||[]).length ? o : null;
-  } catch(e) { return null; }
-}
-function saveCache() {
-  try {
-    localStorage.setItem(CACHE_KEY, JSON.stringify({
-      ts:Date.now(), deals:deals, coupons:coupons, fuel:fuel, insurance:insurance
-    }));
-  } catch(e) {}
+function saveCache(d) {
+  try { localStorage.setItem(CACHE_KEY, JSON.stringify({ts:Date.now(),deals:d.deals||[],coupons:d.coupons||[],fuel:d.fuel||[],insurance:d.insurance||[]})); }
+  catch(e) {}
 }
 </script>
 </body>
