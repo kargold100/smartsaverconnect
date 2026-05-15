@@ -512,18 +512,25 @@ function fetchFresh(spin){
   var cb='ssc_'+Date.now(), sc=document.createElement('script');
   var tim=setTimeout(function(){
     cleanup();if(btn){btn.disabled=false;ico.className='';}
-    if(!deals.length)setErr('Connection timed out. Check your Apps Script URL and ensure the Web App is deployed as "Anyone can access".');
-    else document.getElementById('lastUpd').textContent='Using cached data (refresh timed out)';
-  },30000);
+    if(!deals.length){
+      document.getElementById('dealOutput').innerHTML='';
+      setErr('<strong>Could not load deals.</strong> The most common causes:<br><br>'
+        +'&#9312; <strong>Wrong access level:</strong> Go to your Google Sheet &rarr; Extensions &rarr; Apps Script &rarr; Deploy &rarr; Manage deployments &rarr; edit &rarr; change "Who has access" to <strong>Anyone</strong> (not "Anyone with Google account") &rarr; Deploy.<br><br>'
+        +'&#9313; <strong>Wrong URL:</strong> After re-deploying, copy the new Web App URL and replace <code>YOUR_APPS_SCRIPT_WEB_APP_URL_HERE</code> in index.html &rarr; push to GitHub.<br><br>'
+        +'&#9314; <strong>Scraper not run:</strong> Open your Google Sheet menu &rarr; SmartSaver Connect &rarr; Test scrapers &rarr; run each one.');
+    } else document.getElementById('lastUpd').textContent='Using cached data (refresh timed out)';
+  },12000);
   window[cb]=function(json){
     cleanup();if(btn){btn.disabled=false;ico.className='';ico.textContent='\u21BB';}
-    if(!json||!json.ok){setErr((json&&json.error)||'Apps Script error. Re-deploy the Web App.');return;}
+    if(!json||!json.ok){setErr('<strong>Apps Script error:</strong> '+(json&&json.error||'Unknown error')+'. Re-deploy the Web App and ensure access is set to <strong>Anyone</strong>.');return;}
     ingest(json.data);saveCache(json.data);
     document.getElementById('lastUpd').textContent='Updated '+fmt(Date.now())+' \u00B7 '+deals.length+' deals';
     document.getElementById('main-content').setAttribute('aria-busy','false');
   };
   function cleanup(){clearTimeout(tim);delete window[cb];if(sc.parentNode)sc.parentNode.removeChild(sc);}
-  sc.onerror=function(){cleanup();if(btn){btn.disabled=false;ico.className='';ico.textContent='\u21BB';}setErr('Could not reach Apps Script. Check the URL and Web App deployment.');};
+  sc.onerror=function(){cleanup();if(btn){btn.disabled=false;ico.className='';ico.textContent='\u21BB';}
+    setErr('<strong>Could not reach Apps Script.</strong> Check: (1) The URL in index.html is correct. (2) The Web App is deployed with access set to <strong>Anyone</strong>. (3) <a href="https://script.google.com" target="_blank">script.google.com</a> is not blocked by your browser.');
+  };
   sc.src=APPS_SCRIPT_URL+'?callback='+cb;
   document.head.appendChild(sc);
 }
