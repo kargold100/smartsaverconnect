@@ -711,6 +711,38 @@ function updateStats() {
 function c(cat){ return deals.filter(function(d){return d.cat===cat;}).length; }
 function cRet(){ return deals.filter(function(d){return d.cat==='retail'||isGenRet(d.vendor);}).length; }
 
+// ── HARDCODED TELCO/NBN/ENERGY PLANS ─────────────────────────────
+// These always show regardless of scraper state
+// No prices hardcoded — carrier pricing changes constantly
+var HARDCODED_PLANS = [
+  // Mobile Plans
+  {vendor:'Vodafone',cat:'telco',title:'Vodafone Prepaid — Long Expiry Plans (180 & 365 Day)',desc:'Large data, 365-day validity. Check site for current pricing — promotions change frequently.',url:'https://www.vodafone.com.au/prepaid/plans'},
+  {vendor:'Telstra',cat:'telco',title:'Telstra Prepaid — Long Life Plans',desc:'Australia\'s largest network. Best regional VIC coverage. Check current pricing and any promotions.',url:'https://www.telstra.com.au/mobile-phones/prepaid-mobiles/plans'},
+  {vendor:'Optus',cat:'telco',title:'Optus SIM-Only — Monthly No Lock-In',desc:'Optus SIM-only plans. Includes Optus Sport streaming. Bundle with Optus NBN for savings.',url:'https://www.optus.com.au/mobile/mobile-plans'},
+  {vendor:'ALDI Mobile',cat:'telco',title:'ALDI Mobile — Telstra Network at Budget Prices',desc:'ALDI Mobile on Telstra network with rollover data. No lock-in. Compare vs Telstra direct.',url:'https://www.aldimobile.com.au/pages/plans'},
+  {vendor:'Boost Mobile',cat:'telco',title:'Boost Mobile — Annual Prepaid on Telstra Network',desc:'Boost Mobile annual prepaid on Telstra network. Usually cheaper than Telstra direct.',url:'https://www.boost.com.au/pages/plans'},
+  {vendor:'Kogan Mobile',cat:'telco',title:'Kogan Mobile — Large Data Prepaid Plans',desc:'Kogan Mobile on Vodafone network. Frequent sale pricing. Check current deals.',url:'https://www.koganmobile.com.au/plans/'},
+  {vendor:'Lebara Mobile',cat:'telco',title:'Lebara Mobile — International Calls Included',desc:'Lebara includes international calls to 40+ countries. Great for calling overseas from Melbourne.',url:'https://www.lebara.com.au/prepaid-plans'},
+  {vendor:'amaysim',cat:'telco',title:'amaysim — Unlimited Data Plans (Optus Network)',desc:'amaysim unlimited data on Optus network with data rollover and no lock-in.',url:'https://www.amaysim.com.au/plans/mobile-plans'},
+  // NBN & Internet
+  {vendor:'Aussie Broadband',cat:'nbn',title:'Aussie Broadband — ACCC #1 for Customer Satisfaction',desc:'Rated #1 by ACCC 2023-24. No throttling, Melbourne-based support. Check current signup deals.',url:'https://www.aussiebb.com.au/nbn'},
+  {vendor:'Superloop',cat:'nbn',title:'Superloop NBN — Often Months Free on Signup',desc:'Superloop frequently offers months free on new connections. Check current promotional pricing.',url:'https://www.superloop.com/consumer/nbn.html'},
+  {vendor:'TPG',cat:'nbn',title:'TPG NBN — Budget No Lock-In Plans',desc:'TPG budget NBN plans. No lock-in contracts. Competitive on 50Mbps and 100Mbps tiers.',url:'https://www.tpg.com.au/nbn'},
+  {vendor:'Telstra',cat:'nbn',title:'Telstra NBN — Bundle Discount with Telstra Mobile',desc:'Bundle discount when combined with a Telstra mobile plan. Check for current signup offers.',url:'https://www.telstra.com.au/internet/nbn'},
+  {vendor:'Starlink',cat:'nbn',title:'Starlink Satellite Internet — Best for Regional Areas',desc:'SpaceX Starlink. No data cap. Best option for areas without reliable NBN.',url:'https://www.starlink.com/au'},
+  // Energy
+  {vendor:'ReAmped Energy',cat:'energy',title:'ReAmped Energy — Consistently Cheapest in AU',desc:'Repeatedly ranks among cheapest on Energy Made Easy. Flat-rate, no lock-in, no exit fees.',url:'https://www.reamped.com.au'},
+  {vendor:'Amber Electric',cat:'energy',title:'Amber Electric — Wholesale Electricity Pricing',desc:'Amber passes through wholesale electricity prices. Best for solar + battery homes.',url:'https://www.amber.com.au'},
+  {vendor:'Origin Energy',cat:'energy',title:'Origin Energy — Spike Rewards for Off-Peak Usage',desc:'Origin electricity and gas with Spike rewards. Always compare via energymadeeasy.gov.au first.',url:'https://www.origin.com.au/plans/electricity'},
+];
+
+function getHardcodedPool(cat) {
+  return HARDCODED_PLANS.filter(function(p){return p.cat===cat;}).map(function(p){
+    return {vendor:p.vendor, cat:p.cat, title:p.title, desc:p.desc,
+      pNow:null, pWas:null, disc:0, url:p.url, ts:'', _hardcoded:true};
+  });
+}
+
 // ── RENDER ────────────────────────────────────────────────────────
 function renderDeals() {
   var q = (document.getElementById('fi').value||'').toLowerCase().trim();
@@ -806,37 +838,7 @@ function renderDeals() {
   if (activeFilter==='all' && fuel.length) renderFuelSummary();
 }
 
-// ── HARDCODED TELCO/NBN/ENERGY PLANS ─────────────────────────────
-// These always show regardless of scraper state
-// No prices hardcoded — carrier pricing changes constantly
-var HARDCODED_PLANS = [
-  // Mobile Plans
-  {vendor:'Vodafone',cat:'telco',title:'Vodafone Prepaid — Long Expiry Plans (180 & 365 Day)',desc:'Large data, 365-day validity. Check site for current pricing — promotions change frequently.',url:'https://www.vodafone.com.au/prepaid/plans'},
-  {vendor:'Telstra',cat:'telco',title:'Telstra Prepaid — Long Life Plans',desc:'Australia\'s largest network. Best regional VIC coverage. Check current pricing and any promotions.',url:'https://www.telstra.com.au/mobile-phones/prepaid-mobiles/plans'},
-  {vendor:'Optus',cat:'telco',title:'Optus SIM-Only — Monthly No Lock-In',desc:'Optus SIM-only plans. Includes Optus Sport streaming. Bundle with Optus NBN for savings.',url:'https://www.optus.com.au/mobile/mobile-plans'},
-  {vendor:'ALDI Mobile',cat:'telco',title:'ALDI Mobile — Telstra Network at Budget Prices',desc:'ALDI Mobile on Telstra network with rollover data. No lock-in. Compare vs Telstra direct.',url:'https://www.aldimobile.com.au/pages/plans'},
-  {vendor:'Boost Mobile',cat:'telco',title:'Boost Mobile — Annual Prepaid on Telstra Network',desc:'Boost Mobile annual prepaid on Telstra network. Usually cheaper than Telstra direct.',url:'https://www.boost.com.au/pages/plans'},
-  {vendor:'Kogan Mobile',cat:'telco',title:'Kogan Mobile — Large Data Prepaid Plans',desc:'Kogan Mobile on Vodafone network. Frequent sale pricing. Check current deals.',url:'https://www.koganmobile.com.au/plans/'},
-  {vendor:'Lebara Mobile',cat:'telco',title:'Lebara Mobile — International Calls Included',desc:'Lebara includes international calls to 40+ countries. Great for calling overseas from Melbourne.',url:'https://www.lebara.com.au/prepaid-plans'},
-  {vendor:'amaysim',cat:'telco',title:'amaysim — Unlimited Data Plans (Optus Network)',desc:'amaysim unlimited data on Optus network with data rollover and no lock-in.',url:'https://www.amaysim.com.au/plans/mobile-plans'},
-  // NBN & Internet
-  {vendor:'Aussie Broadband',cat:'nbn',title:'Aussie Broadband — ACCC #1 for Customer Satisfaction',desc:'Rated #1 by ACCC 2023-24. No throttling, Melbourne-based support. Check current signup deals.',url:'https://www.aussiebb.com.au/nbn'},
-  {vendor:'Superloop',cat:'nbn',title:'Superloop NBN — Often Months Free on Signup',desc:'Superloop frequently offers months free on new connections. Check current promotional pricing.',url:'https://www.superloop.com/consumer/nbn.html'},
-  {vendor:'TPG',cat:'nbn',title:'TPG NBN — Budget No Lock-In Plans',desc:'TPG budget NBN plans. No lock-in contracts. Competitive on 50Mbps and 100Mbps tiers.',url:'https://www.tpg.com.au/nbn'},
-  {vendor:'Telstra',cat:'nbn',title:'Telstra NBN — Bundle Discount with Telstra Mobile',desc:'Bundle discount when combined with a Telstra mobile plan. Check for current signup offers.',url:'https://www.telstra.com.au/internet/nbn'},
-  {vendor:'Starlink',cat:'nbn',title:'Starlink Satellite Internet — Best for Regional Areas',desc:'SpaceX Starlink. No data cap. Best option for areas without reliable NBN.',url:'https://www.starlink.com/au'},
-  // Energy
-  {vendor:'ReAmped Energy',cat:'energy',title:'ReAmped Energy — Consistently Cheapest in AU',desc:'Repeatedly ranks among cheapest on Energy Made Easy. Flat-rate, no lock-in, no exit fees.',url:'https://www.reamped.com.au'},
-  {vendor:'Amber Electric',cat:'energy',title:'Amber Electric — Wholesale Electricity Pricing',desc:'Amber passes through wholesale electricity prices. Best for solar + battery homes.',url:'https://www.amber.com.au'},
-  {vendor:'Origin Energy',cat:'energy',title:'Origin Energy — Spike Rewards for Off-Peak Usage',desc:'Origin electricity and gas with Spike rewards. Always compare via energymadeeasy.gov.au first.',url:'https://www.origin.com.au/plans/electricity'},
-];
 
-function getHardcodedPool(cat) {
-  return HARDCODED_PLANS.filter(function(p){return p.cat===cat;}).map(function(p){
-    return {vendor:p.vendor, cat:p.cat, title:p.title, desc:p.desc,
-      pNow:null, pWas:null, disc:0, url:p.url, ts:'', _hardcoded:true};
-  });
-}
 var HOW_TO = {
   woolworths:'Add to cart on woolworths.com.au or the app. Specials apply in-store and online. Everyday Rewards members earn extra points. Specials reset each Wednesday.',
   coles:'Available in-store and on coles.com.au. Flybuys members earn bonus points. Half-price specials rotate each Wednesday.',
