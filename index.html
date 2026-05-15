@@ -277,25 +277,8 @@ body{font-family:var(--fb);font-size:15px;line-height:1.6;background:var(--bg);c
 </head>
 <body>
 <a href="#main" class="skip">Skip to main content</a>
-<div id="setupBanner" style="display:none;background:#1c1816;color:#fff;padding:16px 24px;position:sticky;top:0;z-index:200;border-bottom:3px solid #f59e0b">
-  <div style="max-width:960px;margin:0 auto">
-    <p style="font-family:'Lexend',sans-serif;font-size:14px;font-weight:700;margin-bottom:10px;color:#f59e0b">
-      &#9881; One-time setup — paste your Apps Script Web App URL to load deals:
-    </p>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px">
-      <input id="urlInput" type="url"
-        placeholder="https://script.google.com/macros/s/AKfycb.../exec"
-        style="flex:1;min-width:260px;padding:10px 14px;border:2px solid #f59e0b;border-radius:8px;font-size:14px;background:#fff;color:#1c1816;font-family:inherit"/>
-      <button onclick="saveUrl()"
-        style="padding:10px 22px;background:#f59e0b;color:#1c1816;border:none;border-radius:8px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;white-space:nowrap">
-        Save &amp; Load Deals &#8594;
-      </button>
-    </div>
-    <p style="font-size:12px;color:rgba(255,255,255,.55);line-height:1.6;margin:0">
-      Get your URL: Google Sheet &rarr; Extensions &rarr; Apps Script &rarr; Deploy &rarr; Manage deployments &rarr; copy Web App URL.
-      Ensure access is set to <strong style="color:#f59e0b">Anyone</strong>. Saved in your browser — only needed once.
-    </p>
-  </div>
+<div id="setupBanner" style="display:none;background:#dc2626;color:#fff;padding:12px 24px;text-align:center;font-size:13px;font-weight:600;position:sticky;top:0;z-index:200">
+  &#9888; Open <strong>index.html</strong> in VS Code, find <strong>YOUR_APPS_SCRIPT_WEB_APP_URL_HERE</strong> and replace it with your Apps Script Web App URL, then push to GitHub.
 </div>
 <header class="hdr" role="banner">
   <div class="hdr-in">
@@ -492,39 +475,15 @@ body{font-family:var(--fb);font-size:15px;line-height:1.6;background:var(--bg);c
 
 <script>
 
-// ═══════════════════════════════════════════════════
-// SmartSaver Connect — single clean script
-// ═══════════════════════════════════════════════════
-// ── Apps Script URL ─────────────────────────────────────────────
-// The URL is stored in localStorage so you can set it once in the browser.
-// You can also hardcode it here if you prefer:
-//   var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_ID/exec';
-var APPS_SCRIPT_URL = localStorage.getItem('ssc_url') || 'https://script.google.com/macros/s/AKfycbz60iBo_PfKtmny2YmwFgjvCCIMDoXpHWf7KBPVDfUNBA8VtRybMCSwn7Ze9wvCdg8KHA/exec';
+// ── CONFIG ──────────────────────────────────────────────────────
+// STEP 1: Replace the URL below with your Apps Script Web App URL
+// Get it from: Google Sheet → Extensions → Apps Script → Deploy → Manage deployments
+// Set "Who has access" to Anyone, then copy the Web App URL here
+var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz60iBo_PfKtmny2YmwFgjvCCIMDoXpHWf7KBPVDfUNBA8VtRybMCSwn7Ze9wvCdg8KHA/exec';
 var CACHE_KEY = 'ssc_v8';
 var TTL = 2*60*60*1000;
 var deals=[], coupons=[], fuel=[], insurance=[];
 var activeFilter='all', searchQ='';
-
-function saveUrl() {
-  var u = (document.getElementById('urlInput').value || '').trim();
-  if (!u || !u.startsWith('https://script.google.com')) {
-    document.getElementById('urlInput').style.borderColor = '#dc2626';
-    document.getElementById('urlInput').focus();
-    return;
-  }
-  localStorage.setItem('ssc_url', u);
-  APPS_SCRIPT_URL = u;
-  document.getElementById('setupBanner').style.display = 'none';
-  showSkeleton();
-  fetchFresh(true);
-}
-
-function clearUrl() {
-  localStorage.removeItem('ssc_url');
-  localStorage.removeItem('ssc_v8');
-  APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz60iBo_PfKtmny2YmwFgjvCCIMDoXpHWf7KBPVDfUNBA8VtRybMCSwn7Ze9wvCdg8KHA/exec';
-  location.reload();
-}
 
 window.addEventListener('DOMContentLoaded', function() {
   if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.indexOf('YOUR_') !== -1) {
@@ -822,8 +781,8 @@ function isGenRet(v){return['big w','bigw','kmart','target','myer','officeworks'
 function setTitle(t,sub){document.getElementById('ctitle').textContent=t;document.getElementById('csub').textContent=sub||'';}
 function clearErr(){document.getElementById('errArea').innerHTML='';}
 function setErr(m){document.getElementById('errArea').innerHTML=m?'<div class="notice" role="alert">'+m+'</div>':'';}
+function esc(v){return String(v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\x22/g,'&quot;');}
 function s(v){return String(v||'');}function n(v){var x=parseFloat(v);return isNaN(x)?null:x;}
-function esc(v){return String(v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function fmt(ts){return new Date(ts).toLocaleString('en-AU',{hour:'2-digit',minute:'2-digit',day:'numeric',month:'short'});}
 function readCache(){try{var o=JSON.parse(localStorage.getItem(CACHE_KEY)||'null');return o&&(o.deals||[]).length?o:null;}catch(e){return null;}}
 function saveCache(d){try{localStorage.setItem(CACHE_KEY,JSON.stringify({ts:Date.now(),deals:d.deals||[],coupons:d.coupons||[],fuel:d.fuel||[],insurance:d.insurance||[]}));}catch(e){}}
