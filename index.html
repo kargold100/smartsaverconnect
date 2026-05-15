@@ -277,7 +277,26 @@ body{font-family:var(--fb);font-size:15px;line-height:1.6;background:var(--bg);c
 </head>
 <body>
 <a href="#main" class="skip">Skip to main content</a>
-<div class="setup-banner" id="setupBanner">&#9888;&#65039; <strong>Setup required:</strong> Open <code>index.html</code>, replace <code>YOUR_APPS_SCRIPT_WEB_APP_URL_HERE</code> with your Apps Script Web App URL, then push to GitHub.</div>
+<div id="setupBanner" style="display:none;background:#1c1816;color:#fff;padding:16px 24px;position:sticky;top:0;z-index:200;border-bottom:3px solid #f59e0b">
+  <div style="max-width:960px;margin:0 auto">
+    <p style="font-family:'Lexend',sans-serif;font-size:14px;font-weight:700;margin-bottom:10px;color:#f59e0b">
+      &#9881; One-time setup — paste your Apps Script Web App URL to load deals:
+    </p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px">
+      <input id="urlInput" type="url"
+        placeholder="https://script.google.com/macros/s/AKfycb.../exec"
+        style="flex:1;min-width:260px;padding:10px 14px;border:2px solid #f59e0b;border-radius:8px;font-size:14px;background:#fff;color:#1c1816;font-family:inherit"/>
+      <button onclick="saveUrl()"
+        style="padding:10px 22px;background:#f59e0b;color:#1c1816;border:none;border-radius:8px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;white-space:nowrap">
+        Save &amp; Load Deals &#8594;
+      </button>
+    </div>
+    <p style="font-size:12px;color:rgba(255,255,255,.55);line-height:1.6;margin:0">
+      Get your URL: Google Sheet &rarr; Extensions &rarr; Apps Script &rarr; Deploy &rarr; Manage deployments &rarr; copy Web App URL.
+      Ensure access is set to <strong style="color:#f59e0b">Anyone</strong>. Saved in your browser — only needed once.
+    </p>
+  </div>
+</div>
 <header class="hdr" role="banner">
   <div class="hdr-in">
     <a href="index.html" class="logo" aria-label="SmartSaver Connect home">
