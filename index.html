@@ -476,21 +476,47 @@ body{font-family:var(--fb);font-size:15px;line-height:1.6;background:var(--bg);c
 // ═══════════════════════════════════════════════════
 // SmartSaver Connect — single clean script
 // ═══════════════════════════════════════════════════
-var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz60iBo_PfKtmny2YmwFgjvCCIMDoXpHWf7KBPVDfUNBA8VtRybMCSwn7Ze9wvCdg8KHA/exec';
+// ── Apps Script URL ─────────────────────────────────────────────
+// The URL is stored in localStorage so you can set it once in the browser.
+// You can also hardcode it here if you prefer:
+//   var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_ID/exec';
+var APPS_SCRIPT_URL = localStorage.getItem('ssc_url') || 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
 var CACHE_KEY = 'ssc_v8';
 var TTL = 2*60*60*1000;
 var deals=[], coupons=[], fuel=[], insurance=[];
 var activeFilter='all', searchQ='';
 
+function saveUrl() {
+  var u = (document.getElementById('urlInput').value || '').trim();
+  if (!u || !u.startsWith('https://script.google.com')) {
+    document.getElementById('urlInput').style.borderColor = '#dc2626';
+    document.getElementById('urlInput').focus();
+    return;
+  }
+  localStorage.setItem('ssc_url', u);
+  APPS_SCRIPT_URL = u;
+  document.getElementById('setupBanner').style.display = 'none';
+  showSkeleton();
+  fetchFresh(true);
+}
+
+function clearUrl() {
+  localStorage.removeItem('ssc_url');
+  localStorage.removeItem('ssc_v8');
+  APPS_SCRIPT_URL = 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
+  location.reload();
+}
+
 window.addEventListener('DOMContentLoaded', function() {
   if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.indexOf('YOUR_') !== -1) {
-    document.getElementById('setupBanner').style.display='block';
-    document.getElementById('dealOutput').innerHTML=
+    document.getElementById('setupBanner').style.display = 'block';
+    document.getElementById('dealOutput').innerHTML =
       '<div class="deals-grid"><div class="empty-state">'
-      +'<h3>Setup required</h3>'
-      +'<p>Open <strong>index.html</strong> in a text editor and replace <strong>YOUR_APPS_SCRIPT_WEB_APP_URL_HERE</strong> with your Google Apps Script Web App URL. Then push to GitHub.</p>'
-      +'</div></div>';
-    setTitle('Setup required','Add your Apps Script URL to load deals');
+      + '<h3>Paste your Apps Script URL above to load deals</h3>'
+      + '<p>Enter your Google Apps Script Web App URL in the box at the top of the page. '
+      + 'It will be saved in your browser — you only need to do this once per device.</p>'
+      + '</div></div>';
+    setTitle('Setup required', 'Paste your Apps Script URL above to get started');
     return;
   }
   var c=readCache();
