@@ -499,7 +499,7 @@ body{font-family:var(--fb);font-size:15px;line-height:1.6;background:var(--bg);c
 // The URL is stored in localStorage so you can set it once in the browser.
 // You can also hardcode it here if you prefer:
 //   var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_ID/exec';
-var APPS_SCRIPT_URL = localStorage.getItem('ssc_url') || 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
+var APPS_SCRIPT_URL = localStorage.getItem('ssc_url') || 'https://script.google.com/macros/s/AKfycbz60iBo_PfKtmny2YmwFgjvCCIMDoXpHWf7KBPVDfUNBA8VtRybMCSwn7Ze9wvCdg8KHA/exec';
 var CACHE_KEY = 'ssc_v8';
 var TTL = 2*60*60*1000;
 var deals=[], coupons=[], fuel=[], insurance=[];
@@ -522,7 +522,7 @@ function saveUrl() {
 function clearUrl() {
   localStorage.removeItem('ssc_url');
   localStorage.removeItem('ssc_v8');
-  APPS_SCRIPT_URL = 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
+  APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz60iBo_PfKtmny2YmwFgjvCCIMDoXpHWf7KBPVDfUNBA8VtRybMCSwn7Ze9wvCdg8KHA/exec';
   location.reload();
 }
 
