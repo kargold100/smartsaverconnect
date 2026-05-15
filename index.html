@@ -474,319 +474,591 @@ body{font-family:var(--fb);font-size:15px;line-height:1.6;background:var(--bg);c
 </div>
 
 <script>
-
-// ── CONFIG ──────────────────────────────────────────────────────
-// STEP 1: Replace the URL below with your Apps Script Web App URL
-// Get it from: Google Sheet → Extensions → Apps Script → Deploy → Manage deployments
-// Set "Who has access" to Anyone, then copy the Web App URL here
+// SmartSaver Connect — Main JS
+// Replace YOUR_APPS_SCRIPT_WEB_APP_URL_HERE with your Apps Script Web App URL
 var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz60iBo_PfKtmny2YmwFgjvCCIMDoXpHWf7KBPVDfUNBA8VtRybMCSwn7Ze9wvCdg8KHA/exec';
-var CACHE_KEY = 'ssc_v8';
+var CACHE_KEY = 'ssc_v9';
 var TTL = 2*60*60*1000;
 var deals=[], coupons=[], fuel=[], insurance=[];
 var activeFilter='all', searchQ='';
 
+// ── LIVE RETAILER DATA ──────────────────────────────────────────
+var LIVE = {
+  woolworths: { name:'Woolworths', links:[
+    {n:'Half Price Specials',        u:'https://www.woolworths.com.au/shop/specials/half-price'},
+    {n:'All Weekly Specials',        u:'https://www.woolworths.com.au/shop/specials/all'},
+    {n:'Everyday Rewards Offers',    u:'https://www.woolworths.com.au/shop/discover/everyday-rewards'},
+    {n:'Fresh Produce Deals',        u:'https://www.woolworths.com.au/shop/browse/fruit-veg'},
+    {n:'Pantry Specials',            u:'https://www.woolworths.com.au/shop/browse/pantry'},
+    {n:'Meat & Seafood Specials',    u:'https://www.woolworths.com.au/shop/browse/meat-seafood'},
+    {n:'Baby & Toddler Specials',    u:'https://www.woolworths.com.au/shop/browse/baby'},
+  ]},
+  coles: { name:'Coles', links:[
+    {n:'Half Price Specials',        u:'https://www.coles.com.au/on-special/half-price'},
+    {n:'All Weekly Specials',        u:'https://www.coles.com.au/on-special'},
+    {n:'Flybuys Offers',             u:'https://www.coles.com.au/flybuys'},
+    {n:'Fresh Produce',              u:'https://www.coles.com.au/browse/fruit-vegetables'},
+    {n:'Meat Specials',              u:'https://www.coles.com.au/browse/meat-poultry-seafood'},
+    {n:'Bakery Deals',               u:'https://www.coles.com.au/browse/bakery'},
+  ]},
+  aldi: { name:'ALDI', links:[
+    {n:'Special Buys This Week',     u:'https://www.aldi.com.au/en/special-buys/'},
+    {n:'ALDI Catalogue',             u:'https://www.aldi.com.au/en/groceries/'},
+    {n:'Upcoming Special Buys',      u:'https://www.aldi.com.au/en/special-buys/upcoming-special-buys/'},
+    {n:'Health & Beauty Deals',      u:'https://www.aldi.com.au/en/health-beauty/'},
+  ]},
+  chemist: { name:'Chemist Warehouse', links:[
+    {n:'Half Price Health',          u:'https://www.chemistwarehouse.com.au/catalogues'},
+    {n:'Weekly Specials',            u:'https://www.chemistwarehouse.com.au/weekly-specials'},
+    {n:'Beauty Deals',               u:'https://www.chemistwarehouse.com.au/buy/90236/beauty'},
+    {n:'Vitamins Sale',              u:'https://www.chemistwarehouse.com.au/buy/90237/vitamins-supplements'},
+    {n:'Baby Deals',                 u:'https://www.chemistwarehouse.com.au/buy/90241/baby-child'},
+  ]},
+  amazon: { name:'Amazon AU', links:[
+    {n:'All Deals & Offers',         u:'https://www.amazon.com.au/deals'},
+    {n:'Lightning Deals',            u:'https://www.amazon.com.au/gp/goldbox'},
+    {n:'Electronics Deals',          u:'https://www.amazon.com.au/deals?category=electronics'},
+    {n:'Home & Kitchen',             u:'https://www.amazon.com.au/deals?category=home'},
+    {n:'Toys & Games',               u:'https://www.amazon.com.au/deals?category=toys'},
+    {n:'Sports & Outdoors',          u:'https://www.amazon.com.au/deals?category=sports'},
+    {n:'Prime Member Deals',         u:'https://www.amazon.com.au/prime'},
+  ]},
+  jbhifi: { name:'JB Hi-Fi', links:[
+    {n:'All Deals',                  u:'https://www.jbhifi.com.au/pages/jb-deals'},
+    {n:'TV & Home Theatre',          u:'https://www.jbhifi.com.au/collections/tv'},
+    {n:'Laptops & Computers',        u:'https://www.jbhifi.com.au/collections/computers-tablets'},
+    {n:'Phones & Tablets',           u:'https://www.jbhifi.com.au/collections/phones-gps'},
+    {n:'Gaming Deals',               u:'https://www.jbhifi.com.au/collections/gaming'},
+    {n:'Appliances',                 u:'https://www.jbhifi.com.au/collections/appliances'},
+  ]},
+  bigw: { name:'Big W', links:[
+    {n:'Current Specials',           u:'https://www.bigw.com.au/category/offers'},
+    {n:'Toys & Games',               u:'https://www.bigw.com.au/category/toys-games'},
+    {n:'Baby Deals',                 u:'https://www.bigw.com.au/category/baby'},
+    {n:'Clothing Deals',             u:'https://www.bigw.com.au/category/clothing'},
+    {n:'Home & Garden',              u:'https://www.bigw.com.au/category/home-garden'},
+    {n:'Electronics',                u:'https://www.bigw.com.au/category/electronics'},
+  ]},
+  kmart: { name:'Kmart', links:[
+    {n:'Current Specials',           u:'https://www.kmart.com.au/specials/'},
+    {n:'Home & Living',              u:'https://www.kmart.com.au/category/home/'},
+    {n:'Toys & Games',               u:'https://www.kmart.com.au/category/toys/'},
+    {n:'Clothing',                   u:'https://www.kmart.com.au/category/clothing/'},
+    {n:'Baby & Toddler',             u:'https://www.kmart.com.au/category/baby/'},
+    {n:'Sports & Outdoors',          u:'https://www.kmart.com.au/category/sport-leisure/'},
+  ]},
+  movies: { name:'Movies & Entertainment', links:[
+    {n:'Event Cinemas — Deals',      u:'https://www.eventcinemas.com.au/specials'},
+    {n:'Hoyts — Discount Tickets',   u:'https://www.hoyts.com.au/offers'},
+    {n:'Village Cinemas — Offers',   u:'https://www.villagecinemas.com.au/offers'},
+    {n:'Reading Cinemas — Specials', u:'https://www.readingcinemas.com.au/movie-deals'},
+    {n:'Palace Cinemas — Deals',     u:'https://www.palacecinemas.com.au'},
+    {n:'OzBargain — Cinema Deals',   u:'https://www.ozbargain.com.au/tag/cinema'},
+    {n:'OzBargain — Entertainment',  u:'https://www.ozbargain.com.au/cat/entertainment/deals'},
+  ]},
+  streaming: { name:'Streaming', links:[
+    {n:'Netflix — Plans & Pricing',  u:'https://www.netflix.com/au/signup'},
+    {n:'Disney+ — Subscribe',        u:'https://www.disneyplus.com/en-au'},
+    {n:'Stan — Deals',               u:'https://www.stan.com.au'},
+    {n:'Binge — Offers',             u:'https://www.binge.com.au'},
+    {n:'Foxtel Now — Deals',         u:'https://www.foxtel.com.au/watch/foxtel-now.html'},
+    {n:'Apple TV+ AU',               u:'https://tv.apple.com/au'},
+    {n:'OzBargain — Streaming',      u:'https://www.ozbargain.com.au/tag/streaming'},
+  ]},
+  ubereats: { name:'Uber Eats', links:[
+    {n:'Uber One — Member Offers',   u:'https://www.ubereats.com/au/uber-one'},
+    {n:'Daily Promotions',           u:'https://www.ubereats.com/au/promotions'},
+    {n:'Free Delivery Restaurants',  u:'https://www.ubereats.com/au'},
+    {n:'Menulog — Deals',            u:'https://www.menulog.com.au/deals'},
+    {n:'Menulog — Free Delivery',    u:'https://www.menulog.com.au/search?free_delivery=true'},
+    {n:'DoorDash — Promos',          u:'https://www.doordash.com/en-AU/promotions/'},
+    {n:'Hungry Jacks — App Offers',  u:'https://www.hungryjacks.com.au/deals'},
+    {n:'Dominos — Latest Deals',     u:'https://www.dominos.com.au/inside-dominos/deals'},
+    {n:'Pizza Hut — Current Offers', u:'https://www.pizzahut.com.au/deals'},
+  ]},
+};
+
+// ── BOOT ─────────────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', function() {
   if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.indexOf('YOUR_') !== -1) {
     document.getElementById('setupBanner').style.display = 'block';
     document.getElementById('dealOutput').innerHTML =
       '<div class="deals-grid"><div class="empty-state">'
-      + '<h3>Paste your Apps Script URL above to load deals</h3>'
-      + '<p>Enter your Google Apps Script Web App URL in the box at the top of the page. '
-      + 'It will be saved in your browser — you only need to do this once per device.</p>'
+      + '<h3>Setup required</h3>'
+      + '<p>Open <strong>index.html</strong> in VS Code, press Ctrl+H, '
+      + 'find <strong>YOUR_APPS_SCRIPT_WEB_APP_URL_HERE</strong> and replace with your '
+      + 'Apps Script Web App URL, save, then push to GitHub.</p>'
       + '</div></div>';
-    setTitle('Setup required', 'Paste your Apps Script URL above to get started');
+    setTitle('Setup required', 'Add your Apps Script URL to load deals');
     return;
   }
-  var c=readCache();
-  if(c){ingest(c);document.getElementById('lastUpd').textContent='From cache — updated '+fmt(c.ts);if(Date.now()-c.ts>TTL)fetchFresh(false);}
-  else{showSkeleton();fetchFresh(true);}
+  var cached = readCache();
+  if (cached) {
+    ingest(cached);
+    document.getElementById('lastUpd').textContent = 'Cached — ' + fmt(cached.ts);
+    if (Date.now() - cached.ts > TTL) fetchFresh(false);
+  } else {
+    showSkeleton();
+    fetchFresh(true);
+  }
+  var q = new URLSearchParams(window.location.search).get('q');
+  if (q) { document.getElementById('hs').value = q; searchQ = q; }
 });
 
-function showSkeleton(){
-  var h='<div class="skel-grid">';
-  for(var i=0;i<8;i++)h+='<div class="skel-card"><div style="height:4px;background:var(--stone2)"></div><div style="padding:var(--g4)"><div class="sk sl sl-s"></div><div class="sk sl sl-l"></div><div class="sk sl sl-m"></div><div class="sk sl-xl"></div></div></div>';
-  h+='</div>';
-  document.getElementById('dealOutput').innerHTML=h;
+function showSkeleton() {
+  var h = '<div class="skel-grid">';
+  for (var i=0; i<8; i++)
+    h += '<div class="skel-card"><div style="height:4px;background:var(--border)"></div>'
+       + '<div style="padding:var(--g4)"><div class="sk sl sl-s"></div>'
+       + '<div class="sk sl sl-l"></div><div class="sk sl sl-m"></div>'
+       + '<div class="sk sl-xl"></div></div></div>';
+  h += '</div>';
+  document.getElementById('dealOutput').innerHTML = h;
 }
 
-function fetchFresh(spin){
-  var btn=document.getElementById('refreshBtn'), ico=document.getElementById('ri');
-  if(spin&&btn){btn.disabled=true;ico.className='spin';}
+// ── FETCH ─────────────────────────────────────────────────────────
+function fetchFresh(spin) {
+  var btn = document.getElementById('refreshBtn');
+  var ico = document.getElementById('ri');
+  if (spin && btn) { btn.disabled=true; ico.className='spin'; }
   clearErr();
-  var cb='ssc_'+Date.now(), sc=document.createElement('script');
-  var tim=setTimeout(function(){
-    cleanup();if(btn){btn.disabled=false;ico.className='';}
-    if(!deals.length){
-      document.getElementById('dealOutput').innerHTML='';
-      setErr('<strong>Could not load deals.</strong> The most common causes:<br><br>'
-        +'&#9312; <strong>Wrong access level:</strong> Go to your Google Sheet &rarr; Extensions &rarr; Apps Script &rarr; Deploy &rarr; Manage deployments &rarr; edit &rarr; change "Who has access" to <strong>Anyone</strong> (not "Anyone with Google account") &rarr; Deploy.<br><br>'
-        +'&#9313; <strong>Wrong URL:</strong> After re-deploying, copy the new Web App URL and replace <code>YOUR_APPS_SCRIPT_WEB_APP_URL_HERE</code> in index.html &rarr; push to GitHub.<br><br>'
-        +'&#9314; <strong>Scraper not run:</strong> Open your Google Sheet menu &rarr; SmartSaver Connect &rarr; Test scrapers &rarr; run each one.');
-    } else document.getElementById('lastUpd').textContent='Using cached data (refresh timed out)';
-  },12000);
-  window[cb]=function(json){
-    cleanup();if(btn){btn.disabled=false;ico.className='';ico.textContent='\u21BB';}
-    if(!json||!json.ok){setErr('<strong>Apps Script error:</strong> '+(json&&json.error||'Unknown error')+'. Re-deploy the Web App and ensure access is set to <strong>Anyone</strong>.');return;}
-    ingest(json.data);saveCache(json.data);
-    document.getElementById('lastUpd').textContent='Updated '+fmt(Date.now())+' \u00B7 '+deals.length+' deals';
+  var cb = 'ssc_' + Date.now(), sc = document.createElement('script');
+  var tim = setTimeout(function() {
+    cleanup();
+    if (btn) { btn.disabled=false; ico.className=''; }
+    if (!deals.length) setErr('Timed out. Check: (1) Your Apps Script URL is correct. '
+      + '(2) The Web App is deployed with access set to <strong>Anyone</strong>. '
+      + '(3) Run the scrapers from your Google Sheet menu to populate data.');
+    else document.getElementById('lastUpd').textContent = 'Cached (refresh timed out)';
+  }, 15000);
+  window[cb] = function(json) {
+    cleanup();
+    if (btn) { btn.disabled=false; ico.className=''; ico.innerHTML='&#8635;'; }
+    if (!json || !json.ok) {
+      setErr('Apps Script error: ' + ((json && json.error) || 'unknown')
+        + '. Ensure Web App access is set to <strong>Anyone</strong>.');
+      return;
+    }
+    ingest(json.data);
+    saveCache(json.data);
+    document.getElementById('lastUpd').textContent = 'Updated ' + fmt(Date.now()) + ' \u00B7 ' + deals.length + ' deals';
     document.getElementById('main-content').setAttribute('aria-busy','false');
   };
-  function cleanup(){clearTimeout(tim);delete window[cb];if(sc.parentNode)sc.parentNode.removeChild(sc);}
-  sc.onerror=function(){cleanup();if(btn){btn.disabled=false;ico.className='';ico.textContent='\u21BB';}
-    setErr('<strong>Could not reach Apps Script.</strong> Check: (1) The URL in index.html is correct. (2) The Web App is deployed with access set to <strong>Anyone</strong>. (3) <a href="https://script.google.com" target="_blank">script.google.com</a> is not blocked by your browser.');
+  function cleanup() { clearTimeout(tim); delete window[cb]; if (sc.parentNode) sc.parentNode.removeChild(sc); }
+  sc.onerror = function() {
+    cleanup();
+    if (btn) { btn.disabled=false; ico.className=''; ico.innerHTML='&#8635;'; }
+    setErr('Could not reach Apps Script. Check the URL and ensure the Web App access is set to <strong>Anyone</strong>.');
   };
-  sc.src=APPS_SCRIPT_URL+'?callback='+cb;
+  sc.src = APPS_SCRIPT_URL + '?callback=' + cb;
   document.head.appendChild(sc);
 }
-function doRefresh(){showSkeleton();fetchFresh(true);}
+function doRefresh() { showSkeleton(); fetchFresh(true); }
 
-function ingest(d){
-  deals=normDeals(d.deals||[]);coupons=normCoupons(d.coupons||[]);
-  fuel=normFuel(d.fuel||[]);insurance=normIns(d.insurance||[]);
-  updateStats();renderDeals();
+// ── DATA ──────────────────────────────────────────────────────────
+function ingest(d) {
+  deals     = norm(d.deals     || [], normDeal);
+  coupons   = norm(d.coupons   || [], normCpn);
+  fuel      = norm(d.fuel      || [], normFuel);
+  insurance = norm(d.insurance || [], normIns);
+  updateStats();
+  renderDeals();
 }
-function normDeals(r){return(r||[]).filter(function(x){return x.title;}).map(function(x){return{vendor:s(x.vendor),cat:s(x.category).toLowerCase(),title:s(x.title),desc:s(x.description),pNow:n(x.priceNow),pWas:n(x.priceWas),disc:parseInt(x.discountPct)||0,url:s(x.dealUrl),ts:s(x.scrapedAt)};}); }
-function normCoupons(r){return(r||[]).filter(function(x){return x.code&&x.code!=='SEE_LINK';}).map(function(x){return{vendor:s(x.vendor)||'Various',code:s(x.code),desc:s(x.description),dt:s(x.discountText),url:s(x.dealUrl)};});}
-function normFuel(r){return(r||[]).filter(function(x){return x.priceCents;}).map(function(x){return{name:s(x.stationName),brand:s(x.brand),type:s(x.fuelType),price:parseFloat(x.priceCents)||0,suburb:s(x.suburb)};});}
-function normIns(r){return(r||[]).filter(function(x){return x.title;}).map(function(x){return{insurer:s(x.insurer)||'Various',type:s(x.type)||'General',title:s(x.title),desc:s(x.description),disc:parseInt(x.discountPct)||0,save:n(x.saveDollars),url:s(x.dealUrl)};});}
+function norm(arr, fn) { return (arr||[]).map(fn).filter(Boolean); }
+function normDeal(r) {
+  if (!r.title) return null;
+  return { vendor:s(r.vendor), cat:s(r.category).toLowerCase(),
+    title:s(r.title), desc:s(r.description),
+    pNow:n(r.priceNow), pWas:n(r.priceWas),
+    disc:parseInt(r.discountPct)||0, url:s(r.dealUrl), ts:s(r.scrapedAt) };
+}
+function normCpn(r) {
+  if (!r.code || r.code==='SEE_LINK') return null;
+  return { vendor:s(r.vendor)||'Various', code:s(r.code),
+    desc:s(r.description), dt:s(r.discountText), url:s(r.dealUrl) };
+}
+function normFuel(r) {
+  if (!r.priceCents) return null;
+  return { name:s(r.stationName), brand:s(r.brand), type:s(r.fuelType),
+    price:parseFloat(r.priceCents)||0, suburb:s(r.suburb) };
+}
+function normIns(r) {
+  if (!r.title) return null;
+  return { insurer:s(r.insurer)||'Various', type:s(r.type)||'General',
+    title:s(r.title), desc:s(r.description),
+    disc:parseInt(r.discountPct)||0, save:n(r.saveDollars), url:s(r.dealUrl) };
+}
 
-function updateStats(){
-  var tot=deals.length;
-  document.getElementById('sTot').textContent=tot||'\u2014';
-  document.getElementById('heroNum').textContent=tot||'0';
-  document.getElementById('heroSub').textContent=tot?'across AU retailers':'Add your Apps Script URL';
-  var ds=deals.filter(function(d){return d.disc>0;}).map(function(d){return d.disc;});
-  document.getElementById('sDisc').textContent=ds.length?Math.round(ds.reduce(function(a,b){return a+b;},0)/ds.length)+'%':'\u2014';
-  var ulp=fuel.filter(function(f){return f.type==='ULP'||f.type==='E10';});
-  document.getElementById('sFuel').textContent=ulp.length?Math.min.apply(null,ulp.map(function(f){return f.price;})).toFixed(1):'\u2014';
-  document.getElementById('sCpn').textContent=coupons.length||'\u2014';
-  var cm={'all':deals.length,'ww':c('woolworths'),'coles':c('coles'),'aldi':c('aldi'),'amz':c('amazon'),'ret':cRet(),'cw':c('chemist'),'travel':c('travel'),'telco':c('telco'),'nbn':c('nbn'),'energy':c('energy'),'ent':c('entertainment')+c('food'),'cpn':coupons.length,'fuel':fuel.length,'ins':insurance.length};
+// ── STATS ─────────────────────────────────────────────────────────
+function updateStats() {
+  var tot = deals.length;
+  document.getElementById('sTot').textContent = tot || '\u2014';
+  document.getElementById('heroNum').textContent = tot || '0';
+  document.getElementById('heroSub').textContent = tot ? 'across AU retailers' : 'Set up your Apps Script URL';
+  var ds = deals.filter(function(d){return d.disc>0;}).map(function(d){return d.disc;});
+  document.getElementById('sDisc').textContent = ds.length
+    ? Math.round(ds.reduce(function(a,b){return a+b;},0)/ds.length)+'%' : '\u2014';
+  var ulp = fuel.filter(function(f){return f.type==='ULP'||f.type==='E10';});
+  document.getElementById('sFuel').textContent = ulp.length
+    ? Math.min.apply(null,ulp.map(function(f){return f.price;})).toFixed(1) : '\u2014';
+  document.getElementById('sCpn').textContent = coupons.length || '\u2014';
+  var cm = {all:deals.length, ww:c('woolworths'), coles:c('coles'), aldi:c('aldi'),
+    amz:c('amazon'), ret:cRet(), cw:c('chemist'), travel:c('travel'),
+    telco:c('telco'), nbn:c('nbn'), energy:c('energy'),
+    ent:c('entertainment')+c('food'), cpn:coupons.length, fuel:fuel.length, ins:insurance.length};
   Object.keys(cm).forEach(function(k){var el=document.getElementById('cnt-'+k);if(el)el.textContent=cm[k]||'';});
 }
-function c(cat){return deals.filter(function(d){return d.cat===cat;}).length;}
-function cRet(){return deals.filter(function(d){return d.cat==='retail'||isGenRet(d.vendor);}).length;}
+function c(cat){ return deals.filter(function(d){return d.cat===cat;}).length; }
+function cRet(){ return deals.filter(function(d){return d.cat==='retail'||isGenRet(d.vendor);}).length; }
 
-function renderDeals(){
-  var q=(document.getElementById('fi').value||'').toLowerCase().trim();
-  var sort=document.getElementById('sortSel').value;
-  document.getElementById('fuelOutput').innerHTML='';document.getElementById('insOutput').innerHTML='';
-  document.getElementById('livePanel').style.display='none';document.getElementById('dealOutput').style.display='block';
+// ── RENDER ────────────────────────────────────────────────────────
+function renderDeals() {
+  var q = (document.getElementById('fi').value||'').toLowerCase().trim();
+  var sort = document.getElementById('sortSel').value;
+  document.getElementById('fuelOutput').innerHTML='';
+  document.getElementById('insOutput').innerHTML='';
+  document.getElementById('livePanel').style.display='none';
+  document.getElementById('dealOutput').style.display='block';
   document.getElementById('infoArea').innerHTML='';
-  if(activeFilter==='live'){document.getElementById('dealOutput').style.display='none';document.getElementById('livePanel').style.display='block';loadLive('woolworths',document.querySelector('.live-tab'));setTitle('Live Specials','Direct links to retailer websites \u2014 always current');return;}
-  if(activeFilter==='fuel'){document.getElementById('dealOutput').innerHTML='';renderFuel(q);setTitle('Fuel Prices \u2014 VIC','Cheapest per fuel type highlighted');return;}
-  if(activeFilter==='insurance'){document.getElementById('dealOutput').innerHTML='';renderIns(q);setTitle('Insurance Offers','Current Australian insurance deals');return;}
-  var pool=deals.slice();
-  if(activeFilter==='all'||activeFilter==='coupon'){coupons.forEach(function(cv){pool.push({vendor:cv.vendor,cat:'coupon',_cpn:true,_code:cv.code,title:cv.code+(cv.dt?' \u2014 '+cv.dt:''),desc:cv.desc,pNow:null,pWas:null,disc:0,url:cv.url,ts:''});});}
-  var items=pool.filter(function(d){
-    var catOk=activeFilter==='all'?true:activeFilter==='coupon'?(d._cpn||d.cat==='coupon'):activeFilter==='retail'?(d.cat==='retail'||isGenRet(d.vendor)):activeFilter==='entertainment'?(d.cat==='entertainment'||d.cat==='food'):d.cat===activeFilter;
-    var qOk=!q||d.title.toLowerCase().indexOf(q)!==-1||(d.desc||'').toLowerCase().indexOf(q)!==-1||(d.vendor||'').toLowerCase().indexOf(q)!==-1;
-    return catOk&&qOk;
+
+  if (activeFilter==='live') {
+    document.getElementById('dealOutput').style.display='none';
+    document.getElementById('livePanel').style.display='block';
+    loadLive('woolworths', document.querySelector('.live-tab'));
+    setTitle('Live Specials','Direct links to retailer websites');
+    return;
+  }
+  if (activeFilter==='fuel') {
+    document.getElementById('dealOutput').innerHTML='';
+    renderFuelGrid(q);
+    setTitle('Fuel Prices','Cheapest per fuel type highlighted');
+    return;
+  }
+  if (activeFilter==='insurance') {
+    document.getElementById('dealOutput').innerHTML='';
+    renderInsGrid(q);
+    setTitle('Insurance Offers','Current Australian insurance deals');
+    return;
+  }
+
+  var pool = deals.slice();
+  if (activeFilter==='all'||activeFilter==='coupon') {
+    coupons.forEach(function(cv){
+      pool.push({vendor:cv.vendor, cat:'coupon', _cpn:true, _code:cv.code,
+        title:cv.code+(cv.dt?' \u2014 '+cv.dt:''), desc:cv.desc,
+        pNow:null, pWas:null, disc:0, url:cv.url, ts:''});
+    });
+  }
+  var items = pool.filter(function(d){
+    var catOk = activeFilter==='all' ? true
+      : activeFilter==='coupon'  ? (d._cpn||d.cat==='coupon')
+      : activeFilter==='retail'  ? (d.cat==='retail'||isGenRet(d.vendor))
+      : activeFilter==='entertainment' ? (d.cat==='entertainment'||d.cat==='food')
+      : d.cat===activeFilter;
+    var qOk = !q
+      || d.title.toLowerCase().indexOf(q)!==-1
+      || (d.desc||'').toLowerCase().indexOf(q)!==-1
+      || (d.vendor||'').toLowerCase().indexOf(q)!==-1;
+    return catOk && qOk;
   });
-  if(sort==='discount')items.sort(function(a,b){return(b.disc||0)-(a.disc||0);});
-  if(sort==='price_asc')items.sort(function(a,b){return(a.pNow!=null?a.pNow:9999)-(b.pNow!=null?b.pNow:9999);});
-  if(sort==='price_desc')items.sort(function(a,b){return(b.pNow||0)-(a.pNow||0);});
-  if(sort==='newest')items.sort(function(a,b){return new Date(b.ts||0)-new Date(a.ts||0);});
-  var lbl={all:'All Deals',woolworths:'Woolworths Deals',coles:'Coles Deals',aldi:'ALDI Deals',amazon:'Amazon AU',retail:'Retail Deals',chemist:'Health & Beauty',telco:'Mobile Plans',nbn:'NBN & Internet',energy:'Energy Deals',travel:'Travel Deals',entertainment:'Movies & Entertainment',coupon:'Coupon Codes'};
-  setTitle(lbl[activeFilter]||'Deals',items.length+' result'+(items.length!==1?'s':''));
-  if(activeFilter==='woolworths'||activeFilter==='coles'){var rn=activeFilter.charAt(0).toUpperCase()+activeFilter.slice(1);document.getElementById('infoArea').innerHTML='<div class="info-note">Deals from OzBargain community posts. For live '+rn+' specials use <strong>&#128308; Live Specials</strong> in the sidebar, or <a href="https://www.trolley.com.au" target="_blank" rel="noopener">Trolley.com.au</a> for a side-by-side price comparison.</div>';}
-  if(!items.length){document.getElementById('dealOutput').innerHTML='<div class="deals-grid"><div class="empty-state"><h3>No deals found'+(q?' for \u201c'+esc(q)+'\u201d':'')+' </h3><p>Try clearing your search, choosing a different category, or use Live Specials.</p></div></div>';if(activeFilter==='all'&&fuel.length)renderFuelSummary();return;}
-  var h='<div class="deals-grid">';
+
+  if (sort==='discount') items.sort(function(a,b){return(b.disc||0)-(a.disc||0);});
+  if (sort==='price_asc') items.sort(function(a,b){return(a.pNow!=null?a.pNow:9999)-(b.pNow!=null?b.pNow:9999);});
+  if (sort==='price_desc') items.sort(function(a,b){return(b.pNow||0)-(a.pNow||0);});
+  if (sort==='newest') items.sort(function(a,b){return new Date(b.ts||0)-new Date(a.ts||0);});
+
+  var labels = {all:'All Deals', woolworths:'Woolworths Deals', coles:'Coles Deals',
+    aldi:'ALDI Deals', amazon:'Amazon AU', retail:'Retail Deals',
+    chemist:'Health & Beauty', telco:'Mobile Plans', nbn:'NBN & Internet',
+    energy:'Energy Deals', travel:'Travel Deals',
+    entertainment:'Movies & Entertainment', coupon:'Coupon Codes'};
+  setTitle(labels[activeFilter]||'Deals', items.length+' result'+(items.length!==1?'s':''));
+
+  if (activeFilter==='woolworths'||activeFilter==='coles') {
+    var rn = activeFilter.charAt(0).toUpperCase()+activeFilter.slice(1);
+    document.getElementById('infoArea').innerHTML='<div class="info-note">Deals from OzBargain community posts. '
+      +'For live '+rn+' specials use <strong>&#128308; Live Specials</strong> in the sidebar, or '
+      +'<a href="https://www.trolley.com.au" target="_blank" rel="noopener">Trolley.com.au</a>.</div>';
+  }
+  if (!items.length) {
+    document.getElementById('dealOutput').innerHTML='<div class="deals-grid"><div class="empty-state">'
+      +'<h3>No deals found'+(q?' for \u201c'+esc(q)+'\u201d':'')+' </h3>'
+      +'<p>Try clearing your search, choosing a different category, or use Live Specials.</p>'
+      +'</div></div>';
+    if (activeFilter==='all' && fuel.length) renderFuelSummary();
+    return;
+  }
+  var h = '<div class="deals-grid">';
   items.slice(0,48).forEach(function(d){h+=dealCard(d);});
-  h+='</div>';
-  document.getElementById('dealOutput').innerHTML=h;
-  if(activeFilter==='all'&&fuel.length)renderFuelSummary();
+  h += '</div>';
+  document.getElementById('dealOutput').innerHTML = h;
+  if (activeFilter==='all' && fuel.length) renderFuelSummary();
 }
 
-var HOW_TO={
-  woolworths:'Add to cart on woolworths.com.au or the Woolworths app. Specials apply in-store and online. Everyday Rewards members earn extra points. Specials reset each Wednesday.',
+// ── HOW TO AVAIL ──────────────────────────────────────────────────
+var HOW_TO = {
+  woolworths:'Add to cart on woolworths.com.au or the app. Specials apply in-store and online. Everyday Rewards members earn extra points. Specials reset each Wednesday.',
   coles:'Available in-store and on coles.com.au. Flybuys members earn bonus points. Half-price specials rotate each Wednesday.',
-  aldi:'ALDI Special Buys are in-store only and sell out fast. Available Wednesday and Saturday. No online shopping for Special Buys \u2014 get in early.',
-  amazon:'Add to cart on amazon.com.au. Prime members get free delivery. Lightning deals are time-limited \u2014 act quickly. Try Subscribe & Save for recurring discounts.',
-  retail:"Click View deal to go to the retailer's site. Check if the deal is available in-store near Point Cook.",
-  chemist:'Available in Chemist Warehouse stores or online. Half-price specials rotate weekly. Already heavily discounted \u2014 no price-match needed.',
-  travel:'Click through to the booking site. Travel prices are time-limited. Compare via Webjet and Skyscanner first. Stack with Cashrewards for extra savings.',
-  telco:"Click See current price to view the live plan on the carrier's site. Compare via WhistleOut or Finder before signing up. No lock-in plans let you switch anytime.",
-  nbn:'Click through to check current pricing. Many NBN providers offer months free on signup. Compare via Finder or aussiebb.com.au.',
-  energy:'Get a quote on the provider\u2019s site. Always compare via energymadeeasy.gov.au first. Switching in VIC takes ~10 minutes and can save $200\u2013$500/year.',
-  insurance:'Get a personalised quote on their site. Always compare at least 3 providers via comparethemarket.com.au or Finder before buying.',
-  coupon:'Copy the code above. Go to the retailer\u2019s site, add items to cart, paste the code at checkout. Check expiry \u2014 most OzBargain codes last 24\u201372 hours.',
-  fuel:'Price is at a specific station at time of scrape. Use motormouth.com.au with postcode 3030 to find cheapest fuel near Point Cook right now.',
-  entertainment:'Check the cinema website for booking. Discount Tuesdays (Event, Hoyts, Village) must be booked on the day. Meerkat Movies via Compare The Market gives 2-for-1 on Tuesdays.',
-  food:'Open the app (Uber Eats, Menulog or DoorDash) and apply the promo code at checkout. Codes are often new-user only or time-limited.',
+  aldi:'ALDI Special Buys are in-store only and sell out fast. Available Wednesday and Saturday. No online shopping for Special Buys.',
+  amazon:'Add to cart on amazon.com.au. Prime members get free delivery. Lightning deals are time-limited.',
+  retail:'Click View deal to go to the retailer website. Check if also available in-store near Point Cook.',
+  chemist:'Available in Chemist Warehouse stores or online. Half-price specials rotate weekly.',
+  travel:'Click through to the booking site. Travel prices are time-limited. Compare via Skyscanner first.',
+  telco:'Click See current price to view the live plan. Compare via WhistleOut or Finder before signing up.',
+  nbn:'Click through to check current pricing. Compare via Finder or aussiebb.com.au. Many offer months free on signup.',
+  energy:'Get a quote on their site. Always compare via energymadeeasy.gov.au first. Switching in VIC takes ~10 min.',
+  insurance:'Get a personalised quote on their site. Always compare at least 3 providers via comparethemarket.com.au.',
+  coupon:'Copy the code above. Go to the retailer site, add items to cart, paste at checkout. Check expiry.',
+  fuel:'Price is at a specific station at time of scrape. Use motormouth.com.au with postcode 3030 to find cheapest near Point Cook.',
+  entertainment:'Check the cinema website for booking. Discount Tuesdays must usually be booked on the day.',
+  food:'Open the app (Uber Eats, Menulog or DoorDash) and apply the promo code at checkout.',
 };
-function howTo(cat,cpn){if(cpn)return HOW_TO.coupon;return HOW_TO[cat]||'Click View deal to open the retailer\u2019s page for full details.';}
+function howTo(cat,cpn){ if(cpn)return HOW_TO.coupon; return HOW_TO[cat]||'Click View deal to open the retailer page for full details.'; }
 
-function catCls(cat){var m={woolworths:'cg-grocery',coles:'cg-grocery',aldi:'cg-grocery',grocery:'cg-grocery',retail:'cg-retail',amazon:'cg-retail',chemist:'cg-chemist',travel:'cg-travel',telco:'cg-telco',nbn:'cg-nbn',energy:'cg-energy',coupon:'cg-coupon',fuel:'cg-fuel',insurance:'cg-ins',food:'cg-food',entertainment:'cg-retail'};return m[cat]||'cg-def';}
-function vbadge(v,cat){var n=(v||'').toLowerCase();if(n.indexOf('woolworths')!==-1||n.indexOf('woolies')!==-1)return'vbadge vb-ww';if(n.indexOf('coles')!==-1)return'vbadge vb-coles';if(n.indexOf('aldi')!==-1)return'vbadge vb-aldi';if(n.indexOf('amazon')!==-1)return'vbadge vb-amz';if(n.indexOf('big w')!==-1||n.indexOf('bigw')!==-1)return'vbadge vb-bw';if(n.indexOf('chemist')!==-1||n.indexOf('priceline')!==-1)return'vbadge vb-cw';if(n.indexOf('jb hi-fi')!==-1||n.indexOf('jb hifi')!==-1)return'vbadge vb-jb';if(cat==='coupon')return'vbadge vb-cpn';if(cat==='insurance'||cat==='finance')return'vbadge vb-ins';if(cat==='fuel')return'vbadge vb-fuel';if(cat==='travel')return'vbadge vb-travel';if(cat==='telco'||cat==='nbn')return'vbadge vb-nbn';return'vbadge vb-def';}
-
+// ── DEAL CARD ─────────────────────────────────────────────────────
+function catCls(cat){
+  var m={woolworths:'cg-grocery',coles:'cg-grocery',aldi:'cg-grocery',grocery:'cg-grocery',
+    retail:'cg-retail',amazon:'cg-retail',chemist:'cg-chemist',travel:'cg-travel',
+    telco:'cg-telco',nbn:'cg-nbn',energy:'cg-energy',coupon:'cg-coupon',
+    fuel:'cg-fuel',insurance:'cg-ins',food:'cg-food',entertainment:'cg-retail'};
+  return m[cat]||'cg-def';
+}
+function vbadge(v,cat){
+  var nm=(v||'').toLowerCase();
+  if(nm.indexOf('woolworths')!==-1||nm.indexOf('woolies')!==-1) return'vbadge vb-ww';
+  if(nm.indexOf('coles')!==-1) return'vbadge vb-coles';
+  if(nm.indexOf('aldi')!==-1) return'vbadge vb-aldi';
+  if(nm.indexOf('amazon')!==-1) return'vbadge vb-amz';
+  if(nm.indexOf('big w')!==-1||nm.indexOf('bigw')!==-1) return'vbadge vb-bw';
+  if(nm.indexOf('chemist')!==-1||nm.indexOf('priceline')!==-1) return'vbadge vb-cw';
+  if(nm.indexOf('jb hi-fi')!==-1||nm.indexOf('jb hifi')!==-1) return'vbadge vb-jb';
+  if(cat==='coupon') return'vbadge vb-cpn';
+  if(cat==='insurance'||cat==='finance') return'vbadge vb-ins';
+  if(cat==='fuel') return'vbadge vb-fuel';
+  if(cat==='travel') return'vbadge vb-travel';
+  if(cat==='telco'||cat==='nbn') return'vbadge vb-nbn';
+  return'vbadge vb-def';
+}
 function dealCard(d){
   var vc=vbadge(d.vendor,d.cat), cc=catCls(d.cat);
   var disc=d.disc>0?'<span class="disc-pill">-'+d.disc+'%</span>':'';
   var ph='';
-  if(d.pNow&&d.pNow>0){var sav=(d.pWas&&d.pWas>d.pNow)?Math.round(((d.pWas-d.pNow)/d.pWas)*100):0;ph='<div class="price-row"><span class="price-now">$'+d.pNow.toFixed(2)+'</span>'+(d.pWas&&d.pWas>d.pNow?'<span class="price-was">$'+d.pWas.toFixed(2)+'</span>'+(sav>0?'<span class="save-pill">Save '+sav+'%</span>':''):'')+'</div>';}
-  else if(d.url){var lbl=(d.cat==='telco'||d.cat==='nbn')?'Check current plan price':d.cat==='energy'?'Compare rates on their site':d.cat==='insurance'?'Get a quote':'Check current price';ph='<div class="price-cta"><span>&#128178;</span><span>'+lbl+'</span></div>';}
-  var cpn=d._cpn&&d._code?'<div class="cpn-row"><span class="cpn-code">'+esc(d._code)+'</span><button class="copy-btn" onclick="cpyCode(\''+esc(d._code)+'\',this)">Copy</button></div>':'';
+  if(d.pNow&&d.pNow>0){
+    var sav=(d.pWas&&d.pWas>d.pNow)?Math.round(((d.pWas-d.pNow)/d.pWas)*100):0;
+    ph='<div class="price-row"><span class="price-now">$'+d.pNow.toFixed(2)+'</span>'
+      +(d.pWas&&d.pWas>d.pNow?'<span class="price-was">$'+d.pWas.toFixed(2)+'</span>'
+        +(sav>0?'<span class="save-pill">Save '+sav+'%</span>':''):'')+'</div>';
+  } else if(d.url){
+    var lbl=(d.cat==='telco'||d.cat==='nbn')?'Check current plan price'
+      :d.cat==='energy'?'Compare rates on their site'
+      :d.cat==='insurance'?'Get a quote':'Check current price';
+    ph='<div class="price-cta"><span>&#128178;</span><span>'+lbl+'</span></div>';
+  }
+  var cpn=d._cpn&&d._code
+    ?'<div class="cpn-row"><span class="cpn-code">'+esc(d._code)+'</span>'
+      +'<button class="copy-btn" onclick="cpyCode(\''+esc(d._code)+'\',this)">Copy</button></div>':'';
   var np=!d.pNow||d.pNow<=0;
-  var lnk=d.url?'<a class="'+(np?'live-btn':'card-link')+'" href="'+esc(d.url)+'" target="_blank" rel="noopener">'+(np?'See current price &#8594;':'View deal &#8594;')+'</a>':'<span></span>';
-  var hw=howTo(d.cat,!!d._cpn), hwId='hw_'+Math.random().toString(36).slice(2,9);
-  return'<article class="deal-card '+cc+'"><div class="card-body"><div class="card-top"><span class="'+vc+'">'+esc(d.vendor)+'</span>'+disc+'</div><h3 class="card-title">'+esc(d.title)+'</h3>'+(d.desc?'<p class="card-desc">'+esc(d.desc.slice(0,115))+'</p>':'')+ph+cpn+'</div><div class="card-foot">'+lnk+'</div><div class="how-wrap"><button class="how-btn" onclick="toggleHow(this)" aria-expanded="false" aria-controls="'+hwId+'"><span>&#128161; How to avail</span><span class="how-chev" aria-hidden="true">&#8250;</span></button><div class="how-body" id="'+hwId+'" hidden>'+esc(hw)+'</div></div></article>';
+  var lnk=d.url
+    ?'<a class="'+(np?'live-btn':'card-link')+'" href="'+esc(d.url)+'" target="_blank" rel="noopener">'
+      +(np?'See current price &#8594;':'View deal &#8594;')+'</a>':'<span></span>';
+  var hw=howTo(d.cat,!!d._cpn);
+  var hwId='hw_'+Math.random().toString(36).slice(2,9);
+  return '<article class="deal-card '+cc+'">'
+    +'<div class="card-body">'
+    +'<div class="card-top"><span class="'+vc+'">'+esc(d.vendor)+'</span>'+disc+'</div>'
+    +'<h3 class="card-title">'+esc(d.title)+'</h3>'
+    +(d.desc?'<p class="card-desc">'+esc(d.desc.slice(0,115))+'</p>':'')
+    +ph+cpn+'</div>'
+    +'<div class="card-foot">'+lnk+'</div>'
+    +'<div class="how-wrap">'
+    +'<button class="how-btn" onclick="toggleHow(this)" aria-expanded="false" aria-controls="'+hwId+'">'
+    +'<span>&#128161; How to avail</span><span class="how-chev">&#8250;</span></button>'
+    +'<div class="how-body" id="'+hwId+'" hidden>'+esc(hw)+'</div>'
+    +'</div></article>';
 }
-function toggleHow(btn){var id=btn.getAttribute('aria-controls'),body=document.getElementById(id),open=btn.getAttribute('aria-expanded')==='true';btn.setAttribute('aria-expanded',open?'false':'true');if(open)body.setAttribute('hidden','');else body.removeAttribute('hidden');var ch=btn.querySelector('.how-chev');if(ch)ch.style.transform=open?'':'rotate(90deg)';}
+function toggleHow(btn){
+  var id=btn.getAttribute('aria-controls'),body=document.getElementById(id);
+  var open=btn.getAttribute('aria-expanded')==='true';
+  btn.setAttribute('aria-expanded',open?'false':'true');
+  if(open)body.setAttribute('hidden','');else body.removeAttribute('hidden');
+  var ch=btn.querySelector('.how-chev');if(ch)ch.style.transform=open?'':'rotate(90deg)';
+}
 
+// ── FUEL ──────────────────────────────────────────────────────────
 function ftc(t){return({ULP:'ULP',E10:'E10',P95:'P95',P98:'P98',Diesel:'Diesel',LPG:'LPG'})[t]||'ULP';}
-function renderFuelSummary(){var bt={};fuel.forEach(function(f){if(!bt[f.type]||f.price<bt[f.type].price)bt[f.type]=f;});var ord=['ULP','E10','P95','P98','Diesel','LPG'],best=ord.filter(function(t){return bt[t];}).map(function(t){return bt[t];});if(!best.length)return;var h='<div class="fuel-panel"><div class="fuel-ph"><div class="fuel-ph-title">&#9981; Best fuel prices near Point Cook</div><a class="fuel-map-link" href="https://www.motormouth.com.au/fuel-price-map?postcode=3030" target="_blank" rel="noopener">Live map &#8594;</a></div><div class="fuel-body">';best.forEach(function(f){var tc=ftc(f.type);h+='<div class="fuel-card best"><div class="fuel-type-bar ftb-'+tc+'">'+esc(f.type)+'</div><div class="fuel-card-body"><div class="fuel-price">'+f.price.toFixed(1)+'&cent;</div><div class="fuel-brand">'+esc(f.brand||f.name)+'</div><div class="fuel-loc">'+esc(f.suburb||'')+'</div><span class="fuel-best-tag">&#9733; Cheapest</span></div></div>';});h+='</div></div>';document.getElementById('fuelOutput').innerHTML=h;}
-function renderFuel(q){if(!fuel.length){document.getElementById('fuelOutput').innerHTML='<div class="deals-grid"><div class="empty-state"><h3>No fuel data</h3><p>Add your VIC Fuel API key in Script Properties for live prices.</p></div></div>';return;}var items=fuel.filter(function(f){return!q||(f.name||'').toLowerCase().indexOf(q)!==-1||(f.brand||'').toLowerCase().indexOf(q)!==-1||(f.suburb||'').toLowerCase().indexOf(q)!==-1;});var bt={};items.forEach(function(f){(bt[f.type]=bt[f.type]||[]).push(f);});Object.keys(bt).forEach(function(t){bt[t].sort(function(a,b){return a.price-b.price;});});var ord=['ULP','E10','P95','P98','Diesel','LPG'],types=ord.filter(function(t){return bt[t];}).concat(Object.keys(bt).filter(function(t){return ord.indexOf(t)===-1;}));var h='<div class="fuel-panel"><div class="fuel-ph"><div class="fuel-ph-title">&#9981; Fuel Prices &mdash; VIC, cheapest first</div><a class="fuel-map-link" href="https://www.motormouth.com.au/fuel-price-map?postcode=3030" target="_blank" rel="noopener">Live map &#8594;</a></div><div class="fuel-body">';types.forEach(function(t){bt[t].forEach(function(f,i){var tc=ftc(t),best=i===0;h+='<div class="fuel-card'+(best?' best':'')+'"><div class="fuel-type-bar ftb-'+tc+'">'+esc(t)+(best?' &#9733;':'')+'</div><div class="fuel-card-body"><div class="fuel-price">'+f.price.toFixed(1)+'&cent;</div><div class="fuel-brand">'+esc(f.brand||f.name)+'</div><div class="fuel-loc">'+esc(f.name)+(f.suburb?', '+esc(f.suburb):'')+'</div>'+(best?'<span class="fuel-best-tag">&#9733; Cheapest</span>':'')+'</div></div>';});});h+='</div></div>';document.getElementById('fuelOutput').innerHTML=h;}
-function renderIns(q){var items=insurance.filter(function(o){return!q||o.title.toLowerCase().indexOf(q)!==-1||(o.insurer||'').toLowerCase().indexOf(q)!==-1;});if(!items.length){document.getElementById('insOutput').innerHTML='<div class="deals-grid"><div class="empty-state"><h3>No insurance offers</h3><p>Run the insurance scraper from your Google Sheet.</p></div></div>';return;}var bt={};items.forEach(function(o){(bt[o.type]=bt[o.type]||[]).push(o);});var ord=['Car','Home','Health','Pet','Travel','Life','Income Protection','General'],types=ord.filter(function(t){return bt[t];}).concat(Object.keys(bt).filter(function(t){return ord.indexOf(t)===-1;}));var h='';types.forEach(function(t){h+='<div style="margin-bottom:var(--g6)"><div class="sec-head"><h3 class="sec-title">&#128737;&#65039; '+esc(t)+' Insurance</h3><span class="sec-count">'+bt[t].length+' offer'+(bt[t].length!==1?'s':'')+'</span></div><div class="ins-grid">';bt[t].forEach(function(o){var disc=o.disc>0?'<span class="disc-pill">-'+o.disc+'%</span>':o.save>0?'<span class="disc-pill">Save $'+o.save+'</span>':'';var lnk=o.url?'<a class="card-link" href="'+esc(o.url)+'" target="_blank" rel="noopener">View offer &#8594;</a>':'';h+='<article class="ins-card"><div class="ins-card-top"><span class="vbadge vb-ins">'+esc(o.insurer)+'</span><span class="ins-type">'+esc(o.type)+'</span>'+disc+'</div><div class="ins-body"><h4 class="ins-title">'+esc(o.title)+'</h4>'+(o.desc?'<p class="ins-desc">'+esc(o.desc.slice(0,120))+'</p>':'')+lnk+'</div></article>';});h+='</div></div>';});document.getElementById('insOutput').innerHTML=h;}
+function fuelCard(f,best){
+  var tc=ftc(f.type);
+  return '<div class="fuel-card'+(best?' best':'')+'"><div class="fuel-type-bar ftb-'+tc+'">'+esc(f.type)+(best?' &#9733;':'')+'</div>'
+    +'<div class="fuel-card-body"><div class="fuel-price">'+f.price.toFixed(1)+'&cent;</div>'
+    +'<div class="fuel-brand">'+esc(f.brand||f.name)+'</div>'
+    +'<div class="fuel-loc">'+esc(f.name)+(f.suburb?', '+esc(f.suburb):'')+'</div>'
+    +(best?'<span class="fuel-best-tag">&#9733; Cheapest</span>':'')
+    +'</div></div>';
+}
+function renderFuelSummary(){
+  var bt={};
+  fuel.forEach(function(f){if(!bt[f.type]||f.price<bt[f.type].price)bt[f.type]=f;});
+  var ord=['ULP','E10','P95','P98','Diesel','LPG'];
+  var best=ord.filter(function(t){return bt[t];}).map(function(t){return bt[t];});
+  if(!best.length)return;
+  var h='<div class="fuel-panel"><div class="fuel-ph"><div class="fuel-ph-title">&#9981; Best fuel near Point Cook</div>'
+    +'<a class="fuel-map-link" href="https://www.motormouth.com.au/fuel-price-map?postcode=3030" target="_blank" rel="noopener">Live map &#8594;</a>'
+    +'</div><div class="fuel-body">';
+  best.forEach(function(f){h+=fuelCard(f,true);});
+  h+='</div></div>';
+  document.getElementById('fuelOutput').innerHTML=h;
+}
+function renderFuelGrid(q){
+  if(!fuel.length){
+    document.getElementById('fuelOutput').innerHTML='<div class="deals-grid"><div class="empty-state"><h3>No fuel data</h3><p>Add your VIC Fuel API key in Script Properties for live prices.</p></div></div>';
+    return;
+  }
+  var items=fuel.filter(function(f){
+    return!q||(f.name||'').toLowerCase().indexOf(q)!==-1||(f.brand||'').toLowerCase().indexOf(q)!==-1;
+  });
+  var bt={};
+  items.forEach(function(f){(bt[f.type]=bt[f.type]||[]).push(f);});
+  Object.keys(bt).forEach(function(t){bt[t].sort(function(a,b){return a.price-b.price;});});
+  var ord=['ULP','E10','P95','P98','Diesel','LPG'];
+  var types=ord.filter(function(t){return bt[t];}).concat(Object.keys(bt).filter(function(t){return ord.indexOf(t)===-1;}));
+  var h='<div class="fuel-panel"><div class="fuel-ph"><div class="fuel-ph-title">&#9981; Fuel Prices — VIC</div>'
+    +'<a class="fuel-map-link" href="https://www.motormouth.com.au/fuel-price-map?postcode=3030" target="_blank" rel="noopener">Live map &#8594;</a>'
+    +'</div><div class="fuel-body">';
+  types.forEach(function(t){bt[t].forEach(function(f,i){h+=fuelCard(f,i===0);});});
+  h+='</div></div>';
+  document.getElementById('fuelOutput').innerHTML=h;
+}
 
-// LIVE DATA
-var LIVE = {
-  woolworths: { name:'Woolworths', c:'#15803d', b:'#dcfce7', links:[
-    {n:'Half Price Specials', u:'https://www.woolworths.com.au/shop/browse/specials/half-price'},
-    {n:'New Specials This Week', u:'https://www.woolworths.com.au/shop/browse/specials/new-specials'},
-    {n:'Everyday Rewards Offers', u:'https://www.woolworths.com.au/shop/browse/specials/everyday-rewards-offers'},
-    {n:'Fresh Produce', u:'https://www.woolworths.com.au/shop/browse/fruit-veg/specials'},
-    {n:'Meat & Seafood', u:'https://www.woolworths.com.au/shop/browse/meat-seafood/specials'},
-    {n:'Pantry Specials', u:'https://www.woolworths.com.au/shop/browse/pantry/specials'},
-    {n:'Snacks & Confectionery', u:'https://www.woolworths.com.au/shop/browse/snacks-confectionery/specials'},
-    {n:'Drinks', u:'https://www.woolworths.com.au/shop/browse/drinks/specials'},
-    {n:'Frozen Food', u:'https://www.woolworths.com.au/shop/browse/frozen/specials'},
-    {n:'Dairy & Eggs', u:'https://www.woolworths.com.au/shop/browse/dairy-eggs-fridge/specials'},
-    {n:'Health & Beauty', u:'https://www.woolworths.com.au/shop/browse/health-beauty/specials'},
-    {n:'Baby Specials', u:'https://www.woolworths.com.au/shop/browse/baby/specials'},
-    {n:'Cleaning', u:'https://www.woolworths.com.au/shop/browse/cleaning-pest/specials'},
-    {n:'Pet', u:'https://www.woolworths.com.au/shop/browse/pet/specials'},
-    {n:'All Woolworths Specials', u:'https://www.woolworths.com.au/shop/specials/all'},
-  ]},
-  coles: { name:'Coles', c:'#991b1b', b:'#fee2e2', links:[
-    {n:'All On Special', u:'https://www.coles.com.au/on-special'},
-    {n:'Half Price', u:'https://www.coles.com.au/on-special?sortBy=priceAsc&filters=halfPrice'},
-    {n:'Fresh Produce', u:'https://www.coles.com.au/on-special/fruit-vegetables'},
-    {n:'Meat & Seafood', u:'https://www.coles.com.au/on-special/deli-meat-seafood'},
-    {n:'Dairy & Eggs', u:'https://www.coles.com.au/on-special/dairy-eggs-fridge'},
-    {n:'Pantry', u:'https://www.coles.com.au/on-special/pantry'},
-    {n:'Snacks & Confectionery', u:'https://www.coles.com.au/on-special/snacks-confectionery'},
-    {n:'Drinks', u:'https://www.coles.com.au/on-special/drinks'},
-    {n:'Frozen', u:'https://www.coles.com.au/on-special/frozen'},
-    {n:'Health & Beauty', u:'https://www.coles.com.au/on-special/health-beauty'},
-    {n:'Baby & Child', u:'https://www.coles.com.au/on-special/baby-child'},
-    {n:'Household', u:'https://www.coles.com.au/on-special/household'},
-    {n:'Pet', u:'https://www.coles.com.au/on-special/pet'},
-    {n:'Flybuys Bonus Points', u:'https://www.coles.com.au/on-special?filters=flybuys'},
-  ]},
-  aldi: { name:'ALDI', c:'#1e40af', b:'#dbeafe', links:[
-    {n:'This Week Special Buys', u:'https://www.aldi.com.au/en/special-buys/'},
-    {n:'Next Week Special Buys', u:'https://www.aldi.com.au/en/special-buys/next-week/'},
-    {n:'Home & Garden', u:'https://www.aldi.com.au/en/special-buys/home-garden/'},
-    {n:'Clothing & Footwear', u:'https://www.aldi.com.au/en/special-buys/clothing-footwear/'},
-    {n:'Tools & DIY', u:'https://www.aldi.com.au/en/special-buys/tools-diy/'},
-    {n:'Electronics', u:'https://www.aldi.com.au/en/special-buys/electronics/'},
-    {n:'Outdoor & Sport', u:'https://www.aldi.com.au/en/special-buys/outdoor-sport/'},
-    {n:'Grocery Specials', u:'https://www.aldi.com.au/en/specials/'},
-  ]},
-  chemist: { name:'Chemist WH', c:'#713f12', b:'#fefce8', links:[
-    {n:'All Specials', u:'https://www.chemistwarehouse.com.au/specials'},
-    {n:'Half Price Sale', u:'https://www.chemistwarehouse.com.au/half-price-sale'},
-    {n:'Vitamins & Supplements', u:'https://www.chemistwarehouse.com.au/buy/vitamins-supplements/specials'},
-    {n:'Skincare', u:'https://www.chemistwarehouse.com.au/buy/skincare/specials'},
-    {n:'Hair Care', u:'https://www.chemistwarehouse.com.au/buy/hair-care/specials'},
-    {n:'Baby & Kids', u:'https://www.chemistwarehouse.com.au/buy/baby-kids/specials'},
-    {n:'Cold & Flu', u:'https://www.chemistwarehouse.com.au/buy/cold-flu/specials'},
-    {n:'Dental Care', u:'https://www.chemistwarehouse.com.au/buy/dental-care/specials'},
-  ]},
-  amazon: { name:'Amazon AU', c:'#c2410c', b:'#fff7ed', links:[
-    {n:"Today's Deals (Gold Box)", u:'https://www.amazon.com.au/gp/goldbox'},
-    {n:'Electronics Deals', u:'https://www.amazon.com.au/gp/goldbox?deals-widget=%7B%22version%22%3A1%2C%22browseNodeIds%22%3A%5B%226728488031%22%5D%7D'},
-    {n:'Kitchen & Home', u:'https://www.amazon.com.au/gp/goldbox?deals-widget=%7B%22version%22%3A1%2C%22browseNodeIds%22%3A%5B%22967656031%22%5D%7D'},
-    {n:'Toys & Games', u:'https://www.amazon.com.au/gp/goldbox?deals-widget=%7B%22version%22%3A1%2C%22browseNodeIds%22%3A%5B%221254604031%22%5D%7D'},
-    {n:'Sports & Outdoors', u:'https://www.amazon.com.au/gp/goldbox?deals-widget=%7B%22version%22%3A1%2C%22browseNodeIds%22%3A%5B%221520523031%22%5D%7D'},
-    {n:'Beauty', u:'https://www.amazon.com.au/gp/goldbox?deals-widget=%7B%22version%22%3A1%2C%22browseNodeIds%22%3A%5B%221975558031%22%5D%7D'},
-    {n:'Gaming', u:'https://www.amazon.com.au/gp/goldbox?deals-widget=%7B%22version%22%3A1%2C%22browseNodeIds%22%3A%5B%22823836031%22%5D%7D'},
-    {n:'Pet Supplies', u:'https://www.amazon.com.au/gp/goldbox?deals-widget=%7B%22version%22%3A1%2C%22browseNodeIds%22%3A%5B%221922888031%22%5D%7D'},
-  ]},
-  jbhifi: { name:'JB Hi-Fi', c:'#14532d', b:'#f0fdf4', links:[
-    {n:'Weekly Specials', u:'https://www.jbhifi.com.au/pages/weekly-specials'},
-    {n:'TV Specials', u:'https://www.jbhifi.com.au/collections/tv-specials'},
-    {n:'Laptop Specials', u:'https://www.jbhifi.com.au/collections/laptop-specials'},
-    {n:'Phone Specials', u:'https://www.jbhifi.com.au/collections/phone-specials'},
-    {n:'Audio Specials', u:'https://www.jbhifi.com.au/collections/audio-specials'},
-    {n:'Gaming Specials', u:'https://www.jbhifi.com.au/collections/gaming-specials'},
-  ]},
-  bigw: { name:'Big W', c:'#075985', b:'#e0f2fe', links:[
-    {n:'Sale & Clearance', u:'https://www.bigw.com.au/category/sale-clearance'},
-    {n:'Toys On Sale', u:'https://www.bigw.com.au/category/sale-clearance/toys'},
-    {n:'Clothing On Sale', u:'https://www.bigw.com.au/category/sale-clearance/clothing'},
-    {n:'Electronics On Sale', u:'https://www.bigw.com.au/category/sale-clearance/electronics'},
-    {n:'Home On Sale', u:'https://www.bigw.com.au/category/sale-clearance/home'},
-    {n:'Baby On Sale', u:'https://www.bigw.com.au/category/sale-clearance/baby'},
-  ]},
-  kmart: { name:'Kmart', c:'#5b21b6', b:'#ede9fe', links:[
-    {n:'On Sale Now', u:'https://www.kmart.com.au/category/on-sale/'},
-    {n:'Home On Sale', u:'https://www.kmart.com.au/category/on-sale/home/'},
-    {n:'Clothing On Sale', u:'https://www.kmart.com.au/category/on-sale/clothing/'},
-    {n:'Toys On Sale', u:'https://www.kmart.com.au/category/on-sale/toys/'},
-    {n:'Baby & Kids', u:'https://www.kmart.com.au/category/on-sale/baby-kids/'},
-    {n:'Electronics On Sale', u:'https://www.kmart.com.au/category/on-sale/electronics/'},
-  ]},
-  movies: { name:'Movies', c:'#991b1b', b:'#fee2e2', links:[
-    {n:'Event Cinemas — Cheap Tuesday', u:'https://www.eventcinemas.com.au/deals/cheap-tuesday'},
-    {n:'Village Cinemas — Monday Movies', u:'https://www.villagecinemas.com.au/offers/monday-movies'},
-    {n:'Hoyts — Discount Tuesdays', u:'https://www.hoyts.com.au/offers/discount-tuesday'},
-    {n:'Event Cinemas — All Offers', u:'https://www.eventcinemas.com.au/offers'},
-    {n:'Village Cinemas — All Offers', u:'https://www.villagecinemas.com.au/offers'},
-    {n:'Hoyts — All Offers', u:'https://www.hoyts.com.au/offers'},
-    {n:'Scoopon — Movie Deals', u:'https://www.scoopon.com.au/search/?q=movie'},
-    {n:'Groupon — Melbourne Cinema', u:'https://www.groupon.com.au/local/melbourne/movie-tickets'},
-    {n:'OzBargain — Movie Deals', u:'https://www.ozbargain.com.au/tag/movies'},
-  ]},
-  ubereats: { name:'Uber Eats', c:'#007a4c', b:'#dcfce7', links:[
-    {n:'Uber One — Member Offers',            u:'https://www.ubereats.com/au/uber-one'},
-    {n:'Uber Eats — Daily Promotions',        u:'https://www.ubereats.com/au/promotions'},
-    {n:'Uber Eats — $0 Delivery Restaurants', u:'https://www.ubereats.com/au/feed?pl=JTdCJTIyYWRkcmVzcyUyMiUzQSUyMlBvaW50JTIwQ29vayUyMiUyQyUyMnJlZmVyZW5jZSUyMiUzQSUyMkNoSUpXcHlSSVkxTzFtb1JnVVREZzI3aUh3MCUyMiUyQyUyMnJlZmVyZW5jZVR5cGUlMjIlM0ElMjJnb29nbGVfcGxhY2VzJTIyJTJDJTIybGF0aXR1ZGUlMjIlM0EtMzcuODg3NjIlMkMlMjJsb25naXR1ZGUlMjIlM0ExNDQuNzUyMzglN0Q%3D'},
-    {n:'Menulog — Today's Deals',             u:'https://www.menulog.com.au/deals'},
-    {n:'Menulog — Free Delivery Restaurants', u:'https://www.menulog.com.au/search?free_delivery=true'},
-    {n:'DoorDash — Promos & Offers',          u:'https://www.doordash.com/en-AU/promotions/'},
-    {n:'DoorDash — DashPass Savings',         u:'https://www.doordash.com/dashpass/'},
-    {n:'Hungry Jacks — App Offers',           u:'https://www.hungryjacks.com.au/deals'},
-    {n:'Dominos — Latest Deals',              u:'https://www.dominos.com.au/inside-dominos/deals'},
-    {n:'Pizza Hut — Current Offers',          u:'https://www.pizzahut.com.au/deals'},
-    {n:'OzBargain — Food Deals',              u:'https://www.ozbargain.com.au/cat/food-drink/deals'},
-    {n:'OzBargain — Uber Eats Codes',         u:'https://www.ozbargain.com.au/tag/uber-eats'},
-  ]},
-  streaming: { name:'Streaming', c:'#1e40af', b:'#dbeafe', links:[
-    {n:'Netflix AU — Plans', u:'https://www.netflix.com/au/signup'},
-    {n:'Disney+ AU', u:'https://www.disneyplus.com/en-au'},
-    {n:'Binge — Free Trial', u:'https://binge.com.au'},
-    {n:'Stan — Free Trial', u:'https://www.stan.com.au'},
-    {n:'Kayo Sports — Free Trial', u:'https://kayosports.com.au'},
-    {n:'Paramount+', u:'https://www.paramountplus.com/au/'},
-    {n:'Apple TV+', u:'https://tv.apple.com/au'},
-    {n:'YouTube Premium', u:'https://www.youtube.com/premium'},
-    {n:'Spotify Premium', u:'https://www.spotify.com/au/premium/'},
-    {n:'OzBargain Streaming', u:'https://www.ozbargain.com.au/tag/streaming'},
-  ]},
-};
+// ── INSURANCE ─────────────────────────────────────────────────────
+function renderInsGrid(q){
+  var items=insurance.filter(function(o){
+    return!q||o.title.toLowerCase().indexOf(q)!==-1||(o.insurer||'').toLowerCase().indexOf(q)!==-1;
+  });
+  if(!items.length){
+    document.getElementById('insOutput').innerHTML='<div class="deals-grid"><div class="empty-state"><h3>No insurance offers</h3><p>Run the insurance scraper from your Google Sheet.</p></div></div>';
+    return;
+  }
+  var bt={};items.forEach(function(o){(bt[o.type]=bt[o.type]||[]).push(o);});
+  var ord=['Car','Home','Health','Pet','Travel','Life','Income Protection','General'];
+  var types=ord.filter(function(t){return bt[t];}).concat(Object.keys(bt).filter(function(t){return ord.indexOf(t)===-1;}));
+  var h='';
+  types.forEach(function(t){
+    h+='<div style="margin-bottom:var(--g6)"><div class="sec-head"><h3 class="sec-title">&#128737;&#65039; '+esc(t)+' Insurance</h3>'
+      +'<span class="sec-count">'+bt[t].length+' offer'+(bt[t].length!==1?'s':'')+'</span></div><div class="ins-grid">';
+    bt[t].forEach(function(o){
+      var disc=o.disc>0?'<span class="disc-pill">-'+o.disc+'%</span>':o.save>0?'<span class="disc-pill">Save $'+o.save+'</span>':'';
+      var lnk=o.url?'<a class="card-link" href="'+esc(o.url)+'" target="_blank" rel="noopener">View offer &#8594;</a>':'';
+      h+='<article class="ins-card"><div class="ins-card-top"><span class="vbadge vb-ins">'+esc(o.insurer)+'</span>'
+        +'<span class="ins-type">'+esc(o.type)+'</span>'+disc+'</div>'
+        +'<div class="ins-body"><h4 class="ins-title">'+esc(o.title)+'</h4>'
+        +(o.desc?'<p class="ins-desc">'+esc(o.desc.slice(0,120))+'</p>':'')+lnk+'</div></article>';
+    });
+    h+='</div></div>';
+  });
+  document.getElementById('insOutput').innerHTML=h;
+}
 
-function loadLive(id,tabEl){document.querySelectorAll('.live-tab').forEach(function(t){t.setAttribute('aria-selected','false');});if(tabEl)tabEl.setAttribute('aria-selected','true');var r=LIVE[id];if(!r)return;var h=r.links.map(function(lk){return'<a class="live-card" href="'+esc(lk.u)+'" target="_blank" rel="noopener" aria-label="'+esc(r.name)+': '+esc(lk.n)+' (opens in new tab)"><span class="live-badge">'+esc(r.name)+'</span><span class="live-name">'+esc(lk.n)+'</span><span class="live-cta" aria-hidden="true">Browse live &#8594;</span></a>';}).join('');document.getElementById('liveGrid').innerHTML=h;}
-function setFilter(el){document.querySelectorAll('.fb').forEach(function(b){b.setAttribute('aria-pressed','false');});el.setAttribute('aria-pressed','true');activeFilter=el.dataset.cat;searchQ='';document.getElementById('fi').value='';renderDeals();}
-function setFilterById(cat){var el=document.querySelector('[data-cat="'+cat+'"]');if(el)setFilter(el);}
-function doSearch(){searchQ=(document.getElementById('hs').value||'').trim();document.getElementById('fi').value=searchQ;activeFilter='all';document.querySelectorAll('.fb').forEach(function(b){b.setAttribute('aria-pressed','false');});var a=document.querySelector('[data-cat="all"]');if(a)a.setAttribute('aria-pressed','true');document.querySelectorAll('.qb').forEach(function(b){b.setAttribute('aria-pressed','false');});window.scrollTo({top:500,behavior:'smooth'});renderDeals();}
-function qs(el,term){document.querySelectorAll('.qb').forEach(function(b){b.setAttribute('aria-pressed','false');});el.setAttribute('aria-pressed','true');document.getElementById('hs').value=term;doSearch();}
-function openSubscribe(){var m=document.getElementById('subscribeModal');m.removeAttribute('hidden');document.body.style.overflow='hidden';setTimeout(function(){document.getElementById('subEmail').focus();},50);}
-function closeSubscribe(){document.getElementById('subscribeModal').setAttribute('hidden','');document.body.style.overflow='';document.getElementById('modalForm').style.display='block';document.getElementById('modalSuccess').style.display='none';var b=document.getElementById('subSubmitBtn');if(b){b.disabled=false;b.textContent='Subscribe to deal alerts \uD83D\uDD14';}}
+// ── LIVE SPECIALS ─────────────────────────────────────────────────
+function loadLive(id,tabEl){
+  document.querySelectorAll('.live-tab').forEach(function(t){t.setAttribute('aria-selected','false');});
+  if(tabEl)tabEl.setAttribute('aria-selected','true');
+  var r=LIVE[id];if(!r)return;
+  var h=r.links.map(function(lk){
+    return '<a class="live-card" href="'+esc(lk.u)+'" target="_blank" rel="noopener">'
+      +'<span class="live-badge">'+esc(r.name)+'</span>'
+      +'<span class="live-name">'+esc(lk.n)+'</span>'
+      +'<span class="live-cta">Browse live &#8594;</span></a>';
+  }).join('');
+  document.getElementById('liveGrid').innerHTML=h;
+}
+
+// ── FILTER & SEARCH ───────────────────────────────────────────────
+function setFilter(el){
+  document.querySelectorAll('.fb').forEach(function(b){b.setAttribute('aria-pressed','false');});
+  el.setAttribute('aria-pressed','true');
+  activeFilter=el.dataset.cat;
+  searchQ='';
+  document.getElementById('fi').value='';
+  renderDeals();
+}
+function doSearch(){
+  searchQ=(document.getElementById('hs').value||'').trim();
+  document.getElementById('fi').value=searchQ;
+  activeFilter='all';
+  document.querySelectorAll('.fb').forEach(function(b){b.setAttribute('aria-pressed','false');});
+  var a=document.querySelector('[data-cat="all"]');if(a)a.setAttribute('aria-pressed','true');
+  document.querySelectorAll('.qb').forEach(function(b){b.setAttribute('aria-pressed','false');});
+  window.scrollTo({top:500,behavior:'smooth'});
+  renderDeals();
+}
+function qs(el,term){
+  document.querySelectorAll('.qb').forEach(function(b){b.setAttribute('aria-pressed','false');});
+  el.setAttribute('aria-pressed','true');
+  document.getElementById('hs').value=term;
+  doSearch();
+}
+
+// ── SUBSCRIBE MODAL ───────────────────────────────────────────────
+function openSubscribe(){
+  var m=document.getElementById('subscribeModal');
+  m.removeAttribute('hidden');
+  document.body.style.overflow='hidden';
+  setTimeout(function(){document.getElementById('subEmail').focus();},50);
+}
+function closeSubscribe(){
+  document.getElementById('subscribeModal').setAttribute('hidden','');
+  document.body.style.overflow='';
+  document.getElementById('modalForm').style.display='block';
+  document.getElementById('modalSuccess').style.display='none';
+  var b=document.getElementById('subSubmitBtn');
+  if(b){b.disabled=false;b.textContent='Subscribe to deal alerts \uD83D\uDD14';}
+}
 document.addEventListener('keydown',function(ev){if(ev.key==='Escape')closeSubscribe();});
-function submitSubscribe(ev){ev.preventDefault();var name=(document.getElementById('subName').value||'').trim(),email=(document.getElementById('subEmail').value||'').trim();if(!email||email.indexOf('@')===-1){document.getElementById('subEmail').focus();return;}var cats=[];document.querySelectorAll('input[name="cats"]:checked').forEach(function(cb){cats.push(cb.value);});var btn=document.getElementById('subSubmitBtn');btn.disabled=true;btn.textContent='Subscribing\u2026';if(!APPS_SCRIPT_URL||APPS_SCRIPT_URL.indexOf('YOUR_')!==-1){showSubSuccess(name||'there');return;}var cb='sub_'+Date.now(),sc=document.createElement('script');var tim=setTimeout(function(){if(sc.parentNode)sc.parentNode.removeChild(sc);delete window[cb];showSubSuccess(name||'there');},12000);window[cb]=function(){clearTimeout(tim);if(sc.parentNode)sc.parentNode.removeChild(sc);delete window[cb];showSubSuccess(name||'there');};sc.onerror=function(){clearTimeout(tim);if(sc.parentNode)sc.parentNode.removeChild(sc);delete window[cb];showSubSuccess(name||'there');};sc.src=APPS_SCRIPT_URL+'?action=subscribe&name='+encodeURIComponent(name)+'&email='+encodeURIComponent(email)+'&cats='+encodeURIComponent(cats.join(','))+'&callback='+cb;document.head.appendChild(sc);}
-function showSubSuccess(name){document.getElementById('successName').textContent=name;document.getElementById('modalForm').style.display='none';document.getElementById('modalSuccess').style.display='block';}
-function cpyCode(code,btn){navigator.clipboard.writeText(code).then(function(){btn.textContent='Copied!';setTimeout(function(){btn.textContent='Copy';},1800);});}
-function isGenRet(v){return['big w','bigw','kmart','target','myer','officeworks','harvey norman','kogan','catch','bunnings','ikea'].some(function(x){return(v||'').toLowerCase().indexOf(x)!==-1;});}
+function submitSubscribe(ev){
+  ev.preventDefault();
+  var nm=(document.getElementById('subName').value||'').trim();
+  var em=(document.getElementById('subEmail').value||'').trim();
+  if(!em||em.indexOf('@')===-1){document.getElementById('subEmail').focus();return;}
+  var cats=[];
+  document.querySelectorAll('input[name="cats"]:checked').forEach(function(cb){cats.push(cb.value);});
+  var btn=document.getElementById('subSubmitBtn');
+  btn.disabled=true;btn.textContent='Subscribing\u2026';
+  if(!APPS_SCRIPT_URL||APPS_SCRIPT_URL.indexOf('YOUR_')!==-1){showSubSuccess(nm||'there');return;}
+  var cb='sub_'+Date.now(),sc=document.createElement('script');
+  var tim=setTimeout(function(){if(sc.parentNode)sc.parentNode.removeChild(sc);delete window[cb];showSubSuccess(nm||'there');},12000);
+  window[cb]=function(){clearTimeout(tim);if(sc.parentNode)sc.parentNode.removeChild(sc);delete window[cb];showSubSuccess(nm||'there');};
+  sc.onerror=function(){clearTimeout(tim);if(sc.parentNode)sc.parentNode.removeChild(sc);delete window[cb];showSubSuccess(nm||'there');};
+  sc.src=APPS_SCRIPT_URL+'?action=subscribe&name='+encodeURIComponent(nm)+'&email='+encodeURIComponent(em)+'&cats='+encodeURIComponent(cats.join(','))+'&callback='+cb;
+  document.head.appendChild(sc);
+}
+function showSubSuccess(nm){
+  document.getElementById('successName').textContent=nm;
+  document.getElementById('modalForm').style.display='none';
+  document.getElementById('modalSuccess').style.display='block';
+}
+
+// ── COPY COUPON ───────────────────────────────────────────────────
+function cpyCode(code,btn){
+  navigator.clipboard.writeText(code).then(function(){
+    btn.textContent='Copied!';
+    setTimeout(function(){btn.textContent='Copy';},1800);
+  });
+}
+
+// ── HELPERS ───────────────────────────────────────────────────────
+function isGenRet(v){
+  return['big w','bigw','kmart','target','myer','officeworks','harvey norman','kogan','catch','bunnings','ikea']
+    .some(function(x){return(v||'').toLowerCase().indexOf(x)!==-1;});
+}
 function setTitle(t,sub){document.getElementById('ctitle').textContent=t;document.getElementById('csub').textContent=sub||'';}
 function clearErr(){document.getElementById('errArea').innerHTML='';}
 function setErr(m){document.getElementById('errArea').innerHTML=m?'<div class="notice" role="alert">'+m+'</div>':'';}
+function s(v){return String(v||'');}
+function n(v){var x=parseFloat(v);return isNaN(x)?null:x;}
 function esc(v){return String(v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\x22/g,'&quot;');}
-function s(v){return String(v||'');}function n(v){var x=parseFloat(v);return isNaN(x)?null:x;}
 function fmt(ts){return new Date(ts).toLocaleString('en-AU',{hour:'2-digit',minute:'2-digit',day:'numeric',month:'short'});}
 function readCache(){try{var o=JSON.parse(localStorage.getItem(CACHE_KEY)||'null');return o&&(o.deals||[]).length?o:null;}catch(e){return null;}}
 function saveCache(d){try{localStorage.setItem(CACHE_KEY,JSON.stringify({ts:Date.now(),deals:d.deals||[],coupons:d.coupons||[],fuel:d.fuel||[],insurance:d.insurance||[]}));}catch(e){}}
-
 </script>
 </body>
 </html>
