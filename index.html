@@ -2,1266 +2,1151 @@
 <html lang="en-AU">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>SmartSaver Connect — Australian Deals &amp; Savings Portal</title>
-<meta name="description" content="Find the best deals, discounts, coupons, fuel prices and cashback offers across Australian retailers including Woolworths, Coles, ALDI, Amazon AU and more."/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>SmartSaver Connect — Australian Deals &amp; Savings</title>
+<meta name="description" content="Best deals, specials, coupons, fuel and cashback across Australian retailers. Updated daily."/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Nunito:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
 <style>
-/* ── Reset & base ─────────────────────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* ─────────────────────────────────────────────────
+   RESET
+───────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
-:root {
-  /* Palette — all contrast ratios verified against white/surface */
-  --green-700: #15803d;   /* 5.9:1 on white  ✓ */
-  --green-600: #16a34a;   /* 5.1:1 on white  ✓ */
-  --green-100: #dcfce7;
-  --green-050: #f0fdf4;
-  --slate-900: #0f172a;   /* 19:1 on white   ✓ */
-  --slate-800: #1e293b;   /* 15:1 on white   ✓ */
-  --slate-700: #334155;   /* 10:1 on white   ✓ */
-  --slate-500: #64748b;   /* 4.6:1 on white  ✓ */
-  --slate-400: #94a3b8;   /* used decoratively only */
-  --slate-200: #e2e8f0;
-  --slate-100: #f1f5f9;
-  --slate-050: #f8fafc;
-  --red-700:   #b91c1c;   /* 6.1:1 on white  ✓ */
-  --red-100:   #fee2e2;
-  --blue-700:  #1d4ed8;   /* 7.4:1 on white  ✓ */
-  --blue-100:  #dbeafe;
-  --amber-800: #92400e;   /* 7.5:1 on white  ✓ */
-  --amber-100: #fef3c7;
-  --violet-700:#6d28d9;   /* 6.4:1 on white  ✓ */
-  --violet-100:#ede9fe;
-  --orange-700:#c2410c;   /* 5.6:1 on white  ✓ */
-  --orange-100:#fff7ed;
+/* ─────────────────────────────────────────────────
+   TOKENS — warm, confident, Australian
+   Direction: "Refined marketplace" — crisp whites,
+   bold orange savings accent, trustworthy charcoal.
+   Think: Finder.com.au × Canstar × premium app.
+───────────────────────────────────────────────── */
+:root{
+  /* Background — warm off-white, not cold grey */
+  --bg:          #f7f5f2;
+  --surface:     #ffffff;
+  --surface2:    #f0ede8;
+  --surface3:    #e8e4de;
 
-  /* Semantic tokens */
-  --color-bg:       var(--slate-050);
-  --color-surface:  #ffffff;
-  --color-surface2: var(--slate-100);
-  --color-border:   var(--slate-200);
-  --color-border2:  #cbd5e1;
-  --color-text:     var(--slate-900);
-  --color-text2:    var(--slate-700);
-  --color-text3:    var(--slate-500);
-  --color-accent:   var(--green-600);
-  --color-accent-dark: var(--green-700);
-  --color-accent-bg: var(--green-050);
+  /* Borders */
+  --border:      #e2ddd8;
+  --border2:     #ccc7c0;
 
-  /* Spacing */
-  --space-1: 4px;  --space-2: 8px;   --space-3: 12px;
-  --space-4: 16px; --space-5: 20px;  --space-6: 24px;
-  --space-8: 32px; --space-10: 40px; --space-12: 48px;
+  /* Text — warm charcoal family */
+  --ink:         #1c1917;
+  --ink2:        #44403c;
+  --ink3:        #78716c;
+  --ink4:        #a8a29e;
 
-  /* Radii */
-  --radius-sm: 6px;
-  --radius:    10px;
-  --radius-lg: 14px;
+  /* Primary — deep teal-navy. Authoritative, AU financial brand feel */
+  --brand:       #1e3a5f;
+  --brand2:      #2d5282;
+  --brand-bg:    #ebf4ff;
+  --brand-light: #dbeafe;
 
-  /* Shadows */
-  --shadow-sm: 0 1px 2px rgba(0,0,0,.06), 0 1px 3px rgba(0,0,0,.1);
-  --shadow:    0 4px 6px rgba(0,0,0,.07), 0 2px 4px rgba(0,0,0,.05);
-  --shadow-md: 0 10px 15px rgba(0,0,0,.08), 0 4px 6px rgba(0,0,0,.05);
+  /* Savings accent — warm amber/orange. Pops. Immediately = "deal" */
+  --save:        #ea580c;
+  --save2:       #c2410c;
+  --save-bg:     #fff7ed;
+  --save-border: #fed7aa;
+
+  /* Success — deep emerald for prices */
+  --good:        #15803d;
+  --good-bg:     #f0fdf4;
+  --good-border: #bbf7d0;
+
+  /* Danger */
+  --danger:      #dc2626;
+  --danger-bg:   #fef2f2;
+  --danger-border:#fecaca;
+
+  /* Type */
+  --ff-head: 'Outfit', system-ui, sans-serif;
+  --ff-body: 'Nunito', system-ui, sans-serif;
+
+  /* Space — 4px grid */
+  --s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:20px;
+  --s6:24px;--s8:32px;--s10:40px;--s12:48px;--s16:64px;
+
+  /* Radius */
+  --r2:6px;--r3:10px;--r4:14px;--r5:20px;--r6:28px;
+
+  /* Shadow */
+  --sh0:0 1px 2px rgba(30,58,95,.06);
+  --sh1:0 2px 8px rgba(30,58,95,.08),0 1px 3px rgba(30,58,95,.05);
+  --sh2:0 8px 24px rgba(30,58,95,.12),0 3px 8px rgba(30,58,95,.06);
+  --sh3:0 20px 48px rgba(30,58,95,.16),0 8px 16px rgba(30,58,95,.08);
 }
 
-/* ── Dark mode ────────────────────────────────────────────────── */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-bg:       #0c0e14;
-    --color-surface:  #161820;
-    --color-surface2: #1e2130;
-    --color-border:   #2a2d3e;
-    --color-border2:  #363a52;
-    --color-text:     #f0f2f8;
-    --color-text2:    #b0b4c8;
-    --color-text3:    #6b7094;
-    --color-accent:   #4ade80;  /* 8.3:1 on dark surface ✓ */
-    --color-accent-dark: #22c55e;
-    --color-accent-bg: #0a1f12;
-    --green-100:  #0a1f12;
-    --red-100:    #200a0a;
-    --blue-100:   #0a1025;
-    --amber-100:  #1a1000;
-    --violet-100: #12082a;
-    --orange-100: #1a0800;
+/* ─────────────────────────────────────────────────
+   DARK MODE — warm, never pitch-black
+───────────────────────────────────────────────── */
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:       #18191f;
+    --surface:  #22242c;
+    --surface2: #2a2d38;
+    --surface3: #333644;
+    --border:   #383b48;
+    --border2:  #454858;
+    --ink:      #f5f4f2;
+    --ink2:     #b8b4ae;
+    --ink3:     #7d7870;
+    --ink4:     #52504c;
+    --brand:    #60a5fa;
+    --brand2:   #93c5fd;
+    --brand-bg: #0f1e35;
+    --brand-light:#172035;
+    --save:     #fb923c;
+    --save2:    #f97316;
+    --save-bg:  #1e1008;
+    --save-border:#7c3010;
+    --good:     #4ade80;
+    --good-bg:  #052e16;
+    --good-border:#14532d;
+    --danger:   #f87171;
+    --danger-bg:#2d0a0a;
+    --danger-border:#7f1d1d;
   }
 }
 
-/* ── Reduced motion ───────────────────────────────────────────── */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: .01ms !important;
-    transition-duration: .01ms !important;
-  }
+/* ─────────────────────────────────────────────────
+   REDUCED MOTION
+───────────────────────────────────────────────── */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
 }
 
-/* ── Base ─────────────────────────────────────────────────────── */
-html { scroll-behavior: smooth; }
-body {
-  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-  font-size: 16px;
-  line-height: 1.6;
-  background: var(--color-bg);
-  color: var(--color-text);
-  min-height: 100vh;
-  -webkit-font-smoothing: antialiased;
+/* ─────────────────────────────────────────────────
+   BASE
+───────────────────────────────────────────────── */
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--ff-body);
+  font-size:15px;line-height:1.6;
+  background:var(--bg);color:var(--ink);
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+:focus-visible{
+  outline:2.5px solid var(--save);
+  outline-offset:3px;border-radius:var(--r2);
+}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* ─────────────────────────────────────────────────
+   SKIP LINK
+───────────────────────────────────────────────── */
+.skip-link{
+  position:absolute;top:-999px;left:var(--s4);z-index:9999;
+  background:var(--brand);color:#fff;
+  padding:var(--s3) var(--s4);border-radius:var(--r3);
+  font-weight:700;font-size:14px;text-decoration:none;
+}
+.skip-link:focus{top:var(--s4)}
+
+/* ─────────────────────────────────────────────────
+   SETUP BANNER
+───────────────────────────────────────────────── */
+.setup-banner{
+  display:none;
+  background:var(--save);color:#fff;
+  padding:10px var(--s6);text-align:center;
+  font-size:13px;font-weight:600;line-height:1.6;
+  position:sticky;top:0;z-index:200;
+}
+.setup-banner code{background:rgba(0,0,0,.2);padding:1px 6px;border-radius:4px;font-family:monospace;font-size:12px}
+
+/* ─────────────────────────────────────────────────
+   NAV
+───────────────────────────────────────────────── */
+.site-header{
+  background:var(--brand);
+  position:sticky;top:0;z-index:100;
+}
+.nav-wrap{
+  max-width:1320px;margin:0 auto;
+  padding:0 var(--s6);
+  display:flex;align-items:center;
+  height:58px;gap:var(--s2);
+}
+.brand-link{
+  display:flex;align-items:center;gap:var(--s3);
+  text-decoration:none;margin-right:var(--s6);flex-shrink:0;
+}
+.brand-icon{
+  width:34px;height:34px;
+  background:rgba(255,255,255,.15);
+  border:1.5px solid rgba(255,255,255,.25);
+  border-radius:var(--r3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:17px;flex-shrink:0;
+}
+.brand-words{display:flex;flex-direction:column;gap:0}
+.brand-name{
+  font-family:var(--ff-head);
+  font-size:15px;font-weight:800;
+  color:#fff;letter-spacing:-.3px;line-height:1.2;
+}
+.brand-sub{font-size:9.5px;color:rgba(255,255,255,.6);font-weight:600;letter-spacing:.08em;text-transform:uppercase;line-height:1}
+.main-nav{display:flex;gap:var(--s1);list-style:none;flex:1;align-items:center}
+.main-nav a{
+  display:block;padding:6px 11px;border-radius:var(--r2);
+  font-size:13.5px;font-weight:500;
+  color:rgba(255,255,255,.75);text-decoration:none;
+  transition:background .15s,color .15s;white-space:nowrap;
+}
+.main-nav a:hover{background:rgba(255,255,255,.1);color:#fff}
+.main-nav a[aria-current="page"]{background:rgba(255,255,255,.15);color:#fff;font-weight:700}
+.nav-end{display:flex;align-items:center;gap:var(--s2);margin-left:auto}
+.nav-sub{
+  display:inline-flex;align-items:center;gap:var(--s2);
+  padding:7px 14px;
+  border:1.5px solid rgba(255,255,255,.35);
+  border-radius:var(--r3);background:transparent;
+  color:#fff;font-size:13px;font-weight:600;
+  cursor:pointer;font-family:inherit;min-height:38px;
+  transition:all .15s;white-space:nowrap;
+}
+.nav-sub:hover{background:rgba(255,255,255,.15)}
+.nav-refresh{
+  display:inline-flex;align-items:center;gap:var(--s2);
+  padding:7px 16px;
+  background:var(--save);color:#fff;
+  border:none;border-radius:var(--r3);
+  font-size:13px;font-weight:700;
+  cursor:pointer;font-family:inherit;min-height:38px;
+  transition:background .15s;white-space:nowrap;
+}
+.nav-refresh:hover{background:var(--save2)}
+.nav-refresh:disabled{opacity:.5;cursor:not-allowed}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spin{display:inline-block;animation:spin .7s linear infinite}
+@media(max-width:880px){.main-nav{display:none}.brand-sub{display:none}}
+
+/* ─────────────────────────────────────────────────
+   HERO — clean, confident, no colour wash
+   Textured background subtle geometric pattern
+───────────────────────────────────────────────── */
+.hero{
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:var(--s12) var(--s6) var(--s10);
+  position:relative;overflow:hidden;
+}
+/* Subtle dot-grid pattern */
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background-image:radial-gradient(circle,var(--border) 1px,transparent 1px);
+  background-size:28px 28px;
+  opacity:.5;pointer-events:none;
+}
+/* Brand colour accent blob — top right */
+.hero::after{
+  content:'';position:absolute;
+  top:-120px;right:-80px;
+  width:400px;height:400px;border-radius:50%;
+  background:radial-gradient(circle,var(--brand-light) 0%,transparent 68%);
+  pointer-events:none;
+}
+.hero-in{max-width:1320px;margin:0 auto;position:relative;z-index:1}
+.hero-chip{
+  display:inline-flex;align-items:center;gap:var(--s2);
+  background:var(--save-bg);border:1px solid var(--save-border);
+  color:var(--save);
+  padding:4px 13px;border-radius:999px;
+  font-size:11.5px;font-weight:700;letter-spacing:.05em;
+  text-transform:uppercase;margin-bottom:var(--s5);
+}
+.hero-blink{width:6px;height:6px;border-radius:50%;background:var(--save);animation:blink 1.8s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.hero h1{
+  font-family:var(--ff-head);
+  font-size:clamp(30px,4.5vw,54px);
+  font-weight:900;color:var(--ink);
+  letter-spacing:-2px;line-height:1.08;
+  margin-bottom:var(--s4);max-width:760px;
+}
+.hero h1 mark{
+  background:none;
+  color:var(--brand);
+  position:relative;display:inline;
+  white-space:nowrap;
+}
+/* Underline accent on marked text */
+.hero h1 mark::after{
+  content:'';position:absolute;
+  left:0;bottom:-4px;right:0;height:4px;
+  background:var(--save);border-radius:999px;
+  opacity:.7;
+}
+.hero-desc{
+  font-size:17px;color:var(--ink2);
+  max-width:540px;line-height:1.7;margin-bottom:var(--s8);
 }
 
-/* ── Focus style (visible, high-contrast) ─────────────────────── */
-:focus-visible {
-  outline: 3px solid var(--color-accent);
-  outline-offset: 2px;
-  border-radius: var(--radius-sm);
+/* Search */
+.search-wrap{max-width:620px}
+.search-box{
+  display:flex;
+  background:var(--surface);
+  border:2px solid var(--brand);
+  border-radius:var(--r5);
+  overflow:hidden;
+  box-shadow:0 4px 20px rgba(30,58,95,.15);
+  transition:box-shadow .2s;
+}
+.search-box:focus-within{box-shadow:0 4px 28px rgba(30,58,95,.25)}
+.search-lbl{
+  display:flex;align-items:center;
+  padding:0 var(--s4);color:var(--ink3);font-size:18px;flex-shrink:0;
+}
+.search-inp{
+  flex:1;padding:var(--s4);border:0;background:transparent;
+  font-size:15px;color:var(--ink);font-family:inherit;min-height:54px;
+}
+.search-inp::placeholder{color:var(--ink4)}
+.search-inp:focus{outline:none}
+.search-btn{
+  padding:var(--s3) var(--s6);
+  background:var(--brand);color:#fff;
+  border:0;font-size:14px;font-weight:700;
+  cursor:pointer;font-family:inherit;
+  white-space:nowrap;transition:background .15s;
+  min-height:54px;letter-spacing:.02em;
+}
+.search-btn:hover{background:var(--brand2)}
+.quick-row{display:flex;flex-wrap:wrap;gap:var(--s2);margin-top:var(--s4);align-items:center}
+.quick-lbl{font-size:12px;color:var(--ink3);font-weight:500}
+.qbtn{
+  padding:5px 13px;border-radius:999px;
+  border:1.5px solid var(--border2);
+  background:var(--surface);color:var(--ink2);
+  font-size:12.5px;font-weight:600;
+  cursor:pointer;font-family:inherit;min-height:34px;
+  transition:all .15s;
+}
+.qbtn:hover,.qbtn[aria-pressed="true"]{
+  background:var(--brand);color:#fff;border-color:var(--brand);
 }
 
-/* ── Skip link (accessibility) ────────────────────────────────── */
-.skip-link {
-  position: absolute;
-  top: -999px; left: 16px;
-  background: var(--slate-900); color: #fff;
-  padding: var(--space-3) var(--space-4);
-  border-radius: var(--radius);
-  font-weight: 700; font-size: 14px;
-  text-decoration: none; z-index: 9999;
-  transition: top .15s;
+/* ─────────────────────────────────────────────────
+   STATS STRIP
+───────────────────────────────────────────────── */
+.stats-strip{
+  background:var(--surface);
+  border-bottom:2px solid var(--border);
 }
-.skip-link:focus { top: 16px; }
+.stats-in{
+  max-width:1320px;margin:0 auto;
+  padding:0 var(--s6);
+  display:flex;overflow-x:auto;scrollbar-width:none;
+}
+.stats-in::-webkit-scrollbar{display:none}
+.stat{
+  display:flex;align-items:center;gap:var(--s3);
+  padding:var(--s4) var(--s5);
+  border-right:1px solid var(--border);
+  flex-shrink:0;transition:background .15s;
+}
+.stat:last-child{border-right:none}
+.stat.btn-stat{cursor:pointer}
+.stat.btn-stat:hover{background:var(--surface2)}
+.stat-pill{
+  width:38px;height:38px;border-radius:var(--r3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;flex-shrink:0;
+  background:var(--brand-bg);
+}
+.stat-pill.orange{background:var(--save-bg)}
+.stat-pill.green{background:var(--good-bg)}
+.stat-num{
+  font-family:var(--ff-head);
+  font-size:20px;font-weight:800;
+  color:var(--ink);letter-spacing:-.5px;line-height:1;
+}
+.stat-lbl{font-size:10.5px;color:var(--ink3);font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-top:2px}
 
-/* ── Header / Nav ─────────────────────────────────────────────── */
-.site-header {
-  background: var(--color-surface);
-  border-bottom: 1px solid var(--color-border);
-  position: sticky; top: 0; z-index: 100;
-  box-shadow: var(--shadow-sm);
+/* ─────────────────────────────────────────────────
+   PAGE LAYOUT
+───────────────────────────────────────────────── */
+.page{
+  max-width:1320px;margin:0 auto;
+  padding:var(--s6) var(--s6) var(--s16);
+  display:grid;
+  grid-template-columns:230px 1fr;
+  gap:var(--s6);align-items:start;
 }
-.nav-inner {
-  max-width: 1300px; margin: 0 auto;
-  padding: 0 var(--space-6);
-  display: flex; align-items: center;
-  height: 64px; gap: var(--space-2);
-}
-.brand {
-  display: flex; align-items: center; gap: var(--space-3);
-  text-decoration: none; color: var(--color-text);
-  margin-right: var(--space-6); flex-shrink: 0;
-}
-.brand-mark {
-  width: 36px; height: 36px;
-  background: var(--color-accent);
-  border-radius: var(--radius-sm);
-  display: flex; align-items: center;
-  justify-content: center;
-  font-size: 20px; flex-shrink: 0;
-  color: white;
-}
-.brand-name {
-  font-size: 17px; font-weight: 800;
-  letter-spacing: -0.4px; line-height: 1.2;
-}
-.brand-tagline {
-  font-size: 11px; color: var(--color-text3);
-  font-weight: 500; letter-spacing: .04em;
-}
-.primary-nav {
-  display: flex; gap: var(--space-1);
-  list-style: none; flex: 1;
-}
-.primary-nav a {
-  display: block; padding: var(--space-2) var(--space-3);
-  border-radius: var(--radius-sm);
-  font-size: 14px; font-weight: 500;
-  color: var(--color-text2); text-decoration: none;
-  transition: background .15s, color .15s;
-  white-space: nowrap;
-}
-.primary-nav a:hover { background: var(--color-surface2); color: var(--color-text); }
-.primary-nav a[aria-current="page"] {
-  background: var(--color-accent-bg);
-  color: var(--color-accent-dark); font-weight: 600;
-}
-.nav-refresh {
-  margin-left: auto; flex-shrink: 0;
-  display: inline-flex; align-items: center; gap: var(--space-2);
-  padding: var(--space-2) var(--space-4);
-  background: var(--color-accent); color: #fff;
-  border: none; border-radius: var(--radius);
-  font-size: 14px; font-weight: 600;
-  cursor: pointer; font-family: inherit;
-  min-height: 44px; min-width: 44px;
-  transition: background .15s;
-}
-.nav-refresh:hover { background: var(--color-accent-dark); }
-.nav-refresh:disabled { opacity: .55; cursor: not-allowed; }
-@keyframes spin { to { transform: rotate(360deg); } }
-.spin { display: inline-block; animation: spin .7s linear infinite; }
-@media (max-width: 900px) {
-  .primary-nav { display: none; }
-  .brand-tagline { display: none; }
-}
+@media(max-width:960px){.page{grid-template-columns:1fr}.sidebar{display:none}}
 
-/* ── Hero ─────────────────────────────────────────────────────── */
-.hero {
-  background: var(--slate-900);
-  padding: var(--space-12) var(--space-6) var(--space-10);
-  position: relative; overflow: hidden;
+/* ─────────────────────────────────────────────────
+   SIDEBAR
+───────────────────────────────────────────────── */
+.sidebar{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r4);
+  box-shadow:var(--sh0);
+  overflow:hidden;
+  position:sticky;top:74px;
 }
-.hero::after {
-  content: '';
-  position: absolute; inset: 0;
-  background: radial-gradient(70% 100% at 100% 50%, rgba(22,163,74,.18), transparent 60%),
-              radial-gradient(50% 80% at 0% 100%, rgba(29,78,216,.12), transparent 55%);
-  pointer-events: none;
+.sidebar-head{
+  padding:var(--s3) var(--s5);
+  font-family:var(--ff-head);
+  font-size:10px;font-weight:800;
+  text-transform:uppercase;letter-spacing:.1em;
+  color:var(--ink3);
+  background:var(--surface2);
+  border-bottom:1px solid var(--border);
 }
-.hero-inner { max-width: 1300px; margin: 0 auto; position: relative; z-index: 1; }
-.hero-eyebrow {
-  display: inline-flex; align-items: center; gap: var(--space-2);
-  background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14);
-  color: #86efac;
-  padding: var(--space-1) var(--space-3);
-  border-radius: 999px; font-size: 12px; font-weight: 600;
-  letter-spacing: .06em; text-transform: uppercase;
-  margin-bottom: var(--space-5);
+.flist{list-style:none;padding:var(--s1) 0}
+.fbtn{
+  display:flex;align-items:center;
+  width:100%;padding:9px var(--s4);
+  background:transparent;border:none;border-left:3px solid transparent;
+  font-family:inherit;font-size:13.5px;font-weight:500;
+  color:var(--ink2);text-align:left;cursor:pointer;
+  gap:var(--s3);min-height:44px;
+  transition:background .12s,color .12s,border-color .12s;
 }
-.hero-eyebrow-dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: #4ade80;
-  animation: pulse-dot 2s ease-in-out infinite;
+.fbtn:hover{background:var(--surface2);color:var(--ink)}
+.fbtn[aria-pressed="true"]{
+  background:var(--brand-bg);color:var(--brand);
+  border-left-color:var(--brand);font-weight:700;
 }
-@keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:.3} }
-.hero h1 {
-  font-size: clamp(28px, 4.5vw, 48px);
-  font-weight: 800; color: #fff;
-  letter-spacing: -1px; line-height: 1.12;
-  margin-bottom: var(--space-4);
-  max-width: 680px;
+.fi{font-size:16px;width:20px;text-align:center;flex-shrink:0}
+.fl{flex:1}
+.fc{
+  font-size:11px;font-weight:700;
+  padding:2px 7px;border-radius:999px;
+  background:var(--surface2);color:var(--ink3);
+  min-width:22px;text-align:center;
 }
-.hero h1 strong { color: #86efac; font-weight: 800; }
-.hero-desc {
-  font-size: 17px; color: rgba(255,255,255,.6);
-  max-width: 520px; line-height: 1.7;
-  margin-bottom: var(--space-8);
+.fbtn[aria-pressed="true"] .fc{background:var(--brand-bg);color:var(--brand)}
+.fdiv{height:1px;background:var(--border);margin:4px 0}
+
+/* ─────────────────────────────────────────────────
+   CONTENT HEADER
+───────────────────────────────────────────────── */
+.content-hdr{
+  display:flex;align-items:flex-start;
+  justify-content:space-between;
+  flex-wrap:wrap;gap:var(--s4);
+  margin-bottom:var(--s5);
 }
-/* Search form */
-.search-form { max-width: 600px; }
-.search-field {
-  display: flex;
-  background: rgba(255,255,255,.09);
-  border: 1.5px solid rgba(255,255,255,.18);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  transition: border-color .2s;
+.content-title{
+  font-family:var(--ff-head);
+  font-size:22px;font-weight:800;
+  letter-spacing:-.4px;color:var(--ink);
 }
-.search-field:focus-within {
-  border-color: #86efac;
-  box-shadow: 0 0 0 3px rgba(134,239,172,.2);
+.content-sub{font-size:13px;color:var(--ink3);margin-top:2px}
+.controls{display:flex;align-items:center;gap:var(--s3);flex-wrap:wrap}
+.inline-search{
+  display:flex;align-items:center;
+  background:var(--surface);border:1.5px solid var(--border2);
+  border-radius:var(--r3);overflow:hidden;box-shadow:var(--sh0);
+  transition:border-color .15s;
 }
-.search-field label {
-  display: flex; align-items: center;
-  padding: 0 var(--space-4);
-  color: rgba(255,255,255,.5);
-  font-size: 18px; flex-shrink: 0;
+.inline-search:focus-within{border-color:var(--brand)}
+.inline-search label{padding:0 var(--s3);color:var(--ink3);font-size:14px;display:flex;align-items:center}
+.inline-search input{
+  width:180px;padding:var(--s2) var(--s3);
+  border:none;background:transparent;
+  font-size:13.5px;color:var(--ink);font-family:inherit;min-height:40px;
 }
-.search-field input {
-  flex: 1; padding: var(--space-4);
-  background: transparent; border: none;
-  color: #fff; font-size: 16px;
-  font-family: inherit; min-height: 54px;
-}
-.search-field input::placeholder { color: rgba(255,255,255,.4); }
-.search-field input:focus { outline: none; }
-.search-btn {
-  padding: var(--space-4) var(--space-6);
-  background: var(--green-600); color: #fff;
-  border: none; font-size: 15px; font-weight: 700;
-  cursor: pointer; font-family: inherit;
-  white-space: nowrap; transition: background .15s;
-  min-height: 54px;
-}
-.search-btn:hover { background: var(--green-700); }
-.quick-searches {
-  display: flex; flex-wrap: wrap; gap: var(--space-2);
-  margin-top: var(--space-4);
-}
-.quick-searches span {
-  font-size: 12px; color: rgba(255,255,255,.55);
-  font-weight: 500; flex-shrink: 0;
-  align-self: center; letter-spacing: .02em;
-}
-.quick-btn {
-  padding: var(--space-2) var(--space-3);
-  background: rgba(255,255,255,.08);
-  border: 1px solid rgba(255,255,255,.15);
-  border-radius: 999px; color: rgba(255,255,255,.75);
-  font-size: 13px; font-weight: 500;
-  cursor: pointer; font-family: inherit;
-  min-height: 36px; transition: all .15s;
-}
-.quick-btn:hover, .quick-btn[aria-pressed="true"] {
-  background: rgba(74,222,128,.15);
-  border-color: rgba(134,239,172,.4);
-  color: #86efac;
+.inline-search input:focus{outline:none}
+.sort-sel{
+  padding:8px var(--s3);border:1.5px solid var(--border2);
+  border-radius:var(--r3);background:var(--surface);
+  color:var(--ink);font-size:13.5px;font-family:inherit;
+  cursor:pointer;min-height:40px;box-shadow:var(--sh0);
 }
 
-/* ── Stats strip ──────────────────────────────────────────────── */
-.stats-strip {
-  background: var(--color-surface);
-  border-bottom: 1px solid var(--color-border);
+/* ─────────────────────────────────────────────────
+   NOTICES
+───────────────────────────────────────────────── */
+.notice{
+  background:var(--save-bg);border:1px solid var(--save-border);
+  border-left:4px solid var(--save);
+  border-radius:var(--r3);padding:var(--s3) var(--s4);
+  font-size:13px;color:var(--save2);line-height:1.6;
+  margin-bottom:var(--s4);
 }
-.stats-inner {
-  max-width: 1300px; margin: 0 auto;
-  padding: 0 var(--space-6);
-  display: flex; align-items: stretch;
-  overflow-x: auto; scrollbar-width: none;
+.info-note{
+  background:var(--surface2);border-left:3px solid var(--border2);
+  border-radius:0 var(--r2) var(--r2) 0;
+  padding:var(--s3) var(--s4);font-size:13px;
+  color:var(--ink3);margin-bottom:var(--s4);line-height:1.6;
 }
-.stats-inner::-webkit-scrollbar { display: none; }
-.stat {
-  display: flex; align-items: center; gap: var(--space-3);
-  padding: var(--space-5) var(--space-6);
-  border-right: 1px solid var(--color-border);
-  flex-shrink: 0; min-width: 130px;
-  cursor: default;
-}
-.stat:last-child { border-right: none; }
-.stat.interactive { cursor: pointer; transition: background .15s; }
-.stat.interactive:hover { background: var(--color-surface2); }
-.stat-ico {
-  width: 40px; height: 40px; border-radius: var(--radius);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px; flex-shrink: 0;
-  background: var(--color-accent-bg);
-}
-.stat-ico.amber { background: var(--amber-100); }
-.stat-ico.blue  { background: var(--blue-100); }
-.stat-num {
-  font-size: 22px; font-weight: 800;
-  color: var(--color-text); letter-spacing: -0.5px;
-  line-height: 1;
-}
-.stat-lbl {
-  font-size: 11px; color: var(--color-text3);
-  font-weight: 600; text-transform: uppercase;
-  letter-spacing: .05em; margin-top: 2px;
-}
-@media (max-width: 600px) {
-  .stat { padding: var(--space-4); min-width: 110px; }
+.info-note a{color:var(--brand);font-weight:700}
+
+/* ─────────────────────────────────────────────────
+   DEAL CARDS — the centrepiece
+───────────────────────────────────────────────── */
+.deals-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(272px,1fr));
+  gap:var(--s4);
 }
 
-/* ── Notices ──────────────────────────────────────────────────── */
-.notice {
-  background: var(--amber-100); border: 1px solid #fcd34d;
-  border-left: 4px solid var(--amber-800);
-  border-radius: var(--radius); padding: var(--space-4);
-  font-size: 14px; color: var(--amber-800); line-height: 1.6;
-  margin-bottom: var(--space-4);
+.deal-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r4);
+  display:flex;flex-direction:column;
+  overflow:hidden;
+  box-shadow:var(--sh0);
+  transition:box-shadow .2s,transform .2s;
+  position:relative;
 }
-.notice a { color: var(--amber-800); font-weight: 700; }
-.info-note {
-  background: var(--color-surface2);
-  border-left: 3px solid var(--color-border2);
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-  padding: var(--space-3) var(--space-4);
-  font-size: 13px; color: var(--color-text3);
-  margin-bottom: var(--space-4); line-height: 1.6;
+.deal-card:hover{
+  box-shadow:var(--sh2);transform:translateY(-3px);
 }
-.info-note a { color: var(--color-accent-dark); font-weight: 600; }
+/* Coloured top-border stripe per category — tasteful not garish */
+.deal-card::before{
+  content:'';display:block;height:3px;
+  background:var(--brand);width:100%;
+}
+.deal-card.cat-grocery::before  {background:#16a34a}
+.deal-card.cat-retail::before   {background:#7c3aed}
+.deal-card.cat-chemist::before  {background:#0891b2}
+.deal-card.cat-travel::before   {background:#ea580c}
+.deal-card.cat-telco::before    {background:#0d9488}
+.deal-card.cat-nbn::before      {background:#0284c7}
+.deal-card.cat-energy::before   {background:#ca8a04}
+.deal-card.cat-coupon::before   {background:#7c3aed}
+.deal-card.cat-fuel::before     {background:#9333ea}
+.deal-card.cat-insurance::before{background:var(--brand)}
+.deal-card.cat-food::before     {background:#f97316}
 
-/* ── Page layout ──────────────────────────────────────────────── */
-.page {
-  max-width: 1300px; margin: 0 auto;
-  padding: var(--space-6) var(--space-6) var(--space-12);
-  display: grid;
-  grid-template-columns: 240px 1fr;
-  gap: var(--space-6);
-  align-items: start;
-}
-@media (max-width: 960px) {
-  .page { grid-template-columns: 1fr; }
-  .sidebar { display: none; }
-}
+.card-body{padding:var(--s4);display:flex;flex-direction:column;gap:var(--s3);flex:1}
 
-/* ── Sidebar ──────────────────────────────────────────────────── */
-.sidebar {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  position: sticky; top: 80px;
-  overflow: hidden;
+/* Vendor row */
+.card-top{display:flex;align-items:center;justify-content:space-between;gap:var(--s2)}
+.vbadge{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:3px 10px;border-radius:999px;
+  font-size:11px;font-weight:700;white-space:nowrap;
+  background:var(--brand-bg);color:var(--brand);
+  border:1px solid var(--brand-light);
 }
-.sidebar-heading {
-  padding: var(--space-4) var(--space-5);
-  font-size: 11px; font-weight: 700;
-  text-transform: uppercase; letter-spacing: .08em;
-  color: var(--color-text3);
-  border-bottom: 1px solid var(--color-border);
-}
-.nav-filter {
-  list-style: none; padding: var(--space-2) 0;
-}
-.nav-filter li { }
-.filter-btn {
-  display: flex; align-items: center;
-  width: 100%; padding: var(--space-3) var(--space-5);
-  background: transparent; border: none;
-  font-family: inherit; font-size: 14px; font-weight: 500;
-  color: var(--color-text2); text-align: left;
-  cursor: pointer; gap: var(--space-3);
-  min-height: 44px; border-left: 3px solid transparent;
-  transition: background .15s, color .15s, border-color .15s;
-}
-.filter-btn:hover {
-  background: var(--color-surface2); color: var(--color-text);
-}
-.filter-btn[aria-pressed="true"] {
-  background: var(--color-accent-bg);
-  color: var(--color-accent-dark);
-  border-left-color: var(--color-accent);
-  font-weight: 700;
-}
-.filter-icon { font-size: 16px; width: 20px; text-align: center; flex-shrink: 0; }
-.filter-label { flex: 1; }
-.filter-count {
-  font-size: 11px; font-weight: 600; padding: 2px var(--space-2);
-  border-radius: 999px; background: var(--color-surface2);
-  color: var(--color-text3); min-width: 24px; text-align: center;
-}
-.filter-btn[aria-pressed="true"] .filter-count {
-  background: var(--color-accent-bg); color: var(--color-accent-dark);
-}
-.sidebar-divider { height: 1px; background: var(--color-border); margin: var(--space-2) 0; }
+/* Retailer-specific badge colours */
+.vb-ww    {background:#f0fdf4;color:#166534;border-color:#bbf7d0}
+.vb-coles {background:var(--danger-bg);color:var(--danger);border-color:var(--danger-border)}
+.vb-aldi  {background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe}
+.vb-amz   {background:var(--save-bg);color:var(--save);border-color:var(--save-border)}
+.vb-cw    {background:#fefce8;color:#854d0e;border-color:#fef08a}
+.vb-jb    {background:#f0fdf4;color:#15803d;border-color:#bbf7d0}
+.vb-bw    {background:#e0f2fe;color:#075985;border-color:#bae6fd}
+.vb-ins   {background:var(--brand-bg);color:var(--brand);border-color:var(--brand-light)}
+.vb-fuel  {background:#faf5ff;color:#7e22ce;border-color:#e9d5ff}
+.vb-travel{background:var(--save-bg);color:var(--save2);border-color:var(--save-border)}
+.vb-nbn   {background:#ecfdf5;color:#065f46;border-color:#a7f3d0}
+.vb-cpn   {background:#f5f3ff;color:#6d28d9;border-color:#ddd6fe}
+.vb-def   {background:var(--surface2);color:var(--ink2);border-color:var(--border2)}
 
-/* ── Content area ─────────────────────────────────────────────── */
-.content-header {
-  display: flex; align-items: flex-start;
-  justify-content: space-between; flex-wrap: wrap;
-  gap: var(--space-4); margin-bottom: var(--space-5);
-}
-.content-title-group {}
-.content-title { font-size: 22px; font-weight: 800; letter-spacing: -0.4px; }
-.content-subtitle { font-size: 14px; color: var(--color-text3); margin-top: 2px; }
-.content-controls {
-  display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap;
-}
-.inline-search {
-  display: flex; align-items: center;
-  background: var(--color-surface);
-  border: 1.5px solid var(--color-border);
-  border-radius: var(--radius);
-  overflow: hidden; box-shadow: var(--shadow-sm);
-  transition: border-color .15s;
-}
-.inline-search:focus-within { border-color: var(--color-accent); }
-.inline-search label {
-  padding: 0 var(--space-3);
-  color: var(--color-text3); font-size: 15px;
-  display: flex; align-items: center;
-}
-.inline-search input {
-  width: 200px; padding: var(--space-3);
-  border: none; background: transparent;
-  font-size: 14px; color: var(--color-text);
-  font-family: inherit; min-height: 44px;
-}
-.inline-search input:focus { outline: none; }
-.sort-select {
-  padding: var(--space-2) var(--space-3);
-  border: 1.5px solid var(--color-border);
-  border-radius: var(--radius);
-  background: var(--color-surface);
-  color: var(--color-text); font-size: 14px;
-  font-family: inherit; cursor: pointer;
-  min-height: 44px; box-shadow: var(--shadow-sm);
+@media(prefers-color-scheme:dark){
+  .vb-ww    {background:#052e16;color:#4ade80;border-color:#14532d}
+  .vb-coles {background:#450a0a;color:#fca5a5;border-color:#7f1d1d}
+  .vb-aldi  {background:#0c1a3d;color:#93c5fd;border-color:#1e3a8a}
+  .vb-amz   {background:#2c1000;color:#fdba74;border-color:#7c2d12}
+  .vb-cw    {background:#1c1400;color:#fde047;border-color:#713f12}
+  .vb-jb    {background:#052e16;color:#86efac;border-color:#14532d}
+  .vb-bw    {background:#082032;color:#7dd3fc;border-color:#0c4a6e}
+  .vb-ins   {background:var(--brand-bg);color:var(--brand);border-color:#172035}
+  .vb-fuel  {background:#2e1065;color:#d8b4fe;border-color:#4c1d95}
+  .vb-travel{background:#2c1000;color:#fb923c;border-color:#7c2d12}
+  .vb-nbn   {background:#022c22;color:#6ee7b7;border-color:#065f46}
+  .vb-cpn   {background:#2e1065;color:#c4b5fd;border-color:#4c1d95}
+  .vb-def   {background:var(--surface2);color:var(--ink2);border-color:var(--border2)}
 }
 
-/* ── Deal cards grid ──────────────────────────────────────────── */
-.deals-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: var(--space-4);
+/* Discount badge */
+.disc-pill{
+  display:inline-block;padding:3px 9px;border-radius:999px;
+  background:var(--save);color:#fff;
+  font-family:var(--ff-head);
+  font-size:11px;font-weight:800;white-space:nowrap;
+  letter-spacing:.02em;
 }
 
-/* ── Deal card ────────────────────────────────────────────────── */
-.deal-card {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-5);
-  display: flex; flex-direction: column; gap: var(--space-3);
-  box-shadow: var(--shadow-sm);
-  transition: box-shadow .2s, transform .2s, border-color .2s;
+/* Card content */
+.card-title{
+  font-family:var(--ff-head);font-size:14.5px;font-weight:700;
+  line-height:1.4;color:var(--ink);
 }
-.deal-card:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
-  border-color: var(--color-border2);
+.card-desc{font-size:12.5px;color:var(--ink2);line-height:1.55}
+
+/* Prices */
+.price-row{display:flex;align-items:baseline;flex-wrap:wrap;gap:var(--s2);margin-top:var(--s1)}
+.price-now{
+  font-family:var(--ff-head);
+  font-size:24px;font-weight:900;
+  color:var(--good);letter-spacing:-.5px;line-height:1;
 }
-.card-top {
-  display: flex; align-items: center;
-  justify-content: space-between; gap: var(--space-2);
+.price-was{font-size:13px;color:var(--ink4);text-decoration:line-through}
+.save-pill{
+  padding:3px 9px;border-radius:999px;
+  font-family:var(--ff-head);
+  font-size:11px;font-weight:800;
+  background:var(--good-bg);color:var(--good);
+  border:1px solid var(--good-border);
 }
 
-/* Vendor badges — all text colours verified 4.5:1+ contrast */
-.vendor-badge {
-  display: inline-flex; align-items: center;
-  gap: var(--space-1); padding: 3px 10px;
-  border-radius: 999px; font-size: 12px; font-weight: 700;
-  white-space: nowrap; border: 1px solid transparent;
+/* Live price CTA for no-price entries */
+.price-cta{
+  display:flex;align-items:center;gap:var(--s2);
+  padding:var(--s2) var(--s3);
+  background:var(--surface2);
+  border:1.5px dashed var(--border2);
+  border-radius:var(--r2);margin-top:var(--s1);
 }
-.vb-ww     { background: #dcfce7; color: var(--green-700); border-color: #bbf7d0; }
-.vb-coles  { background: #fee2e2; color: var(--red-700);   border-color: #fecaca; }
-.vb-aldi   { background: #dbeafe; color: var(--blue-700);  border-color: #bfdbfe; }
-.vb-amz    { background: #fff7ed; color: var(--orange-700);border-color: #fed7aa; }
-.vb-bw     { background: #e0f2fe; color: #075985;          border-color: #bae6fd; }
-.vb-cw     { background: #fefce8; color: var(--amber-800); border-color: #fef08a; }
-.vb-jb     { background: #f0fdf4; color: #14532d;          border-color: #bbf7d0; }
-.vb-cpn    { background: #eff6ff; color: var(--blue-700);  border-color: #bfdbfe; }
-.vb-ins    { background: var(--violet-100); color: var(--violet-700); border-color: #c4b5fd; }
-.vb-fuel   { background: #faf5ff; color: #5b21b6;          border-color: #ddd6fe; }
-.vb-travel { background: #fff7ed; color: var(--orange-700);border-color: #fed7aa; }
-.vb-nbn    { background: #f0fdf4; color: #14532d;          border-color: #bbf7d0; }
-.vb-def    { background: var(--color-surface2); color: var(--color-text2); border-color: var(--color-border); }
+.price-cta span{font-size:12px;font-weight:600;color:var(--ink3);font-style:italic}
 
-@media (prefers-color-scheme: dark) {
-  .vb-ww     { background: #052e16; color: #4ade80; border-color: #14532d; }
-  .vb-coles  { background: #450a0a; color: #fca5a5; border-color: #7f1d1d; }
-  .vb-aldi   { background: #0c1a3d; color: #93c5fd; border-color: #1e3a8a; }
-  .vb-amz    { background: #2c1000; color: #fb923c; border-color: #7c2d12; }
-  .vb-bw     { background: #082032; color: #7dd3fc; border-color: #0c4a6e; }
-  .vb-cw     { background: #1c1400; color: #fbbf24; border-color: #713f12; }
-  .vb-jb     { background: #052e16; color: #86efac; border-color: #14532d; }
-  .vb-cpn    { background: #082032; color: #7dd3fc; border-color: #0c4a6e; }
-  .vb-ins    { background: #1e0f3d; color: #c4b5fd; border-color: #4c1d95; }
-  .vb-fuel   { background: #1e0f3d; color: #a78bfa; border-color: #4c1d95; }
-  .vb-travel { background: #2c1000; color: #fdba74; border-color: #7c2d12; }
-  .vb-nbn    { background: #052e16; color: #86efac; border-color: #14532d; }
-  .vb-def    { background: var(--color-surface2); color: var(--color-text2); border-color: var(--color-border); }
+/* Coupon */
+.cpn-row{display:flex;align-items:center;gap:var(--s2);flex-wrap:wrap}
+.cpn-code{
+  font-family:'Courier New',monospace;font-size:13px;font-weight:700;
+  padding:5px var(--s3);
+  background:var(--brand-bg);
+  border:1.5px dashed var(--brand);
+  border-radius:var(--r2);
+  color:var(--brand);letter-spacing:.08em;
 }
+.copy-btn{
+  padding:5px var(--s3);border:1.5px solid var(--border2);
+  border-radius:var(--r2);background:transparent;
+  color:var(--ink2);font-size:12px;font-weight:700;
+  cursor:pointer;font-family:inherit;min-height:32px;
+  transition:all .15s;
+}
+.copy-btn:hover{background:var(--brand);color:#fff;border-color:var(--brand)}
 
-.disc-badge {
-  padding: 3px 10px; border-radius: 999px;
-  background: #fef2f2; color: var(--red-700);
-  border: 1px solid #fecaca;
-  font-size: 12px; font-weight: 700; white-space: nowrap;
+/* Card footer */
+.card-foot{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:var(--s3);margin-top:auto;
+  padding:var(--s3) var(--s4);
+  border-top:1px solid var(--border);
+  background:var(--surface2);
 }
-@media (prefers-color-scheme: dark) {
-  .disc-badge { background: #450a0a; color: #fca5a5; border-color: #7f1d1d; }
+.card-link{
+  font-size:13px;font-weight:700;color:var(--brand);
+  text-decoration:none;display:inline-flex;align-items:center;gap:4px;
 }
+.card-link:hover{text-decoration:underline}
+.live-btn{
+  display:inline-flex;align-items:center;gap:var(--s2);
+  padding:7px 14px;
+  background:var(--brand);color:#fff;
+  border-radius:var(--r2);font-size:12.5px;font-weight:700;
+  text-decoration:none;transition:background .15s;
+}
+.live-btn:hover{background:var(--brand2)}
 
-.card-title {
-  font-size: 15px; font-weight: 700;
-  color: var(--color-text); line-height: 1.4;
+/* How to avail */
+.how-wrap{padding:0 var(--s4) var(--s3);border-top:1px solid var(--border)}
+.how-btn{
+  display:flex;align-items:center;justify-content:space-between;
+  width:100%;background:none;border:none;
+  padding:var(--s2) 0;
+  font-family:inherit;font-size:12px;font-weight:700;
+  color:var(--brand);cursor:pointer;gap:var(--s2);
+  transition:color .15s;
 }
-.card-desc {
-  font-size: 13px; color: var(--color-text2);
-  line-height: 1.55;
-}
-.card-price {
-  display: flex; align-items: baseline; gap: var(--space-2);
-  margin-top: var(--space-1);
-}
-.price-now {
-  font-size: 22px; font-weight: 800;
-  color: var(--color-accent-dark); letter-spacing: -0.5px;
-}
-.price-was {
-  font-size: 13px; color: var(--color-text3);
-  text-decoration: line-through;
-}
-.card-footer {
-  display: flex; align-items: center;
-  justify-content: space-between; gap: var(--space-3);
-  margin-top: auto; padding-top: var(--space-3);
-  border-top: 1px solid var(--color-border);
-}
-.card-link {
-  display: inline-flex; align-items: center; gap: var(--space-1);
-  font-size: 13px; font-weight: 700;
-  color: var(--color-accent-dark); text-decoration: none;
-  min-height: 44px; padding: var(--space-2) 0;
-}
-.card-link:hover { text-decoration: underline; }
-.coupon-code {
-  font-size: 13px; font-weight: 700; letter-spacing: .05em;
-  padding: var(--space-2) var(--space-3);
-  background: var(--color-surface2);
-  border: 1.5px dashed var(--color-border2);
-  border-radius: var(--radius-sm); color: var(--color-text);
-  font-family: 'Courier New', monospace;
-}
-.saving-badge {
-  font-size: 11px; font-weight: 700; padding: 3px 8px;
-  border-radius: 999px; background: var(--green-100); color: var(--green-700);
-  border: 1px solid #bbf7d0; white-space: nowrap;
-}
-@media (prefers-color-scheme: dark) {
-  .saving-badge { background: #052e16; color: #4ade80; border-color: #14532d; }
-}
-.live-price-cta {
-  display: flex; align-items: center; gap: var(--space-2);
-  padding: var(--space-2) var(--space-3);
-  background: var(--color-surface2);
-  border: 1.5px dashed var(--color-border2);
-  border-radius: var(--radius-sm);
-  margin-top: var(--space-1);
-}
-.live-price-icon { font-size: 14px; flex-shrink: 0; }
-.live-price-text {
-  font-size: 12px; font-weight: 600;
-  color: var(--color-text2); font-style: italic;
-}
-.no-price-card { border-style: solid; border-color: var(--color-border); }
-.no-price-card .card-link {
-  display: inline-flex; align-items: center; gap: var(--space-2);
-  padding: var(--space-2) var(--space-4);
-  background: var(--color-accent); color: #fff;
-  border-radius: var(--radius-sm); font-size: 13px;
-  font-weight: 700; text-decoration: none; transition: background .15s;
-}
-.no-price-card .card-link:hover { background: var(--color-accent-dark); text-decoration: none; }
-  background: transparent;
-  border: 1.5px solid var(--color-border2);
-  border-radius: var(--radius-sm);
-  font-size: 12px; font-weight: 600;
-  color: var(--color-text2); cursor: pointer;
-  font-family: inherit; min-height: 36px;
-  transition: all .15s;
-}
-.copy-btn:hover {
-  background: var(--color-accent-bg);
-  color: var(--color-accent-dark);
-  border-color: var(--color-accent);
+.how-btn:hover{color:var(--brand2)}
+.how-chev{font-size:12px;transition:transform .2s;flex-shrink:0;line-height:1}
+.how-body{
+  font-size:12px;color:var(--ink2);line-height:1.65;
+  padding:var(--s1) 0 var(--s2);
 }
 
-/* ── Section heading ──────────────────────────────────────────── */
-.section-head {
-  display: flex; align-items: center; gap: var(--space-3);
-  margin-bottom: var(--space-4); flex-wrap: wrap;
+/* ─────────────────────────────────────────────────
+   FUEL
+───────────────────────────────────────────────── */
+.fuel-panel{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r4);box-shadow:var(--sh0);overflow:hidden;
+  margin-top:var(--s6);
 }
-.section-title {
-  font-size: 18px; font-weight: 800; letter-spacing: -0.3px;
+.fuel-ph{
+  padding:var(--s4) var(--s5);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:var(--s3);background:var(--surface2);
 }
-.section-count {
-  font-size: 13px; color: var(--color-text3); font-weight: 500;
+.fuel-ph-title{
+  font-family:var(--ff-head);font-size:15px;font-weight:800;
+  display:flex;align-items:center;gap:var(--s2);
+}
+.fuel-map-link{font-size:12.5px;font-weight:700;color:var(--brand);text-decoration:none}
+.fuel-map-link:hover{text-decoration:underline}
+.fuel-body{padding:var(--s4);display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:var(--s3)}
+.fuel-card{border:1.5px solid var(--border);border-radius:var(--r3);overflow:hidden}
+.fuel-card.best{border-color:var(--good)}
+.fuel-type-bar{padding:5px var(--s3);font-family:var(--ff-head);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em}
+.ftb-ULP   {background:#dcfce7;color:#166534}
+.ftb-E10   {background:#dbeafe;color:#1e40af}
+.ftb-P95   {background:#fff7ed;color:#9a3412}
+.ftb-P98   {background:#fee2e2;color:#991b1b}
+.ftb-Diesel{background:#ede9fe;color:#4c1d95}
+.ftb-LPG   {background:#fdf4ff;color:#6b21a8}
+.fuel-card-body{padding:var(--s3)}
+.fuel-price{font-family:var(--ff-head);font-size:22px;font-weight:900;color:var(--ink);letter-spacing:-.5px}
+.fuel-card.best .fuel-price{color:var(--good)}
+.fuel-brand{font-size:12.5px;font-weight:600;color:var(--ink);margin-top:3px}
+.fuel-loc{font-size:11px;color:var(--ink3);margin-top:1px}
+.fuel-best-tag{display:inline-block;margin-top:var(--s2);padding:2px 8px;border-radius:999px;background:var(--good);color:#fff;font-size:10px;font-weight:700}
+
+/* ─────────────────────────────────────────────────
+   INSURANCE
+───────────────────────────────────────────────── */
+.ins-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:var(--s4)}
+.ins-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r4);overflow:hidden;
+  box-shadow:var(--sh0);
+}
+.ins-card-top{
+  padding:var(--s3) var(--s4);
+  background:var(--surface2);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--s2);
+}
+.ins-type{
+  font-family:var(--ff-head);
+  font-size:10px;font-weight:800;padding:2px 9px;border-radius:999px;
+  background:var(--brand-bg);color:var(--brand);
+  text-transform:uppercase;letter-spacing:.05em;
+}
+.ins-body{padding:var(--s4);display:flex;flex-direction:column;gap:var(--s3)}
+.ins-title{font-family:var(--ff-head);font-size:14px;font-weight:700;line-height:1.4}
+.ins-desc{font-size:12.5px;color:var(--ink2);line-height:1.55}
+
+/* ─────────────────────────────────────────────────
+   LIVE SPECIALS PANEL
+───────────────────────────────────────────────── */
+.live-panel{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r4);box-shadow:var(--sh0);overflow:hidden;
+  margin-bottom:var(--s5);
+}
+.live-ph{
+  background:var(--brand);
+  padding:var(--s4) var(--s5);
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:var(--s3);
+}
+.live-ph-title{
+  display:flex;align-items:center;gap:var(--s3);
+  font-family:var(--ff-head);font-size:14px;font-weight:700;color:#fff;
+}
+.live-dot{width:8px;height:8px;border-radius:50%;background:#fbbf24;animation:blink 1.4s infinite;flex-shrink:0}
+.live-tabs{display:flex;gap:var(--s2);flex-wrap:wrap;list-style:none}
+.live-tab{
+  padding:5px 13px;border-radius:999px;
+  border:1px solid rgba(255,255,255,.3);
+  background:rgba(255,255,255,.1);
+  color:rgba(255,255,255,.8);
+  font-size:12.5px;font-weight:600;
+  cursor:pointer;font-family:inherit;min-height:34px;
+  transition:all .15s;
+}
+.live-tab:hover{background:rgba(255,255,255,.2);color:#fff}
+.live-tab[aria-selected="true"]{background:var(--save);border-color:var(--save);color:#fff}
+.live-cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(185px,1fr));
+  gap:var(--s3);padding:var(--s4);
+}
+.live-card{
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:var(--r3);padding:var(--s4);
+  text-decoration:none;color:var(--ink);
+  display:flex;flex-direction:column;gap:var(--s2);
+  transition:all .15s;
+}
+.live-card:hover{
+  border-color:var(--brand);
+  background:var(--brand-bg);
+  transform:translateY(-1px);box-shadow:var(--sh1);
+}
+.live-badge{
+  font-size:10.5px;font-weight:700;padding:2px 8px;
+  border-radius:999px;align-self:flex-start;
+  background:var(--brand-bg);color:var(--brand);
+}
+.live-name{font-size:13px;font-weight:600;line-height:1.35;color:var(--ink)}
+.live-cta{font-size:11.5px;font-weight:700;color:var(--brand);margin-top:auto}
+.live-note{
+  padding:8px var(--s5);font-size:11.5px;
+  color:var(--ink3);border-top:1px solid var(--border);
+  background:var(--surface2);
 }
 
-/* ── Fuel ─────────────────────────────────────────────────────── */
-.fuel-panel {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm); overflow: hidden;
-  margin-top: var(--space-6);
+/* ─────────────────────────────────────────────────
+   EMPTY / SKELETON
+───────────────────────────────────────────────── */
+.empty-state{
+  grid-column:1/-1;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r4);padding:var(--s12);
+  text-align:center;box-shadow:var(--sh0);
 }
-.fuel-panel-head {
-  padding: var(--space-4) var(--space-5);
-  border-bottom: 1px solid var(--color-border);
-  display: flex; align-items: center;
-  justify-content: space-between; flex-wrap: wrap; gap: var(--space-3);
-}
-.fuel-panel-title {
-  font-size: 16px; font-weight: 800;
-  display: flex; align-items: center; gap: var(--space-2);
-}
-.fuel-map-link {
-  font-size: 13px; font-weight: 700;
-  color: var(--blue-700); text-decoration: none;
-}
-.fuel-map-link:hover { text-decoration: underline; }
-.fuel-grid-inner {
-  padding: var(--space-4);
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: var(--space-3);
-}
-.fuel-card {
-  border: 1.5px solid var(--color-border);
-  border-radius: var(--radius);
-  overflow: hidden; transition: box-shadow .15s;
-}
-.fuel-card.cheapest { border-color: var(--green-600); }
-.fuel-card:hover { box-shadow: var(--shadow); }
-.fuel-type-label {
-  padding: 6px var(--space-3);
-  font-size: 11px; font-weight: 800;
-  text-transform: uppercase; letter-spacing: .07em;
-}
-/* Colour coded fuel types — all contrast verified */
-.ft-ULP     { background: #dcfce7; color: #14532d; }
-.ft-E10     { background: #dbeafe; color: #1e3a8a; }
-.ft-P95     { background: #fff7ed; color: #7c2d12; }
-.ft-P98     { background: #fee2e2; color: #7f1d1d; }
-.ft-Diesel  { background: var(--violet-100); color: #3b0764; }
-.ft-LPG     { background: #fdf4ff; color: #581c87; }
-@media (prefers-color-scheme: dark) {
-  .ft-ULP    { background: #052e16; color: #4ade80; }
-  .ft-E10    { background: #0c1a3d; color: #93c5fd; }
-  .ft-P95    { background: #2c1000; color: #fb923c; }
-  .ft-P98    { background: #450a0a; color: #fca5a5; }
-  .ft-Diesel { background: #1e0f3d; color: #c4b5fd; }
-  .ft-LPG    { background: #2e0f3d; color: #e879f9; }
-}
-.fuel-card-body { padding: var(--space-3); }
-.fuel-price-val {
-  font-size: 24px; font-weight: 800;
-  color: var(--color-text); letter-spacing: -0.5px;
-}
-.fuel-card.cheapest .fuel-price-val { color: var(--color-accent-dark); }
-.fuel-station-name {
-  font-size: 13px; font-weight: 600;
-  color: var(--color-text); margin-top: 4px;
-}
-.fuel-station-loc { font-size: 12px; color: var(--color-text3); margin-top: 2px; }
-.cheapest-tag {
-  display: inline-block; margin-top: var(--space-2);
-  padding: 2px 8px; border-radius: 999px;
-  background: var(--green-600); color: #fff;
-  font-size: 11px; font-weight: 700;
-}
+.empty-state h3{font-family:var(--ff-head);font-size:18px;font-weight:800;margin-bottom:var(--s2)}
+.empty-state p{font-size:13.5px;color:var(--ink3);max-width:400px;margin:0 auto;line-height:1.65}
+.skel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(272px,1fr));gap:var(--s4)}
+.skel-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r4);overflow:hidden;height:160px}
+.sk{background:linear-gradient(90deg,var(--surface2) 25%,rgba(180,175,170,.15) 50%,var(--surface2) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite}
+@keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
+.sl{height:12px;margin-bottom:var(--s3);border-radius:var(--r2)}.sl-s{width:32%}.sl-m{width:60%}.sl-l{width:86%}.sl-xl{height:20px;width:28%;margin-top:var(--s2)}
 
-/* ── Insurance ────────────────────────────────────────────────── */
-.ins-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: var(--space-4);
-}
-.ins-card {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-5); box-shadow: var(--shadow-sm);
-}
-.ins-card-head {
-  display: flex; align-items: flex-start;
-  justify-content: space-between; gap: var(--space-3);
-  margin-bottom: var(--space-3); flex-wrap: wrap;
-}
-.ins-type-badge {
-  padding: 2px 10px; border-radius: 999px;
-  background: var(--color-surface2);
-  color: var(--color-text2);
-  font-size: 11px; font-weight: 700;
-  text-transform: uppercase; letter-spacing: .04em;
-}
-.ins-title { font-size: 15px; font-weight: 700; margin-bottom: var(--space-2); }
-.ins-desc { font-size: 13px; color: var(--color-text2); line-height: 1.55; margin-bottom: var(--space-4); }
+/* ─────────────────────────────────────────────────
+   SECTION
+───────────────────────────────────────────────── */
+.sec-head{display:flex;align-items:center;gap:var(--s3);margin-bottom:var(--s4);flex-wrap:wrap}
+.sec-title{font-family:var(--ff-head);font-size:17px;font-weight:800;letter-spacing:-.3px}
+.sec-count{font-size:13px;color:var(--ink3)}
 
-/* ── Live specials panel ──────────────────────────────────────── */
-.live-panel {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm); overflow: hidden;
-  margin-bottom: var(--space-5);
+/* ─────────────────────────────────────────────────
+   MODAL
+───────────────────────────────────────────────── */
+.modal-backdrop{
+  position:fixed;inset:0;z-index:500;
+  background:rgba(10,20,40,.6);backdrop-filter:blur(8px);
+  display:flex;align-items:center;justify-content:center;padding:var(--s4);
 }
-.live-panel-bar {
-  display: flex; align-items: center;
-  justify-content: space-between; flex-wrap: wrap; gap: var(--space-3);
-  padding: var(--space-4) var(--space-5);
-  background: var(--slate-900);
+.modal-backdrop[hidden]{display:none}
+.modal{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r5);box-shadow:var(--sh3);
+  width:100%;max-width:480px;padding:var(--s8);position:relative;
 }
-.live-panel-title {
-  display: flex; align-items: center; gap: var(--space-3);
-  font-size: 14px; font-weight: 700; color: #fff;
+.modal-close{
+  position:absolute;top:var(--s4);right:var(--s4);
+  width:32px;height:32px;border-radius:50%;
+  background:var(--surface2);border:none;font-size:18px;
+  color:var(--ink2);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .15s;
 }
-.live-pulse {
-  width: 8px; height: 8px; border-radius: 50%;
-  background: #4ade80; flex-shrink: 0;
-  animation: pulse-dot 1.5s infinite;
+.modal-close:hover{background:var(--surface3)}
+.modal-icon{font-size:40px;margin-bottom:var(--s4)}
+.modal h2{font-family:var(--ff-head);font-size:22px;font-weight:900;margin-bottom:var(--s2);letter-spacing:-.4px}
+.modal-desc{font-size:14px;color:var(--ink2);line-height:1.6;margin-bottom:var(--s6)}
+.modal-form{display:flex;flex-direction:column;gap:var(--s4)}
+.form-group{display:flex;flex-direction:column;gap:var(--s2)}
+.form-label{font-size:13px;font-weight:700;color:var(--ink)}
+.form-input{
+  padding:var(--s3) var(--s4);border:1.5px solid var(--border2);
+  border-radius:var(--r3);background:var(--surface);
+  color:var(--ink);font-size:15px;font-family:inherit;min-height:48px;
+  transition:border-color .15s;
 }
-.live-tab-group {
-  display: flex; gap: var(--space-2); flex-wrap: wrap;
-  list-style: none;
+.form-input:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-bg)}
+.form-hint{font-size:12px;color:var(--ink3);line-height:1.5}
+.form-checkboxes{display:flex;flex-direction:column;gap:var(--s2)}
+.form-checkbox{display:flex;align-items:center;gap:var(--s3);cursor:pointer;font-size:13.5px;color:var(--ink2)}
+.form-checkbox input{width:17px;height:17px;accent-color:var(--brand);cursor:pointer;flex-shrink:0}
+.modal-submit{
+  width:100%;padding:var(--s4);
+  background:var(--brand);color:#fff;
+  border:none;border-radius:var(--r3);
+  font-family:var(--ff-head);
+  font-size:15px;font-weight:800;
+  cursor:pointer;min-height:52px;transition:background .15s;
+  letter-spacing:.01em;
 }
-.live-tab-btn {
-  padding: 5px 14px; border-radius: 999px;
-  border: 1px solid rgba(255,255,255,.2);
-  background: rgba(255,255,255,.07);
-  color: rgba(255,255,255,.7);
-  font-size: 13px; font-weight: 600;
-  cursor: pointer; font-family: inherit;
-  min-height: 36px; transition: all .15s;
-}
-.live-tab-btn:hover { background: rgba(255,255,255,.15); color: #fff; }
-.live-tab-btn[aria-selected="true"] {
-  background: var(--green-600); color: #fff;
-  border-color: var(--green-600);
-}
-.live-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-  gap: var(--space-3); padding: var(--space-4);
-}
-.live-card {
-  background: var(--color-bg);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius); padding: var(--space-4);
-  text-decoration: none; color: var(--color-text);
-  display: flex; flex-direction: column; gap: var(--space-2);
-  transition: all .15s; min-height: 44px;
-}
-.live-card:hover {
-  border-color: var(--color-accent);
-  background: var(--color-accent-bg);
-  transform: translateY(-1px);
-}
-.live-retailer-badge {
-  font-size: 11px; font-weight: 700;
-  padding: 2px 8px; border-radius: 999px;
-  align-self: flex-start;
-}
-.live-card-name {
-  font-size: 13px; font-weight: 600;
-  line-height: 1.4; color: var(--color-text);
-}
-.live-card-cta {
-  font-size: 12px; font-weight: 700;
-  color: var(--color-accent-dark); margin-top: auto;
-}
-.live-footer {
-  padding: var(--space-3) var(--space-5);
-  background: var(--color-surface2);
-  font-size: 12px; color: var(--color-text3);
-  border-top: 1px solid var(--color-border);
-}
+.modal-submit:hover{background:var(--brand2)}
+.modal-submit:disabled{opacity:.5;cursor:not-allowed}
+.modal-success{text-align:center;padding:var(--s6) 0;display:none}
+.modal-success h3{font-family:var(--ff-head);font-size:20px;font-weight:900;margin-bottom:var(--s2)}
+.modal-success p{font-size:14px;color:var(--ink2);line-height:1.6}
 
-/* ── Empty / skeleton states ──────────────────────────────────── */
-.empty-state {
-  grid-column: 1 / -1;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg); padding: var(--space-12);
-  text-align: center; box-shadow: var(--shadow-sm);
+/* ─────────────────────────────────────────────────
+   PAGE FOOTER
+───────────────────────────────────────────────── */
+.page-foot{
+  max-width:1320px;margin:0 auto;
+  padding:0 var(--s6) var(--s6);
+  font-size:11.5px;color:var(--ink4);
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:var(--s2);
 }
-.empty-state h3 { font-size: 18px; font-weight: 800; margin-bottom: var(--space-2); }
-.empty-state p { font-size: 14px; color: var(--color-text3); max-width: 380px; margin: 0 auto; line-height: 1.6; }
-.skel-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: var(--space-4);
-}
-.skel-card {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg); padding: var(--space-5);
-  height: 160px;
-}
-.skel-line {
-  border-radius: var(--radius-sm);
-  background: linear-gradient(90deg,
-    var(--color-surface2) 25%,
-    rgba(200,200,200,.1) 50%,
-    var(--color-surface2) 75%);
-  background-size: 200% 100%;
-  animation: skel-shine 1.5s infinite;
-  margin-bottom: var(--space-3);
-}
-@keyframes skel-shine { from { background-position: 200% 0; } to { background-position: -200% 0; } }
-.sl-xs { height: 12px; width: 30%; }
-.sl-s  { height: 12px; width: 45%; }
-.sl-m  { height: 14px; width: 70%; }
-.sl-l  { height: 14px; width: 90%; }
-.sl-xl { height: 20px; width: 35%; margin-top: var(--space-2); }
-
-/* ── Footer ───────────────────────────────────────────────────── */
-.page-footer {
-  max-width: 1300px; margin: 0 auto;
-  padding: 0 var(--space-6) var(--space-6);
-  font-size: 12px; color: var(--color-text3);
-  display: flex; justify-content: space-between;
-  flex-wrap: wrap; gap: var(--space-2);
-}
-
-/* ── Utility ──────────────────────────────────────────────────── */
-.sr-only {
-  position: absolute; width: 1px; height: 1px;
-  padding: 0; margin: -1px; overflow: hidden;
-  clip: rect(0,0,0,0); white-space: nowrap; border: 0;
-}
-
-/* ── Subscribe modal ──────────────────────────────────────────── */
-.modal-backdrop {
-  position: fixed; inset: 0; z-index: 500;
-  background: rgba(0,0,0,.55); backdrop-filter: blur(4px);
-  display: flex; align-items: center; justify-content: center;
-  padding: var(--space-4);
-}
-.modal-backdrop[hidden] { display: none; }
-.modal {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  box-shadow: 0 20px 60px rgba(0,0,0,.25);
-  width: 100%; max-width: 480px;
-  padding: var(--space-8);
-  position: relative;
-}
-.modal-close {
-  position: absolute; top: var(--space-4); right: var(--space-4);
-  width: 32px; height: 32px; border-radius: 50%;
-  background: var(--color-surface2); border: none;
-  font-size: 18px; line-height: 1; cursor: pointer;
-  color: var(--color-text2); font-family: inherit;
-  display: flex; align-items: center; justify-content: center;
-  transition: background .15s;
-}
-.modal-close:hover { background: var(--color-border2); }
-.modal-icon { font-size: 40px; margin-bottom: var(--space-4); }
-.modal h2 { font-size: 22px; font-weight: 800; letter-spacing: -.4px; margin-bottom: var(--space-2); }
-.modal-desc { font-size: 14px; color: var(--color-text2); line-height: 1.6; margin-bottom: var(--space-6); }
-.modal-form { display: flex; flex-direction: column; gap: var(--space-4); }
-.form-group { display: flex; flex-direction: column; gap: var(--space-2); }
-.form-label { font-size: 13px; font-weight: 600; color: var(--color-text); }
-.form-input {
-  padding: var(--space-3) var(--space-4);
-  border: 1.5px solid var(--color-border);
-  border-radius: var(--radius);
-  background: var(--color-bg);
-  color: var(--color-text); font-size: 15px;
-  font-family: inherit; min-height: 48px;
-  transition: border-color .15s;
-}
-.form-input:focus { outline: none; border-color: var(--color-accent); box-shadow: 0 0 0 3px rgba(22,163,74,.12); }
-.form-hint { font-size: 12px; color: var(--color-text3); line-height: 1.5; }
-.form-checkboxes { display: flex; flex-direction: column; gap: var(--space-2); }
-.form-checkbox {
-  display: flex; align-items: center; gap: var(--space-3);
-  cursor: pointer; font-size: 13px; color: var(--color-text2);
-}
-.form-checkbox input[type=checkbox] {
-  width: 18px; height: 18px; accent-color: var(--color-accent); cursor: pointer; flex-shrink: 0;
-}
-.modal-submit {
-  width: 100%; padding: var(--space-4);
-  background: var(--color-accent); color: #fff;
-  border: none; border-radius: var(--radius);
-  font-size: 15px; font-weight: 700;
-  cursor: pointer; font-family: inherit;
-  min-height: 52px; transition: background .15s;
-}
-.modal-submit:hover { background: var(--color-accent-dark); }
-.modal-submit:disabled { opacity: .5; cursor: not-allowed; }
-.modal-success {
-  text-align: center; padding: var(--space-6) 0;
-  display: none;
-}
-.modal-success h3 { font-size: 20px; font-weight: 800; margin-bottom: var(--space-2); }
-.modal-success p { font-size: 14px; color: var(--color-text2); line-height: 1.6; }
-/* Subscribe button in nav */
-.subscribe-btn {
-  display: inline-flex; align-items: center; gap: var(--space-2);
-  padding: var(--space-2) var(--space-4);
-  background: transparent;
-  border: 1.5px solid var(--color-accent);
-  color: var(--color-accent); border-radius: var(--radius);
-  font-size: 13px; font-weight: 600;
-  cursor: pointer; font-family: inherit;
-  min-height: 44px; transition: all .15s;
-  white-space: nowrap;
-}
-.subscribe-btn:hover { background: var(--color-accent-bg); }
-
 </style>
 </head>
 <body>
 
-<!-- Skip navigation link -->
-<a href="#main-content" class="skip-link">Skip to main content</a>
+<a href="#main" class="skip-link">Skip to main content</a>
 
-<!-- Site header -->
+<!-- Setup banner -->
+<div class="setup-banner" id="setupBanner">
+  &#9888;&#65039; <strong>Setup required:</strong>
+  Open <code>index.html</code>, find <code>YOUR_APPS_SCRIPT_WEB_APP_URL_HERE</code> and replace it with your Apps Script Web App URL, then push to GitHub.
+</div>
+
+<!-- Nav -->
 <header class="site-header" role="banner">
-  <div class="nav-inner">
-    <a href="index.html" class="brand" aria-label="SmartSaver Connect — Home">
-      <div class="brand-mark" aria-hidden="true">💰</div>
-      <div>
+  <div class="nav-wrap">
+    <a href="index.html" class="brand-link" aria-label="SmartSaver Connect home">
+      <div class="brand-icon" aria-hidden="true">&#128176;</div>
+      <div class="brand-words">
         <div class="brand-name">SmartSaver Connect</div>
-        <span class="brand-tagline">Australian Deals Portal</span>
+        <div class="brand-sub">AU Deals Portal</div>
       </div>
     </a>
     <nav aria-label="Primary navigation">
-      <ul class="primary-nav" role="list">
+      <ul class="main-nav" role="list">
         <li><a href="index.html" aria-current="page">Deals</a></li>
         <li><a href="digest.html">Weekly Digest</a></li>
-        <li><a href="catalogue-search.html">Search Catalogues</a></li>
-        <li><a href="compare.html">Compare Prices</a></li>
+        <li><a href="catalogue-search.html">Search</a></li>
+        <li><a href="compare.html">Compare</a></li>
         <li><a href="catalogues.html">Catalogues</a></li>
         <li><a href="cashback.html">Cashback</a></li>
       </ul>
     </nav>
-    <button class="subscribe-btn" onclick="openSubscribe()" aria-label="Subscribe to deal alerts">
-      🔔 Get Deal Alerts
-    </button>
-    <button class="nav-refresh" id="refreshBtn" onclick="doRefresh()"
-      aria-label="Refresh deals data" aria-live="polite">
-      <span id="refreshIcon" aria-hidden="true">↻</span>
-      <span>Refresh</span>
-    </button>
+    <div class="nav-end">
+      <button class="nav-sub" onclick="openSubscribe()" aria-label="Subscribe to deal alerts">
+        &#128276; Get Alerts
+      </button>
+      <button class="nav-refresh" id="refreshBtn" onclick="doRefresh()"
+        aria-label="Refresh deals" aria-live="polite">
+        <span id="ri" aria-hidden="true">&#8635;</span> Refresh
+      </button>
+    </div>
   </div>
 </header>
 
 <!-- Hero -->
-<section class="hero" aria-labelledby="hero-heading">
-  <div class="hero-inner">
-    <div class="hero-eyebrow" aria-hidden="true">
-      <span class="hero-eyebrow-dot"></span>Live Australian Deals
+<section class="hero" aria-labelledby="hero-h">
+  <div class="hero-in">
+    <div class="hero-chip" aria-hidden="true">
+      <span class="hero-blink"></span>Live deals updated daily
     </div>
-    <h1 id="hero-heading">
-      Find the best deals across<br>
-      <strong>every Australian retailer</strong>
+    <h1 id="hero-h">
+      Save more on<br><mark>every shop</mark> in Australia
     </h1>
     <p class="hero-desc">
-      Deals, specials, coupons, fuel prices and cashback — updated automatically from across the web.
+      Deals, specials, coupons, fuel prices and cashback —
+      automatically pulled from 40+ Australian retailers every day.
     </p>
-    <div class="search-form" role="search">
-      <div class="search-field">
-        <label for="heroSearch">
-          <span aria-hidden="true">🔍</span>
+    <div class="search-wrap" role="search">
+      <div class="search-box">
+        <label class="search-lbl" for="hs">
+          <span aria-hidden="true">&#128269;</span>
           <span class="sr-only">Search deals</span>
         </label>
-        <input
-          type="search" id="heroSearch"
-          placeholder="Search deals — e.g. milk, headphones, kettle chips…"
-          aria-label="Search deals"
-          autocomplete="off"
+        <input class="search-inp" type="search" id="hs"
+          placeholder="Search deals — milk, headphones, nappies, coffee…"
+          aria-label="Search deals" autocomplete="off"
           onkeydown="if(event.key==='Enter')doSearch()"/>
         <button class="search-btn" onclick="doSearch()">Search deals</button>
       </div>
-      <div class="quick-searches" aria-label="Quick search suggestions" role="group">
-        <span aria-hidden="true">Try:</span>
-        <button class="quick-btn" onclick="qsearch(this,'woolworths')" aria-pressed="false">Woolworths</button>
-        <button class="quick-btn" onclick="qsearch(this,'coles')" aria-pressed="false">Coles</button>
-        <button class="quick-btn" onclick="qsearch(this,'aldi')" aria-pressed="false">ALDI</button>
-        <button class="quick-btn" onclick="qsearch(this,'amazon')" aria-pressed="false">Amazon AU</button>
-        <button class="quick-btn" onclick="qsearch(this,'chemist')" aria-pressed="false">Chemist WH</button>
-        <button class="quick-btn" onclick="qsearch(this,'jb hi-fi')" aria-pressed="false">JB Hi-Fi</button>
-        <button class="quick-btn" onclick="qsearch(this,'travel')" aria-pressed="false">Travel</button>
+      <div class="quick-row" role="group" aria-label="Quick searches">
+        <span class="quick-lbl" aria-hidden="true">Try:</span>
+        <button class="qbtn" onclick="qs(this,'woolworths')" aria-pressed="false">Woolworths</button>
+        <button class="qbtn" onclick="qs(this,'coles')" aria-pressed="false">Coles</button>
+        <button class="qbtn" onclick="qs(this,'aldi')" aria-pressed="false">ALDI</button>
+        <button class="qbtn" onclick="qs(this,'amazon')" aria-pressed="false">Amazon AU</button>
+        <button class="qbtn" onclick="qs(this,'chemist')" aria-pressed="false">Chemist WH</button>
+        <button class="qbtn" onclick="qs(this,'jb hi-fi')" aria-pressed="false">JB Hi-Fi</button>
+        <button class="qbtn" onclick="qs(this,'travel')" aria-pressed="false">Travel</button>
       </div>
     </div>
   </div>
 </section>
 
 <!-- Stats strip -->
-<div class="stats-strip" role="region" aria-label="Summary statistics">
-  <div class="stats-inner">
-    <div class="stat"><div class="stat-ico" aria-hidden="true">🏷️</div><div><div class="stat-num" id="sTot">—</div><div class="stat-lbl">Deals</div></div></div>
-    <div class="stat"><div class="stat-ico" aria-hidden="true">%</div><div><div class="stat-num" id="sDisc">—</div><div class="stat-lbl">Avg discount</div></div></div>
-    <div class="stat"><div class="stat-ico amber" aria-hidden="true">⛽</div><div><div class="stat-num" id="sFuel">—</div><div class="stat-lbl">Best ULP ¢/L</div></div></div>
-    <div class="stat"><div class="stat-ico blue" aria-hidden="true">🎟️</div><div><div class="stat-num" id="sCpn">—</div><div class="stat-lbl">Coupons</div></div></div>
-    <div class="stat interactive" onclick="window.open('digest.html','_blank')" role="button" tabindex="0" aria-label="Open weekly digest" onkeydown="if(event.key==='Enter')window.open('digest.html','_blank')">
-      <div class="stat-ico" aria-hidden="true">📰</div>
-      <div><div class="stat-num" style="font-size:14px">Weekly</div><div class="stat-lbl">Digest →</div></div>
+<div class="stats-strip" role="region" aria-label="Statistics">
+  <div class="stats-in">
+    <div class="stat">
+      <div class="stat-pill" aria-hidden="true">&#127991;&#65039;</div>
+      <div><div class="stat-num" id="sTot">&mdash;</div><div class="stat-lbl">Deals</div></div>
+    </div>
+    <div class="stat">
+      <div class="stat-pill orange" aria-hidden="true">%</div>
+      <div><div class="stat-num" id="sDisc">&mdash;</div><div class="stat-lbl">Avg Saving</div></div>
+    </div>
+    <div class="stat">
+      <div class="stat-pill green" aria-hidden="true">&#9981;</div>
+      <div><div class="stat-num" id="sFuel">&mdash;</div><div class="stat-lbl">Best ULP &cent;</div></div>
+    </div>
+    <div class="stat">
+      <div class="stat-pill" aria-hidden="true">&#127981;</div>
+      <div><div class="stat-num" id="sCpn">&mdash;</div><div class="stat-lbl">Coupons</div></div>
+    </div>
+    <div class="stat btn-stat" role="button" tabindex="0"
+      onclick="window.open('digest.html','_blank')"
+      onkeydown="if(event.key==='Enter')window.open('digest.html','_blank')"
+      aria-label="Open weekly digest">
+      <div class="stat-pill" aria-hidden="true">&#128240;</div>
+      <div><div class="stat-num" style="font-size:14px;padding-top:3px">Weekly</div><div class="stat-lbl">Digest &rarr;</div></div>
     </div>
   </div>
 </div>
 
-<!-- Notices -->
-<div style="max-width:1300px;margin:0 auto;padding:var(--space-5) var(--space-6) 0" role="alert" aria-live="polite">
-  <div class="notice" id="setupNotice" style="display:none">
-    <strong>Setup needed:</strong> Replace <code>YOUR_APPS_SCRIPT_WEB_APP_URL_HERE</code> with your Apps Script Web App URL.
-  </div>
+<!-- Error area -->
+<div style="max-width:1320px;margin:0 auto;padding:var(--s4) var(--s6) 0" aria-live="polite">
   <div id="errArea"></div>
 </div>
 
-<!-- Page layout -->
-<div class="page" id="main-content">
+<!-- Page -->
+<div class="page" id="main">
 
-  <!-- Sidebar filter nav -->
-  <aside aria-label="Filter deals by category">
+  <!-- Sidebar -->
+  <aside aria-label="Filter by category">
     <div class="sidebar">
-      <div class="sidebar-heading" id="filter-group-label">Filter by category</div>
-      <nav aria-labelledby="filter-group-label">
-        <ul class="nav-filter" role="list">
-          <li>
-            <button class="filter-btn" data-cat="all" aria-pressed="true" onclick="setFilter(this)">
-              <span class="filter-icon" aria-hidden="true">🏠</span>
-              <span class="filter-label">All Deals</span>
-              <span class="filter-count" id="cnt-all" aria-label="total deals">—</span>
-            </button>
-          </li>
-          <li role="separator"><div class="sidebar-divider"></div></li>
-          <li>
-            <button class="filter-btn" data-cat="woolworths" aria-pressed="false" onclick="setFilter(this)">
-              <span class="filter-icon" aria-hidden="true">🟢</span>
-              <span class="filter-label">Woolworths</span>
-              <span class="filter-count" id="cnt-ww">—</span>
-            </button>
-          </li>
-          <li>
-            <button class="filter-btn" data-cat="coles" aria-pressed="false" onclick="setFilter(this)">
-              <span class="filter-icon" aria-hidden="true">🔴</span>
-              <span class="filter-label">Coles</span>
-              <span class="filter-count" id="cnt-coles">—</span>
-            </button>
-          </li>
-          <li>
-            <button class="filter-btn" data-cat="aldi" aria-pressed="false" onclick="setFilter(this)">
-              <span class="filter-icon" aria-hidden="true">🔵</span>
-              <span class="filter-label">ALDI</span>
-              <span class="filter-count" id="cnt-aldi">—</span>
-            </button>
-          </li>
-          <li>
-            <button class="filter-btn" data-cat="amazon" aria-pressed="false" onclick="setFilter(this)">
-              <span class="filter-icon" aria-hidden="true">📦</span>
-              <span class="filter-label">Amazon AU</span>
-              <span class="filter-count" id="cnt-amz">—</span>
-            </button>
-          </li>
-          <li role="separator"><div class="sidebar-divider"></div></li>
-          <li>
-            <button class="filter-btn" data-cat="retail" aria-pressed="false" onclick="setFilter(this)">
-              <span class="filter-icon" aria-hidden="true">🏬</span>
-              <span class="filter-label">Retail</span>
-              <span class="filter-count" id="cnt-ret">—</span>
-            </button>
-          </li>
-          <li>
-            <button class="filter-btn" data-cat="chemist" aria-pressed="false" onclick="setFilter(this)">
-              <span class="filter-icon" aria-hidden="true">💊</span>
-              <span class="filter-label">Health &amp; Beauty</span>
-              <span class="filter-count" id="cnt-cw">—</span>
-            </button>
-          </li>
-          <li>
-            <button class="filter-btn" data-cat="travel" aria-pressed="false" onclick="setFilter(this)">
-              <span class="filter-icon" aria-hidden="true">✈️</span>
-              <span class="filter-label">Travel</span>
-              <span class="filter-count" id="cnt-travel">—</span>
-            </button>
-          </li>
-          <li>
-            <button class="filter-btn" data-cat="telco" aria-pressed="false" onclick="setFilter(this)">
-              <span class="filter-icon" aria-hidden="true">📱</span>
-              <span class="filter-label">Mobile Plans</span>
-              <span class="filter-count" id="cnt-telco">—</span>
-            </button>
-          </li>
-          <li>
-            <button class="filter-btn" data-cat="nbn" aria-pressed="false" onclick="setFilter(this)">
-              <span class="filter-icon" aria-hidden="true">🌐</span>
-              <span class="filter-label">NBN &amp; Internet</span>
-              <span class="filter-count" id="cnt-nbn">—</span>
-            </button>
-          </li>
-          <li>
-            <button class="filter-btn" data-cat="energy" aria-pressed="false" onclick="setFilter(this)">
-              <span class="filter-icon" aria-hidden="true">⚡</span>
-              <span class="filter-label">Energy</span>
-              <span class="filter-count" id="cnt-energy">—</span>
-            </button>
-          </li>
-          <li>
-            <button class="filter-btn" data-cat="entertainment" aria-pressed="false" onclick="setFilter(this)">
-              <span class="filter-icon" aria-hidden="true">🎬</span>
-              <span class="filter-label">Movies &amp; Fun</span>
-              <span class="filter-count" id="cnt-ent">—</span>
-            </button>
-          </li>
-          <li role="separator"><div class="sidebar-divider"></div></li>
-          <li>
-            <button class="filter-btn" data-cat="coupon" aria-pressed="false" onclick="setFilter(this)">
-              <span class="filter-icon" aria-hidden="true">🎟️</span>
-              <span class="filter-label">Coupon Codes</span>
-              <span class="filter-count" id="cnt-cpn">—</span>
-            </button>
-          </li>
-          <li>
-            <button class="filter-btn" data-cat="fuel" aria-pressed="false" onclick="setFilter(this)">
-              <span class="filter-icon" aria-hidden="true">⛽</span>
-              <span class="filter-label">Fuel Prices</span>
-              <span class="filter-count" id="cnt-fuel">—</span>
-            </button>
-          </li>
-          <li>
-            <button class="filter-btn" data-cat="insurance" aria-pressed="false" onclick="setFilter(this)">
-              <span class="filter-icon" aria-hidden="true">🛡️</span>
-              <span class="filter-label">Insurance</span>
-              <span class="filter-count" id="cnt-ins">—</span>
-            </button>
-          </li>
-          <li role="separator"><div class="sidebar-divider"></div></li>
-          <li>
-            <button class="filter-btn" data-cat="live" aria-pressed="false" onclick="setFilter(this)">
-              <span class="filter-icon" aria-hidden="true">🔴</span>
-              <span class="filter-label">Live Specials</span>
-            </button>
-          </li>
-        </ul>
-      </nav>
+      <div class="sidebar-head">Categories</div>
+      <ul class="flist" role="list">
+        <li><button class="fbtn" data-cat="all" aria-pressed="true" onclick="setFilter(this)"><span class="fi" aria-hidden="true">&#127968;</span><span class="fl">All Deals</span><span class="fc" id="cnt-all">&mdash;</span></button></li>
+        <li><div class="fdiv"></div></li>
+        <li><button class="fbtn" data-cat="woolworths" aria-pressed="false" onclick="setFilter(this)"><span class="fi" aria-hidden="true">&#129001;</span><span class="fl">Woolworths</span><span class="fc" id="cnt-ww"></span></button></li>
+        <li><button class="fbtn" data-cat="coles" aria-pressed="false" onclick="setFilter(this)"><span class="fi" aria-hidden="true">&#128308;</span><span class="fl">Coles</span><span class="fc" id="cnt-coles"></span></button></li>
+        <li><button class="fbtn" data-cat="aldi" aria-pressed="false" onclick="setFilter(this)"><span class="fi" aria-hidden="true">&#128309;</span><span class="fl">ALDI</span><span class="fc" id="cnt-aldi"></span></button></li>
+        <li><button class="fbtn" data-cat="amazon" aria-pressed="false" onclick="setFilter(this)"><span class="fi" aria-hidden="true">&#128230;</span><span class="fl">Amazon AU</span><span class="fc" id="cnt-amz"></span></button></li>
+        <li><div class="fdiv"></div></li>
+        <li><button class="fbtn" data-cat="retail" aria-pressed="false" onclick="setFilter(this)"><span class="fi" aria-hidden="true">&#127978;</span><span class="fl">Retail</span><span class="fc" id="cnt-ret"></span></button></li>
+        <li><button class="fbtn" data-cat="chemist" aria-pressed="false" onclick="setFilter(this)"><span class="fi" aria-hidden="true">&#128138;</span><span class="fl">Health &amp; Beauty</span><span class="fc" id="cnt-cw"></span></button></li>
+        <li><button class="fbtn" data-cat="travel" aria-pressed="false" onclick="setFilter(this)"><span class="fi" aria-hidden="true">&#9992;&#65039;</span><span class="fl">Travel</span><span class="fc" id="cnt-travel"></span></button></li>
+        <li><button class="fbtn" data-cat="telco" aria-pressed="false" onclick="setFilter(this)"><span class="fi" aria-hidden="true">&#128241;</span><span class="fl">Mobile Plans</span><span class="fc" id="cnt-telco"></span></button></li>
+        <li><button class="fbtn" data-cat="nbn" aria-pressed="false" onclick="setFilter(this)"><span class="fi" aria-hidden="true">&#127760;</span><span class="fl">NBN &amp; Internet</span><span class="fc" id="cnt-nbn"></span></button></li>
+        <li><button class="fbtn" data-cat="energy" aria-pressed="false" onclick="setFilter(this)"><span class="fi" aria-hidden="true">&#9889;</span><span class="fl">Energy</span><span class="fc" id="cnt-energy"></span></button></li>
+        <li><button class="fbtn" data-cat="entertainment" aria-pressed="false" onclick="setFilter(this)"><span class="fi" aria-hidden="true">&#127916;</span><span class="fl">Movies &amp; Fun</span><span class="fc" id="cnt-ent"></span></button></li>
+        <li><div class="fdiv"></div></li>
+        <li><button class="fbtn" data-cat="coupon" aria-pressed="false" onclick="setFilter(this)"><span class="fi" aria-hidden="true">&#127981;</span><span class="fl">Coupon Codes</span><span class="fc" id="cnt-cpn"></span></button></li>
+        <li><button class="fbtn" data-cat="fuel" aria-pressed="false" onclick="setFilter(this)"><span class="fi" aria-hidden="true">&#9981;</span><span class="fl">Fuel Prices</span><span class="fc" id="cnt-fuel"></span></button></li>
+        <li><button class="fbtn" data-cat="insurance" aria-pressed="false" onclick="setFilter(this)"><span class="fi" aria-hidden="true">&#128737;&#65039;</span><span class="fl">Insurance</span><span class="fc" id="cnt-ins"></span></button></li>
+        <li><div class="fdiv"></div></li>
+        <li><button class="fbtn" data-cat="live" aria-pressed="false" onclick="setFilter(this)"><span class="fi" aria-hidden="true">&#128308;</span><span class="fl">Live Specials</span></button></li>
+      </ul>
     </div>
   </aside>
 
-  <!-- Main content -->
-  <main id="main-content" aria-label="Deals content" aria-live="polite" aria-busy="true">
+  <!-- Main -->
+  <main id="main-content" aria-label="Deals" aria-live="polite" aria-busy="true">
 
-    <!-- Content header -->
-    <div class="content-header">
-      <div class="content-title-group">
-        <h2 class="content-title" id="contentTitle">All Deals</h2>
-        <p class="content-subtitle" id="contentSubtitle">Loading deals…</p>
+    <div class="content-hdr">
+      <div>
+        <h2 class="content-title" id="ctitle">All Deals</h2>
+        <p class="content-sub" id="csub">Loading&hellip;</p>
       </div>
-      <div class="content-controls" role="group" aria-label="Filter and sort controls">
+      <div class="controls" role="group" aria-label="Sort and filter">
         <div class="inline-search">
-          <label for="filterInput">
-            <span aria-hidden="true">🔍</span>
+          <label for="fi">
+            <span aria-hidden="true">&#128269;</span>
             <span class="sr-only">Filter results</span>
           </label>
-          <input type="search" id="filterInput"
-            placeholder="Filter results…"
-            aria-label="Filter current results"
-            autocomplete="off"
-            oninput="renderDeals()"/>
+          <input type="search" id="fi" placeholder="Filter results&hellip;"
+            aria-label="Filter current results" autocomplete="off" oninput="renderDeals()"/>
         </div>
-        <label for="sortSel" class="sr-only">Sort deals by</label>
-        <select id="sortSel" class="sort-select" onchange="renderDeals()"
-          aria-label="Sort deals">
+        <label for="sortSel" class="sr-only">Sort by</label>
+        <select id="sortSel" class="sort-sel" onchange="renderDeals()" aria-label="Sort deals">
           <option value="discount">Best discount first</option>
-          <option value="price_asc">Price: Low to high</option>
-          <option value="price_desc">Price: High to low</option>
+          <option value="price_asc">Price: low to high</option>
+          <option value="price_desc">Price: high to low</option>
           <option value="newest">Newest first</option>
         </select>
       </div>
     </div>
 
     <div id="infoArea" aria-live="polite"></div>
+    <div id="errArea2"></div>
 
-    <!-- Live specials panel -->
+    <!-- Live panel -->
     <section class="live-panel" id="livePanel" style="display:none" aria-label="Live retailer specials">
-      <div class="live-panel-bar">
-        <div class="live-panel-title">
-          <span class="live-pulse" aria-hidden="true"></span>
-          Live Specials — opens directly on retailer website
+      <div class="live-ph">
+        <div class="live-ph-title">
+          <span class="live-dot" aria-hidden="true"></span>
+          Live Specials &mdash; opens directly on retailer website
         </div>
-        <ul class="live-tab-group" role="tablist" aria-label="Select retailer">
-          <li role="presentation"><button class="live-tab-btn" role="tab" aria-selected="true"  onclick="loadLive('woolworths',this)">Woolworths</button></li>
-          <li role="presentation"><button class="live-tab-btn" role="tab" aria-selected="false" onclick="loadLive('coles',this)">Coles</button></li>
-          <li role="presentation"><button class="live-tab-btn" role="tab" aria-selected="false" onclick="loadLive('aldi',this)">ALDI</button></li>
-          <li role="presentation"><button class="live-tab-btn" role="tab" aria-selected="false" onclick="loadLive('chemist',this)">Chemist WH</button></li>
-          <li role="presentation"><button class="live-tab-btn" role="tab" aria-selected="false" onclick="loadLive('amazon',this)">Amazon</button></li>
-          <li role="presentation"><button class="live-tab-btn" role="tab" aria-selected="false" onclick="loadLive('jbhifi',this)">JB Hi-Fi</button></li>
-          <li role="presentation"><button class="live-tab-btn" role="tab" aria-selected="false" onclick="loadLive('bigw',this)">Big W</button></li>
-          <li role="presentation"><button class="live-tab-btn" role="tab" aria-selected="false" onclick="loadLive('kmart',this)">Kmart</button></li>
-          <li role="presentation"><button class="live-tab-btn" role="tab" aria-selected="false" onclick="loadLive('movies',this)">🎬 Movies</button></li>
-          <li role="presentation"><button class="live-tab-btn" role="tab" aria-selected="false" onclick="loadLive('streaming',this)">📺 Streaming</button></li>
-          <li role="presentation"><button class="live-tab-btn" role="tab" aria-selected="false" onclick="loadLive('ubereats',this)">🛵 Uber Eats</button></li>
+        <ul class="live-tabs" role="tablist" aria-label="Retailer">
+          <li><button class="live-tab" role="tab" aria-selected="true"  onclick="loadLive('woolworths',this)">Woolworths</button></li>
+          <li><button class="live-tab" role="tab" aria-selected="false" onclick="loadLive('coles',this)">Coles</button></li>
+          <li><button class="live-tab" role="tab" aria-selected="false" onclick="loadLive('aldi',this)">ALDI</button></li>
+          <li><button class="live-tab" role="tab" aria-selected="false" onclick="loadLive('chemist',this)">Chemist WH</button></li>
+          <li><button class="live-tab" role="tab" aria-selected="false" onclick="loadLive('amazon',this)">Amazon</button></li>
+          <li><button class="live-tab" role="tab" aria-selected="false" onclick="loadLive('jbhifi',this)">JB Hi-Fi</button></li>
+          <li><button class="live-tab" role="tab" aria-selected="false" onclick="loadLive('bigw',this)">Big W</button></li>
+          <li><button class="live-tab" role="tab" aria-selected="false" onclick="loadLive('kmart',this)">Kmart</button></li>
+          <li><button class="live-tab" role="tab" aria-selected="false" onclick="loadLive('movies',this)">&#127916; Movies</button></li>
+          <li><button class="live-tab" role="tab" aria-selected="false" onclick="loadLive('streaming',this)">&#128250; Streaming</button></li>
+          <li><button class="live-tab" role="tab" aria-selected="false" onclick="loadLive('ubereats',this)">&#128757; Uber Eats</button></li>
         </ul>
       </div>
       <div class="live-cards" id="liveGrid" role="tabpanel">
-        <p style="grid-column:1/-1;color:var(--color-text3);font-size:14px;padding:var(--space-2)">Select a retailer tab above to view their current specials.</p>
+        <p style="grid-column:1/-1;color:var(--ink3);font-size:13.5px;padding:4px">Select a retailer tab above.</p>
       </div>
-      <div class="live-footer">All links open directly on the retailer's website in real time — not scraped, always current.</div>
+      <div class="live-note">All links open directly on the retailer&#8217;s own website &mdash; always current, never cached.</div>
     </section>
 
-    <!-- Deals output -->
-    <div id="dealOutput" aria-live="polite"></div>
+    <div id="dealOutput"></div>
     <div id="fuelOutput"></div>
     <div id="insOutput"></div>
+    <p class="page-foot" id="lastUpd"></p>
 
-    <p class="page-footer" id="lastUpd" aria-live="polite"></p>
   </main>
+</div>
+<!-- Subscribe modal -->
+<div class="modal-backdrop" id="subscribeModal" hidden role="dialog"
+  aria-modal="true" aria-labelledby="modal-title"
+  onclick="if(event.target===this)closeSubscribe()">
+  <div class="modal">
+    <button class="modal-close" onclick="closeSubscribe()" aria-label="Close">&times;</button>
+
+    <!-- Form view -->
+    <div id="modalForm">
+      <div class="modal-icon" aria-hidden="true">🔔</div>
+      <h2 id="modal-title">Get Daily Deal Alerts</h2>
+      <p class="modal-desc">
+        Receive a daily email with the best deals, coupons, fuel prices
+        and cashback offers — straight to your inbox. Unsubscribe any time.
+      </p>
+      <form class="modal-form" onsubmit="submitSubscribe(event)" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="subName">Your name</label>
+          <input class="form-input" type="text" id="subName"
+            placeholder="e.g. Karthik" autocomplete="given-name" required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="subEmail">Email address <span aria-hidden="true">*</span></label>
+          <input class="form-input" type="email" id="subEmail"
+            placeholder="you@example.com" autocomplete="email" required/>
+          <p class="form-hint">We only use this to send deal alerts. No spam, ever.</p>
+        </div>
+        <div class="form-group">
+          <span class="form-label" id="cats-label">I'm interested in</span>
+          <div class="form-checkboxes" role="group" aria-labelledby="cats-label">
+            <label class="form-checkbox"><input type="checkbox" name="cats" value="grocery" checked/> 🛒 Grocery specials (Woolworths, Coles, ALDI)</label>
+            <label class="form-checkbox"><input type="checkbox" name="cats" value="retail" checked/> 🏬 Retail &amp; electronics deals</label>
+            <label class="form-checkbox"><input type="checkbox" name="cats" value="fuel" checked/> ⛽ Fuel price alerts</label>
+            <label class="form-checkbox"><input type="checkbox" name="cats" value="food"/> 🛵 Food delivery (Uber Eats, Menulog)</label>
+            <label class="form-checkbox"><input type="checkbox" name="cats" value="telco"/> 📱 Mobile plan &amp; NBN deals</label>
+            <label class="form-checkbox"><input type="checkbox" name="cats" value="travel"/> ✈️ Travel &amp; flights</label>
+            <label class="form-checkbox"><input type="checkbox" name="cats" value="cashback"/> 💰 Cashback offers</label>
+          </div>
+        </div>
+        <button class="modal-submit" type="submit" id="subSubmitBtn">
+          Subscribe to deal alerts 🔔
+        </button>
+        <p class="form-hint" style="text-align:center">
+          Free · Unsubscribe any time · No spam
+        </p>
+      </form>
+    </div>
+
+    <!-- Success view -->
+    <div class="modal-success" id="modalSuccess">
+      <div style="font-size:56px;margin-bottom:16px">🎉</div>
+      <h3>You're subscribed!</h3>
+      <p>Check your inbox — you'll receive your first deal digest soon.
+      <br><br>
+      <strong id="successName"></strong>, you'll get daily alerts for the categories you selected.
+      <br><br>
+      <span style="font-size:13px;color:var(--color-text3)">To unsubscribe, just reply "unsubscribe" to any alert email.</span>
+      </p>
+    </div>
+  </div>
 </div>
 
 <script>
+
+
 // ── CONFIG ───────────────────────────────────────────────────────
 var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz60iBo_PfKtmny2YmwFgjvCCIMDoXpHWf7KBPVDfUNBA8VtRybMCSwn7Ze9wvCdg8KHA/exec';
 var CACHE_KEY = 'ssc_v7';
@@ -1274,8 +1159,14 @@ var activeFilter='all', searchQ='';
 // ── BOOT ──────────────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', function() {
   if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.indexOf('YOUR_') !== -1) {
-    document.getElementById('setupNotice').style.display = 'block';
-    showSkeleton();
+    document.getElementById('setupBanner').style.display = 'block';
+    // Show empty state with helpful message instead of frozen skeleton
+    document.getElementById('dealOutput').innerHTML =
+      '<div class="deals-grid"><div class="empty-state">'
+      + '<h3>Add your Apps Script URL to load deals</h3>'
+      + '<p>Open <strong>index.html</strong> in a text editor, find <strong>YOUR_APPS_SCRIPT_WEB_APP_URL_HERE</strong> on line 1266, and replace it with your Google Apps Script Web App URL. Then save and push to GitHub — Netlify will deploy in 30 seconds.</p>'
+      + '</div></div>';
+    setTitle('Setup required', 'Add your Apps Script URL to load live deals');
     return;
   }
   var c = readCache();
@@ -1306,7 +1197,7 @@ function showSkeleton() {
 // ── FETCH ─────────────────────────────────────────────────────────
 function fetchFresh(showSpinner) {
   var btn = document.getElementById('refreshBtn');
-  var ico = document.getElementById('refreshIcon');
+  var ico = document.getElementById('ri');
   if (showSpinner) {
     btn.disabled = true;
     ico.textContent = '↻';
@@ -1428,7 +1319,7 @@ function cRet() { return deals.filter(function(d){return d.cat==='retail'||isGen
 
 // ── RENDER ────────────────────────────────────────────────────────
 function renderDeals() {
-  var q = (document.getElementById('filterInput').value || '').toLowerCase().trim();
+  var q = (document.getElementById('fi').value || '').toLowerCase().trim();
   var sort = document.getElementById('sortSel').value;
 
   document.getElementById('fuelOutput').innerHTML = '';
@@ -1523,66 +1414,100 @@ function renderDeals() {
 }
 
 // ── DEAL CARD ─────────────────────────────────────────────────────
+// ── HOW TO AVAIL instructions per category ────────────────────────
+var HOW_TO = {
+  woolworths: 'Add to cart on woolworths.com.au or in the app. Everyday Rewards members get extra points on specials. Price applies in-store and online.',
+  coles:      'Available in-store and on coles.com.au. Flybuys members earn bonus points on specials. Check "On Special" page weekly — resets each Wednesday.',
+  aldi:       'ALDI Special Buys are in-store only and sell out fast. Available Wednesday & Saturday. No online shopping for Special Buys.',
+  amazon:     'Add to cart and checkout on amazon.com.au. Prime members get free delivery. Lightning deals are time-limited — act fast.',
+  retail:     'Click "View deal" to go to the retailer\'s website. Check if the deal is also available in-store near Point Cook.',
+  chemist:    'Available in-store at Chemist Warehouse or online. Half-price specials change weekly. No price-match needed — already discounted.',
+  travel:     'Click through to the airline or booking site. Prices are time-limited. Compare via Skyscanner before booking. Stack with Cashrewards for extra savings.',
+  telco:      'Click "See current price" to view the live plan on the carrier\'s website. Compare via WhistleOut or Finder before signing up. No lock-in plans let you switch anytime.',
+  nbn:        'Click through to check current pricing and promotions. Many NBN providers offer months-free on new connections. Compare via Finder for the best deal.',
+  energy:     'Get a quote on the provider\'s site. Always compare via Energy Made Easy (govt site) first. Switching takes 10 minutes and can save $200-500/year in VIC.',
+  insurance:  'Click through to get a quote. Prices vary by your circumstances. Always compare via Compare The Market or Finder before buying.',
+  coupon:     'Copy the code above. Paste it at checkout on the retailer\'s website. Check expiry — most OzBargain codes last 24-72 hours.',
+  fuel:       'Price shown is at a specific station. Use MotorMouth or GasBuddy to find cheapest fuel near you right now.',
+  entertainment: 'Check the event or cinema website for booking. Tuesday/Monday discount tickets must be booked on the day. MYER One and other loyalty cards may give extra discounts.',
+  food:       'Open the app (Uber Eats, Menulog or DoorDash) and apply the promo code at checkout. Codes are often new-user only or time-limited.',
+  default:    'Click "View deal" to go to the retailer\'s website. Prices are subject to availability and may change.',
+};
+
+function howTo(cat, isCoupon) {
+  if (isCoupon) return HOW_TO.coupon;
+  return HOW_TO[cat] || HOW_TO.default;
+}
+
 function dealCard(d) {
   var vc   = vbadge(d.vendor, d.cat);
-  var disc = d.disc > 0
-    ? '<span class="disc-badge" aria-label="' + d.disc + ' percent off">-' + d.disc + '%</span>' : '';
+  var vcCls = vc; // e.g. "v-badge vd-ww"
 
-  // ── Price display ────────────────────────────────────────────
-  // Three states:
-  //   1. Has price + was price → show both with saving
-  //   2. Has price only → show price
-  //   3. No price (telco/NBN/insurance/energy curated entries) → show "Check live price" CTA
+  // Discount badge
+  var disc = d.disc > 0
+    ? '<span class="disc-pill" aria-label="' + d.disc + ' percent off">-' + d.disc + '%</span>' : '';
+
+  // Price section — 3 states
   var priceSection = '';
   if (d.pNow && d.pNow > 0) {
     var saving = (d.pWas && d.pWas > d.pNow)
       ? Math.round(((d.pWas - d.pNow) / d.pWas) * 100) : 0;
     priceSection = '<div class="card-price">'
-      + '<span class="price-now" aria-label="Price: ' + d.pNow.toFixed(2) + ' dollars">$' + d.pNow.toFixed(2) + '</span>'
+      + '<span class="price-now" aria-label="Price ' + d.pNow.toFixed(2) + ' dollars">$' + d.pNow.toFixed(2) + '</span>'
       + (d.pWas && d.pWas > d.pNow
-          ? '<span class="price-was" aria-label="Was ' + d.pWas.toFixed(2) + ' dollars">$' + d.pWas.toFixed(2) + '</span>'
-            + (saving > 0 ? '<span class="saving-badge">Save ' + saving + '%</span>' : '')
+          ? '<span class="price-was" aria-label="Was ' + d.pWas.toFixed(2) + '">$' + d.pWas.toFixed(2) + '</span>'
+            + (saving > 0 ? '<span class="save-pill">Save ' + saving + '%</span>' : '')
           : '')
       + '</div>';
   } else if (d.url) {
-    // No price — show a "Check live price" badge appropriate to category
-    var ctaLabel = d.cat === 'telco'      ? 'Check current plan price'
-      : d.cat === 'nbn'       ? 'Check current plan price'
-      : d.cat === 'energy'    ? 'Compare rates on carrier site'
-      : d.cat === 'insurance' ? 'Get a quote on their site'
+    var ctaLabel = (d.cat==='telco'||d.cat==='nbn') ? 'Check current plan price'
+      : d.cat==='energy'    ? 'Compare rates on their site'
+      : d.cat==='insurance' ? 'Get a quote on their site'
       : 'Check current price';
-    priceSection = '<div class="live-price-cta">'
-      + '<span class="live-price-icon" aria-hidden="true">💲</span>'
-      + '<span class="live-price-text">' + ctaLabel + '</span>'
+    priceSection = '<div class="live-cta-box" aria-label="' + ctaLabel + '">'
+      + '<span aria-hidden="true">&#128178;</span>'
+      + '<span>' + ctaLabel + '</span>'
       + '</div>';
   }
 
-  // ── Primary action button ────────────────────────────────────
+  // Action button
+  var noPrice = !d.pNow || d.pNow <= 0;
   var link = d.url
-    ? '<a class="card-link" href="' + esc(d.url) + '" target="_blank" rel="noopener"'
-      + ' aria-label="View deal from ' + esc(d.vendor) + ' (opens in new tab)">'
-      + ((!d.pNow || d.pNow <= 0) ? 'See current price →' : 'View deal →')
+    ? '<a class="' + (noPrice ? 'live-link' : 'card-link') + '" href="' + esc(d.url) + '" target="_blank" rel="noopener"'
+      + ' aria-label="' + (noPrice ? 'See current price at ' : 'View deal from ') + esc(d.vendor) + ' (opens in new tab)">'
+      + (noPrice ? 'See current price &#8594;' : 'View deal &#8594;')
       + '</a>'
     : '<span></span>';
 
-  // ── Coupon code ──────────────────────────────────────────────
+  // Coupon code
   var couponBit = d._cpn && d._code
-    ? '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px">'
-      + '<span class="coupon-code" aria-label="Coupon code: ' + esc(d._code) + '">' + esc(d._code) + '</span>'
+    ? '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">'
+      + '<span class="cpn-code" aria-label="Coupon code: ' + esc(d._code) + '">' + esc(d._code) + '</span>'
       + '<button class="copy-btn" onclick="cpyCode(\'' + esc(d._code) + '\',this)"'
       + ' aria-label="Copy coupon code ' + esc(d._code) + '">Copy</button>'
       + '</div>' : '';
 
-  return '<article class="deal-card' + ((!d.pNow || d.pNow <= 0) && d.url ? ' no-price-card' : '') + '">'
+  // How to avail — collapsed by default, expandable
+  var hw = howTo(d.cat, !!d._cpn);
+  var hwId = 'hw_' + Math.random().toString(36).slice(2,8);
+  var howSection = '<div class="how-to">'
+    + '<button class="how-btn" onclick="toggleHow(this)" aria-expanded="false" aria-controls="' + hwId + '">'
+    + '<span>&#128161; How to avail</span><span class="how-chevron" aria-hidden="true">&#8250;</span>'
+    + '</button>'
+    + '<div class="how-body" id="' + hwId + '" hidden>' + esc(hw) + '</div>'
+    + '</div>';
+
+  return '<article class="deal-card">'
     + '<div class="card-top">'
-    +   '<span class="vendor-badge ' + vc + '">' + esc(d.vendor) + '</span>'
+    +   '<span class="' + vcCls + '"><span class="v-dot" aria-hidden="true"></span>' + esc(d.vendor) + '</span>'
     +   disc
     + '</div>'
     + '<h3 class="card-title">' + esc(d.title) + '</h3>'
-    + (d.desc ? '<p class="card-desc">' + esc(d.desc.slice(0, 110)) + '</p>' : '')
+    + (d.desc ? '<p class="card-desc">' + esc(d.desc.slice(0,110)) + '</p>' : '')
     + priceSection
     + couponBit
     + '<div class="card-footer">' + link + '</div>'
+    + howSection
     + '</article>';
 }
 
@@ -1834,7 +1759,7 @@ var LIVE = {
 };
 
 function loadLive(id, tabEl) {
-  document.querySelectorAll('.live-tab-btn').forEach(function(t) {
+  document.querySelectorAll('.live-tab').forEach(function(t) {
     t.setAttribute('aria-selected','false');
   });
   if (tabEl) tabEl.setAttribute('aria-selected','true');
@@ -1842,12 +1767,23 @@ function loadLive(id, tabEl) {
   var html = r.links.map(function(lk) {
     return '<a class="live-card" href="' + esc(lk.u) + '" target="_blank" rel="noopener"'
       + ' aria-label="' + esc(r.name) + ': ' + esc(lk.n) + ' (opens in new tab)">'
-      + '<span class="live-retailer-badge" style="background:' + r.b + ';color:' + r.c + '">' + esc(r.name) + '</span>'
-      + '<span class="live-card-name">' + esc(lk.n) + '</span>'
-      + '<span class="live-card-cta" aria-hidden="true">Browse live →</span>'
+      + '<span class="live-badge">' + esc(r.name) + '</span>'
+      + '<span class="live-name">' + esc(lk.n) + '</span>'
+      + '<span class="live-cta-txt" aria-hidden="true">Browse live &#8594;</span>'
       + '</a>';
   }).join('');
   document.getElementById('liveGrid').innerHTML = html;
+}
+
+function toggleHow(btn) {
+  var id   = btn.getAttribute('aria-controls');
+  var body = document.getElementById(id);
+  var open = btn.getAttribute('aria-expanded') === 'true';
+  btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+  if (open) { body.setAttribute('hidden',''); }
+  else      { body.removeAttribute('hidden'); }
+  var chev = btn.querySelector('.how-chevron');
+  if (chev) chev.style.transform = open ? '' : 'rotate(90deg)';
 }
 
 // ── FILTER & SEARCH ───────────────────────────────────────────────
@@ -1858,7 +1794,7 @@ function setFilter(el) {
   el.setAttribute('aria-pressed','true');
   activeFilter = el.dataset.cat;
   searchQ = '';
-  document.getElementById('filterInput').value = '';
+  document.getElementById('fi').value = '';
   renderDeals();
 }
 function setFilterById(cat) {
@@ -1866,8 +1802,8 @@ function setFilterById(cat) {
   if (el) setFilter(el);
 }
 function doSearch() {
-  searchQ = (document.getElementById('heroSearch').value || '').trim();
-  document.getElementById('filterInput').value = searchQ;
+  searchQ = (document.getElementById('hs').value || '').trim();
+  document.getElementById('fi').value = searchQ;
   activeFilter = 'all';
   document.querySelectorAll('.filter-btn').forEach(function(b) { b.setAttribute('aria-pressed','false'); });
   var allBtn = document.querySelector('[data-cat="all"]');
@@ -1876,10 +1812,10 @@ function doSearch() {
   window.scrollTo({ top: 500, behavior: 'smooth' });
   renderDeals();
 }
-function qsearch(el, term) {
+function qs(el, term) {
   document.querySelectorAll('.quick-btn').forEach(function(b) { b.setAttribute('aria-pressed','false'); });
   el.setAttribute('aria-pressed','true');
-  document.getElementById('heroSearch').value = term;
+  document.getElementById('hs').value = term;
   doSearch();
 }
 
@@ -1891,19 +1827,20 @@ function isGenRet(v) {
 }
 function vbadge(v, cat) {
   var n = (v||'').toLowerCase();
-  if (n.indexOf('woolworths')!==-1||n.indexOf('woolies')!==-1) return 'vendor-badge vb-ww';
-  if (n.indexOf('coles')!==-1)       return 'vendor-badge vb-coles';
-  if (n.indexOf('aldi')!==-1)        return 'vendor-badge vb-aldi';
-  if (n.indexOf('amazon')!==-1)      return 'vendor-badge vb-amz';
-  if (n.indexOf('big w')!==-1||n.indexOf('bigw')!==-1) return 'vendor-badge vb-bw';
-  if (n.indexOf('chemist')!==-1||n.indexOf('priceline')!==-1) return 'vendor-badge vb-cw';
-  if (n.indexOf('jb hi-fi')!==-1||n.indexOf('jb hifi')!==-1) return 'vendor-badge vb-jb';
-  if (cat==='coupon')                return 'vendor-badge vb-cpn';
-  if (cat==='insurance'||cat==='finance') return 'vendor-badge vb-ins';
-  if (cat==='fuel')                  return 'vendor-badge vb-fuel';
-  if (cat==='travel')                return 'vendor-badge vb-travel';
-  if (cat==='telco'||cat==='nbn')    return 'vendor-badge vb-nbn';
-  return 'vendor-badge vb-def';
+  var base = 'v-badge ';
+  if (n.indexOf('woolworths')!==-1||n.indexOf('woolies')!==-1) return base+'vd-ww';
+  if (n.indexOf('coles')!==-1)       return base+'vd-coles';
+  if (n.indexOf('aldi')!==-1)        return base+'vd-aldi';
+  if (n.indexOf('amazon')!==-1)      return base+'vd-amz';
+  if (n.indexOf('big w')!==-1||n.indexOf('bigw')!==-1) return base+'vd-bw';
+  if (n.indexOf('chemist')!==-1||n.indexOf('priceline')!==-1) return base+'vd-cw';
+  if (n.indexOf('jb hi-fi')!==-1||n.indexOf('jb hifi')!==-1) return base+'vd-jb';
+  if (cat==='coupon')                return base+'vd-cpn';
+  if (cat==='insurance'||cat==='finance') return base+'vd-ins';
+  if (cat==='fuel')                  return base+'vd-fuel';
+  if (cat==='travel')                return base+'vd-travel';
+  if (cat==='telco'||cat==='nbn')    return base+'vd-nbn';
+  return base+'vd-def';
 }
 function cpyCode(code, btn) {
   navigator.clipboard.writeText(code).then(function() {
@@ -1916,10 +1853,10 @@ function cpyCode(code, btn) {
   });
 }
 function setTitle(t, sub) {
-  document.getElementById('contentTitle').textContent = t;
-  document.getElementById('contentSubtitle').textContent = sub || '';
+  document.getElementById('ctitle').textContent = t;
+  document.getElementById('csub').textContent = sub || '';
 }
-function setSubtitle(m) { document.getElementById('contentSubtitle').textContent = m; }
+function setSubtitle(m) { document.getElementById('csub').textContent = m; }
 function clearErr() { document.getElementById('errArea').innerHTML = ''; }
 function setErr(m) { document.getElementById('errArea').innerHTML = m ? '<div class="notice" role="alert">' + m + '</div>' : ''; }
 function s(v) { return String(v||''); }
@@ -2001,69 +1938,268 @@ function showSubSuccess(name) {
   document.getElementById('modalForm').style.display = 'none';
   document.getElementById('modalSuccess').style.display = 'block';
 }
+
+
+
+// ── Patch JS references for new HTML IDs ─────────────────────────
+// All functions already use 'fi','hs','ri','ctitle','csub' from previous rebuild.
+
+// ── vbadge — returns new CSS classes ────────────────────────────
+function vbadge(v, cat) {
+  var n = (v||'').toLowerCase();
+  if (n.indexOf('woolworths')!==-1||n.indexOf('woolies')!==-1) return 'vbadge vb-ww';
+  if (n.indexOf('coles')!==-1)       return 'vbadge vb-coles';
+  if (n.indexOf('aldi')!==-1)        return 'vbadge vb-aldi';
+  if (n.indexOf('amazon')!==-1)      return 'vbadge vb-amz';
+  if (n.indexOf('big w')!==-1||n.indexOf('bigw')!==-1) return 'vbadge vb-bw';
+  if (n.indexOf('chemist')!==-1||n.indexOf('priceline')!==-1) return 'vbadge vb-cw';
+  if (n.indexOf('jb hi-fi')!==-1||n.indexOf('jb hifi')!==-1) return 'vbadge vb-jb';
+  if (cat==='coupon')                return 'vbadge vb-cpn';
+  if (cat==='insurance'||cat==='finance') return 'vbadge vb-ins';
+  if (cat==='fuel')                  return 'vbadge vb-fuel';
+  if (cat==='travel')                return 'vbadge vb-travel';
+  if (cat==='telco'||cat==='nbn')    return 'vbadge vb-nbn';
+  return 'vbadge vb-def';
+}
+
+// ── Category stripe class ────────────────────────────────────────
+function catCls(cat) {
+  var m = { woolworths:'cat-grocery', coles:'cat-grocery', aldi:'cat-grocery',
+    grocery:'cat-grocery', retail:'cat-retail', chemist:'cat-chemist',
+    travel:'cat-travel', telco:'cat-telco', nbn:'cat-nbn',
+    energy:'cat-energy', coupon:'cat-coupon', fuel:'cat-fuel',
+    insurance:'cat-insurance', food:'cat-food', entertainment:'cat-retail',
+    amazon:'cat-retail' };
+  return m[cat] || '';
+}
+
+// ── HOW-TO per category ──────────────────────────────────────────
+var HOW_TO = {
+  woolworths: 'Add to cart on woolworths.com.au or the Woolworths app. Specials apply in-store and online. Everyday Rewards members earn extra points. Specials change each Wednesday.',
+  coles:      'Available in-store and on coles.com.au. Flybuys members earn bonus points on specials. Half-price items rotate weekly — usually resets Wednesday.',
+  aldi:       'ALDI Special Buys are in-store only and sell out fast. Available from Wednesday and Saturday. No online shopping for Special Buys — get in early.',
+  amazon:     'Add to cart and checkout on amazon.com.au. Prime members get free delivery. Lightning deals are time-limited — act quickly. Check Subscribe & Save for recurring discounts.',
+  retail:     'Click View deal to go to the retailer's site. Check if the deal is available in-store near Point Cook. Some deals are online-only.',
+  chemist:    'Available in Chemist Warehouse stores or online at chemistwarehouse.com.au. Half-price specials rotate weekly. No price-match needed — already heavily discounted.',
+  travel:     'Click through to the airline or hotel booking site. Travel prices are time-limited. Compare across Webjet, Skyscanner and Finder first. Stack with Cashrewards for extra savings on top.',
+  telco:      'Click See current price to view the live plan on the carrier's website. Compare plans via WhistleOut or Finder.com.au before signing up. No lock-in plans let you switch anytime — worth doing every 12 months.',
+  nbn:        'Click through to check current pricing. Many NBN providers offer months free on new connections. Compare via Aussie Broadband, Superloop and TPG. Check Finder for current signup bonuses.',
+  energy:     'Get a quote on the provider's website. Always compare via Energy Made Easy (govt) at energymadeeasy.gov.au first. Switching electricity in VIC takes 10 minutes and can save $200–$500/year.',
+  insurance:  'Click through to get a personalised quote. Prices vary by your circumstances. Always compare at least 3 providers via Compare The Market or Finder before buying.',
+  coupon:     'Copy the code above. Go to the retailer's website, add items to cart, then paste the code at checkout. Check the deal post for expiry — most OzBargain codes last 24–72 hours.',
+  fuel:       'Price shown is at a specific station at time of scrape. Use MotorMouth (motormouth.com.au/postcode=3030) or GasBuddy to find cheapest fuel near Point Cook right now.',
+  entertainment: 'Check the cinema or event website for booking. Tuesday discount tickets (Event, Hoyts, Village) must usually be booked on the day. Meerkat Movies via Compare The Market gives 2-for-1 on Tuesdays.',
+  food:       'Open the Uber Eats, Menulog or DoorDash app. Apply the promo code at checkout. Codes are often new-user only or time-limited. Uber One members get $0 delivery on eligible restaurants.',
+};
+
+function howTo(cat, isCoupon) {
+  if (isCoupon) return HOW_TO.coupon;
+  return HOW_TO[cat] || 'Click View deal to open the retailer's page for full details and to purchase.';
+}
+
+// ── dealCard — rewritten to use new CSS ─────────────────────────
+function dealCard(d) {
+  var vc   = vbadge(d.vendor, d.cat);
+  var cc   = catCls(d.cat);
+  var disc = d.disc > 0
+    ? '<span class="disc-pill" aria-label="' + d.disc + ' percent off">-' + d.disc + '%</span>' : '';
+
+  // Price
+  var priceHtml = '';
+  if (d.pNow && d.pNow > 0) {
+    var sav = (d.pWas && d.pWas > d.pNow)
+      ? Math.round(((d.pWas - d.pNow) / d.pWas) * 100) : 0;
+    priceHtml = '<div class="price-row">'
+      + '<span class="price-now">$' + d.pNow.toFixed(2) + '</span>'
+      + (d.pWas && d.pWas > d.pNow
+        ? '<span class="price-was">$' + d.pWas.toFixed(2) + '</span>'
+          + (sav > 0 ? '<span class="save-pill">Save ' + sav + '%</span>' : '')
+        : '')
+      + '</div>';
+  } else if (d.url) {
+    var ctaLbl = (d.cat==='telco'||d.cat==='nbn') ? 'Check current plan price'
+      : d.cat==='energy'    ? 'Compare rates on their site'
+      : d.cat==='insurance' ? 'Get a quote'
+      : 'Check current price';
+    priceHtml = '<div class="price-cta"><span aria-hidden="true">&#128178;</span><span>' + ctaLbl + '</span></div>';
+  }
+
+  // Coupon
+  var cpnHtml = d._cpn && d._code
+    ? '<div class="cpn-row"><span class="cpn-code" aria-label="Coupon code ' + esc(d._code) + '">'
+      + esc(d._code) + '</span>'
+      + '<button class="copy-btn" onclick="cpyCode('' + esc(d._code) + '',this)">Copy</button></div>' : '';
+
+  // Link
+  var noPrice = !d.pNow || d.pNow <= 0;
+  var linkHtml = d.url
+    ? '<a class="' + (noPrice ? 'live-btn' : 'card-link') + '" href="' + esc(d.url) + '" target="_blank" rel="noopener">'
+      + (noPrice ? 'See current price &#8594;' : 'View deal &#8594;') + '</a>'
+    : '<span></span>';
+
+  // How to avail
+  var hw = howTo(d.cat, !!d._cpn);
+  var hwId = 'hw_' + Math.random().toString(36).slice(2,9);
+  var howHtml = '<div class="how-wrap">'
+    + '<button class="how-btn" onclick="toggleHow(this)" aria-expanded="false" aria-controls="' + hwId + '">'
+    + '<span>&#128161; How to avail</span>'
+    + '<span class="how-chev" aria-hidden="true">&#8250;</span>'
+    + '</button>'
+    + '<div class="how-body" id="' + hwId + '" hidden>' + esc(hw) + '</div>'
+    + '</div>';
+
+  return '<article class="deal-card ' + cc + '">'
+    + '<div class="card-body">'
+    +   '<div class="card-top"><span class="' + vc + '">' + esc(d.vendor) + '</span>' + disc + '</div>'
+    +   '<h3 class="card-title">' + esc(d.title) + '</h3>'
+    +   (d.desc ? '<p class="card-desc">' + esc(d.desc.slice(0,115)) + '</p>' : '')
+    +   priceHtml + cpnHtml
+    + '</div>'
+    + '<div class="card-foot">' + linkHtml + '</div>'
+    + howHtml
+    + '</article>';
+}
+
+// ── loadLive — uses .live-tab ────────────────────────────────────
+function loadLive(id, tabEl) {
+  document.querySelectorAll('.live-tab').forEach(function(t){t.setAttribute('aria-selected','false');});
+  if (tabEl) tabEl.setAttribute('aria-selected','true');
+  var r = LIVE[id]; if (!r) return;
+  var h = r.links.map(function(lk){
+    return '<a class="live-card" href="' + esc(lk.u) + '" target="_blank" rel="noopener"'
+      + ' aria-label="' + esc(r.name) + ': ' + esc(lk.n) + ' (opens in new tab)">'
+      + '<span class="live-badge">' + esc(r.name) + '</span>'
+      + '<span class="live-name">' + esc(lk.n) + '</span>'
+      + '<span class="live-cta" aria-hidden="true">Browse live &#8594;</span>'
+      + '</a>';
+  }).join('');
+  document.getElementById('liveGrid').innerHTML = h;
+}
+
+// ── toggleHow ───────────────────────────────────────────────────
+function toggleHow(btn) {
+  var id   = btn.getAttribute('aria-controls');
+  var body = document.getElementById(id);
+  var open = btn.getAttribute('aria-expanded') === 'true';
+  btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+  if (open) body.setAttribute('hidden','');
+  else body.removeAttribute('hidden');
+  var chev = btn.querySelector('.how-chev');
+  if (chev) chev.style.transform = open ? '' : 'rotate(90deg)';
+}
+
+// ── Quick search ─────────────────────────────────────────────────
+function qs(el, term) {
+  document.querySelectorAll('.qbtn').forEach(function(b){b.setAttribute('aria-pressed','false');});
+  el.setAttribute('aria-pressed','true');
+  document.getElementById('hs').value = term;
+  doSearch();
+}
+
+// ── Fuel — uses new CSS ──────────────────────────────────────────
+function ftc(t){ return ({ULP:'ULP',E10:'E10',P95:'P95',P98:'P98',Diesel:'Diesel',LPG:'LPG'})[t]||'ULP'; }
+
+function renderFuelSummary() {
+  var bt = {};
+  fuel.forEach(function(f){ if(!bt[f.type]||f.price<bt[f.type].price) bt[f.type]=f; });
+  var ord=['ULP','E10','P95','P98','Diesel','LPG'];
+  var best=ord.filter(function(t){return bt[t];}).map(function(t){return bt[t];});
+  if (!best.length) return;
+  var h = '<div class="fuel-panel" role="region" aria-label="Best fuel prices">'
+    + '<div class="fuel-ph"><div class="fuel-ph-title">&#9981; Best fuel prices near Point Cook</div>'
+    + '<a class="fuel-map-link" href="https://www.motormouth.com.au/fuel-price-map?postcode=3030" target="_blank" rel="noopener">Live map &#8594;</a>'
+    + '</div><div class="fuel-body">';
+  best.forEach(function(f){
+    var tc=ftc(f.type);
+    h+='<div class="fuel-card best"><div class="fuel-type-bar ftb-'+tc+'">'+esc(f.type)+'</div>'
+      +'<div class="fuel-card-body">'
+      +'<div class="fuel-price">'+f.price.toFixed(1)+'&cent;</div>'
+      +'<div class="fuel-brand">'+esc(f.brand||f.name)+'</div>'
+      +'<div class="fuel-loc">'+esc(f.suburb||'')+'</div>'
+      +'<span class="fuel-best-tag">&#9733; Cheapest</span>'
+      +'</div></div>';
+  });
+  h+='</div></div>';
+  document.getElementById('fuelOutput').innerHTML=h;
+}
+
+function renderFuel(q) {
+  if (!fuel.length) {
+    document.getElementById('fuelOutput').innerHTML='<div class="deals-grid"><div class="empty-state"><h3>No fuel data yet</h3><p>Add your free VIC Fuel API key in Script Properties.</p></div></div>';
+    return;
+  }
+  var items=fuel.filter(function(f){
+    return !q||(f.name||'').toLowerCase().indexOf(q)!==-1||(f.brand||'').toLowerCase().indexOf(q)!==-1||(f.suburb||'').toLowerCase().indexOf(q)!==-1;
+  });
+  var bt={};
+  items.forEach(function(f){(bt[f.type]=bt[f.type]||[]).push(f);});
+  Object.keys(bt).forEach(function(t){bt[t].sort(function(a,b){return a.price-b.price;});});
+  var ord=['ULP','E10','P95','P98','Diesel','LPG'];
+  var types=ord.filter(function(t){return bt[t];}).concat(Object.keys(bt).filter(function(t){return ord.indexOf(t)===-1;}));
+  var h='<div class="fuel-panel" role="region" aria-label="Fuel prices">'
+    +'<div class="fuel-ph">'
+    +'<div class="fuel-ph-title">&#9981; Fuel Prices &mdash; VIC, cheapest first</div>'
+    +'<a class="fuel-map-link" href="https://www.motormouth.com.au/fuel-price-map?postcode=3030" target="_blank" rel="noopener">Live map &#8594;</a>'
+    +'</div><div class="fuel-body">';
+  types.forEach(function(t){
+    bt[t].forEach(function(f,i){
+      var tc=ftc(t),best=i===0;
+      h+='<div class="fuel-card'+(best?' best':'')+'"><div class="fuel-type-bar ftb-'+tc+'">'+esc(t)+(best?' &#9733;':'')+'</div>'
+        +'<div class="fuel-card-body"><div class="fuel-price">'+f.price.toFixed(1)+'&cent;</div>'
+        +'<div class="fuel-brand">'+esc(f.brand||f.name)+'</div>'
+        +'<div class="fuel-loc">'+esc(f.name)+(f.suburb?', '+esc(f.suburb):'')+'</div>'
+        +(best?'<span class="fuel-best-tag">&#9733; Cheapest</span>':'')
+        +'</div></div>';
+    });
+  });
+  h+='</div></div>';
+  document.getElementById('fuelOutput').innerHTML=h;
+}
+
+function renderIns(q) {
+  var items=insurance.filter(function(o){
+    return !q||o.title.toLowerCase().indexOf(q)!==-1||(o.insurer||'').toLowerCase().indexOf(q)!==-1;
+  });
+  if (!items.length){
+    document.getElementById('insOutput').innerHTML='<div class="deals-grid"><div class="empty-state"><h3>No insurance offers</h3><p>Run the insurance scraper from your Google Sheet.</p></div></div>';
+    return;
+  }
+  var bt={};
+  items.forEach(function(o){(bt[o.type]=bt[o.type]||[]).push(o);});
+  var ord=['Car','Home','Health','Pet','Travel','Life','Income Protection','General'];
+  var types=ord.filter(function(t){return bt[t];}).concat(Object.keys(bt).filter(function(t){return ord.indexOf(t)===-1;}));
+  var h='';
+  types.forEach(function(t){
+    h+='<div style="margin-bottom:var(--s6)"><div class="sec-head"><h3 class="sec-title">&#128737;&#65039; '+esc(t)+' Insurance</h3><span class="sec-count">'+bt[t].length+' offer'+(bt[t].length!==1?'s':'')+'</span></div><div class="ins-grid">';
+    bt[t].forEach(function(o){
+      var disc=o.disc>0?'<span class="disc-pill">-'+o.disc+'%</span>':o.save>0?'<span class="disc-pill">Save $'+o.save+'</span>':'';
+      var lnk=o.url?'<a class="card-link" href="'+esc(o.url)+'" target="_blank" rel="noopener">View offer &#8594;</a>':'';
+      h+='<article class="ins-card">'
+        +'<div class="ins-card-top"><span class="vbadge vb-ins">'+esc(o.insurer)+'</span><span class="ins-type">'+esc(o.type)+'</span>'+disc+'</div>'
+        +'<div class="ins-body"><h4 class="ins-title">'+esc(o.title)+'</h4>'
+        +(o.desc?'<p class="ins-desc">'+esc(o.desc.slice(0,120))+'</p>':'')
+        +lnk+'</div></article>';
+    });
+    h+='</div></div>';
+  });
+  document.getElementById('insOutput').innerHTML=h;
+}
+
+// ── Boot — show proper empty state when URL not set ──────────────
+(function patchBoot(){
+  var origBoot = window.addEventListener;
+  // Already running — just patch the check
+})();
+
+// Override setupBanner reference
+document.addEventListener('DOMContentLoaded', function() {
+  // If original boot already ran (from the embedded JS above), it may have
+  // tried to find 'setupNotice' or 'setupBanner'. Ensure banner is shown.
+  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.indexOf('YOUR_') !== -1) {
+    var b = document.getElementById('setupBanner');
+    if (b) b.style.display = 'block';
+  }
+});
 </script>
-
-<!-- Subscribe modal -->
-<div class="modal-backdrop" id="subscribeModal" hidden role="dialog"
-  aria-modal="true" aria-labelledby="modal-title"
-  onclick="if(event.target===this)closeSubscribe()">
-  <div class="modal">
-    <button class="modal-close" onclick="closeSubscribe()" aria-label="Close">&times;</button>
-
-    <!-- Form view -->
-    <div id="modalForm">
-      <div class="modal-icon" aria-hidden="true">🔔</div>
-      <h2 id="modal-title">Get Daily Deal Alerts</h2>
-      <p class="modal-desc">
-        Receive a daily email with the best deals, coupons, fuel prices
-        and cashback offers — straight to your inbox. Unsubscribe any time.
-      </p>
-      <form class="modal-form" onsubmit="submitSubscribe(event)" novalidate>
-        <div class="form-group">
-          <label class="form-label" for="subName">Your name</label>
-          <input class="form-input" type="text" id="subName"
-            placeholder="e.g. Karthik" autocomplete="given-name" required/>
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="subEmail">Email address <span aria-hidden="true">*</span></label>
-          <input class="form-input" type="email" id="subEmail"
-            placeholder="you@example.com" autocomplete="email" required/>
-          <p class="form-hint">We only use this to send deal alerts. No spam, ever.</p>
-        </div>
-        <div class="form-group">
-          <span class="form-label" id="cats-label">I'm interested in</span>
-          <div class="form-checkboxes" role="group" aria-labelledby="cats-label">
-            <label class="form-checkbox"><input type="checkbox" name="cats" value="grocery" checked/> 🛒 Grocery specials (Woolworths, Coles, ALDI)</label>
-            <label class="form-checkbox"><input type="checkbox" name="cats" value="retail" checked/> 🏬 Retail &amp; electronics deals</label>
-            <label class="form-checkbox"><input type="checkbox" name="cats" value="fuel" checked/> ⛽ Fuel price alerts</label>
-            <label class="form-checkbox"><input type="checkbox" name="cats" value="food"/> 🛵 Food delivery (Uber Eats, Menulog)</label>
-            <label class="form-checkbox"><input type="checkbox" name="cats" value="telco"/> 📱 Mobile plan &amp; NBN deals</label>
-            <label class="form-checkbox"><input type="checkbox" name="cats" value="travel"/> ✈️ Travel &amp; flights</label>
-            <label class="form-checkbox"><input type="checkbox" name="cats" value="cashback"/> 💰 Cashback offers</label>
-          </div>
-        </div>
-        <button class="modal-submit" type="submit" id="subSubmitBtn">
-          Subscribe to deal alerts 🔔
-        </button>
-        <p class="form-hint" style="text-align:center">
-          Free · Unsubscribe any time · No spam
-        </p>
-      </form>
-    </div>
-
-    <!-- Success view -->
-    <div class="modal-success" id="modalSuccess">
-      <div style="font-size:56px;margin-bottom:16px">🎉</div>
-      <h3>You're subscribed!</h3>
-      <p>Check your inbox — you'll receive your first deal digest soon.
-      <br><br>
-      <strong id="successName"></strong>, you'll get daily alerts for the categories you selected.
-      <br><br>
-      <span style="font-size:13px;color:var(--color-text3)">To unsubscribe, just reply "unsubscribe" to any alert email.</span>
-      </p>
-    </div>
-  </div>
-</div>
-
 </body>
 </html>
