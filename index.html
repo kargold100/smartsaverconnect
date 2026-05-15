@@ -742,6 +742,17 @@ function renderDeals() {
   }
 
   var pool = deals.slice();
+  // Always merge hardcoded plans for these categories so they show even before scraper runs
+  if (activeFilter==='telco'||activeFilter==='nbn'||activeFilter==='energy'||activeFilter==='all') {
+    var hc = (activeFilter==='all')
+      ? getHardcodedPool('telco').concat(getHardcodedPool('nbn')).concat(getHardcodedPool('energy'))
+      : getHardcodedPool(activeFilter);
+    // Only add hardcoded if not already in scraped deals (avoid duplicates by title)
+    var existingTitles = pool.map(function(d){return d.title.toLowerCase().slice(0,40);});
+    hc.forEach(function(h){
+      if(existingTitles.indexOf(h.title.toLowerCase().slice(0,40))===-1) pool.push(h);
+    });
+  }
   if (activeFilter==='all'||activeFilter==='coupon') {
     coupons.forEach(function(cv){
       pool.push({vendor:cv.vendor, cat:'coupon', _cpn:true, _code:cv.code,
@@ -795,7 +806,37 @@ function renderDeals() {
   if (activeFilter==='all' && fuel.length) renderFuelSummary();
 }
 
-// ── HOW TO AVAIL ──────────────────────────────────────────────────
+// ── HARDCODED TELCO/NBN/ENERGY PLANS ─────────────────────────────
+// These always show regardless of scraper state
+// No prices hardcoded — carrier pricing changes constantly
+var HARDCODED_PLANS = [
+  // Mobile Plans
+  {vendor:'Vodafone',cat:'telco',title:'Vodafone Prepaid — Long Expiry Plans (180 & 365 Day)',desc:'Large data, 365-day validity. Check site for current pricing — promotions change frequently.',url:'https://www.vodafone.com.au/prepaid/plans'},
+  {vendor:'Telstra',cat:'telco',title:'Telstra Prepaid — Long Life Plans',desc:'Australia\'s largest network. Best regional VIC coverage. Check current pricing and any promotions.',url:'https://www.telstra.com.au/mobile-phones/prepaid-mobiles/plans'},
+  {vendor:'Optus',cat:'telco',title:'Optus SIM-Only — Monthly No Lock-In',desc:'Optus SIM-only plans. Includes Optus Sport streaming. Bundle with Optus NBN for savings.',url:'https://www.optus.com.au/mobile/mobile-plans'},
+  {vendor:'ALDI Mobile',cat:'telco',title:'ALDI Mobile — Telstra Network at Budget Prices',desc:'ALDI Mobile on Telstra network with rollover data. No lock-in. Compare vs Telstra direct.',url:'https://www.aldimobile.com.au/pages/plans'},
+  {vendor:'Boost Mobile',cat:'telco',title:'Boost Mobile — Annual Prepaid on Telstra Network',desc:'Boost Mobile annual prepaid on Telstra network. Usually cheaper than Telstra direct.',url:'https://www.boost.com.au/pages/plans'},
+  {vendor:'Kogan Mobile',cat:'telco',title:'Kogan Mobile — Large Data Prepaid Plans',desc:'Kogan Mobile on Vodafone network. Frequent sale pricing. Check current deals.',url:'https://www.koganmobile.com.au/plans/'},
+  {vendor:'Lebara Mobile',cat:'telco',title:'Lebara Mobile — International Calls Included',desc:'Lebara includes international calls to 40+ countries. Great for calling overseas from Melbourne.',url:'https://www.lebara.com.au/prepaid-plans'},
+  {vendor:'amaysim',cat:'telco',title:'amaysim — Unlimited Data Plans (Optus Network)',desc:'amaysim unlimited data on Optus network with data rollover and no lock-in.',url:'https://www.amaysim.com.au/plans/mobile-plans'},
+  // NBN & Internet
+  {vendor:'Aussie Broadband',cat:'nbn',title:'Aussie Broadband — ACCC #1 for Customer Satisfaction',desc:'Rated #1 by ACCC 2023-24. No throttling, Melbourne-based support. Check current signup deals.',url:'https://www.aussiebb.com.au/nbn'},
+  {vendor:'Superloop',cat:'nbn',title:'Superloop NBN — Often Months Free on Signup',desc:'Superloop frequently offers months free on new connections. Check current promotional pricing.',url:'https://www.superloop.com/consumer/nbn.html'},
+  {vendor:'TPG',cat:'nbn',title:'TPG NBN — Budget No Lock-In Plans',desc:'TPG budget NBN plans. No lock-in contracts. Competitive on 50Mbps and 100Mbps tiers.',url:'https://www.tpg.com.au/nbn'},
+  {vendor:'Telstra',cat:'nbn',title:'Telstra NBN — Bundle Discount with Telstra Mobile',desc:'Bundle discount when combined with a Telstra mobile plan. Check for current signup offers.',url:'https://www.telstra.com.au/internet/nbn'},
+  {vendor:'Starlink',cat:'nbn',title:'Starlink Satellite Internet — Best for Regional Areas',desc:'SpaceX Starlink. No data cap. Best option for areas without reliable NBN.',url:'https://www.starlink.com/au'},
+  // Energy
+  {vendor:'ReAmped Energy',cat:'energy',title:'ReAmped Energy — Consistently Cheapest in AU',desc:'Repeatedly ranks among cheapest on Energy Made Easy. Flat-rate, no lock-in, no exit fees.',url:'https://www.reamped.com.au'},
+  {vendor:'Amber Electric',cat:'energy',title:'Amber Electric — Wholesale Electricity Pricing',desc:'Amber passes through wholesale electricity prices. Best for solar + battery homes.',url:'https://www.amber.com.au'},
+  {vendor:'Origin Energy',cat:'energy',title:'Origin Energy — Spike Rewards for Off-Peak Usage',desc:'Origin electricity and gas with Spike rewards. Always compare via energymadeeasy.gov.au first.',url:'https://www.origin.com.au/plans/electricity'},
+];
+
+function getHardcodedPool(cat) {
+  return HARDCODED_PLANS.filter(function(p){return p.cat===cat;}).map(function(p){
+    return {vendor:p.vendor, cat:p.cat, title:p.title, desc:p.desc,
+      pNow:null, pWas:null, disc:0, url:p.url, ts:'', _hardcoded:true};
+  });
+}
 var HOW_TO = {
   woolworths:'Add to cart on woolworths.com.au or the app. Specials apply in-store and online. Everyday Rewards members earn extra points. Specials reset each Wednesday.',
   coles:'Available in-store and on coles.com.au. Flybuys members earn bonus points. Half-price specials rotate each Wednesday.',
@@ -914,18 +955,37 @@ function renderFuelGrid(q){
     return;
   }
   var items=fuel.filter(function(f){
-    return!q||(f.name||'').toLowerCase().indexOf(q)!==-1||(f.brand||'').toLowerCase().indexOf(q)!==-1;
+    return!q||(f.name||'').toLowerCase().indexOf(q)!==-1||(f.brand||'').toLowerCase().indexOf(q)!==-1||(f.suburb||'').toLowerCase().indexOf(q)!==-1;
   });
+  // Sort by price within each type so cheapest is always index 0
   var bt={};
   items.forEach(function(f){(bt[f.type]=bt[f.type]||[]).push(f);});
   Object.keys(bt).forEach(function(t){bt[t].sort(function(a,b){return a.price-b.price;});});
   var ord=['ULP','E10','P95','P98','Diesel','LPG'];
   var types=ord.filter(function(t){return bt[t];}).concat(Object.keys(bt).filter(function(t){return ord.indexOf(t)===-1;}));
-  var h='<div class="fuel-panel"><div class="fuel-ph"><div class="fuel-ph-title">&#9981; Fuel Prices — VIC</div>'
+
+  // Section 1: Best price per fuel type (one card each, sorted cheapest-first)
+  var h='<div class="fuel-panel">'
+    +'<div class="fuel-ph"><div class="fuel-ph-title">&#9733; Cheapest per fuel type — Point Cook area</div>'
     +'<a class="fuel-map-link" href="https://www.motormouth.com.au/fuel-price-map?postcode=3030" target="_blank" rel="noopener">Live map &#8594;</a>'
     +'</div><div class="fuel-body">';
-  types.forEach(function(t){bt[t].forEach(function(f,i){h+=fuelCard(f,i===0);});});
-  h+='</div></div>';
+  types.forEach(function(t){if(bt[t].length)h+=fuelCard(bt[t][0],true);});
+  h+='</div>';
+
+  // Section 2: All stations if more than one per type
+  var hasMore = types.some(function(t){return bt[t].length>1;});
+  if(hasMore){
+    h+='<div style="border-top:1px solid var(--border);padding:var(--g3) var(--g5);background:var(--surface2);font-family:var(--fh);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink3)">All stations</div>'
+      +'<div class="fuel-body">';
+    types.forEach(function(t){
+      bt[t].forEach(function(f,i){
+        if(i===0)return; // already shown above as cheapest
+        h+=fuelCard(f,false);
+      });
+    });
+    h+='</div>';
+  }
+  h+='</div>';
   document.getElementById('fuelOutput').innerHTML=h;
 }
 
@@ -983,8 +1043,11 @@ function setFilter(el){
 }
 function doSearch(){
   searchQ=(document.getElementById('hs').value||'').trim();
+  if(!searchQ) return;
   document.getElementById('fi').value=searchQ;
   activeFilter='all';
+  // Switch to newest sort so results aren't buried by discount-first ordering
+  document.getElementById('sortSel').value='newest';
   document.querySelectorAll('.fb').forEach(function(b){b.setAttribute('aria-pressed','false');});
   var a=document.querySelector('[data-cat="all"]');if(a)a.setAttribute('aria-pressed','true');
   document.querySelectorAll('.qb').forEach(function(b){b.setAttribute('aria-pressed','false');});
