@@ -589,8 +589,36 @@ body {
   border-radius: var(--radius-sm); color: var(--color-text);
   font-family: 'Courier New', monospace;
 }
-.copy-btn {
+.saving-badge {
+  font-size: 11px; font-weight: 700; padding: 3px 8px;
+  border-radius: 999px; background: var(--green-100); color: var(--green-700);
+  border: 1px solid #bbf7d0; white-space: nowrap;
+}
+@media (prefers-color-scheme: dark) {
+  .saving-badge { background: #052e16; color: #4ade80; border-color: #14532d; }
+}
+.live-price-cta {
+  display: flex; align-items: center; gap: var(--space-2);
   padding: var(--space-2) var(--space-3);
+  background: var(--color-surface2);
+  border: 1.5px dashed var(--color-border2);
+  border-radius: var(--radius-sm);
+  margin-top: var(--space-1);
+}
+.live-price-icon { font-size: 14px; flex-shrink: 0; }
+.live-price-text {
+  font-size: 12px; font-weight: 600;
+  color: var(--color-text2); font-style: italic;
+}
+.no-price-card { border-style: solid; border-color: var(--color-border); }
+.no-price-card .card-link {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-accent); color: #fff;
+  border-radius: var(--radius-sm); font-size: 13px;
+  font-weight: 700; text-decoration: none; transition: background .15s;
+}
+.no-price-card .card-link:hover { background: var(--color-accent-dark); text-decoration: none; }
   background: transparent;
   border: 1.5px solid var(--color-border2);
   border-radius: var(--radius-sm);
@@ -850,6 +878,89 @@ body {
   padding: 0; margin: -1px; overflow: hidden;
   clip: rect(0,0,0,0); white-space: nowrap; border: 0;
 }
+
+/* ── Subscribe modal ──────────────────────────────────────────── */
+.modal-backdrop {
+  position: fixed; inset: 0; z-index: 500;
+  background: rgba(0,0,0,.55); backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center;
+  padding: var(--space-4);
+}
+.modal-backdrop[hidden] { display: none; }
+.modal {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 20px 60px rgba(0,0,0,.25);
+  width: 100%; max-width: 480px;
+  padding: var(--space-8);
+  position: relative;
+}
+.modal-close {
+  position: absolute; top: var(--space-4); right: var(--space-4);
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--color-surface2); border: none;
+  font-size: 18px; line-height: 1; cursor: pointer;
+  color: var(--color-text2); font-family: inherit;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .15s;
+}
+.modal-close:hover { background: var(--color-border2); }
+.modal-icon { font-size: 40px; margin-bottom: var(--space-4); }
+.modal h2 { font-size: 22px; font-weight: 800; letter-spacing: -.4px; margin-bottom: var(--space-2); }
+.modal-desc { font-size: 14px; color: var(--color-text2); line-height: 1.6; margin-bottom: var(--space-6); }
+.modal-form { display: flex; flex-direction: column; gap: var(--space-4); }
+.form-group { display: flex; flex-direction: column; gap: var(--space-2); }
+.form-label { font-size: 13px; font-weight: 600; color: var(--color-text); }
+.form-input {
+  padding: var(--space-3) var(--space-4);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-bg);
+  color: var(--color-text); font-size: 15px;
+  font-family: inherit; min-height: 48px;
+  transition: border-color .15s;
+}
+.form-input:focus { outline: none; border-color: var(--color-accent); box-shadow: 0 0 0 3px rgba(22,163,74,.12); }
+.form-hint { font-size: 12px; color: var(--color-text3); line-height: 1.5; }
+.form-checkboxes { display: flex; flex-direction: column; gap: var(--space-2); }
+.form-checkbox {
+  display: flex; align-items: center; gap: var(--space-3);
+  cursor: pointer; font-size: 13px; color: var(--color-text2);
+}
+.form-checkbox input[type=checkbox] {
+  width: 18px; height: 18px; accent-color: var(--color-accent); cursor: pointer; flex-shrink: 0;
+}
+.modal-submit {
+  width: 100%; padding: var(--space-4);
+  background: var(--color-accent); color: #fff;
+  border: none; border-radius: var(--radius);
+  font-size: 15px; font-weight: 700;
+  cursor: pointer; font-family: inherit;
+  min-height: 52px; transition: background .15s;
+}
+.modal-submit:hover { background: var(--color-accent-dark); }
+.modal-submit:disabled { opacity: .5; cursor: not-allowed; }
+.modal-success {
+  text-align: center; padding: var(--space-6) 0;
+  display: none;
+}
+.modal-success h3 { font-size: 20px; font-weight: 800; margin-bottom: var(--space-2); }
+.modal-success p { font-size: 14px; color: var(--color-text2); line-height: 1.6; }
+/* Subscribe button in nav */
+.subscribe-btn {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  background: transparent;
+  border: 1.5px solid var(--color-accent);
+  color: var(--color-accent); border-radius: var(--radius);
+  font-size: 13px; font-weight: 600;
+  cursor: pointer; font-family: inherit;
+  min-height: 44px; transition: all .15s;
+  white-space: nowrap;
+}
+.subscribe-btn:hover { background: var(--color-accent-bg); }
+
 </style>
 </head>
 <body>
@@ -877,6 +988,9 @@ body {
         <li><a href="cashback.html">Cashback</a></li>
       </ul>
     </nav>
+    <button class="subscribe-btn" onclick="openSubscribe()" aria-label="Subscribe to deal alerts">
+      🔔 Get Deal Alerts
+    </button>
     <button class="nav-refresh" id="refreshBtn" onclick="doRefresh()"
       aria-label="Refresh deals data" aria-live="polite">
       <span id="refreshIcon" aria-hidden="true">↻</span>
@@ -1129,6 +1243,7 @@ body {
           <li role="presentation"><button class="live-tab-btn" role="tab" aria-selected="false" onclick="loadLive('kmart',this)">Kmart</button></li>
           <li role="presentation"><button class="live-tab-btn" role="tab" aria-selected="false" onclick="loadLive('movies',this)">🎬 Movies</button></li>
           <li role="presentation"><button class="live-tab-btn" role="tab" aria-selected="false" onclick="loadLive('streaming',this)">📺 Streaming</button></li>
+          <li role="presentation"><button class="live-tab-btn" role="tab" aria-selected="false" onclick="loadLive('ubereats',this)">🛵 Uber Eats</button></li>
         </ul>
       </div>
       <div class="live-cards" id="liveGrid" role="tabpanel">
@@ -1409,30 +1524,63 @@ function renderDeals() {
 
 // ── DEAL CARD ─────────────────────────────────────────────────────
 function dealCard(d) {
-  var vc = vbadge(d.vendor, d.cat);
-  var disc = d.disc > 0 ? '<span class="disc-badge" aria-label="' + d.disc + ' percent off">-' + d.disc + '%</span>' : '';
-  var price = d.pNow && d.pNow > 0
-    ? '<div class="card-price">'
+  var vc   = vbadge(d.vendor, d.cat);
+  var disc = d.disc > 0
+    ? '<span class="disc-badge" aria-label="' + d.disc + ' percent off">-' + d.disc + '%</span>' : '';
+
+  // ── Price display ────────────────────────────────────────────
+  // Three states:
+  //   1. Has price + was price → show both with saving
+  //   2. Has price only → show price
+  //   3. No price (telco/NBN/insurance/energy curated entries) → show "Check live price" CTA
+  var priceSection = '';
+  if (d.pNow && d.pNow > 0) {
+    var saving = (d.pWas && d.pWas > d.pNow)
+      ? Math.round(((d.pWas - d.pNow) / d.pWas) * 100) : 0;
+    priceSection = '<div class="card-price">'
       + '<span class="price-now" aria-label="Price: ' + d.pNow.toFixed(2) + ' dollars">$' + d.pNow.toFixed(2) + '</span>'
       + (d.pWas && d.pWas > d.pNow
-          ? '<span class="price-was" aria-label="Was ' + d.pWas.toFixed(2) + ' dollars">$' + d.pWas.toFixed(2) + '</span>' : '')
-      + '</div>' : '';
+          ? '<span class="price-was" aria-label="Was ' + d.pWas.toFixed(2) + ' dollars">$' + d.pWas.toFixed(2) + '</span>'
+            + (saving > 0 ? '<span class="saving-badge">Save ' + saving + '%</span>' : '')
+          : '')
+      + '</div>';
+  } else if (d.url) {
+    // No price — show a "Check live price" badge appropriate to category
+    var ctaLabel = d.cat === 'telco'      ? 'Check current plan price'
+      : d.cat === 'nbn'       ? 'Check current plan price'
+      : d.cat === 'energy'    ? 'Compare rates on carrier site'
+      : d.cat === 'insurance' ? 'Get a quote on their site'
+      : 'Check current price';
+    priceSection = '<div class="live-price-cta">'
+      + '<span class="live-price-icon" aria-hidden="true">💲</span>'
+      + '<span class="live-price-text">' + ctaLabel + '</span>'
+      + '</div>';
+  }
+
+  // ── Primary action button ────────────────────────────────────
   var link = d.url
-    ? '<a class="card-link" href="' + esc(d.url) + '" target="_blank" rel="noopener" aria-label="View deal from ' + esc(d.vendor) + ' (opens in new tab)">View deal →</a>'
+    ? '<a class="card-link" href="' + esc(d.url) + '" target="_blank" rel="noopener"'
+      + ' aria-label="View deal from ' + esc(d.vendor) + ' (opens in new tab)">'
+      + ((!d.pNow || d.pNow <= 0) ? 'See current price →' : 'View deal →')
+      + '</a>'
     : '<span></span>';
+
+  // ── Coupon code ──────────────────────────────────────────────
   var couponBit = d._cpn && d._code
-    ? '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">'
+    ? '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px">'
       + '<span class="coupon-code" aria-label="Coupon code: ' + esc(d._code) + '">' + esc(d._code) + '</span>'
-      + '<button class="copy-btn" onclick="cpyCode(\'' + esc(d._code) + '\',this)" aria-label="Copy coupon code ' + esc(d._code) + '">Copy</button>'
+      + '<button class="copy-btn" onclick="cpyCode(\'' + esc(d._code) + '\',this)"'
+      + ' aria-label="Copy coupon code ' + esc(d._code) + '">Copy</button>'
       + '</div>' : '';
 
-  return '<article class="deal-card">'
+  return '<article class="deal-card' + ((!d.pNow || d.pNow <= 0) && d.url ? ' no-price-card' : '') + '">'
     + '<div class="card-top">'
-    + '  <span class="vendor-badge ' + vc + '">' + esc(d.vendor) + '</span>' + disc
+    +   '<span class="vendor-badge ' + vc + '">' + esc(d.vendor) + '</span>'
+    +   disc
     + '</div>'
     + '<h3 class="card-title">' + esc(d.title) + '</h3>'
-    + (d.desc ? '<p class="card-desc">' + esc(d.desc.slice(0,100)) + '</p>' : '')
-    + price
+    + (d.desc ? '<p class="card-desc">' + esc(d.desc.slice(0, 110)) + '</p>' : '')
+    + priceSection
     + couponBit
     + '<div class="card-footer">' + link + '</div>'
     + '</article>';
@@ -1657,6 +1805,20 @@ var LIVE = {
     {n:'Groupon — Melbourne Cinema', u:'https://www.groupon.com.au/local/melbourne/movie-tickets'},
     {n:'OzBargain — Movie Deals', u:'https://www.ozbargain.com.au/tag/movies'},
   ]},
+  ubereats: { name:'Uber Eats', c:'#007a4c', b:'#dcfce7', links:[
+    {n:'Uber One — Member Offers',            u:'https://www.ubereats.com/au/uber-one'},
+    {n:'Uber Eats — Daily Promotions',        u:'https://www.ubereats.com/au/promotions'},
+    {n:'Uber Eats — $0 Delivery Restaurants', u:'https://www.ubereats.com/au/feed?pl=JTdCJTIyYWRkcmVzcyUyMiUzQSUyMlBvaW50JTIwQ29vayUyMiUyQyUyMnJlZmVyZW5jZSUyMiUzQSUyMkNoSUpXcHlSSVkxTzFtb1JnVVREZzI3aUh3MCUyMiUyQyUyMnJlZmVyZW5jZVR5cGUlMjIlM0ElMjJnb29nbGVfcGxhY2VzJTIyJTJDJTIybGF0aXR1ZGUlMjIlM0EtMzcuODg3NjIlMkMlMjJsb25naXR1ZGUlMjIlM0ExNDQuNzUyMzglN0Q%3D'},
+    {n:'Menulog — Today's Deals',             u:'https://www.menulog.com.au/deals'},
+    {n:'Menulog — Free Delivery Restaurants', u:'https://www.menulog.com.au/search?free_delivery=true'},
+    {n:'DoorDash — Promos & Offers',          u:'https://www.doordash.com/en-AU/promotions/'},
+    {n:'DoorDash — DashPass Savings',         u:'https://www.doordash.com/dashpass/'},
+    {n:'Hungry Jacks — App Offers',           u:'https://www.hungryjacks.com.au/deals'},
+    {n:'Dominos — Latest Deals',              u:'https://www.dominos.com.au/inside-dominos/deals'},
+    {n:'Pizza Hut — Current Offers',          u:'https://www.pizzahut.com.au/deals'},
+    {n:'OzBargain — Food Deals',              u:'https://www.ozbargain.com.au/cat/food-drink/deals'},
+    {n:'OzBargain — Uber Eats Codes',         u:'https://www.ozbargain.com.au/tag/uber-eats'},
+  ]},
   streaming: { name:'Streaming', c:'#1e40af', b:'#dbeafe', links:[
     {n:'Netflix AU — Plans', u:'https://www.netflix.com/au/signup'},
     {n:'Disney+ AU', u:'https://www.disneyplus.com/en-au'},
@@ -1772,6 +1934,136 @@ function saveCache(d) {
   try { localStorage.setItem(CACHE_KEY, JSON.stringify({ts:Date.now(),deals:d.deals||[],coupons:d.coupons||[],fuel:d.fuel||[],insurance:d.insurance||[]})); }
   catch(e) {}
 }
+
+// ── SUBSCRIBE MODAL ───────────────────────────────────────────────
+var SUBSCRIBE_URL = APPS_SCRIPT_URL;
+
+function openSubscribe() {
+  var m = document.getElementById('subscribeModal');
+  m.removeAttribute('hidden');
+  document.body.style.overflow = 'hidden';
+  setTimeout(function(){ document.getElementById('subEmail').focus(); }, 50);
+}
+function closeSubscribe() {
+  document.getElementById('subscribeModal').setAttribute('hidden','');
+  document.body.style.overflow = '';
+  document.getElementById('modalForm').style.display = 'block';
+  document.getElementById('modalSuccess').style.display = 'none';
+  var btn = document.getElementById('subSubmitBtn');
+  btn.disabled = false;
+  btn.textContent = 'Subscribe to deal alerts \uD83D\uDD14';
+}
+document.addEventListener('keydown', function(ev) {
+  if (ev.key === 'Escape') closeSubscribe();
+});
+function submitSubscribe(ev) {
+  ev.preventDefault();
+  var name  = (document.getElementById('subName').value  || '').trim();
+  var email = (document.getElementById('subEmail').value || '').trim();
+  if (!email || email.indexOf('@') === -1) {
+    document.getElementById('subEmail').focus(); return;
+  }
+  var cats = [];
+  document.querySelectorAll('input[name="cats"]:checked').forEach(function(cb){ cats.push(cb.value); });
+  var btn = document.getElementById('subSubmitBtn');
+  btn.disabled = true; btn.textContent = 'Subscribing\u2026';
+  if (!SUBSCRIBE_URL || SUBSCRIBE_URL.indexOf('YOUR_') !== -1) {
+    showSubSuccess(name || 'there'); return;
+  }
+  var cb = 'sub_' + Date.now(), sc = document.createElement('script');
+  var timer = setTimeout(function(){
+    if (sc.parentNode) sc.parentNode.removeChild(sc);
+    delete window[cb];
+    showSubSuccess(name || 'there');
+  }, 12000);
+  window[cb] = function(){
+    clearTimeout(timer);
+    if (sc.parentNode) sc.parentNode.removeChild(sc);
+    delete window[cb];
+    showSubSuccess(name || 'there');
+  };
+  sc.onerror = function(){
+    clearTimeout(timer);
+    if (sc.parentNode) sc.parentNode.removeChild(sc);
+    delete window[cb];
+    showSubSuccess(name || 'there');
+  };
+  sc.src = SUBSCRIBE_URL
+    + '?action=subscribe'
+    + '&name='  + encodeURIComponent(name)
+    + '&email=' + encodeURIComponent(email)
+    + '&cats='  + encodeURIComponent(cats.join(','))
+    + '&callback=' + cb;
+  document.head.appendChild(sc);
+}
+function showSubSuccess(name) {
+  document.getElementById('successName').textContent = name;
+  document.getElementById('modalForm').style.display = 'none';
+  document.getElementById('modalSuccess').style.display = 'block';
+}
 </script>
+
+<!-- Subscribe modal -->
+<div class="modal-backdrop" id="subscribeModal" hidden role="dialog"
+  aria-modal="true" aria-labelledby="modal-title"
+  onclick="if(event.target===this)closeSubscribe()">
+  <div class="modal">
+    <button class="modal-close" onclick="closeSubscribe()" aria-label="Close">&times;</button>
+
+    <!-- Form view -->
+    <div id="modalForm">
+      <div class="modal-icon" aria-hidden="true">🔔</div>
+      <h2 id="modal-title">Get Daily Deal Alerts</h2>
+      <p class="modal-desc">
+        Receive a daily email with the best deals, coupons, fuel prices
+        and cashback offers — straight to your inbox. Unsubscribe any time.
+      </p>
+      <form class="modal-form" onsubmit="submitSubscribe(event)" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="subName">Your name</label>
+          <input class="form-input" type="text" id="subName"
+            placeholder="e.g. Karthik" autocomplete="given-name" required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="subEmail">Email address <span aria-hidden="true">*</span></label>
+          <input class="form-input" type="email" id="subEmail"
+            placeholder="you@example.com" autocomplete="email" required/>
+          <p class="form-hint">We only use this to send deal alerts. No spam, ever.</p>
+        </div>
+        <div class="form-group">
+          <span class="form-label" id="cats-label">I'm interested in</span>
+          <div class="form-checkboxes" role="group" aria-labelledby="cats-label">
+            <label class="form-checkbox"><input type="checkbox" name="cats" value="grocery" checked/> 🛒 Grocery specials (Woolworths, Coles, ALDI)</label>
+            <label class="form-checkbox"><input type="checkbox" name="cats" value="retail" checked/> 🏬 Retail &amp; electronics deals</label>
+            <label class="form-checkbox"><input type="checkbox" name="cats" value="fuel" checked/> ⛽ Fuel price alerts</label>
+            <label class="form-checkbox"><input type="checkbox" name="cats" value="food"/> 🛵 Food delivery (Uber Eats, Menulog)</label>
+            <label class="form-checkbox"><input type="checkbox" name="cats" value="telco"/> 📱 Mobile plan &amp; NBN deals</label>
+            <label class="form-checkbox"><input type="checkbox" name="cats" value="travel"/> ✈️ Travel &amp; flights</label>
+            <label class="form-checkbox"><input type="checkbox" name="cats" value="cashback"/> 💰 Cashback offers</label>
+          </div>
+        </div>
+        <button class="modal-submit" type="submit" id="subSubmitBtn">
+          Subscribe to deal alerts 🔔
+        </button>
+        <p class="form-hint" style="text-align:center">
+          Free · Unsubscribe any time · No spam
+        </p>
+      </form>
+    </div>
+
+    <!-- Success view -->
+    <div class="modal-success" id="modalSuccess">
+      <div style="font-size:56px;margin-bottom:16px">🎉</div>
+      <h3>You're subscribed!</h3>
+      <p>Check your inbox — you'll receive your first deal digest soon.
+      <br><br>
+      <strong id="successName"></strong>, you'll get daily alerts for the categories you selected.
+      <br><br>
+      <span style="font-size:13px;color:var(--color-text3)">To unsubscribe, just reply "unsubscribe" to any alert email.</span>
+      </p>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
