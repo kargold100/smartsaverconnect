@@ -3,1040 +3,369 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>SmartSaver Connect — Australian Deals &amp; Savings</title>
+<title>SmartSaver Connect &#8212; AU Deals &amp; Savings</title>
 <meta name="description" content="Best deals, specials, coupons, fuel and cashback across Australian retailers. Updated daily."/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Nunito:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800;900&family=Mulish:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
 <style>
-/* ─────────────────────────────────────────────────
-   RESET
-───────────────────────────────────────────────── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-
-/* ─────────────────────────────────────────────────
-   TOKENS — warm, confident, Australian
-   Direction: "Refined marketplace" — crisp whites,
-   bold orange savings accent, trustworthy charcoal.
-   Think: Finder.com.au × Canstar × premium app.
-───────────────────────────────────────────────── */
 :root{
-  /* Background — warm off-white, not cold grey */
-  --bg:          #f7f5f2;
-  --surface:     #ffffff;
-  --surface2:    #f0ede8;
-  --surface3:    #e8e4de;
-
-  /* Borders */
-  --border:      #e2ddd8;
-  --border2:     #ccc7c0;
-
-  /* Text — warm charcoal family */
-  --ink:         #1c1917;
-  --ink2:        #44403c;
-  --ink3:        #78716c;
-  --ink4:        #a8a29e;
-
-  /* Primary — deep teal-navy. Authoritative, AU financial brand feel */
-  --brand:       #1e3a5f;
-  --brand2:      #2d5282;
-  --brand-bg:    #ebf4ff;
-  --brand-light: #dbeafe;
-
-  /* Savings accent — warm amber/orange. Pops. Immediately = "deal" */
-  --save:        #ea580c;
-  --save2:       #c2410c;
-  --save-bg:     #fff7ed;
-  --save-border: #fed7aa;
-
-  /* Success — deep emerald for prices */
-  --good:        #15803d;
-  --good-bg:     #f0fdf4;
-  --good-border: #bbf7d0;
-
-  /* Danger */
-  --danger:      #dc2626;
-  --danger-bg:   #fef2f2;
-  --danger-border:#fecaca;
-
-  /* Type */
-  --ff-head: 'Outfit', system-ui, sans-serif;
-  --ff-body: 'Nunito', system-ui, sans-serif;
-
-  /* Space — 4px grid */
-  --s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:20px;
-  --s6:24px;--s8:32px;--s10:40px;--s12:48px;--s16:64px;
-
-  /* Radius */
-  --r2:6px;--r3:10px;--r4:14px;--r5:20px;--r6:28px;
-
-  /* Shadow */
-  --sh0:0 1px 2px rgba(30,58,95,.06);
-  --sh1:0 2px 8px rgba(30,58,95,.08),0 1px 3px rgba(30,58,95,.05);
-  --sh2:0 8px 24px rgba(30,58,95,.12),0 3px 8px rgba(30,58,95,.06);
-  --sh3:0 20px 48px rgba(30,58,95,.16),0 8px 16px rgba(30,58,95,.08);
+  --cream:#faf8f5;--white:#ffffff;--stone:#f2ede8;--stone2:#e8e2da;--stone3:#d6cfc6;
+  --ink:#1a1714;--ink2:#4a4540;--ink3:#8c857e;--ink4:#b8b2aa;
+  --brand:#2c3e50;--brand2:#3d5166;--brand-bg:#edf2f7;--brand-lt:#dde6f0;
+  --deal:#e8443a;--deal2:#c73830;--deal-bg:#fef3f2;--deal-bd:#fcd7d5;
+  --price:#1a6b3c;--price-bg:#ebf7f1;--price-bd:#a7e3c3;
+  --fh:'Lexend',system-ui,sans-serif;--fb:'Mulish',system-ui,sans-serif;
+  --g1:4px;--g2:8px;--g3:12px;--g4:16px;--g5:20px;--g6:24px;--g8:32px;--g10:40px;--g12:48px;
+  --r1:4px;--r2:8px;--r3:12px;--r4:16px;--r5:24px;
+  --s0:0 1px 3px rgba(28,23,20,.07);--s1:0 2px 10px rgba(28,23,20,.09),0 1px 4px rgba(28,23,20,.06);
+  --s2:0 8px 28px rgba(28,23,20,.12),0 3px 10px rgba(28,23,20,.07);--s3:0 20px 56px rgba(28,23,20,.16);
 }
-
-/* ─────────────────────────────────────────────────
-   DARK MODE — warm, never pitch-black
-───────────────────────────────────────────────── */
-@media(prefers-color-scheme:dark){
-  :root{
-    --bg:       #18191f;
-    --surface:  #22242c;
-    --surface2: #2a2d38;
-    --surface3: #333644;
-    --border:   #383b48;
-    --border2:  #454858;
-    --ink:      #f5f4f2;
-    --ink2:     #b8b4ae;
-    --ink3:     #7d7870;
-    --ink4:     #52504c;
-    --brand:    #60a5fa;
-    --brand2:   #93c5fd;
-    --brand-bg: #0f1e35;
-    --brand-light:#172035;
-    --save:     #fb923c;
-    --save2:    #f97316;
-    --save-bg:  #1e1008;
-    --save-border:#7c3010;
-    --good:     #4ade80;
-    --good-bg:  #052e16;
-    --good-border:#14532d;
-    --danger:   #f87171;
-    --danger-bg:#2d0a0a;
-    --danger-border:#7f1d1d;
-  }
-}
-
-/* ─────────────────────────────────────────────────
-   REDUCED MOTION
-───────────────────────────────────────────────── */
-@media(prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
-}
-
-/* ─────────────────────────────────────────────────
-   BASE
-───────────────────────────────────────────────── */
+@media(prefers-color-scheme:dark){:root{
+  --cream:#1c1a18;--white:#252320;--stone:#2e2b28;--stone2:#3a3632;--stone3:#4a4540;
+  --ink:#f5f2ee;--ink2:#b8b2aa;--ink3:#7a746e;--ink4:#504c48;
+  --brand:#8facc8;--brand2:#a8c0d8;--brand-bg:#1a2535;--brand-lt:#1e2d40;
+  --deal:#f06b62;--deal2:#e8443a;--deal-bg:#2a1210;--deal-bd:#5a1e1a;
+  --price:#3dba77;--price-bg:#0d2e1c;--price-bd:#1a5c36;
+}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 html{scroll-behavior:smooth}
-body{
-  font-family:var(--ff-body);
-  font-size:15px;line-height:1.6;
-  background:var(--bg);color:var(--ink);
-  min-height:100vh;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-}
-:focus-visible{
-  outline:2.5px solid var(--save);
-  outline-offset:3px;border-radius:var(--r2);
-}
+body{font-family:var(--fb);font-size:15px;line-height:1.6;background:var(--cream);color:var(--ink);min-height:100vh;-webkit-font-smoothing:antialiased}
+:focus-visible{outline:2px solid var(--deal);outline-offset:3px;border-radius:var(--r1)}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-
-/* ─────────────────────────────────────────────────
-   SKIP LINK
-───────────────────────────────────────────────── */
-.skip-link{
-  position:absolute;top:-999px;left:var(--s4);z-index:9999;
-  background:var(--brand);color:#fff;
-  padding:var(--s3) var(--s4);border-radius:var(--r3);
-  font-weight:700;font-size:14px;text-decoration:none;
-}
-.skip-link:focus{top:var(--s4)}
-
-/* ─────────────────────────────────────────────────
-   SETUP BANNER
-───────────────────────────────────────────────── */
-.setup-banner{
-  display:none;
-  background:var(--save);color:#fff;
-  padding:10px var(--s6);text-align:center;
-  font-size:13px;font-weight:600;line-height:1.6;
-  position:sticky;top:0;z-index:200;
-}
-.setup-banner code{background:rgba(0,0,0,.2);padding:1px 6px;border-radius:4px;font-family:monospace;font-size:12px}
-
-/* ─────────────────────────────────────────────────
-   NAV
-───────────────────────────────────────────────── */
-.site-header{
-  background:var(--brand);
-  position:sticky;top:0;z-index:100;
-}
-.nav-wrap{
-  max-width:1320px;margin:0 auto;
-  padding:0 var(--s6);
-  display:flex;align-items:center;
-  height:58px;gap:var(--s2);
-}
-.brand-link{
-  display:flex;align-items:center;gap:var(--s3);
-  text-decoration:none;margin-right:var(--s6);flex-shrink:0;
-}
-.brand-icon{
-  width:34px;height:34px;
-  background:rgba(255,255,255,.15);
-  border:1.5px solid rgba(255,255,255,.25);
-  border-radius:var(--r3);
-  display:flex;align-items:center;justify-content:center;
-  font-size:17px;flex-shrink:0;
-}
-.brand-words{display:flex;flex-direction:column;gap:0}
-.brand-name{
-  font-family:var(--ff-head);
-  font-size:15px;font-weight:800;
-  color:#fff;letter-spacing:-.3px;line-height:1.2;
-}
-.brand-sub{font-size:9.5px;color:rgba(255,255,255,.6);font-weight:600;letter-spacing:.08em;text-transform:uppercase;line-height:1}
-.main-nav{display:flex;gap:var(--s1);list-style:none;flex:1;align-items:center}
-.main-nav a{
-  display:block;padding:6px 11px;border-radius:var(--r2);
-  font-size:13.5px;font-weight:500;
-  color:rgba(255,255,255,.75);text-decoration:none;
-  transition:background .15s,color .15s;white-space:nowrap;
-}
-.main-nav a:hover{background:rgba(255,255,255,.1);color:#fff}
-.main-nav a[aria-current="page"]{background:rgba(255,255,255,.15);color:#fff;font-weight:700}
-.nav-end{display:flex;align-items:center;gap:var(--s2);margin-left:auto}
-.nav-sub{
-  display:inline-flex;align-items:center;gap:var(--s2);
-  padding:7px 14px;
-  border:1.5px solid rgba(255,255,255,.35);
-  border-radius:var(--r3);background:transparent;
-  color:#fff;font-size:13px;font-weight:600;
-  cursor:pointer;font-family:inherit;min-height:38px;
-  transition:all .15s;white-space:nowrap;
-}
-.nav-sub:hover{background:rgba(255,255,255,.15)}
-.nav-refresh{
-  display:inline-flex;align-items:center;gap:var(--s2);
-  padding:7px 16px;
-  background:var(--save);color:#fff;
-  border:none;border-radius:var(--r3);
-  font-size:13px;font-weight:700;
-  cursor:pointer;font-family:inherit;min-height:38px;
-  transition:background .15s;white-space:nowrap;
-}
-.nav-refresh:hover{background:var(--save2)}
-.nav-refresh:disabled{opacity:.5;cursor:not-allowed}
+.skip{position:absolute;top:-999px;left:var(--g4);z-index:9999;background:var(--brand);color:#fff;padding:var(--g3) var(--g4);border-radius:var(--r2);font-weight:700;font-size:14px;text-decoration:none}
+.skip:focus{top:var(--g4)}
+.setup-banner{display:none;background:var(--deal);color:#fff;padding:10px var(--g6);text-align:center;font-size:13px;font-weight:600;line-height:1.6;position:sticky;top:0;z-index:300}
+.setup-banner code{background:rgba(0,0,0,.2);padding:1px 6px;border-radius:3px;font-family:monospace;font-size:12px}
+/* NAV */
+.hdr{background:var(--brand);position:sticky;top:0;z-index:100}
+.hdr-in{max-width:1320px;margin:0 auto;padding:0 var(--g6);display:flex;align-items:center;height:56px;gap:var(--g2)}
+.logo{display:flex;align-items:center;gap:var(--g3);text-decoration:none;margin-right:var(--g8);flex-shrink:0}
+.logo-mark{width:32px;height:32px;border-radius:var(--r2);background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.logo-name{font-family:var(--fh);font-size:15px;font-weight:700;color:#fff;letter-spacing:-.2px;line-height:1.2}
+.logo-tag{font-size:9.5px;color:rgba(255,255,255,.55);font-weight:500;letter-spacing:.07em;text-transform:uppercase}
+.nav{display:flex;gap:var(--g1);list-style:none;flex:1;align-items:center}
+.nav a{display:block;padding:6px 11px;border-radius:var(--r1);font-size:13.5px;font-weight:500;color:rgba(255,255,255,.72);text-decoration:none;transition:all .15s;white-space:nowrap}
+.nav a:hover{color:#fff;background:rgba(255,255,255,.1)}
+.nav a[aria-current="page"]{color:#fff;background:rgba(255,255,255,.15);font-weight:600}
+.hdr-btns{display:flex;gap:var(--g2);align-items:center;margin-left:auto}
+.btn-ghost{display:inline-flex;align-items:center;gap:var(--g2);padding:7px 14px;border:1.5px solid rgba(255,255,255,.3);border-radius:var(--r2);background:transparent;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;min-height:36px;transition:all .15s;white-space:nowrap}
+.btn-ghost:hover{background:rgba(255,255,255,.12)}
+.btn-coral{display:inline-flex;align-items:center;gap:var(--g2);padding:7px 16px;background:var(--deal);color:#fff;border:none;border-radius:var(--r2);font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;min-height:36px;transition:background .15s;white-space:nowrap}
+.btn-coral:hover{background:var(--deal2)}
+.btn-coral:disabled{opacity:.5;cursor:not-allowed}
 @keyframes spin{to{transform:rotate(360deg)}}
 .spin{display:inline-block;animation:spin .7s linear infinite}
-@media(max-width:880px){.main-nav{display:none}.brand-sub{display:none}}
-
-/* ─────────────────────────────────────────────────
-   HERO — clean, confident, no colour wash
-   Textured background subtle geometric pattern
-───────────────────────────────────────────────── */
-.hero{
-  background:var(--surface);
-  border-bottom:1px solid var(--border);
-  padding:var(--s12) var(--s6) var(--s10);
-  position:relative;overflow:hidden;
-}
-/* Subtle dot-grid pattern */
-.hero::before{
-  content:'';position:absolute;inset:0;
-  background-image:radial-gradient(circle,var(--border) 1px,transparent 1px);
-  background-size:28px 28px;
-  opacity:.5;pointer-events:none;
-}
-/* Brand colour accent blob — top right */
-.hero::after{
-  content:'';position:absolute;
-  top:-120px;right:-80px;
-  width:400px;height:400px;border-radius:50%;
-  background:radial-gradient(circle,var(--brand-light) 0%,transparent 68%);
-  pointer-events:none;
-}
-.hero-in{max-width:1320px;margin:0 auto;position:relative;z-index:1}
-.hero-chip{
-  display:inline-flex;align-items:center;gap:var(--s2);
-  background:var(--save-bg);border:1px solid var(--save-border);
-  color:var(--save);
-  padding:4px 13px;border-radius:999px;
-  font-size:11.5px;font-weight:700;letter-spacing:.05em;
-  text-transform:uppercase;margin-bottom:var(--s5);
-}
-.hero-blink{width:6px;height:6px;border-radius:50%;background:var(--save);animation:blink 1.8s infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
-.hero h1{
-  font-family:var(--ff-head);
-  font-size:clamp(30px,4.5vw,54px);
-  font-weight:900;color:var(--ink);
-  letter-spacing:-2px;line-height:1.08;
-  margin-bottom:var(--s4);max-width:760px;
-}
-.hero h1 mark{
-  background:none;
-  color:var(--brand);
-  position:relative;display:inline;
-  white-space:nowrap;
-}
-/* Underline accent on marked text */
-.hero h1 mark::after{
-  content:'';position:absolute;
-  left:0;bottom:-4px;right:0;height:4px;
-  background:var(--save);border-radius:999px;
-  opacity:.7;
-}
-.hero-desc{
-  font-size:17px;color:var(--ink2);
-  max-width:540px;line-height:1.7;margin-bottom:var(--s8);
-}
-
-/* Search */
-.search-wrap{max-width:620px}
-.search-box{
-  display:flex;
-  background:var(--surface);
-  border:2px solid var(--brand);
-  border-radius:var(--r5);
-  overflow:hidden;
-  box-shadow:0 4px 20px rgba(30,58,95,.15);
-  transition:box-shadow .2s;
-}
-.search-box:focus-within{box-shadow:0 4px 28px rgba(30,58,95,.25)}
-.search-lbl{
-  display:flex;align-items:center;
-  padding:0 var(--s4);color:var(--ink3);font-size:18px;flex-shrink:0;
-}
-.search-inp{
-  flex:1;padding:var(--s4);border:0;background:transparent;
-  font-size:15px;color:var(--ink);font-family:inherit;min-height:54px;
-}
+@media(max-width:860px){.nav{display:none}.logo-tag{display:none}}
+/* HERO */
+.hero{background:var(--white);border-bottom:2px solid var(--stone2);padding:var(--g12) var(--g6) var(--g10);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(-45deg,var(--stone) 0px,var(--stone) 1px,transparent 1px,transparent 12px);opacity:.3;pointer-events:none}
+.hero-in{max-width:1320px;margin:0 auto;position:relative;z-index:1;display:grid;grid-template-columns:1fr auto;gap:var(--g8);align-items:center}
+@media(max-width:800px){.hero-in{grid-template-columns:1fr}.hero-aside{display:none}}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:var(--g2);border:1px solid var(--deal-bd);background:var(--deal-bg);color:var(--deal);padding:3px 12px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:var(--g5)}
+.hero-blink{width:5px;height:5px;border-radius:50%;background:var(--deal);animation:blink 1.8s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.hero h1{font-family:var(--fh);font-size:clamp(32px,4.5vw,58px);font-weight:900;color:var(--ink);letter-spacing:-2.5px;line-height:1.05;margin-bottom:var(--g5)}
+.hero h1 .accent{color:var(--deal)}
+.hero-sub{font-size:17px;color:var(--ink2);max-width:520px;line-height:1.7;margin-bottom:var(--g8)}
+.search-form{max-width:580px}
+.search-box{display:flex;border:2px solid var(--ink);border-radius:var(--r3);background:var(--white);overflow:hidden;box-shadow:4px 4px 0 var(--ink);transition:box-shadow .15s,border-color .15s}
+.search-box:focus-within{box-shadow:4px 4px 0 var(--deal);border-color:var(--deal)}
+.search-lbl{display:flex;align-items:center;padding:0 var(--g4);color:var(--ink3);font-size:18px;flex-shrink:0}
+.search-inp{flex:1;padding:var(--g4);border:0;background:transparent;font-size:15px;color:var(--ink);font-family:inherit;min-height:54px}
 .search-inp::placeholder{color:var(--ink4)}
 .search-inp:focus{outline:none}
-.search-btn{
-  padding:var(--s3) var(--s6);
-  background:var(--brand);color:#fff;
-  border:0;font-size:14px;font-weight:700;
-  cursor:pointer;font-family:inherit;
-  white-space:nowrap;transition:background .15s;
-  min-height:54px;letter-spacing:.02em;
-}
+.search-btn{padding:var(--g3) var(--g6);background:var(--ink);color:#fff;border:0;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;transition:background .15s;min-height:54px;letter-spacing:.02em}
 .search-btn:hover{background:var(--brand2)}
-.quick-row{display:flex;flex-wrap:wrap;gap:var(--s2);margin-top:var(--s4);align-items:center}
-.quick-lbl{font-size:12px;color:var(--ink3);font-weight:500}
-.qbtn{
-  padding:5px 13px;border-radius:999px;
-  border:1.5px solid var(--border2);
-  background:var(--surface);color:var(--ink2);
-  font-size:12.5px;font-weight:600;
-  cursor:pointer;font-family:inherit;min-height:34px;
-  transition:all .15s;
-}
-.qbtn:hover,.qbtn[aria-pressed="true"]{
-  background:var(--brand);color:#fff;border-color:var(--brand);
-}
-
-/* ─────────────────────────────────────────────────
-   STATS STRIP
-───────────────────────────────────────────────── */
-.stats-strip{
-  background:var(--surface);
-  border-bottom:2px solid var(--border);
-}
-.stats-in{
-  max-width:1320px;margin:0 auto;
-  padding:0 var(--s6);
-  display:flex;overflow-x:auto;scrollbar-width:none;
-}
+.quick-row{display:flex;flex-wrap:wrap;gap:var(--g2);margin-top:var(--g4);align-items:center}
+.ql{font-size:12px;color:var(--ink3);font-weight:500}
+.qb{padding:5px 13px;border-radius:999px;border:1.5px solid var(--stone3);background:var(--white);color:var(--ink2);font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;min-height:34px;transition:all .15s}
+.qb:hover,.qb[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+/* Hero stat card */
+.hero-aside{background:var(--deal);color:#fff;border-radius:var(--r4);padding:var(--g6);min-width:190px;text-align:center;box-shadow:6px 6px 0 var(--deal2)}
+.ha-title{font-family:var(--fh);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.8;margin-bottom:var(--g4)}
+.ha-num{font-family:var(--fh);font-size:52px;font-weight:900;line-height:1;letter-spacing:-2px}
+.ha-label{font-size:13px;opacity:.8;margin-top:var(--g2)}
+.ha-sub{font-size:11px;opacity:.6;margin-top:var(--g1)}
+/* STATS */
+.stats{background:var(--white);border-bottom:2px solid var(--stone2)}
+.stats-in{max-width:1320px;margin:0 auto;padding:0 var(--g6);display:flex;overflow-x:auto;scrollbar-width:none}
 .stats-in::-webkit-scrollbar{display:none}
-.stat{
-  display:flex;align-items:center;gap:var(--s3);
-  padding:var(--s4) var(--s5);
-  border-right:1px solid var(--border);
-  flex-shrink:0;transition:background .15s;
-}
+.stat{display:flex;align-items:center;gap:var(--g3);padding:var(--g4) var(--g5);border-right:1px solid var(--stone2);flex-shrink:0;transition:background .15s;cursor:default}
 .stat:last-child{border-right:none}
-.stat.btn-stat{cursor:pointer}
-.stat.btn-stat:hover{background:var(--surface2)}
-.stat-pill{
-  width:38px;height:38px;border-radius:var(--r3);
-  display:flex;align-items:center;justify-content:center;
-  font-size:16px;flex-shrink:0;
-  background:var(--brand-bg);
-}
-.stat-pill.orange{background:var(--save-bg)}
-.stat-pill.green{background:var(--good-bg)}
-.stat-num{
-  font-family:var(--ff-head);
-  font-size:20px;font-weight:800;
-  color:var(--ink);letter-spacing:-.5px;line-height:1;
-}
-.stat-lbl{font-size:10.5px;color:var(--ink3);font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-top:2px}
-
-/* ─────────────────────────────────────────────────
-   PAGE LAYOUT
-───────────────────────────────────────────────── */
-.page{
-  max-width:1320px;margin:0 auto;
-  padding:var(--s6) var(--s6) var(--s16);
-  display:grid;
-  grid-template-columns:230px 1fr;
-  gap:var(--s6);align-items:start;
-}
+.stat.clickable{cursor:pointer}.stat.clickable:hover{background:var(--stone)}
+.stat-ico{width:36px;height:36px;border-radius:var(--r2);background:var(--stone);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.stat-num{font-family:var(--fh);font-size:20px;font-weight:800;color:var(--ink);letter-spacing:-.5px;line-height:1}
+.stat-lbl{font-size:10px;color:var(--ink3);font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-top:2px}
+/* LAYOUT */
+.page{max-width:1320px;margin:0 auto;padding:var(--g6) var(--g6) var(--g12);display:grid;grid-template-columns:220px 1fr;gap:var(--g6);align-items:start}
 @media(max-width:960px){.page{grid-template-columns:1fr}.sidebar{display:none}}
-
-/* ─────────────────────────────────────────────────
-   SIDEBAR
-───────────────────────────────────────────────── */
-.sidebar{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:var(--r4);
-  box-shadow:var(--sh0);
-  overflow:hidden;
-  position:sticky;top:74px;
-}
-.sidebar-head{
-  padding:var(--s3) var(--s5);
-  font-family:var(--ff-head);
-  font-size:10px;font-weight:800;
-  text-transform:uppercase;letter-spacing:.1em;
-  color:var(--ink3);
-  background:var(--surface2);
-  border-bottom:1px solid var(--border);
-}
-.flist{list-style:none;padding:var(--s1) 0}
-.fbtn{
-  display:flex;align-items:center;
-  width:100%;padding:9px var(--s4);
-  background:transparent;border:none;border-left:3px solid transparent;
-  font-family:inherit;font-size:13.5px;font-weight:500;
-  color:var(--ink2);text-align:left;cursor:pointer;
-  gap:var(--s3);min-height:44px;
-  transition:background .12s,color .12s,border-color .12s;
-}
-.fbtn:hover{background:var(--surface2);color:var(--ink)}
-.fbtn[aria-pressed="true"]{
-  background:var(--brand-bg);color:var(--brand);
-  border-left-color:var(--brand);font-weight:700;
-}
-.fi{font-size:16px;width:20px;text-align:center;flex-shrink:0}
-.fl{flex:1}
-.fc{
-  font-size:11px;font-weight:700;
-  padding:2px 7px;border-radius:999px;
-  background:var(--surface2);color:var(--ink3);
-  min-width:22px;text-align:center;
-}
-.fbtn[aria-pressed="true"] .fc{background:var(--brand-bg);color:var(--brand)}
-.fdiv{height:1px;background:var(--border);margin:4px 0}
-
-/* ─────────────────────────────────────────────────
-   CONTENT HEADER
-───────────────────────────────────────────────── */
-.content-hdr{
-  display:flex;align-items:flex-start;
-  justify-content:space-between;
-  flex-wrap:wrap;gap:var(--s4);
-  margin-bottom:var(--s5);
-}
-.content-title{
-  font-family:var(--ff-head);
-  font-size:22px;font-weight:800;
-  letter-spacing:-.4px;color:var(--ink);
-}
-.content-sub{font-size:13px;color:var(--ink3);margin-top:2px}
-.controls{display:flex;align-items:center;gap:var(--s3);flex-wrap:wrap}
-.inline-search{
-  display:flex;align-items:center;
-  background:var(--surface);border:1.5px solid var(--border2);
-  border-radius:var(--r3);overflow:hidden;box-shadow:var(--sh0);
-  transition:border-color .15s;
-}
-.inline-search:focus-within{border-color:var(--brand)}
-.inline-search label{padding:0 var(--s3);color:var(--ink3);font-size:14px;display:flex;align-items:center}
-.inline-search input{
-  width:180px;padding:var(--s2) var(--s3);
-  border:none;background:transparent;
-  font-size:13.5px;color:var(--ink);font-family:inherit;min-height:40px;
-}
-.inline-search input:focus{outline:none}
-.sort-sel{
-  padding:8px var(--s3);border:1.5px solid var(--border2);
-  border-radius:var(--r3);background:var(--surface);
-  color:var(--ink);font-size:13.5px;font-family:inherit;
-  cursor:pointer;min-height:40px;box-shadow:var(--sh0);
-}
-
-/* ─────────────────────────────────────────────────
-   NOTICES
-───────────────────────────────────────────────── */
-.notice{
-  background:var(--save-bg);border:1px solid var(--save-border);
-  border-left:4px solid var(--save);
-  border-radius:var(--r3);padding:var(--s3) var(--s4);
-  font-size:13px;color:var(--save2);line-height:1.6;
-  margin-bottom:var(--s4);
-}
-.info-note{
-  background:var(--surface2);border-left:3px solid var(--border2);
-  border-radius:0 var(--r2) var(--r2) 0;
-  padding:var(--s3) var(--s4);font-size:13px;
-  color:var(--ink3);margin-bottom:var(--s4);line-height:1.6;
-}
+/* SIDEBAR */
+.sidebar{background:var(--white);border:1px solid var(--stone2);border-radius:var(--r3);box-shadow:var(--s0);overflow:hidden;position:sticky;top:72px}
+.sb-head{padding:var(--g3) var(--g4);font-family:var(--fh);font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--ink3);background:var(--stone);border-bottom:1px solid var(--stone2)}
+.flist{list-style:none;padding:var(--g1) 0}
+.fb{display:flex;align-items:center;width:100%;padding:9px var(--g4);background:transparent;border:none;border-left:3px solid transparent;font-family:inherit;font-size:13.5px;font-weight:500;color:var(--ink2);text-align:left;cursor:pointer;gap:var(--g3);min-height:44px;transition:all .12s}
+.fb:hover{background:var(--stone);color:var(--ink)}
+.fb[aria-pressed="true"]{background:var(--deal-bg);color:var(--deal);border-left-color:var(--deal);font-weight:700}
+.fi{font-size:15px;width:20px;text-align:center;flex-shrink:0}.fl{flex:1}
+.fc{font-size:11px;font-weight:700;padding:1px 7px;border-radius:999px;background:var(--stone);color:var(--ink3);min-width:22px;text-align:center}
+.fb[aria-pressed="true"] .fc{background:var(--deal-bg);color:var(--deal)}
+.fdiv{height:1px;background:var(--stone2);margin:3px 0}
+/* CONTENT HEADER */
+.ch{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:var(--g4);margin-bottom:var(--g5)}
+.ch-title{font-family:var(--fh);font-size:22px;font-weight:800;letter-spacing:-.4px;color:var(--ink)}
+.ch-sub{font-size:13px;color:var(--ink3);margin-top:2px}
+.ctrls{display:flex;align-items:center;gap:var(--g3);flex-wrap:wrap}
+.isrch{display:flex;align-items:center;background:var(--white);border:1.5px solid var(--stone3);border-radius:var(--r2);overflow:hidden;box-shadow:var(--s0);transition:border-color .15s}
+.isrch:focus-within{border-color:var(--ink)}
+.isrch label{padding:0 var(--g3);color:var(--ink3);font-size:14px;display:flex;align-items:center}
+.isrch input{width:180px;padding:var(--g2) var(--g3);border:none;background:transparent;font-size:13.5px;color:var(--ink);font-family:inherit;min-height:40px}
+.isrch input:focus{outline:none}
+.sort-s{padding:8px var(--g3);border:1.5px solid var(--stone3);border-radius:var(--r2);background:var(--white);color:var(--ink);font-size:13.5px;font-family:inherit;cursor:pointer;min-height:40px;box-shadow:var(--s0)}
+/* NOTICES */
+.notice{background:var(--deal-bg);border:1px solid var(--deal-bd);border-left:4px solid var(--deal);border-radius:var(--r2);padding:var(--g3) var(--g4);font-size:13px;color:var(--deal2);line-height:1.6;margin-bottom:var(--g4)}
+.info-note{background:var(--stone);border-left:3px solid var(--stone3);border-radius:0 var(--r1) var(--r1) 0;padding:var(--g3) var(--g4);font-size:13px;color:var(--ink3);margin-bottom:var(--g4);line-height:1.6}
 .info-note a{color:var(--brand);font-weight:700}
-
-/* ─────────────────────────────────────────────────
-   DEAL CARDS — the centrepiece
-───────────────────────────────────────────────── */
-.deals-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(272px,1fr));
-  gap:var(--s4);
-}
-
-.deal-card{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:var(--r4);
-  display:flex;flex-direction:column;
-  overflow:hidden;
-  box-shadow:var(--sh0);
-  transition:box-shadow .2s,transform .2s;
-  position:relative;
-}
-.deal-card:hover{
-  box-shadow:var(--sh2);transform:translateY(-3px);
-}
-/* Coloured top-border stripe per category — tasteful not garish */
-.deal-card::before{
-  content:'';display:block;height:3px;
-  background:var(--brand);width:100%;
-}
-.deal-card.cat-grocery::before  {background:#16a34a}
-.deal-card.cat-retail::before   {background:#7c3aed}
-.deal-card.cat-chemist::before  {background:#0891b2}
-.deal-card.cat-travel::before   {background:#ea580c}
-.deal-card.cat-telco::before    {background:#0d9488}
-.deal-card.cat-nbn::before      {background:#0284c7}
-.deal-card.cat-energy::before   {background:#ca8a04}
-.deal-card.cat-coupon::before   {background:#7c3aed}
-.deal-card.cat-fuel::before     {background:#9333ea}
-.deal-card.cat-insurance::before{background:var(--brand)}
-.deal-card.cat-food::before     {background:#f97316}
-
-.card-body{padding:var(--s4);display:flex;flex-direction:column;gap:var(--s3);flex:1}
-
-/* Vendor row */
-.card-top{display:flex;align-items:center;justify-content:space-between;gap:var(--s2)}
-.vbadge{
-  display:inline-flex;align-items:center;gap:5px;
-  padding:3px 10px;border-radius:999px;
-  font-size:11px;font-weight:700;white-space:nowrap;
-  background:var(--brand-bg);color:var(--brand);
-  border:1px solid var(--brand-light);
-}
-/* Retailer-specific badge colours */
-.vb-ww    {background:#f0fdf4;color:#166534;border-color:#bbf7d0}
-.vb-coles {background:var(--danger-bg);color:var(--danger);border-color:var(--danger-border)}
-.vb-aldi  {background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe}
-.vb-amz   {background:var(--save-bg);color:var(--save);border-color:var(--save-border)}
-.vb-cw    {background:#fefce8;color:#854d0e;border-color:#fef08a}
-.vb-jb    {background:#f0fdf4;color:#15803d;border-color:#bbf7d0}
-.vb-bw    {background:#e0f2fe;color:#075985;border-color:#bae6fd}
-.vb-ins   {background:var(--brand-bg);color:var(--brand);border-color:var(--brand-light)}
-.vb-fuel  {background:#faf5ff;color:#7e22ce;border-color:#e9d5ff}
-.vb-travel{background:var(--save-bg);color:var(--save2);border-color:var(--save-border)}
-.vb-nbn   {background:#ecfdf5;color:#065f46;border-color:#a7f3d0}
-.vb-cpn   {background:#f5f3ff;color:#6d28d9;border-color:#ddd6fe}
-.vb-def   {background:var(--surface2);color:var(--ink2);border-color:var(--border2)}
-
+/* DEAL CARDS */
+.deals-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(274px,1fr));gap:var(--g4)}
+.deal-card{background:var(--white);border:1px solid var(--stone2);border-radius:var(--r3);display:flex;flex-direction:column;box-shadow:var(--s0);transition:box-shadow .2s,transform .18s;overflow:hidden;position:relative}
+.deal-card:hover{box-shadow:var(--s2);transform:translateY(-2px)}
+.deal-card::after{content:'';position:absolute;left:0;top:0;bottom:0;width:4px}
+.deal-card.cg-grocery::after{background:#16a34a}.deal-card.cg-retail::after{background:#7c3aed}
+.deal-card.cg-chemist::after{background:#0e7490}.deal-card.cg-travel::after{background:var(--deal)}
+.deal-card.cg-telco::after{background:#0d9488}.deal-card.cg-nbn::after{background:#0284c7}
+.deal-card.cg-energy::after{background:#d97706}.deal-card.cg-coupon::after{background:#7c3aed}
+.deal-card.cg-fuel::after{background:#9333ea}.deal-card.cg-ins::after{background:var(--brand)}
+.deal-card.cg-food::after{background:#f97316}.deal-card.cg-def::after{background:var(--stone3)}
+.card-body{padding:var(--g4) var(--g4) var(--g4) calc(var(--g4) + 4px);display:flex;flex-direction:column;gap:var(--g3);flex:1}
+.card-top{display:flex;align-items:center;justify-content:space-between;gap:var(--g2)}
+.vbadge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:999px;font-family:var(--fh);font-size:10.5px;font-weight:700;white-space:nowrap;background:var(--stone);color:var(--ink2);border:1px solid var(--stone3)}
+.vb-ww{background:#f0fdf4;color:#166534;border-color:#bbf7d0}
+.vb-coles{background:var(--deal-bg);color:var(--deal);border-color:var(--deal-bd)}
+.vb-aldi{background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe}
+.vb-amz{background:#fff7ed;color:#c2410c;border-color:#fed7aa}
+.vb-cw{background:#fefce8;color:#854d0e;border-color:#fef08a}
+.vb-jb{background:#f0fdf4;color:#15803d;border-color:#bbf7d0}
+.vb-bw{background:#e0f2fe;color:#075985;border-color:#bae6fd}
+.vb-ins{background:var(--brand-bg);color:var(--brand);border-color:var(--brand-lt)}
+.vb-fuel{background:#fdf4ff;color:#7e22ce;border-color:#e9d5ff}
+.vb-travel{background:#fff7ed;color:#c2410c;border-color:#fed7aa}
+.vb-nbn{background:#ecfdf5;color:#065f46;border-color:#a7f3d0}
+.vb-cpn{background:#f5f3ff;color:#6d28d9;border-color:#ddd6fe}
+.vb-def{background:var(--stone);color:var(--ink2);border-color:var(--stone3)}
 @media(prefers-color-scheme:dark){
-  .vb-ww    {background:#052e16;color:#4ade80;border-color:#14532d}
-  .vb-coles {background:#450a0a;color:#fca5a5;border-color:#7f1d1d}
-  .vb-aldi  {background:#0c1a3d;color:#93c5fd;border-color:#1e3a8a}
-  .vb-amz   {background:#2c1000;color:#fdba74;border-color:#7c2d12}
-  .vb-cw    {background:#1c1400;color:#fde047;border-color:#713f12}
-  .vb-jb    {background:#052e16;color:#86efac;border-color:#14532d}
-  .vb-bw    {background:#082032;color:#7dd3fc;border-color:#0c4a6e}
-  .vb-ins   {background:var(--brand-bg);color:var(--brand);border-color:#172035}
-  .vb-fuel  {background:#2e1065;color:#d8b4fe;border-color:#4c1d95}
-  .vb-travel{background:#2c1000;color:#fb923c;border-color:#7c2d12}
-  .vb-nbn   {background:#022c22;color:#6ee7b7;border-color:#065f46}
-  .vb-cpn   {background:#2e1065;color:#c4b5fd;border-color:#4c1d95}
-  .vb-def   {background:var(--surface2);color:var(--ink2);border-color:var(--border2)}
+  .vb-ww{background:#052e16;color:#4ade80;border-color:#14532d}.vb-coles{background:#2a1210;color:#f06b62;border-color:#5a1e1a}
+  .vb-aldi{background:#0c1a3d;color:#93c5fd;border-color:#1e3a8a}.vb-amz{background:#2a1500;color:#fb923c;border-color:#7c2d12}
+  .vb-cw{background:#1c1400;color:#fde047;border-color:#713f12}.vb-jb{background:#052e16;color:#86efac;border-color:#14532d}
+  .vb-bw{background:#082032;color:#7dd3fc;border-color:#0c4a6e}.vb-ins{background:var(--brand-bg);color:var(--brand);border-color:var(--brand-lt)}
+  .vb-fuel{background:#2e1065;color:#d8b4fe;border-color:#4c1d95}.vb-travel{background:#2a1500;color:#fb923c;border-color:#7c2d12}
+  .vb-nbn{background:#022c22;color:#6ee7b7;border-color:#065f46}.vb-cpn{background:#2e1065;color:#c4b5fd;border-color:#4c1d95}
+  .vb-def{background:var(--stone);color:var(--ink2);border-color:var(--stone3)}
 }
-
-/* Discount badge */
-.disc-pill{
-  display:inline-block;padding:3px 9px;border-radius:999px;
-  background:var(--save);color:#fff;
-  font-family:var(--ff-head);
-  font-size:11px;font-weight:800;white-space:nowrap;
-  letter-spacing:.02em;
-}
-
-/* Card content */
-.card-title{
-  font-family:var(--ff-head);font-size:14.5px;font-weight:700;
-  line-height:1.4;color:var(--ink);
-}
+.disc-pill{display:inline-block;padding:3px 9px;border-radius:999px;background:var(--deal);color:#fff;font-family:var(--fh);font-size:11px;font-weight:800;white-space:nowrap;flex-shrink:0}
+.card-title{font-family:var(--fh);font-size:14px;font-weight:700;line-height:1.4;color:var(--ink)}
 .card-desc{font-size:12.5px;color:var(--ink2);line-height:1.55}
-
-/* Prices */
-.price-row{display:flex;align-items:baseline;flex-wrap:wrap;gap:var(--s2);margin-top:var(--s1)}
-.price-now{
-  font-family:var(--ff-head);
-  font-size:24px;font-weight:900;
-  color:var(--good);letter-spacing:-.5px;line-height:1;
-}
+.price-row{display:flex;align-items:baseline;flex-wrap:wrap;gap:var(--g2);margin-top:var(--g1)}
+.price-now{font-family:var(--fh);font-size:26px;font-weight:900;color:var(--price);letter-spacing:-.5px;line-height:1}
 .price-was{font-size:13px;color:var(--ink4);text-decoration:line-through}
-.save-pill{
-  padding:3px 9px;border-radius:999px;
-  font-family:var(--ff-head);
-  font-size:11px;font-weight:800;
-  background:var(--good-bg);color:var(--good);
-  border:1px solid var(--good-border);
-}
-
-/* Live price CTA for no-price entries */
-.price-cta{
-  display:flex;align-items:center;gap:var(--s2);
-  padding:var(--s2) var(--s3);
-  background:var(--surface2);
-  border:1.5px dashed var(--border2);
-  border-radius:var(--r2);margin-top:var(--s1);
-}
+.save-pill{padding:2px 9px;border-radius:999px;font-family:var(--fh);font-size:10.5px;font-weight:800;background:var(--price-bg);color:var(--price);border:1px solid var(--price-bd)}
+.price-cta{display:flex;align-items:center;gap:var(--g2);padding:var(--g2) var(--g3);background:var(--stone);border:1.5px dashed var(--stone3);border-radius:var(--r1);margin-top:var(--g1)}
 .price-cta span{font-size:12px;font-weight:600;color:var(--ink3);font-style:italic}
-
-/* Coupon */
-.cpn-row{display:flex;align-items:center;gap:var(--s2);flex-wrap:wrap}
-.cpn-code{
-  font-family:'Courier New',monospace;font-size:13px;font-weight:700;
-  padding:5px var(--s3);
-  background:var(--brand-bg);
-  border:1.5px dashed var(--brand);
-  border-radius:var(--r2);
-  color:var(--brand);letter-spacing:.08em;
-}
-.copy-btn{
-  padding:5px var(--s3);border:1.5px solid var(--border2);
-  border-radius:var(--r2);background:transparent;
-  color:var(--ink2);font-size:12px;font-weight:700;
-  cursor:pointer;font-family:inherit;min-height:32px;
-  transition:all .15s;
-}
-.copy-btn:hover{background:var(--brand);color:#fff;border-color:var(--brand)}
-
-/* Card footer */
-.card-foot{
-  display:flex;align-items:center;justify-content:space-between;
-  gap:var(--s3);margin-top:auto;
-  padding:var(--s3) var(--s4);
-  border-top:1px solid var(--border);
-  background:var(--surface2);
-}
-.card-link{
-  font-size:13px;font-weight:700;color:var(--brand);
-  text-decoration:none;display:inline-flex;align-items:center;gap:4px;
-}
+.cpn-row{display:flex;align-items:center;gap:var(--g2);flex-wrap:wrap}
+.cpn-code{font-family:'Courier New',monospace;font-size:13px;font-weight:700;padding:5px var(--g3);background:var(--brand-bg);border:1.5px dashed var(--brand-lt);border-radius:var(--r1);color:var(--brand);letter-spacing:.08em}
+.copy-btn{padding:5px var(--g3);border:1.5px solid var(--stone3);border-radius:var(--r1);background:transparent;color:var(--ink2);font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;min-height:32px;transition:all .15s}
+.copy-btn:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+.card-foot{display:flex;align-items:center;justify-content:space-between;gap:var(--g3);padding:var(--g3) var(--g4) var(--g3) calc(var(--g4) + 4px);border-top:1px solid var(--stone2);background:var(--stone)}
+.card-link{font-size:13px;font-weight:700;color:var(--brand);text-decoration:none;display:inline-flex;align-items:center;gap:3px}
 .card-link:hover{text-decoration:underline}
-.live-btn{
-  display:inline-flex;align-items:center;gap:var(--s2);
-  padding:7px 14px;
-  background:var(--brand);color:#fff;
-  border-radius:var(--r2);font-size:12.5px;font-weight:700;
-  text-decoration:none;transition:background .15s;
-}
-.live-btn:hover{background:var(--brand2)}
-
-/* How to avail */
-.how-wrap{padding:0 var(--s4) var(--s3);border-top:1px solid var(--border)}
-.how-btn{
-  display:flex;align-items:center;justify-content:space-between;
-  width:100%;background:none;border:none;
-  padding:var(--s2) 0;
-  font-family:inherit;font-size:12px;font-weight:700;
-  color:var(--brand);cursor:pointer;gap:var(--s2);
-  transition:color .15s;
-}
-.how-btn:hover{color:var(--brand2)}
-.how-chev{font-size:12px;transition:transform .2s;flex-shrink:0;line-height:1}
-.how-body{
-  font-size:12px;color:var(--ink2);line-height:1.65;
-  padding:var(--s1) 0 var(--s2);
-}
-
-/* ─────────────────────────────────────────────────
-   FUEL
-───────────────────────────────────────────────── */
-.fuel-panel{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--r4);box-shadow:var(--sh0);overflow:hidden;
-  margin-top:var(--s6);
-}
-.fuel-ph{
-  padding:var(--s4) var(--s5);border-bottom:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;
-  flex-wrap:wrap;gap:var(--s3);background:var(--surface2);
-}
-.fuel-ph-title{
-  font-family:var(--ff-head);font-size:15px;font-weight:800;
-  display:flex;align-items:center;gap:var(--s2);
-}
+.live-btn{display:inline-flex;align-items:center;gap:var(--g2);padding:6px 13px;background:var(--deal);color:#fff;border-radius:var(--r2);font-size:12.5px;font-weight:700;text-decoration:none;transition:background .15s;border:none;cursor:pointer;font-family:inherit}
+.live-btn:hover{background:var(--deal2)}
+.how-wrap{border-top:1px solid var(--stone2)}
+.how-btn{display:flex;align-items:center;justify-content:space-between;width:100%;background:none;border:none;padding:8px calc(var(--g4) + 4px);font-family:var(--fh);font-size:12px;font-weight:700;color:var(--brand);cursor:pointer;gap:var(--g2);transition:color .15s}
+.how-btn:hover{color:var(--deal)}
+.how-chev{font-size:12px;transition:transform .2s;flex-shrink:0}
+.how-body{font-size:12px;color:var(--ink2);line-height:1.65;padding:var(--g1) calc(var(--g4) + 4px) var(--g3)}
+/* FUEL */
+.fuel-panel{background:var(--white);border:1px solid var(--stone2);border-radius:var(--r3);box-shadow:var(--s0);overflow:hidden;margin-top:var(--g6)}
+.fuel-ph{padding:var(--g4) var(--g5);border-bottom:1px solid var(--stone2);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--g3);background:var(--stone)}
+.fuel-ph-title{font-family:var(--fh);font-size:15px;font-weight:800;display:flex;align-items:center;gap:var(--g2)}
 .fuel-map-link{font-size:12.5px;font-weight:700;color:var(--brand);text-decoration:none}
 .fuel-map-link:hover{text-decoration:underline}
-.fuel-body{padding:var(--s4);display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:var(--s3)}
-.fuel-card{border:1.5px solid var(--border);border-radius:var(--r3);overflow:hidden}
-.fuel-card.best{border-color:var(--good)}
-.fuel-type-bar{padding:5px var(--s3);font-family:var(--ff-head);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em}
-.ftb-ULP   {background:#dcfce7;color:#166534}
-.ftb-E10   {background:#dbeafe;color:#1e40af}
-.ftb-P95   {background:#fff7ed;color:#9a3412}
-.ftb-P98   {background:#fee2e2;color:#991b1b}
-.ftb-Diesel{background:#ede9fe;color:#4c1d95}
-.ftb-LPG   {background:#fdf4ff;color:#6b21a8}
-.fuel-card-body{padding:var(--s3)}
-.fuel-price{font-family:var(--ff-head);font-size:22px;font-weight:900;color:var(--ink);letter-spacing:-.5px}
-.fuel-card.best .fuel-price{color:var(--good)}
-.fuel-brand{font-size:12.5px;font-weight:600;color:var(--ink);margin-top:3px}
+.fuel-body{padding:var(--g4);display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:var(--g3)}
+.fuel-card{border:1.5px solid var(--stone2);border-radius:var(--r2);overflow:hidden}
+.fuel-card.best{border-color:var(--price)}
+.fuel-type-bar{padding:5px var(--g3);font-family:var(--fh);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em}
+.ftb-ULP{background:#dcfce7;color:#166534}.ftb-E10{background:#dbeafe;color:#1e40af}
+.ftb-P95{background:#fff7ed;color:#9a3412}.ftb-P98{background:#fee2e2;color:#991b1b}
+.ftb-Diesel{background:#ede9fe;color:#4c1d95}.ftb-LPG{background:#fdf4ff;color:#6b21a8}
+.fuel-card-body{padding:var(--g3)}
+.fuel-price{font-family:var(--fh);font-size:22px;font-weight:900;color:var(--ink);letter-spacing:-.5px}
+.fuel-card.best .fuel-price{color:var(--price)}
+.fuel-brand{font-size:12px;font-weight:600;color:var(--ink);margin-top:3px}
 .fuel-loc{font-size:11px;color:var(--ink3);margin-top:1px}
-.fuel-best-tag{display:inline-block;margin-top:var(--s2);padding:2px 8px;border-radius:999px;background:var(--good);color:#fff;font-size:10px;font-weight:700}
-
-/* ─────────────────────────────────────────────────
-   INSURANCE
-───────────────────────────────────────────────── */
-.ins-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:var(--s4)}
-.ins-card{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--r4);overflow:hidden;
-  box-shadow:var(--sh0);
-}
-.ins-card-top{
-  padding:var(--s3) var(--s4);
-  background:var(--surface2);border-bottom:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--s2);
-}
-.ins-type{
-  font-family:var(--ff-head);
-  font-size:10px;font-weight:800;padding:2px 9px;border-radius:999px;
-  background:var(--brand-bg);color:var(--brand);
-  text-transform:uppercase;letter-spacing:.05em;
-}
-.ins-body{padding:var(--s4);display:flex;flex-direction:column;gap:var(--s3)}
-.ins-title{font-family:var(--ff-head);font-size:14px;font-weight:700;line-height:1.4}
+.fuel-best-tag{display:inline-block;margin-top:var(--g2);padding:2px 8px;border-radius:999px;background:var(--price);color:#fff;font-family:var(--fh);font-size:10px;font-weight:700}
+/* INSURANCE */
+.ins-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:var(--g4)}
+.ins-card{background:var(--white);border:1px solid var(--stone2);border-radius:var(--r3);overflow:hidden;box-shadow:var(--s0)}
+.ins-card-top{padding:var(--g3) var(--g4);background:var(--stone);border-bottom:1px solid var(--stone2);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--g2)}
+.ins-type{font-family:var(--fh);font-size:10px;font-weight:800;padding:2px 9px;border-radius:999px;background:var(--brand-bg);color:var(--brand);text-transform:uppercase;letter-spacing:.05em}
+.ins-body{padding:var(--g4);display:flex;flex-direction:column;gap:var(--g3)}
+.ins-title{font-family:var(--fh);font-size:14px;font-weight:700;line-height:1.4}
 .ins-desc{font-size:12.5px;color:var(--ink2);line-height:1.55}
-
-/* ─────────────────────────────────────────────────
-   LIVE SPECIALS PANEL
-───────────────────────────────────────────────── */
-.live-panel{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--r4);box-shadow:var(--sh0);overflow:hidden;
-  margin-bottom:var(--s5);
-}
-.live-ph{
-  background:var(--brand);
-  padding:var(--s4) var(--s5);
-  display:flex;align-items:center;justify-content:space-between;
-  flex-wrap:wrap;gap:var(--s3);
-}
-.live-ph-title{
-  display:flex;align-items:center;gap:var(--s3);
-  font-family:var(--ff-head);font-size:14px;font-weight:700;color:#fff;
-}
-.live-dot{width:8px;height:8px;border-radius:50%;background:#fbbf24;animation:blink 1.4s infinite;flex-shrink:0}
-.live-tabs{display:flex;gap:var(--s2);flex-wrap:wrap;list-style:none}
-.live-tab{
-  padding:5px 13px;border-radius:999px;
-  border:1px solid rgba(255,255,255,.3);
-  background:rgba(255,255,255,.1);
-  color:rgba(255,255,255,.8);
-  font-size:12.5px;font-weight:600;
-  cursor:pointer;font-family:inherit;min-height:34px;
-  transition:all .15s;
-}
+/* LIVE */
+.live-panel{background:var(--white);border:1px solid var(--stone2);border-radius:var(--r3);box-shadow:var(--s0);overflow:hidden;margin-bottom:var(--g5)}
+.live-ph{background:var(--brand);padding:var(--g4) var(--g5);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--g3)}
+.live-ph-title{display:flex;align-items:center;gap:var(--g3);font-family:var(--fh);font-size:14px;font-weight:700;color:#fff}
+.live-dot{width:8px;height:8px;border-radius:50%;background:#f59e0b;animation:blink 1.4s infinite;flex-shrink:0}
+.live-tabs{display:flex;gap:var(--g2);flex-wrap:wrap;list-style:none}
+.live-tab{padding:5px 13px;border-radius:999px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.1);color:rgba(255,255,255,.8);font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;min-height:34px;transition:all .15s}
 .live-tab:hover{background:rgba(255,255,255,.2);color:#fff}
-.live-tab[aria-selected="true"]{background:var(--save);border-color:var(--save);color:#fff}
-.live-cards{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(185px,1fr));
-  gap:var(--s3);padding:var(--s4);
-}
-.live-card{
-  background:var(--surface2);border:1px solid var(--border);
-  border-radius:var(--r3);padding:var(--s4);
-  text-decoration:none;color:var(--ink);
-  display:flex;flex-direction:column;gap:var(--s2);
-  transition:all .15s;
-}
-.live-card:hover{
-  border-color:var(--brand);
-  background:var(--brand-bg);
-  transform:translateY(-1px);box-shadow:var(--sh1);
-}
-.live-badge{
-  font-size:10.5px;font-weight:700;padding:2px 8px;
-  border-radius:999px;align-self:flex-start;
-  background:var(--brand-bg);color:var(--brand);
-}
+.live-tab[aria-selected="true"]{background:var(--deal);border-color:var(--deal);color:#fff}
+.live-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:var(--g3);padding:var(--g4)}
+.live-card{background:var(--stone);border:1px solid var(--stone2);border-radius:var(--r2);padding:var(--g4);text-decoration:none;color:var(--ink);display:flex;flex-direction:column;gap:var(--g2);transition:all .15s}
+.live-card:hover{border-color:var(--ink);background:var(--white);transform:translateY(-1px);box-shadow:var(--s1)}
+.live-badge{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:999px;align-self:flex-start;background:var(--brand-bg);color:var(--brand);font-family:var(--fh)}
 .live-name{font-size:13px;font-weight:600;line-height:1.35;color:var(--ink)}
-.live-cta{font-size:11.5px;font-weight:700;color:var(--brand);margin-top:auto}
-.live-note{
-  padding:8px var(--s5);font-size:11.5px;
-  color:var(--ink3);border-top:1px solid var(--border);
-  background:var(--surface2);
-}
-
-/* ─────────────────────────────────────────────────
-   EMPTY / SKELETON
-───────────────────────────────────────────────── */
-.empty-state{
-  grid-column:1/-1;
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--r4);padding:var(--s12);
-  text-align:center;box-shadow:var(--sh0);
-}
-.empty-state h3{font-family:var(--ff-head);font-size:18px;font-weight:800;margin-bottom:var(--s2)}
+.live-cta{font-size:11.5px;font-weight:700;color:var(--deal);margin-top:auto}
+.live-note{padding:8px var(--g5);font-size:11.5px;color:var(--ink3);border-top:1px solid var(--stone2);background:var(--stone)}
+/* EMPTY/SKELETON */
+.empty-state{grid-column:1/-1;background:var(--white);border:1px solid var(--stone2);border-radius:var(--r3);padding:var(--g12);text-align:center;box-shadow:var(--s0)}
+.empty-state h3{font-family:var(--fh);font-size:18px;font-weight:800;margin-bottom:var(--g2)}
 .empty-state p{font-size:13.5px;color:var(--ink3);max-width:400px;margin:0 auto;line-height:1.65}
-.skel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(272px,1fr));gap:var(--s4)}
-.skel-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r4);overflow:hidden;height:160px}
-.sk{background:linear-gradient(90deg,var(--surface2) 25%,rgba(180,175,170,.15) 50%,var(--surface2) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite}
+.skel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(274px,1fr));gap:var(--g4)}
+.skel-card{background:var(--white);border:1px solid var(--stone2);border-radius:var(--r3);overflow:hidden;height:158px}
+.sk{background:linear-gradient(90deg,var(--stone) 25%,rgba(220,215,210,.2) 50%,var(--stone) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:var(--r1)}
 @keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
-.sl{height:12px;margin-bottom:var(--s3);border-radius:var(--r2)}.sl-s{width:32%}.sl-m{width:60%}.sl-l{width:86%}.sl-xl{height:20px;width:28%;margin-top:var(--s2)}
-
-/* ─────────────────────────────────────────────────
-   SECTION
-───────────────────────────────────────────────── */
-.sec-head{display:flex;align-items:center;gap:var(--s3);margin-bottom:var(--s4);flex-wrap:wrap}
-.sec-title{font-family:var(--ff-head);font-size:17px;font-weight:800;letter-spacing:-.3px}
+.sl{height:12px;margin-bottom:var(--g3)}.sl-s{width:32%}.sl-m{width:58%}.sl-l{width:85%}.sl-xl{height:20px;width:28%;margin-top:var(--g2)}
+.sec-head{display:flex;align-items:center;gap:var(--g3);margin-bottom:var(--g4);flex-wrap:wrap}
+.sec-title{font-family:var(--fh);font-size:17px;font-weight:800;letter-spacing:-.3px}
 .sec-count{font-size:13px;color:var(--ink3)}
-
-/* ─────────────────────────────────────────────────
-   MODAL
-───────────────────────────────────────────────── */
-.modal-backdrop{
-  position:fixed;inset:0;z-index:500;
-  background:rgba(10,20,40,.6);backdrop-filter:blur(8px);
-  display:flex;align-items:center;justify-content:center;padding:var(--s4);
-}
+/* MODAL */
+.modal-backdrop{position:fixed;inset:0;z-index:500;background:rgba(10,8,6,.65);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:var(--g4)}
 .modal-backdrop[hidden]{display:none}
-.modal{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--r5);box-shadow:var(--sh3);
-  width:100%;max-width:480px;padding:var(--s8);position:relative;
-}
-.modal-close{
-  position:absolute;top:var(--s4);right:var(--s4);
-  width:32px;height:32px;border-radius:50%;
-  background:var(--surface2);border:none;font-size:18px;
-  color:var(--ink2);cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  transition:background .15s;
-}
-.modal-close:hover{background:var(--surface3)}
-.modal-icon{font-size:40px;margin-bottom:var(--s4)}
-.modal h2{font-family:var(--ff-head);font-size:22px;font-weight:900;margin-bottom:var(--s2);letter-spacing:-.4px}
-.modal-desc{font-size:14px;color:var(--ink2);line-height:1.6;margin-bottom:var(--s6)}
-.modal-form{display:flex;flex-direction:column;gap:var(--s4)}
-.form-group{display:flex;flex-direction:column;gap:var(--s2)}
+.modal{background:var(--white);border:1px solid var(--stone2);border-radius:var(--r4);box-shadow:var(--s3);width:100%;max-width:480px;padding:var(--g8);position:relative}
+.modal-close{position:absolute;top:var(--g4);right:var(--g4);width:32px;height:32px;border-radius:50%;background:var(--stone);border:none;font-size:18px;color:var(--ink2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s}
+.modal-close:hover{background:var(--stone2)}
+.modal-icon{font-size:40px;margin-bottom:var(--g4)}
+.modal h2{font-family:var(--fh);font-size:22px;font-weight:900;margin-bottom:var(--g2);letter-spacing:-.4px}
+.modal-desc{font-size:14px;color:var(--ink2);line-height:1.6;margin-bottom:var(--g6)}
+.modal-form{display:flex;flex-direction:column;gap:var(--g4)}
+.form-group{display:flex;flex-direction:column;gap:var(--g2)}
 .form-label{font-size:13px;font-weight:700;color:var(--ink)}
-.form-input{
-  padding:var(--s3) var(--s4);border:1.5px solid var(--border2);
-  border-radius:var(--r3);background:var(--surface);
-  color:var(--ink);font-size:15px;font-family:inherit;min-height:48px;
-  transition:border-color .15s;
-}
-.form-input:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-bg)}
+.form-input{padding:var(--g3) var(--g4);border:1.5px solid var(--stone3);border-radius:var(--r2);background:var(--white);color:var(--ink);font-size:15px;font-family:inherit;min-height:48px;transition:border-color .15s}
+.form-input:focus{outline:none;border-color:var(--ink);box-shadow:0 0 0 3px var(--stone)}
 .form-hint{font-size:12px;color:var(--ink3);line-height:1.5}
-.form-checkboxes{display:flex;flex-direction:column;gap:var(--s2)}
-.form-checkbox{display:flex;align-items:center;gap:var(--s3);cursor:pointer;font-size:13.5px;color:var(--ink2)}
-.form-checkbox input{width:17px;height:17px;accent-color:var(--brand);cursor:pointer;flex-shrink:0}
-.modal-submit{
-  width:100%;padding:var(--s4);
-  background:var(--brand);color:#fff;
-  border:none;border-radius:var(--r3);
-  font-family:var(--ff-head);
-  font-size:15px;font-weight:800;
-  cursor:pointer;min-height:52px;transition:background .15s;
-  letter-spacing:.01em;
-}
-.modal-submit:hover{background:var(--brand2)}
+.form-checkboxes{display:flex;flex-direction:column;gap:var(--g2)}
+.form-checkbox{display:flex;align-items:center;gap:var(--g3);cursor:pointer;font-size:13.5px;color:var(--ink2)}
+.form-checkbox input{width:17px;height:17px;accent-color:var(--deal);cursor:pointer;flex-shrink:0}
+.modal-submit{width:100%;padding:var(--g4);background:var(--deal);color:#fff;border:none;border-radius:var(--r2);font-family:var(--fh);font-size:15px;font-weight:800;cursor:pointer;min-height:52px;transition:background .15s}
+.modal-submit:hover{background:var(--deal2)}
 .modal-submit:disabled{opacity:.5;cursor:not-allowed}
-.modal-success{text-align:center;padding:var(--s6) 0;display:none}
-.modal-success h3{font-family:var(--ff-head);font-size:20px;font-weight:900;margin-bottom:var(--s2)}
+.modal-success{text-align:center;padding:var(--g6) 0;display:none}
+.modal-success h3{font-family:var(--fh);font-size:20px;font-weight:900;margin-bottom:var(--g2)}
 .modal-success p{font-size:14px;color:var(--ink2);line-height:1.6}
-
-/* ─────────────────────────────────────────────────
-   PAGE FOOTER
-───────────────────────────────────────────────── */
-.page-foot{
-  max-width:1320px;margin:0 auto;
-  padding:0 var(--s6) var(--s6);
-  font-size:11.5px;color:var(--ink4);
-  display:flex;justify-content:space-between;flex-wrap:wrap;gap:var(--s2);
-}
 </style>
 </head>
 <body>
-
-<a href="#main" class="skip-link">Skip to main content</a>
-
-<!-- Setup banner -->
-<div class="setup-banner" id="setupBanner">
-  &#9888;&#65039; <strong>Setup required:</strong>
-  Open <code>index.html</code>, find <code>YOUR_APPS_SCRIPT_WEB_APP_URL_HERE</code> and replace it with your Apps Script Web App URL, then push to GitHub.
-</div>
-
-<!-- Nav -->
-<header class="site-header" role="banner">
-  <div class="nav-wrap">
-    <a href="index.html" class="brand-link" aria-label="SmartSaver Connect home">
-      <div class="brand-icon" aria-hidden="true">&#128176;</div>
-      <div class="brand-words">
-        <div class="brand-name">SmartSaver Connect</div>
-        <div class="brand-sub">AU Deals Portal</div>
-      </div>
+<a href="#main" class="skip">Skip to main content</a>
+<div class="setup-banner" id="setupBanner">&#9888;&#65039; <strong>Setup required:</strong> Open <code>index.html</code>, replace <code>YOUR_APPS_SCRIPT_WEB_APP_URL_HERE</code> with your Apps Script Web App URL, then push to GitHub.</div>
+<header class="hdr" role="banner">
+  <div class="hdr-in">
+    <a href="index.html" class="logo" aria-label="SmartSaver Connect home">
+      <div class="logo-mark" aria-hidden="true">&#128176;</div>
+      <div><div class="logo-name">SmartSaver Connect</div><div class="logo-tag">AU Deals Portal</div></div>
     </a>
-    <nav aria-label="Primary navigation">
-      <ul class="main-nav" role="list">
-        <li><a href="index.html" aria-current="page">Deals</a></li>
-        <li><a href="digest.html">Weekly Digest</a></li>
-        <li><a href="catalogue-search.html">Search</a></li>
-        <li><a href="compare.html">Compare</a></li>
-        <li><a href="catalogues.html">Catalogues</a></li>
-        <li><a href="cashback.html">Cashback</a></li>
-      </ul>
-    </nav>
-    <div class="nav-end">
-      <button class="nav-sub" onclick="openSubscribe()" aria-label="Subscribe to deal alerts">
-        &#128276; Get Alerts
-      </button>
-      <button class="nav-refresh" id="refreshBtn" onclick="doRefresh()"
-        aria-label="Refresh deals" aria-live="polite">
-        <span id="ri" aria-hidden="true">&#8635;</span> Refresh
-      </button>
+    <nav aria-label="Primary navigation"><ul class="nav" role="list">
+      <li><a href="index.html" aria-current="page">Deals</a></li>
+      <li><a href="digest.html">Digest</a></li>
+      <li><a href="catalogue-search.html">Search</a></li>
+      <li><a href="compare.html">Compare</a></li>
+      <li><a href="catalogues.html">Catalogues</a></li>
+      <li><a href="cashback.html">Cashback</a></li>
+    </ul></nav>
+    <div class="hdr-btns">
+      <button class="btn-ghost" onclick="openSubscribe()" aria-label="Subscribe to daily deal alerts">&#128276; Get Alerts</button>
+      <button class="btn-coral" id="refreshBtn" onclick="doRefresh()" aria-label="Refresh deals" aria-live="polite"><span id="ri" aria-hidden="true">&#8635;</span> Refresh</button>
     </div>
   </div>
 </header>
-
-<!-- Hero -->
-<section class="hero" aria-labelledby="hero-h">
+<section class="hero" aria-labelledby="h1">
   <div class="hero-in">
-    <div class="hero-chip" aria-hidden="true">
-      <span class="hero-blink"></span>Live deals updated daily
-    </div>
-    <h1 id="hero-h">
-      Save more on<br><mark>every shop</mark> in Australia
-    </h1>
-    <p class="hero-desc">
-      Deals, specials, coupons, fuel prices and cashback —
-      automatically pulled from 40+ Australian retailers every day.
-    </p>
-    <div class="search-wrap" role="search">
-      <div class="search-box">
-        <label class="search-lbl" for="hs">
-          <span aria-hidden="true">&#128269;</span>
-          <span class="sr-only">Search deals</span>
-        </label>
-        <input class="search-inp" type="search" id="hs"
-          placeholder="Search deals — milk, headphones, nappies, coffee…"
-          aria-label="Search deals" autocomplete="off"
-          onkeydown="if(event.key==='Enter')doSearch()"/>
-        <button class="search-btn" onclick="doSearch()">Search deals</button>
-      </div>
-      <div class="quick-row" role="group" aria-label="Quick searches">
-        <span class="quick-lbl" aria-hidden="true">Try:</span>
-        <button class="qbtn" onclick="qs(this,'woolworths')" aria-pressed="false">Woolworths</button>
-        <button class="qbtn" onclick="qs(this,'coles')" aria-pressed="false">Coles</button>
-        <button class="qbtn" onclick="qs(this,'aldi')" aria-pressed="false">ALDI</button>
-        <button class="qbtn" onclick="qs(this,'amazon')" aria-pressed="false">Amazon AU</button>
-        <button class="qbtn" onclick="qs(this,'chemist')" aria-pressed="false">Chemist WH</button>
-        <button class="qbtn" onclick="qs(this,'jb hi-fi')" aria-pressed="false">JB Hi-Fi</button>
-        <button class="qbtn" onclick="qs(this,'travel')" aria-pressed="false">Travel</button>
+    <div>
+      <div class="hero-eyebrow" aria-hidden="true"><span class="hero-blink"></span>Updated daily</div>
+      <h1 id="h1">Every Aussie deal,<br><span class="accent">one place.</span></h1>
+      <p class="hero-sub">Grocery specials, retail deals, fuel prices, coupons and cashback &mdash; from 40+ Australian retailers, every day.</p>
+      <div class="search-form" role="search">
+        <div class="search-box">
+          <label class="search-lbl" for="hs"><span aria-hidden="true">&#128269;</span><span class="sr-only">Search</span></label>
+          <input class="search-inp" type="search" id="hs" placeholder="Try: milk, headphones, nappies, coffee&hellip;" aria-label="Search deals" autocomplete="off" onkeydown="if(event.key==='Enter')doSearch()"/>
+          <button class="search-btn" onclick="doSearch()">Search</button>
+        </div>
+        <div class="quick-row" role="group" aria-label="Quick searches">
+          <span class="ql" aria-hidden="true">Try:</span>
+          <button class="qb" onclick="qs(this,'woolworths')" aria-pressed="false">Woolworths</button>
+          <button class="qb" onclick="qs(this,'coles')" aria-pressed="false">Coles</button>
+          <button class="qb" onclick="qs(this,'aldi')" aria-pressed="false">ALDI</button>
+          <button class="qb" onclick="qs(this,'amazon')" aria-pressed="false">Amazon AU</button>
+          <button class="qb" onclick="qs(this,'chemist')" aria-pressed="false">Chemist WH</button>
+          <button class="qb" onclick="qs(this,'jb hi-fi')" aria-pressed="false">JB Hi-Fi</button>
+          <button class="qb" onclick="qs(this,'travel')" aria-pressed="false">Travel</button>
+        </div>
       </div>
     </div>
+    <aside class="hero-aside" aria-label="Deals loaded">
+      <div class="ha-title">Deals loaded</div>
+      <div class="ha-num" id="heroNum">0</div>
+      <div class="ha-label">across AU retailers</div>
+      <div class="ha-sub" id="heroSub">Loading&hellip;</div>
+    </aside>
   </div>
 </section>
-
-<!-- Stats strip -->
-<div class="stats-strip" role="region" aria-label="Statistics">
+<div class="stats" role="region" aria-label="Statistics">
   <div class="stats-in">
-    <div class="stat">
-      <div class="stat-pill" aria-hidden="true">&#127991;&#65039;</div>
-      <div><div class="stat-num" id="sTot">&mdash;</div><div class="stat-lbl">Deals</div></div>
-    </div>
-    <div class="stat">
-      <div class="stat-pill orange" aria-hidden="true">%</div>
-      <div><div class="stat-num" id="sDisc">&mdash;</div><div class="stat-lbl">Avg Saving</div></div>
-    </div>
-    <div class="stat">
-      <div class="stat-pill green" aria-hidden="true">&#9981;</div>
-      <div><div class="stat-num" id="sFuel">&mdash;</div><div class="stat-lbl">Best ULP &cent;</div></div>
-    </div>
-    <div class="stat">
-      <div class="stat-pill" aria-hidden="true">&#127981;</div>
-      <div><div class="stat-num" id="sCpn">&mdash;</div><div class="stat-lbl">Coupons</div></div>
-    </div>
-    <div class="stat btn-stat" role="button" tabindex="0"
-      onclick="window.open('digest.html','_blank')"
-      onkeydown="if(event.key==='Enter')window.open('digest.html','_blank')"
-      aria-label="Open weekly digest">
-      <div class="stat-pill" aria-hidden="true">&#128240;</div>
-      <div><div class="stat-num" style="font-size:14px;padding-top:3px">Weekly</div><div class="stat-lbl">Digest &rarr;</div></div>
+    <div class="stat"><div class="stat-ico" aria-hidden="true">&#127991;&#65039;</div><div><div class="stat-num" id="sTot">&mdash;</div><div class="stat-lbl">Total deals</div></div></div>
+    <div class="stat"><div class="stat-ico" aria-hidden="true">%</div><div><div class="stat-num" id="sDisc">&mdash;</div><div class="stat-lbl">Avg saving</div></div></div>
+    <div class="stat"><div class="stat-ico" aria-hidden="true">&#9981;</div><div><div class="stat-num" id="sFuel">&mdash;</div><div class="stat-lbl">Best ULP &#162;</div></div></div>
+    <div class="stat"><div class="stat-ico" aria-hidden="true">&#127981;</div><div><div class="stat-num" id="sCpn">&mdash;</div><div class="stat-lbl">Coupons</div></div></div>
+    <div class="stat clickable" role="button" tabindex="0" onclick="window.open('digest.html','_blank')" onkeydown="if(event.key==='Enter')window.open('digest.html','_blank')" aria-label="Open weekly digest">
+      <div class="stat-ico" aria-hidden="true">&#128240;</div><div><div class="stat-num" style="font-size:13px;padding-top:4px">Weekly</div><div class="stat-lbl">Digest &rarr;</div></div>
     </div>
   </div>
 </div>
-
-<!-- Error area -->
-<div style="max-width:1320px;margin:0 auto;padding:var(--s4) var(--s6) 0" aria-live="polite">
-  <div id="errArea"></div>
-</div>
-
-<!-- Page -->
+<div style="max-width:1320px;margin:0 auto;padding:var(--g4) var(--g6) 0" aria-live="polite"><div id="errArea"></div></div>
 <div class="page" id="main">
-
-  <!-- Sidebar -->
-  <aside aria-label="Filter by category">
-    <div class="sidebar">
-      <div class="sidebar-head">Categories</div>
-      <ul class="flist" role="list">
-        <li><button class="fbtn" data-cat="all" aria-pressed="true" onclick="setFilter(this)"><span class="fi" aria-hidden="true">&#127968;</span><span class="fl">All Deals</span><span class="fc" id="cnt-all">&mdash;</span></button></li>
-        <li><div class="fdiv"></div></li>
-        <li><button class="fbtn" data-cat="woolworths" aria-pressed="false" onclick="setFilter(this)"><span class="fi" aria-hidden="true">&#129001;</span><span class="fl">Woolworths</span><span class="fc" id="cnt-ww"></span></button></li>
-        <li><button class="fbtn" data-cat="coles" aria-pressed="false" onclick="setFilter(this)"><span class="fi" aria-hidden="true">&#128308;</span><span class="fl">Coles</span><span class="fc" id="cnt-coles"></span></button></li>
-        <li><button class="fbtn" data-cat="aldi" aria-pressed="false" onclick="setFilter(this)"><span class="fi" aria-hidden="true">&#128309;</span><span class="fl">ALDI</span><span class="fc" id="cnt-aldi"></span></button></li>
-        <li><button class="fbtn" data-cat="amazon" aria-pressed="false" onclick="setFilter(this)"><span class="fi" aria-hidden="true">&#128230;</span><span class="fl">Amazon AU</span><span class="fc" id="cnt-amz"></span></button></li>
-        <li><div class="fdiv"></div></li>
-        <li><button class="fbtn" data-cat="retail" aria-pressed="false" onclick="setFilter(this)"><span class="fi" aria-hidden="true">&#127978;</span><span class="fl">Retail</span><span class="fc" id="cnt-ret"></span></button></li>
-        <li><button class="fbtn" data-cat="chemist" aria-pressed="false" onclick="setFilter(this)"><span class="fi" aria-hidden="true">&#128138;</span><span class="fl">Health &amp; Beauty</span><span class="fc" id="cnt-cw"></span></button></li>
-        <li><button class="fbtn" data-cat="travel" aria-pressed="false" onclick="setFilter(this)"><span class="fi" aria-hidden="true">&#9992;&#65039;</span><span class="fl">Travel</span><span class="fc" id="cnt-travel"></span></button></li>
-        <li><button class="fbtn" data-cat="telco" aria-pressed="false" onclick="setFilter(this)"><span class="fi" aria-hidden="true">&#128241;</span><span class="fl">Mobile Plans</span><span class="fc" id="cnt-telco"></span></button></li>
-        <li><button class="fbtn" data-cat="nbn" aria-pressed="false" onclick="setFilter(this)"><span class="fi" aria-hidden="true">&#127760;</span><span class="fl">NBN &amp; Internet</span><span class="fc" id="cnt-nbn"></span></button></li>
-        <li><button class="fbtn" data-cat="energy" aria-pressed="false" onclick="setFilter(this)"><span class="fi" aria-hidden="true">&#9889;</span><span class="fl">Energy</span><span class="fc" id="cnt-energy"></span></button></li>
-        <li><button class="fbtn" data-cat="entertainment" aria-pressed="false" onclick="setFilter(this)"><span class="fi" aria-hidden="true">&#127916;</span><span class="fl">Movies &amp; Fun</span><span class="fc" id="cnt-ent"></span></button></li>
-        <li><div class="fdiv"></div></li>
-        <li><button class="fbtn" data-cat="coupon" aria-pressed="false" onclick="setFilter(this)"><span class="fi" aria-hidden="true">&#127981;</span><span class="fl">Coupon Codes</span><span class="fc" id="cnt-cpn"></span></button></li>
-        <li><button class="fbtn" data-cat="fuel" aria-pressed="false" onclick="setFilter(this)"><span class="fi" aria-hidden="true">&#9981;</span><span class="fl">Fuel Prices</span><span class="fc" id="cnt-fuel"></span></button></li>
-        <li><button class="fbtn" data-cat="insurance" aria-pressed="false" onclick="setFilter(this)"><span class="fi" aria-hidden="true">&#128737;&#65039;</span><span class="fl">Insurance</span><span class="fc" id="cnt-ins"></span></button></li>
-        <li><div class="fdiv"></div></li>
-        <li><button class="fbtn" data-cat="live" aria-pressed="false" onclick="setFilter(this)"><span class="fi" aria-hidden="true">&#128308;</span><span class="fl">Live Specials</span></button></li>
-      </ul>
-    </div>
-  </aside>
-
-  <!-- Main -->
-  <main id="main-content" aria-label="Deals" aria-live="polite" aria-busy="true">
-
-    <div class="content-hdr">
-      <div>
-        <h2 class="content-title" id="ctitle">All Deals</h2>
-        <p class="content-sub" id="csub">Loading&hellip;</p>
-      </div>
-      <div class="controls" role="group" aria-label="Sort and filter">
-        <div class="inline-search">
-          <label for="fi">
-            <span aria-hidden="true">&#128269;</span>
-            <span class="sr-only">Filter results</span>
-          </label>
-          <input type="search" id="fi" placeholder="Filter results&hellip;"
-            aria-label="Filter current results" autocomplete="off" oninput="renderDeals()"/>
-        </div>
+  <aside aria-label="Filter by category"><div class="sidebar">
+    <div class="sb-head">Categories</div>
+    <ul class="flist" role="list">
+      <li><button class="fb" data-cat="all" aria-pressed="true" onclick="setFilter(this)"><span class="fi">&#127968;</span><span class="fl">All Deals</span><span class="fc" id="cnt-all">&mdash;</span></button></li>
+      <li><div class="fdiv"></div></li>
+      <li><button class="fb" data-cat="woolworths" aria-pressed="false" onclick="setFilter(this)"><span class="fi">&#129001;</span><span class="fl">Woolworths</span><span class="fc" id="cnt-ww"></span></button></li>
+      <li><button class="fb" data-cat="coles" aria-pressed="false" onclick="setFilter(this)"><span class="fi">&#128308;</span><span class="fl">Coles</span><span class="fc" id="cnt-coles"></span></button></li>
+      <li><button class="fb" data-cat="aldi" aria-pressed="false" onclick="setFilter(this)"><span class="fi">&#128309;</span><span class="fl">ALDI</span><span class="fc" id="cnt-aldi"></span></button></li>
+      <li><button class="fb" data-cat="amazon" aria-pressed="false" onclick="setFilter(this)"><span class="fi">&#128230;</span><span class="fl">Amazon AU</span><span class="fc" id="cnt-amz"></span></button></li>
+      <li><div class="fdiv"></div></li>
+      <li><button class="fb" data-cat="retail" aria-pressed="false" onclick="setFilter(this)"><span class="fi">&#127978;</span><span class="fl">Retail</span><span class="fc" id="cnt-ret"></span></button></li>
+      <li><button class="fb" data-cat="chemist" aria-pressed="false" onclick="setFilter(this)"><span class="fi">&#128138;</span><span class="fl">Health &amp; Beauty</span><span class="fc" id="cnt-cw"></span></button></li>
+      <li><button class="fb" data-cat="travel" aria-pressed="false" onclick="setFilter(this)"><span class="fi">&#9992;&#65039;</span><span class="fl">Travel</span><span class="fc" id="cnt-travel"></span></button></li>
+      <li><button class="fb" data-cat="telco" aria-pressed="false" onclick="setFilter(this)"><span class="fi">&#128241;</span><span class="fl">Mobile Plans</span><span class="fc" id="cnt-telco"></span></button></li>
+      <li><button class="fb" data-cat="nbn" aria-pressed="false" onclick="setFilter(this)"><span class="fi">&#127760;</span><span class="fl">NBN &amp; Internet</span><span class="fc" id="cnt-nbn"></span></button></li>
+      <li><button class="fb" data-cat="energy" aria-pressed="false" onclick="setFilter(this)"><span class="fi">&#9889;</span><span class="fl">Energy</span><span class="fc" id="cnt-energy"></span></button></li>
+      <li><button class="fb" data-cat="entertainment" aria-pressed="false" onclick="setFilter(this)"><span class="fi">&#127916;</span><span class="fl">Movies &amp; Fun</span><span class="fc" id="cnt-ent"></span></button></li>
+      <li><div class="fdiv"></div></li>
+      <li><button class="fb" data-cat="coupon" aria-pressed="false" onclick="setFilter(this)"><span class="fi">&#127981;</span><span class="fl">Coupon Codes</span><span class="fc" id="cnt-cpn"></span></button></li>
+      <li><button class="fb" data-cat="fuel" aria-pressed="false" onclick="setFilter(this)"><span class="fi">&#9981;</span><span class="fl">Fuel Prices</span><span class="fc" id="cnt-fuel"></span></button></li>
+      <li><button class="fb" data-cat="insurance" aria-pressed="false" onclick="setFilter(this)"><span class="fi">&#128737;&#65039;</span><span class="fl">Insurance</span><span class="fc" id="cnt-ins"></span></button></li>
+      <li><div class="fdiv"></div></li>
+      <li><button class="fb" data-cat="live" aria-pressed="false" onclick="setFilter(this)"><span class="fi">&#128308;</span><span class="fl">Live Specials</span></button></li>
+    </ul>
+  </div></aside>
+  <main id="main-content" aria-label="Deals content" aria-live="polite" aria-busy="true">
+    <div class="ch">
+      <div><h2 class="ch-title" id="ctitle">All Deals</h2><p class="ch-sub" id="csub">Loading deals&hellip;</p></div>
+      <div class="ctrls" role="group" aria-label="Sort and filter">
+        <div class="isrch"><label for="fi"><span aria-hidden="true">&#128269;</span><span class="sr-only">Filter</span></label><input type="search" id="fi" placeholder="Filter results&hellip;" aria-label="Filter" autocomplete="off" oninput="renderDeals()"/></div>
         <label for="sortSel" class="sr-only">Sort by</label>
-        <select id="sortSel" class="sort-sel" onchange="renderDeals()" aria-label="Sort deals">
+        <select id="sortSel" class="sort-s" onchange="renderDeals()" aria-label="Sort">
           <option value="discount">Best discount first</option>
           <option value="price_asc">Price: low to high</option>
           <option value="price_desc">Price: high to low</option>
@@ -1044,17 +373,10 @@ body{
         </select>
       </div>
     </div>
-
     <div id="infoArea" aria-live="polite"></div>
-    <div id="errArea2"></div>
-
-    <!-- Live panel -->
     <section class="live-panel" id="livePanel" style="display:none" aria-label="Live retailer specials">
       <div class="live-ph">
-        <div class="live-ph-title">
-          <span class="live-dot" aria-hidden="true"></span>
-          Live Specials &mdash; opens directly on retailer website
-        </div>
+        <div class="live-ph-title"><span class="live-dot" aria-hidden="true"></span>Live Specials &mdash; opens on retailer website</div>
         <ul class="live-tabs" role="tablist" aria-label="Retailer">
           <li><button class="live-tab" role="tab" aria-selected="true"  onclick="loadLive('woolworths',this)">Woolworths</button></li>
           <li><button class="live-tab" role="tab" aria-selected="false" onclick="loadLive('coles',this)">Coles</button></li>
@@ -1069,17 +391,13 @@ body{
           <li><button class="live-tab" role="tab" aria-selected="false" onclick="loadLive('ubereats',this)">&#128757; Uber Eats</button></li>
         </ul>
       </div>
-      <div class="live-cards" id="liveGrid" role="tabpanel">
-        <p style="grid-column:1/-1;color:var(--ink3);font-size:13.5px;padding:4px">Select a retailer tab above.</p>
-      </div>
-      <div class="live-note">All links open directly on the retailer&#8217;s own website &mdash; always current, never cached.</div>
+      <div class="live-cards" id="liveGrid" role="tabpanel"><p style="grid-column:1/-1;color:var(--ink3);font-size:13.5px;padding:4px">Select a retailer tab above.</p></div>
+      <div class="live-note">All links open directly on the retailer&#8217;s own website &mdash; always current.</div>
     </section>
-
     <div id="dealOutput"></div>
     <div id="fuelOutput"></div>
     <div id="insOutput"></div>
-    <p class="page-foot" id="lastUpd"></p>
-
+    <p style="font-size:11.5px;color:var(--ink4);margin-top:var(--g6)" id="lastUpd"></p>
   </main>
 </div>
 <!-- Subscribe modal -->
@@ -1091,11 +409,11 @@ body{
 
     <!-- Form view -->
     <div id="modalForm">
-      <div class="modal-icon" aria-hidden="true">🔔</div>
+      <div class="modal-icon" aria-hidden="true">&#128276;</div>
       <h2 id="modal-title">Get Daily Deal Alerts</h2>
       <p class="modal-desc">
         Receive a daily email with the best deals, coupons, fuel prices
-        and cashback offers — straight to your inbox. Unsubscribe any time.
+        and cashback offers &#8212; straight to your inbox. Unsubscribe any time.
       </p>
       <form class="modal-form" onsubmit="submitSubscribe(event)" novalidate>
         <div class="form-group">
@@ -1112,29 +430,29 @@ body{
         <div class="form-group">
           <span class="form-label" id="cats-label">I'm interested in</span>
           <div class="form-checkboxes" role="group" aria-labelledby="cats-label">
-            <label class="form-checkbox"><input type="checkbox" name="cats" value="grocery" checked/> 🛒 Grocery specials (Woolworths, Coles, ALDI)</label>
-            <label class="form-checkbox"><input type="checkbox" name="cats" value="retail" checked/> 🏬 Retail &amp; electronics deals</label>
-            <label class="form-checkbox"><input type="checkbox" name="cats" value="fuel" checked/> ⛽ Fuel price alerts</label>
-            <label class="form-checkbox"><input type="checkbox" name="cats" value="food"/> 🛵 Food delivery (Uber Eats, Menulog)</label>
-            <label class="form-checkbox"><input type="checkbox" name="cats" value="telco"/> 📱 Mobile plan &amp; NBN deals</label>
-            <label class="form-checkbox"><input type="checkbox" name="cats" value="travel"/> ✈️ Travel &amp; flights</label>
-            <label class="form-checkbox"><input type="checkbox" name="cats" value="cashback"/> 💰 Cashback offers</label>
+            <label class="form-checkbox"><input type="checkbox" name="cats" value="grocery" checked/> &#128722; Grocery specials (Woolworths, Coles, ALDI)</label>
+            <label class="form-checkbox"><input type="checkbox" name="cats" value="retail" checked/> &#127980; Retail &amp; electronics deals</label>
+            <label class="form-checkbox"><input type="checkbox" name="cats" value="fuel" checked/> &#9981; Fuel price alerts</label>
+            <label class="form-checkbox"><input type="checkbox" name="cats" value="food"/> &#128757; Food delivery (Uber Eats, Menulog)</label>
+            <label class="form-checkbox"><input type="checkbox" name="cats" value="telco"/> &#128241; Mobile plan &amp; NBN deals</label>
+            <label class="form-checkbox"><input type="checkbox" name="cats" value="travel"/> &#9992;&#65039; Travel &amp; flights</label>
+            <label class="form-checkbox"><input type="checkbox" name="cats" value="cashback"/> &#128176; Cashback offers</label>
           </div>
         </div>
         <button class="modal-submit" type="submit" id="subSubmitBtn">
-          Subscribe to deal alerts 🔔
+          Subscribe to deal alerts &#128276;
         </button>
         <p class="form-hint" style="text-align:center">
-          Free · Unsubscribe any time · No spam
+          Free &#183; Unsubscribe any time &#183; No spam
         </p>
       </form>
     </div>
 
     <!-- Success view -->
     <div class="modal-success" id="modalSuccess">
-      <div style="font-size:56px;margin-bottom:16px">🎉</div>
+      <div style="font-size:56px;margin-bottom:16px">&#127881;</div>
       <h3>You're subscribed!</h3>
-      <p>Check your inbox — you'll receive your first deal digest soon.
+      <p>Check your inbox &#8212; you'll receive your first deal digest soon.
       <br><br>
       <strong id="successName"></strong>, you'll get daily alerts for the categories you selected.
       <br><br>
@@ -1146,491 +464,161 @@ body{
 
 <script>
 
-
-// ── CONFIG ───────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════
+// SmartSaver Connect — single clean script
+// ═══════════════════════════════════════════════════
 var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz60iBo_PfKtmny2YmwFgjvCCIMDoXpHWf7KBPVDfUNBA8VtRybMCSwn7Ze9wvCdg8KHA/exec';
-var CACHE_KEY = 'ssc_v7';
-var TTL = 2 * 60 * 60 * 1000;
-
-// ── STATE ─────────────────────────────────────────────────────────
+var CACHE_KEY = 'ssc_v8';
+var TTL = 2*60*60*1000;
 var deals=[], coupons=[], fuel=[], insurance=[];
 var activeFilter='all', searchQ='';
 
-// ── BOOT ──────────────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', function() {
   if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.indexOf('YOUR_') !== -1) {
-    document.getElementById('setupBanner').style.display = 'block';
-    // Show empty state with helpful message instead of frozen skeleton
-    document.getElementById('dealOutput').innerHTML =
+    document.getElementById('setupBanner').style.display='block';
+    document.getElementById('dealOutput').innerHTML=
       '<div class="deals-grid"><div class="empty-state">'
-      + '<h3>Add your Apps Script URL to load deals</h3>'
-      + '<p>Open <strong>index.html</strong> in a text editor, find <strong>YOUR_APPS_SCRIPT_WEB_APP_URL_HERE</strong> on line 1266, and replace it with your Google Apps Script Web App URL. Then save and push to GitHub — Netlify will deploy in 30 seconds.</p>'
-      + '</div></div>';
-    setTitle('Setup required', 'Add your Apps Script URL to load live deals');
+      +'<h3>Setup required</h3>'
+      +'<p>Open <strong>index.html</strong> in a text editor and replace <strong>YOUR_APPS_SCRIPT_WEB_APP_URL_HERE</strong> with your Google Apps Script Web App URL. Then push to GitHub.</p>'
+      +'</div></div>';
+    setTitle('Setup required','Add your Apps Script URL to load deals');
     return;
   }
-  var c = readCache();
-  if (c) {
-    ingest(c);
-    setSubtitle('From cache — updated ' + fmt(c.ts));
-    if (Date.now() - c.ts > TTL) fetchFresh(false);
-  } else {
-    showSkeleton();
-    fetchFresh(true);
-  }
+  var c=readCache();
+  if(c){ingest(c);document.getElementById('lastUpd').textContent='From cache — updated '+fmt(c.ts);if(Date.now()-c.ts>TTL)fetchFresh(false);}
+  else{showSkeleton();fetchFresh(true);}
 });
 
-function showSkeleton() {
-  var h = '<div class="skel-grid">';
-  for (var i=0; i<8; i++) {
-    h += '<div class="skel-card">'
-      + '<div class="skel-line sl-xs" style="margin-bottom:16px"></div>'
-      + '<div class="skel-line sl-l"></div>'
-      + '<div class="skel-line sl-m"></div>'
-      + '<div class="skel-line sl-xl"></div>'
-      + '</div>';
-  }
-  h += '</div>';
-  document.getElementById('dealOutput').innerHTML = h;
+function showSkeleton(){
+  var h='<div class="skel-grid">';
+  for(var i=0;i<8;i++)h+='<div class="skel-card"><div style="height:4px;background:var(--stone2)"></div><div style="padding:var(--g4)"><div class="sk sl sl-s"></div><div class="sk sl sl-l"></div><div class="sk sl sl-m"></div><div class="sk sl-xl"></div></div></div>';
+  h+='</div>';
+  document.getElementById('dealOutput').innerHTML=h;
 }
 
-// ── FETCH ─────────────────────────────────────────────────────────
-function fetchFresh(showSpinner) {
-  var btn = document.getElementById('refreshBtn');
-  var ico = document.getElementById('ri');
-  if (showSpinner) {
-    btn.disabled = true;
-    ico.textContent = '↻';
-    ico.classList.add('spin');
-    btn.setAttribute('aria-label', 'Loading deals, please wait');
-  }
+function fetchFresh(spin){
+  var btn=document.getElementById('refreshBtn'), ico=document.getElementById('ri');
+  if(spin&&btn){btn.disabled=true;ico.className='spin';}
   clearErr();
-
-  var cb = 'ssc_' + Date.now();
-  var sc = document.createElement('script');
-  var timer = setTimeout(function() {
-    cleanup();
-    btn.disabled = false;
-    ico.classList.remove('spin');
-    btn.setAttribute('aria-label', 'Refresh deals data');
-    if (!deals.length) setErr('Connection timed out. Check your Apps Script URL and ensure the Web App is deployed as "Anyone can access".');
-    else setSubtitle('Using cached data (refresh timed out)');
-  }, 30000);
-
-  window[cb] = function(json) {
-    cleanup();
-    btn.disabled = false;
-    ico.classList.remove('spin');
-    btn.setAttribute('aria-label', 'Refresh deals data');
-    if (!json || !json.ok) {
-      setErr((json && json.error) || 'Apps Script returned an error. Re-deploy the Web App and try again.');
-      return;
-    }
-    ingest(json.data);
-    saveCache(json.data);
-    setSubtitle('Updated ' + fmt(Date.now()) + ' · ' + deals.length + ' deals loaded');
-    document.getElementById('main-content').setAttribute('aria-busy', 'false');
+  var cb='ssc_'+Date.now(), sc=document.createElement('script');
+  var tim=setTimeout(function(){
+    cleanup();if(btn){btn.disabled=false;ico.className='';}
+    if(!deals.length)setErr('Connection timed out. Check your Apps Script URL and ensure the Web App is deployed as "Anyone can access".');
+    else document.getElementById('lastUpd').textContent='Using cached data (refresh timed out)';
+  },30000);
+  window[cb]=function(json){
+    cleanup();if(btn){btn.disabled=false;ico.className='';ico.textContent='\u21BB';}
+    if(!json||!json.ok){setErr((json&&json.error)||'Apps Script error. Re-deploy the Web App.');return;}
+    ingest(json.data);saveCache(json.data);
+    document.getElementById('lastUpd').textContent='Updated '+fmt(Date.now())+' \u00B7 '+deals.length+' deals';
+    document.getElementById('main-content').setAttribute('aria-busy','false');
   };
-
-  function cleanup() {
-    clearTimeout(timer);
-    delete window[cb];
-    if (sc.parentNode) sc.parentNode.removeChild(sc);
-  }
-
-  sc.onerror = function() {
-    cleanup();
-    btn.disabled = false;
-    ico.classList.remove('spin');
-    btn.setAttribute('aria-label', 'Refresh deals data');
-    setErr('Could not reach Apps Script. Check the URL is correct.');
-  };
-  sc.src = APPS_SCRIPT_URL + '?callback=' + cb;
+  function cleanup(){clearTimeout(tim);delete window[cb];if(sc.parentNode)sc.parentNode.removeChild(sc);}
+  sc.onerror=function(){cleanup();if(btn){btn.disabled=false;ico.className='';ico.textContent='\u21BB';}setErr('Could not reach Apps Script. Check the URL and Web App deployment.');};
+  sc.src=APPS_SCRIPT_URL+'?callback='+cb;
   document.head.appendChild(sc);
 }
-function doRefresh() { showSkeleton(); fetchFresh(true); }
+function doRefresh(){showSkeleton();fetchFresh(true);}
 
-// ── INGEST ────────────────────────────────────────────────────────
-function ingest(d) {
-  deals     = normDeals(d.deals     || []);
-  coupons   = normCoupons(d.coupons || []);
-  fuel      = normFuel(d.fuel       || []);
-  insurance = normIns(d.insurance   || []);
-  updateStats();
-  renderDeals();
+function ingest(d){
+  deals=normDeals(d.deals||[]);coupons=normCoupons(d.coupons||[]);
+  fuel=normFuel(d.fuel||[]);insurance=normIns(d.insurance||[]);
+  updateStats();renderDeals();
 }
+function normDeals(r){return(r||[]).filter(function(x){return x.title;}).map(function(x){return{vendor:s(x.vendor),cat:s(x.category).toLowerCase(),title:s(x.title),desc:s(x.description),pNow:n(x.priceNow),pWas:n(x.priceWas),disc:parseInt(x.discountPct)||0,url:s(x.dealUrl),ts:s(x.scrapedAt)};}); }
+function normCoupons(r){return(r||[]).filter(function(x){return x.code&&x.code!=='SEE_LINK';}).map(function(x){return{vendor:s(x.vendor)||'Various',code:s(x.code),desc:s(x.description),dt:s(x.discountText),url:s(x.dealUrl)};});}
+function normFuel(r){return(r||[]).filter(function(x){return x.priceCents;}).map(function(x){return{name:s(x.stationName),brand:s(x.brand),type:s(x.fuelType),price:parseFloat(x.priceCents)||0,suburb:s(x.suburb)};});}
+function normIns(r){return(r||[]).filter(function(x){return x.title;}).map(function(x){return{insurer:s(x.insurer)||'Various',type:s(x.type)||'General',title:s(x.title),desc:s(x.description),disc:parseInt(x.discountPct)||0,save:n(x.saveDollars),url:s(x.dealUrl)};});}
 
-function normDeals(rows) {
-  return (rows||[]).filter(function(r) { return r.title; }).map(function(r) {
-    return { vendor: s(r.vendor), cat: s(r.category).toLowerCase(),
-      title: s(r.title), desc: s(r.description),
-      pNow: n(r.priceNow), pWas: n(r.priceWas),
-      disc: parseInt(r.discountPct)||0,
-      url: s(r.dealUrl), ts: s(r.scrapedAt) };
+function updateStats(){
+  var tot=deals.length;
+  document.getElementById('sTot').textContent=tot||'\u2014';
+  document.getElementById('heroNum').textContent=tot||'0';
+  document.getElementById('heroSub').textContent=tot?'across AU retailers':'Add your Apps Script URL';
+  var ds=deals.filter(function(d){return d.disc>0;}).map(function(d){return d.disc;});
+  document.getElementById('sDisc').textContent=ds.length?Math.round(ds.reduce(function(a,b){return a+b;},0)/ds.length)+'%':'\u2014';
+  var ulp=fuel.filter(function(f){return f.type==='ULP'||f.type==='E10';});
+  document.getElementById('sFuel').textContent=ulp.length?Math.min.apply(null,ulp.map(function(f){return f.price;})).toFixed(1):'\u2014';
+  document.getElementById('sCpn').textContent=coupons.length||'\u2014';
+  var cm={'all':deals.length,'ww':c('woolworths'),'coles':c('coles'),'aldi':c('aldi'),'amz':c('amazon'),'ret':cRet(),'cw':c('chemist'),'travel':c('travel'),'telco':c('telco'),'nbn':c('nbn'),'energy':c('energy'),'ent':c('entertainment')+c('food'),'cpn':coupons.length,'fuel':fuel.length,'ins':insurance.length};
+  Object.keys(cm).forEach(function(k){var el=document.getElementById('cnt-'+k);if(el)el.textContent=cm[k]||'';});
+}
+function c(cat){return deals.filter(function(d){return d.cat===cat;}).length;}
+function cRet(){return deals.filter(function(d){return d.cat==='retail'||isGenRet(d.vendor);}).length;}
+
+function renderDeals(){
+  var q=(document.getElementById('fi').value||'').toLowerCase().trim();
+  var sort=document.getElementById('sortSel').value;
+  document.getElementById('fuelOutput').innerHTML='';document.getElementById('insOutput').innerHTML='';
+  document.getElementById('livePanel').style.display='none';document.getElementById('dealOutput').style.display='block';
+  document.getElementById('infoArea').innerHTML='';
+  if(activeFilter==='live'){document.getElementById('dealOutput').style.display='none';document.getElementById('livePanel').style.display='block';loadLive('woolworths',document.querySelector('.live-tab'));setTitle('Live Specials','Direct links to retailer websites \u2014 always current');return;}
+  if(activeFilter==='fuel'){document.getElementById('dealOutput').innerHTML='';renderFuel(q);setTitle('Fuel Prices \u2014 VIC','Cheapest per fuel type highlighted');return;}
+  if(activeFilter==='insurance'){document.getElementById('dealOutput').innerHTML='';renderIns(q);setTitle('Insurance Offers','Current Australian insurance deals');return;}
+  var pool=deals.slice();
+  if(activeFilter==='all'||activeFilter==='coupon'){coupons.forEach(function(cv){pool.push({vendor:cv.vendor,cat:'coupon',_cpn:true,_code:cv.code,title:cv.code+(cv.dt?' \u2014 '+cv.dt:''),desc:cv.desc,pNow:null,pWas:null,disc:0,url:cv.url,ts:''});});}
+  var items=pool.filter(function(d){
+    var catOk=activeFilter==='all'?true:activeFilter==='coupon'?(d._cpn||d.cat==='coupon'):activeFilter==='retail'?(d.cat==='retail'||isGenRet(d.vendor)):activeFilter==='entertainment'?(d.cat==='entertainment'||d.cat==='food'):d.cat===activeFilter;
+    var qOk=!q||d.title.toLowerCase().indexOf(q)!==-1||(d.desc||'').toLowerCase().indexOf(q)!==-1||(d.vendor||'').toLowerCase().indexOf(q)!==-1;
+    return catOk&&qOk;
   });
-}
-function normCoupons(rows) {
-  return (rows||[]).filter(function(r) { return r.code && r.code !== 'SEE_LINK'; }).map(function(r) {
-    return { vendor: s(r.vendor)||'Various', code: s(r.code),
-      desc: s(r.description), dt: s(r.discountText), url: s(r.dealUrl) };
-  });
-}
-function normFuel(rows) {
-  return (rows||[]).filter(function(r) { return r.priceCents; }).map(function(r) {
-    return { name: s(r.stationName), brand: s(r.brand), type: s(r.fuelType),
-      price: parseFloat(r.priceCents)||0, suburb: s(r.suburb) };
-  });
-}
-function normIns(rows) {
-  return (rows||[]).filter(function(r) { return r.title; }).map(function(r) {
-    return { insurer: s(r.insurer)||'Various', type: s(r.type)||'General',
-      title: s(r.title), desc: s(r.description),
-      disc: parseInt(r.discountPct)||0, save: n(r.saveDollars), url: s(r.dealUrl) };
-  });
+  if(sort==='discount')items.sort(function(a,b){return(b.disc||0)-(a.disc||0);});
+  if(sort==='price_asc')items.sort(function(a,b){return(a.pNow!=null?a.pNow:9999)-(b.pNow!=null?b.pNow:9999);});
+  if(sort==='price_desc')items.sort(function(a,b){return(b.pNow||0)-(a.pNow||0);});
+  if(sort==='newest')items.sort(function(a,b){return new Date(b.ts||0)-new Date(a.ts||0);});
+  var lbl={all:'All Deals',woolworths:'Woolworths Deals',coles:'Coles Deals',aldi:'ALDI Deals',amazon:'Amazon AU',retail:'Retail Deals',chemist:'Health & Beauty',telco:'Mobile Plans',nbn:'NBN & Internet',energy:'Energy Deals',travel:'Travel Deals',entertainment:'Movies & Entertainment',coupon:'Coupon Codes'};
+  setTitle(lbl[activeFilter]||'Deals',items.length+' result'+(items.length!==1?'s':''));
+  if(activeFilter==='woolworths'||activeFilter==='coles'){var rn=activeFilter.charAt(0).toUpperCase()+activeFilter.slice(1);document.getElementById('infoArea').innerHTML='<div class="info-note">Deals from OzBargain community posts. For live '+rn+' specials use <strong>&#128308; Live Specials</strong> in the sidebar, or <a href="https://www.trolley.com.au" target="_blank" rel="noopener">Trolley.com.au</a> for a side-by-side price comparison.</div>';}
+  if(!items.length){document.getElementById('dealOutput').innerHTML='<div class="deals-grid"><div class="empty-state"><h3>No deals found'+(q?' for \u201c'+esc(q)+'\u201d':'')+' </h3><p>Try clearing your search, choosing a different category, or use Live Specials.</p></div></div>';if(activeFilter==='all'&&fuel.length)renderFuelSummary();return;}
+  var h='<div class="deals-grid">';
+  items.slice(0,48).forEach(function(d){h+=dealCard(d);});
+  h+='</div>';
+  document.getElementById('dealOutput').innerHTML=h;
+  if(activeFilter==='all'&&fuel.length)renderFuelSummary();
 }
 
-// ── STATS ─────────────────────────────────────────────────────────
-function updateStats() {
-  document.getElementById('sTot').textContent = deals.length || '—';
-  var ds = deals.filter(function(d) { return d.disc > 0; }).map(function(d) { return d.disc; });
-  document.getElementById('sDisc').textContent = ds.length
-    ? Math.round(ds.reduce(function(a,b){return a+b;},0) / ds.length) + '%' : '—';
-  var ulp = fuel.filter(function(f) { return f.type==='ULP' || f.type==='E10'; });
-  document.getElementById('sFuel').textContent = ulp.length
-    ? Math.min.apply(null, ulp.map(function(f){return f.price;})).toFixed(1) : '—';
-  document.getElementById('sCpn').textContent = coupons.length || '—';
-
-  // Sidebar counts
-  var cm = {
-    'all': deals.length,
-    'ww': c('woolworths'), 'coles': c('coles'), 'aldi': c('aldi'), 'amz': c('amazon'),
-    'ret': cRet(), 'cw': c('chemist'), 'travel': c('travel'),
-    'telco': c('telco'), 'nbn': c('nbn'), 'energy': c('energy'),
-    'ent': c('entertainment') + c('food'),
-    'cpn': coupons.length, 'fuel': fuel.length, 'ins': insurance.length
-  };
-  Object.keys(cm).forEach(function(k) {
-    var el = document.getElementById('cnt-' + k);
-    if (el) el.textContent = cm[k] || '';
-  });
-}
-function c(cat) { return deals.filter(function(d){return d.cat===cat;}).length; }
-function cRet() { return deals.filter(function(d){return d.cat==='retail'||isGenRet(d.vendor);}).length; }
-
-// ── RENDER ────────────────────────────────────────────────────────
-function renderDeals() {
-  var q = (document.getElementById('fi').value || '').toLowerCase().trim();
-  var sort = document.getElementById('sortSel').value;
-
-  document.getElementById('fuelOutput').innerHTML = '';
-  document.getElementById('insOutput').innerHTML = '';
-  document.getElementById('livePanel').style.display = 'none';
-  document.getElementById('dealOutput').style.display = 'block';
-  document.getElementById('infoArea').innerHTML = '';
-
-  if (activeFilter === 'live') {
-    document.getElementById('dealOutput').style.display = 'none';
-    document.getElementById('livePanel').style.display = 'block';
-    loadLive('woolworths', document.querySelector('.live-tab-btn'));
-    setTitle('Live Specials', 'Direct links to retailer websites — always current');
-    return;
-  }
-  if (activeFilter === 'fuel') {
-    document.getElementById('dealOutput').innerHTML = '';
-    renderFuel(q);
-    setTitle('Fuel Prices — VIC', 'Cheapest station per fuel type highlighted');
-    return;
-  }
-  if (activeFilter === 'insurance') {
-    document.getElementById('dealOutput').innerHTML = '';
-    renderIns(q);
-    setTitle('Insurance Offers', 'Current Australian insurance deals');
-    return;
-  }
-
-  // Build pool
-  var pool = deals.slice();
-  if (activeFilter === 'all' || activeFilter === 'coupon') {
-    coupons.forEach(function(cv) {
-      pool.push({ vendor:cv.vendor, cat:'coupon', _cpn:true, _code:cv.code,
-        title: cv.code + (cv.dt ? ' — '+cv.dt : ''),
-        desc: cv.desc, pNow:null, pWas:null, disc:0, url:cv.url, ts:'' });
-    });
-  }
-
-  // Filter
-  var items = pool.filter(function(d) {
-    var catOk = activeFilter === 'all' ? true
-      : activeFilter === 'coupon'  ? (d._cpn || d.cat === 'coupon')
-      : activeFilter === 'retail'  ? (d.cat === 'retail' || isGenRet(d.vendor))
-      : activeFilter === 'entertainment' ? (d.cat === 'entertainment' || d.cat === 'food')
-      : d.cat === activeFilter;
-    var qOk = !q
-      || d.title.toLowerCase().indexOf(q) !== -1
-      || (d.desc||'').toLowerCase().indexOf(q) !== -1
-      || (d.vendor||'').toLowerCase().indexOf(q) !== -1;
-    return catOk && qOk;
-  });
-
-  // Sort
-  if (sort === 'discount') items.sort(function(a,b){return(b.disc||0)-(a.disc||0);});
-  if (sort === 'price_asc') items.sort(function(a,b){return(a.pNow!=null?a.pNow:9999)-(b.pNow!=null?b.pNow:9999);});
-  if (sort === 'price_desc') items.sort(function(a,b){return(b.pNow||0)-(a.pNow||0);});
-  if (sort === 'newest') items.sort(function(a,b){return new Date(b.ts||0)-new Date(a.ts||0);});
-
-  var labels = { all:'All Deals', woolworths:'Woolworths Deals', coles:'Coles Deals',
-    aldi:'ALDI Deals', amazon:'Amazon AU Deals', retail:'Retail Deals',
-    chemist:'Health & Beauty', telco:'Mobile Plan Deals', nbn:'NBN & Internet',
-    energy:'Energy Deals', travel:'Travel Deals',
-    entertainment:'Movies & Entertainment', coupon:'Coupon Codes' };
-  setTitle(labels[activeFilter]||'Deals', items.length + ' result' + (items.length!==1?'s':''));
-
-  // Info note for WW/Coles
-  if (activeFilter === 'woolworths' || activeFilter === 'coles') {
-    var rname = activeFilter === 'woolworths' ? 'Woolworths' : 'Coles';
-    document.getElementById('infoArea').innerHTML =
-      '<div class="info-note" role="note">Deals sourced from OzBargain community posts. '
-      + 'For live ' + rname + ' specials with actual prices, use '
-      + '<strong><a href="index.html" onclick="setFilterById(\'live\');return false">🔴 Live Specials</a></strong> '
-      + 'in the sidebar, or <a href="https://www.trolley.com.au" target="_blank" rel="noopener">Trolley.com.au</a> '
-      + 'for a side-by-side Woolworths vs Coles price comparison.</div>';
-  }
-
-  if (!items.length) {
-    document.getElementById('dealOutput').innerHTML =
-      '<div class="deals-grid"><div class="empty-state">'
-      + '<h3>No deals found' + (q ? ' for &ldquo;' + esc(q) + '&rdquo;' : '') + '</h3>'
-      + '<p>Try clearing your search, selecting a different category, or use Live Specials for direct retailer pages.</p>'
-      + '</div></div>';
-    if (activeFilter === 'all' && fuel.length) renderFuelSummary();
-    return;
-  }
-
-  var html = '<div class="deals-grid">';
-  items.slice(0, 48).forEach(function(d) { html += dealCard(d); });
-  html += '</div>';
-  document.getElementById('dealOutput').innerHTML = html;
-  if (activeFilter === 'all' && fuel.length) renderFuelSummary();
-}
-
-// ── DEAL CARD ─────────────────────────────────────────────────────
-// ── HOW TO AVAIL instructions per category ────────────────────────
-var HOW_TO = {
-  woolworths: 'Add to cart on woolworths.com.au or in the app. Everyday Rewards members get extra points on specials. Price applies in-store and online.',
-  coles:      'Available in-store and on coles.com.au. Flybuys members earn bonus points on specials. Check "On Special" page weekly — resets each Wednesday.',
-  aldi:       'ALDI Special Buys are in-store only and sell out fast. Available Wednesday & Saturday. No online shopping for Special Buys.',
-  amazon:     'Add to cart and checkout on amazon.com.au. Prime members get free delivery. Lightning deals are time-limited — act fast.',
-  retail:     'Click "View deal" to go to the retailer\'s website. Check if the deal is also available in-store near Point Cook.',
-  chemist:    'Available in-store at Chemist Warehouse or online. Half-price specials change weekly. No price-match needed — already discounted.',
-  travel:     'Click through to the airline or booking site. Prices are time-limited. Compare via Skyscanner before booking. Stack with Cashrewards for extra savings.',
-  telco:      'Click "See current price" to view the live plan on the carrier\'s website. Compare via WhistleOut or Finder before signing up. No lock-in plans let you switch anytime.',
-  nbn:        'Click through to check current pricing and promotions. Many NBN providers offer months-free on new connections. Compare via Finder for the best deal.',
-  energy:     'Get a quote on the provider\'s site. Always compare via Energy Made Easy (govt site) first. Switching takes 10 minutes and can save $200-500/year in VIC.',
-  insurance:  'Click through to get a quote. Prices vary by your circumstances. Always compare via Compare The Market or Finder before buying.',
-  coupon:     'Copy the code above. Paste it at checkout on the retailer\'s website. Check expiry — most OzBargain codes last 24-72 hours.',
-  fuel:       'Price shown is at a specific station. Use MotorMouth or GasBuddy to find cheapest fuel near you right now.',
-  entertainment: 'Check the event or cinema website for booking. Tuesday/Monday discount tickets must be booked on the day. MYER One and other loyalty cards may give extra discounts.',
-  food:       'Open the app (Uber Eats, Menulog or DoorDash) and apply the promo code at checkout. Codes are often new-user only or time-limited.',
-  default:    'Click "View deal" to go to the retailer\'s website. Prices are subject to availability and may change.',
+var HOW_TO={
+  woolworths:'Add to cart on woolworths.com.au or the Woolworths app. Specials apply in-store and online. Everyday Rewards members earn extra points. Specials reset each Wednesday.',
+  coles:'Available in-store and on coles.com.au. Flybuys members earn bonus points. Half-price specials rotate each Wednesday.',
+  aldi:'ALDI Special Buys are in-store only and sell out fast. Available Wednesday and Saturday. No online shopping for Special Buys \u2014 get in early.',
+  amazon:'Add to cart on amazon.com.au. Prime members get free delivery. Lightning deals are time-limited \u2014 act quickly. Try Subscribe & Save for recurring discounts.',
+  retail:"Click View deal to go to the retailer's site. Check if the deal is available in-store near Point Cook.",
+  chemist:'Available in Chemist Warehouse stores or online. Half-price specials rotate weekly. Already heavily discounted \u2014 no price-match needed.',
+  travel:'Click through to the booking site. Travel prices are time-limited. Compare via Webjet and Skyscanner first. Stack with Cashrewards for extra savings.',
+  telco:"Click See current price to view the live plan on the carrier's site. Compare via WhistleOut or Finder before signing up. No lock-in plans let you switch anytime.",
+  nbn:'Click through to check current pricing. Many NBN providers offer months free on signup. Compare via Finder or aussiebb.com.au.',
+  energy:'Get a quote on the provider\u2019s site. Always compare via energymadeeasy.gov.au first. Switching in VIC takes ~10 minutes and can save $200\u2013$500/year.',
+  insurance:'Get a personalised quote on their site. Always compare at least 3 providers via comparethemarket.com.au or Finder before buying.',
+  coupon:'Copy the code above. Go to the retailer\u2019s site, add items to cart, paste the code at checkout. Check expiry \u2014 most OzBargain codes last 24\u201372 hours.',
+  fuel:'Price is at a specific station at time of scrape. Use motormouth.com.au with postcode 3030 to find cheapest fuel near Point Cook right now.',
+  entertainment:'Check the cinema website for booking. Discount Tuesdays (Event, Hoyts, Village) must be booked on the day. Meerkat Movies via Compare The Market gives 2-for-1 on Tuesdays.',
+  food:'Open the app (Uber Eats, Menulog or DoorDash) and apply the promo code at checkout. Codes are often new-user only or time-limited.',
 };
+function howTo(cat,cpn){if(cpn)return HOW_TO.coupon;return HOW_TO[cat]||'Click View deal to open the retailer\u2019s page for full details.';}
 
-function howTo(cat, isCoupon) {
-  if (isCoupon) return HOW_TO.coupon;
-  return HOW_TO[cat] || HOW_TO.default;
+function catCls(cat){var m={woolworths:'cg-grocery',coles:'cg-grocery',aldi:'cg-grocery',grocery:'cg-grocery',retail:'cg-retail',amazon:'cg-retail',chemist:'cg-chemist',travel:'cg-travel',telco:'cg-telco',nbn:'cg-nbn',energy:'cg-energy',coupon:'cg-coupon',fuel:'cg-fuel',insurance:'cg-ins',food:'cg-food',entertainment:'cg-retail'};return m[cat]||'cg-def';}
+function vbadge(v,cat){var n=(v||'').toLowerCase();if(n.indexOf('woolworths')!==-1||n.indexOf('woolies')!==-1)return'vbadge vb-ww';if(n.indexOf('coles')!==-1)return'vbadge vb-coles';if(n.indexOf('aldi')!==-1)return'vbadge vb-aldi';if(n.indexOf('amazon')!==-1)return'vbadge vb-amz';if(n.indexOf('big w')!==-1||n.indexOf('bigw')!==-1)return'vbadge vb-bw';if(n.indexOf('chemist')!==-1||n.indexOf('priceline')!==-1)return'vbadge vb-cw';if(n.indexOf('jb hi-fi')!==-1||n.indexOf('jb hifi')!==-1)return'vbadge vb-jb';if(cat==='coupon')return'vbadge vb-cpn';if(cat==='insurance'||cat==='finance')return'vbadge vb-ins';if(cat==='fuel')return'vbadge vb-fuel';if(cat==='travel')return'vbadge vb-travel';if(cat==='telco'||cat==='nbn')return'vbadge vb-nbn';return'vbadge vb-def';}
+
+function dealCard(d){
+  var vc=vbadge(d.vendor,d.cat), cc=catCls(d.cat);
+  var disc=d.disc>0?'<span class="disc-pill">-'+d.disc+'%</span>':'';
+  var ph='';
+  if(d.pNow&&d.pNow>0){var sav=(d.pWas&&d.pWas>d.pNow)?Math.round(((d.pWas-d.pNow)/d.pWas)*100):0;ph='<div class="price-row"><span class="price-now">$'+d.pNow.toFixed(2)+'</span>'+(d.pWas&&d.pWas>d.pNow?'<span class="price-was">$'+d.pWas.toFixed(2)+'</span>'+(sav>0?'<span class="save-pill">Save '+sav+'%</span>':''):'')+'</div>';}
+  else if(d.url){var lbl=(d.cat==='telco'||d.cat==='nbn')?'Check current plan price':d.cat==='energy'?'Compare rates on their site':d.cat==='insurance'?'Get a quote':'Check current price';ph='<div class="price-cta"><span>&#128178;</span><span>'+lbl+'</span></div>';}
+  var cpn=d._cpn&&d._code?'<div class="cpn-row"><span class="cpn-code">'+esc(d._code)+'</span><button class="copy-btn" onclick="cpyCode(\''+esc(d._code)+'\',this)">Copy</button></div>':'';
+  var np=!d.pNow||d.pNow<=0;
+  var lnk=d.url?'<a class="'+(np?'live-btn':'card-link')+'" href="'+esc(d.url)+'" target="_blank" rel="noopener">'+(np?'See current price &#8594;':'View deal &#8594;')+'</a>':'<span></span>';
+  var hw=howTo(d.cat,!!d._cpn), hwId='hw_'+Math.random().toString(36).slice(2,9);
+  return'<article class="deal-card '+cc+'"><div class="card-body"><div class="card-top"><span class="'+vc+'">'+esc(d.vendor)+'</span>'+disc+'</div><h3 class="card-title">'+esc(d.title)+'</h3>'+(d.desc?'<p class="card-desc">'+esc(d.desc.slice(0,115))+'</p>':'')+ph+cpn+'</div><div class="card-foot">'+lnk+'</div><div class="how-wrap"><button class="how-btn" onclick="toggleHow(this)" aria-expanded="false" aria-controls="'+hwId+'"><span>&#128161; How to avail</span><span class="how-chev" aria-hidden="true">&#8250;</span></button><div class="how-body" id="'+hwId+'" hidden>'+esc(hw)+'</div></div></article>';
 }
+function toggleHow(btn){var id=btn.getAttribute('aria-controls'),body=document.getElementById(id),open=btn.getAttribute('aria-expanded')==='true';btn.setAttribute('aria-expanded',open?'false':'true');if(open)body.setAttribute('hidden','');else body.removeAttribute('hidden');var ch=btn.querySelector('.how-chev');if(ch)ch.style.transform=open?'':'rotate(90deg)';}
 
-function dealCard(d) {
-  var vc   = vbadge(d.vendor, d.cat);
-  var vcCls = vc; // e.g. "v-badge vd-ww"
+function ftc(t){return({ULP:'ULP',E10:'E10',P95:'P95',P98:'P98',Diesel:'Diesel',LPG:'LPG'})[t]||'ULP';}
+function renderFuelSummary(){var bt={};fuel.forEach(function(f){if(!bt[f.type]||f.price<bt[f.type].price)bt[f.type]=f;});var ord=['ULP','E10','P95','P98','Diesel','LPG'],best=ord.filter(function(t){return bt[t];}).map(function(t){return bt[t];});if(!best.length)return;var h='<div class="fuel-panel"><div class="fuel-ph"><div class="fuel-ph-title">&#9981; Best fuel prices near Point Cook</div><a class="fuel-map-link" href="https://www.motormouth.com.au/fuel-price-map?postcode=3030" target="_blank" rel="noopener">Live map &#8594;</a></div><div class="fuel-body">';best.forEach(function(f){var tc=ftc(f.type);h+='<div class="fuel-card best"><div class="fuel-type-bar ftb-'+tc+'">'+esc(f.type)+'</div><div class="fuel-card-body"><div class="fuel-price">'+f.price.toFixed(1)+'&cent;</div><div class="fuel-brand">'+esc(f.brand||f.name)+'</div><div class="fuel-loc">'+esc(f.suburb||'')+'</div><span class="fuel-best-tag">&#9733; Cheapest</span></div></div>';});h+='</div></div>';document.getElementById('fuelOutput').innerHTML=h;}
+function renderFuel(q){if(!fuel.length){document.getElementById('fuelOutput').innerHTML='<div class="deals-grid"><div class="empty-state"><h3>No fuel data</h3><p>Add your VIC Fuel API key in Script Properties for live prices.</p></div></div>';return;}var items=fuel.filter(function(f){return!q||(f.name||'').toLowerCase().indexOf(q)!==-1||(f.brand||'').toLowerCase().indexOf(q)!==-1||(f.suburb||'').toLowerCase().indexOf(q)!==-1;});var bt={};items.forEach(function(f){(bt[f.type]=bt[f.type]||[]).push(f);});Object.keys(bt).forEach(function(t){bt[t].sort(function(a,b){return a.price-b.price;});});var ord=['ULP','E10','P95','P98','Diesel','LPG'],types=ord.filter(function(t){return bt[t];}).concat(Object.keys(bt).filter(function(t){return ord.indexOf(t)===-1;}));var h='<div class="fuel-panel"><div class="fuel-ph"><div class="fuel-ph-title">&#9981; Fuel Prices &mdash; VIC, cheapest first</div><a class="fuel-map-link" href="https://www.motormouth.com.au/fuel-price-map?postcode=3030" target="_blank" rel="noopener">Live map &#8594;</a></div><div class="fuel-body">';types.forEach(function(t){bt[t].forEach(function(f,i){var tc=ftc(t),best=i===0;h+='<div class="fuel-card'+(best?' best':'')+'"><div class="fuel-type-bar ftb-'+tc+'">'+esc(t)+(best?' &#9733;':'')+'</div><div class="fuel-card-body"><div class="fuel-price">'+f.price.toFixed(1)+'&cent;</div><div class="fuel-brand">'+esc(f.brand||f.name)+'</div><div class="fuel-loc">'+esc(f.name)+(f.suburb?', '+esc(f.suburb):'')+'</div>'+(best?'<span class="fuel-best-tag">&#9733; Cheapest</span>':'')+'</div></div>';});});h+='</div></div>';document.getElementById('fuelOutput').innerHTML=h;}
+function renderIns(q){var items=insurance.filter(function(o){return!q||o.title.toLowerCase().indexOf(q)!==-1||(o.insurer||'').toLowerCase().indexOf(q)!==-1;});if(!items.length){document.getElementById('insOutput').innerHTML='<div class="deals-grid"><div class="empty-state"><h3>No insurance offers</h3><p>Run the insurance scraper from your Google Sheet.</p></div></div>';return;}var bt={};items.forEach(function(o){(bt[o.type]=bt[o.type]||[]).push(o);});var ord=['Car','Home','Health','Pet','Travel','Life','Income Protection','General'],types=ord.filter(function(t){return bt[t];}).concat(Object.keys(bt).filter(function(t){return ord.indexOf(t)===-1;}));var h='';types.forEach(function(t){h+='<div style="margin-bottom:var(--g6)"><div class="sec-head"><h3 class="sec-title">&#128737;&#65039; '+esc(t)+' Insurance</h3><span class="sec-count">'+bt[t].length+' offer'+(bt[t].length!==1?'s':'')+'</span></div><div class="ins-grid">';bt[t].forEach(function(o){var disc=o.disc>0?'<span class="disc-pill">-'+o.disc+'%</span>':o.save>0?'<span class="disc-pill">Save $'+o.save+'</span>':'';var lnk=o.url?'<a class="card-link" href="'+esc(o.url)+'" target="_blank" rel="noopener">View offer &#8594;</a>':'';h+='<article class="ins-card"><div class="ins-card-top"><span class="vbadge vb-ins">'+esc(o.insurer)+'</span><span class="ins-type">'+esc(o.type)+'</span>'+disc+'</div><div class="ins-body"><h4 class="ins-title">'+esc(o.title)+'</h4>'+(o.desc?'<p class="ins-desc">'+esc(o.desc.slice(0,120))+'</p>':'')+lnk+'</div></article>';});h+='</div></div>';});document.getElementById('insOutput').innerHTML=h;}
 
-  // Discount badge
-  var disc = d.disc > 0
-    ? '<span class="disc-pill" aria-label="' + d.disc + ' percent off">-' + d.disc + '%</span>' : '';
-
-  // Price section — 3 states
-  var priceSection = '';
-  if (d.pNow && d.pNow > 0) {
-    var saving = (d.pWas && d.pWas > d.pNow)
-      ? Math.round(((d.pWas - d.pNow) / d.pWas) * 100) : 0;
-    priceSection = '<div class="card-price">'
-      + '<span class="price-now" aria-label="Price ' + d.pNow.toFixed(2) + ' dollars">$' + d.pNow.toFixed(2) + '</span>'
-      + (d.pWas && d.pWas > d.pNow
-          ? '<span class="price-was" aria-label="Was ' + d.pWas.toFixed(2) + '">$' + d.pWas.toFixed(2) + '</span>'
-            + (saving > 0 ? '<span class="save-pill">Save ' + saving + '%</span>' : '')
-          : '')
-      + '</div>';
-  } else if (d.url) {
-    var ctaLabel = (d.cat==='telco'||d.cat==='nbn') ? 'Check current plan price'
-      : d.cat==='energy'    ? 'Compare rates on their site'
-      : d.cat==='insurance' ? 'Get a quote on their site'
-      : 'Check current price';
-    priceSection = '<div class="live-cta-box" aria-label="' + ctaLabel + '">'
-      + '<span aria-hidden="true">&#128178;</span>'
-      + '<span>' + ctaLabel + '</span>'
-      + '</div>';
-  }
-
-  // Action button
-  var noPrice = !d.pNow || d.pNow <= 0;
-  var link = d.url
-    ? '<a class="' + (noPrice ? 'live-link' : 'card-link') + '" href="' + esc(d.url) + '" target="_blank" rel="noopener"'
-      + ' aria-label="' + (noPrice ? 'See current price at ' : 'View deal from ') + esc(d.vendor) + ' (opens in new tab)">'
-      + (noPrice ? 'See current price &#8594;' : 'View deal &#8594;')
-      + '</a>'
-    : '<span></span>';
-
-  // Coupon code
-  var couponBit = d._cpn && d._code
-    ? '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">'
-      + '<span class="cpn-code" aria-label="Coupon code: ' + esc(d._code) + '">' + esc(d._code) + '</span>'
-      + '<button class="copy-btn" onclick="cpyCode(\'' + esc(d._code) + '\',this)"'
-      + ' aria-label="Copy coupon code ' + esc(d._code) + '">Copy</button>'
-      + '</div>' : '';
-
-  // How to avail — collapsed by default, expandable
-  var hw = howTo(d.cat, !!d._cpn);
-  var hwId = 'hw_' + Math.random().toString(36).slice(2,8);
-  var howSection = '<div class="how-to">'
-    + '<button class="how-btn" onclick="toggleHow(this)" aria-expanded="false" aria-controls="' + hwId + '">'
-    + '<span>&#128161; How to avail</span><span class="how-chevron" aria-hidden="true">&#8250;</span>'
-    + '</button>'
-    + '<div class="how-body" id="' + hwId + '" hidden>' + esc(hw) + '</div>'
-    + '</div>';
-
-  return '<article class="deal-card">'
-    + '<div class="card-top">'
-    +   '<span class="' + vcCls + '"><span class="v-dot" aria-hidden="true"></span>' + esc(d.vendor) + '</span>'
-    +   disc
-    + '</div>'
-    + '<h3 class="card-title">' + esc(d.title) + '</h3>'
-    + (d.desc ? '<p class="card-desc">' + esc(d.desc.slice(0,110)) + '</p>' : '')
-    + priceSection
-    + couponBit
-    + '<div class="card-footer">' + link + '</div>'
-    + howSection
-    + '</article>';
-}
-
-// ── FUEL ──────────────────────────────────────────────────────────
-function ftc(t) {
-  var m = { ULP:'ULP', E10:'E10', P95:'P95', P98:'P98', Diesel:'Diesel', LPG:'LPG' };
-  return m[t] || 'ULP';
-}
-
-function renderFuelSummary() {
-  var byType = {};
-  fuel.forEach(function(f) {
-    if (!byType[f.type] || f.price < byType[f.type].price) byType[f.type] = f;
-  });
-  var ord = ['ULP','E10','P95','P98','Diesel','LPG'];
-  var best = ord.filter(function(t){return byType[t];}).map(function(t){return byType[t];});
-  if (!best.length) return;
-
-  var html = '<div class="fuel-panel" role="region" aria-label="Best fuel prices">'
-    + '<div class="fuel-panel-head">'
-    + '  <div class="fuel-panel-title">⛽ Best Fuel Prices — VIC</div>'
-    + '  <a class="fuel-map-link" href="https://www.motormouth.com.au/fuel-price-map?postcode=3030" target="_blank" rel="noopener">Live map (MotorMouth) →</a>'
-    + '</div>'
-    + '<div class="fuel-grid-inner">';
-  best.forEach(function(f) {
-    var t = ftc(f.type);
-    html += '<div class="fuel-card cheapest">'
-      + '<div class="fuel-type-label ft-' + t + '">' + esc(f.type) + '</div>'
-      + '<div class="fuel-card-body">'
-      + '<div class="fuel-price-val" aria-label="' + f.price.toFixed(1) + ' cents per litre">' + f.price.toFixed(1) + '¢/L</div>'
-      + '<div class="fuel-station-name">' + esc(f.brand||f.name) + '</div>'
-      + '<div class="fuel-station-loc">' + esc(f.suburb||'') + '</div>'
-      + '<span class="cheapest-tag" aria-label="Cheapest ' + t + '">★ Cheapest</span>'
-      + '</div></div>';
-  });
-  html += '</div></div>';
-  document.getElementById('fuelOutput').innerHTML = html;
-}
-
-function renderFuel(q) {
-  if (!fuel.length) {
-    document.getElementById('fuelOutput').innerHTML =
-      '<div class="deals-grid"><div class="empty-state"><h3>No fuel data yet</h3>'
-      + '<p>Add your free VIC Fuel API key to Script Properties for live prices, or use MotorMouth for a live map.</p></div></div>';
-    return;
-  }
-  var items = fuel.filter(function(f) {
-    return !q || (f.name||'').toLowerCase().indexOf(q)!==-1
-      || (f.brand||'').toLowerCase().indexOf(q)!==-1
-      || (f.suburb||'').toLowerCase().indexOf(q)!==-1;
-  });
-  var byType = {};
-  items.forEach(function(f) { (byType[f.type] = byType[f.type]||[]).push(f); });
-  Object.keys(byType).forEach(function(t) { byType[t].sort(function(a,b){return a.price-b.price;}); });
-  var ord = ['ULP','E10','P95','P98','Diesel','LPG'];
-  var types = ord.filter(function(t){return byType[t];})
-    .concat(Object.keys(byType).filter(function(t){return ord.indexOf(t)===-1;}));
-
-  var html = '<div class="fuel-panel" role="region" aria-label="Fuel prices by type">'
-    + '<div class="fuel-panel-head">'
-    + '  <div class="fuel-panel-title">⛽ Fuel Prices — VIC, cheapest first per type</div>'
-    + '  <a class="fuel-map-link" href="https://www.motormouth.com.au/fuel-price-map?postcode=3030" target="_blank" rel="noopener">Live map →</a>'
-    + '</div><div class="fuel-grid-inner">';
-  types.forEach(function(t) {
-    byType[t].forEach(function(f, i) {
-      var tc = ftc(t), cheapest = i === 0;
-      html += '<div class="fuel-card' + (cheapest ? ' cheapest' : '') + '">'
-        + '<div class="fuel-type-label ft-' + tc + '">' + esc(t) + (cheapest ? ' ★' : '') + '</div>'
-        + '<div class="fuel-card-body">'
-        + '<div class="fuel-price-val">' + f.price.toFixed(1) + '¢/L</div>'
-        + '<div class="fuel-station-name">' + esc(f.brand||f.name) + '</div>'
-        + '<div class="fuel-station-loc">' + esc(f.name) + (f.suburb ? ', ' + esc(f.suburb) : '') + '</div>'
-        + (cheapest ? '<span class="cheapest-tag">★ Cheapest</span>' : '')
-        + '</div></div>';
-    });
-  });
-  html += '</div></div>';
-  document.getElementById('fuelOutput').innerHTML = html;
-}
-
-function renderIns(q) {
-  var items = insurance.filter(function(o) {
-    return !q || o.title.toLowerCase().indexOf(q)!==-1 || (o.insurer||'').toLowerCase().indexOf(q)!==-1;
-  });
-  if (!items.length) {
-    document.getElementById('insOutput').innerHTML =
-      '<div class="deals-grid"><div class="empty-state"><h3>No insurance offers loaded</h3>'
-      + '<p>Run the insurance scraper from your Google Sheet menu.</p></div></div>';
-    return;
-  }
-  var byType = {};
-  items.forEach(function(o) { (byType[o.type] = byType[o.type]||[]).push(o); });
-  var ord = ['Car','Home','Health','Pet','Travel','Life','Income Protection','General'];
-  var types = ord.filter(function(t){return byType[t];})
-    .concat(Object.keys(byType).filter(function(t){return ord.indexOf(t)===-1;}));
-  var html = '';
-  types.forEach(function(t) {
-    html += '<section aria-label="' + esc(t) + ' insurance" style="margin-bottom:var(--space-6)">'
-      + '<div class="section-head">'
-      + '<h3 class="section-title">🛡️ ' + esc(t) + ' Insurance</h3>'
-      + '<span class="section-count">' + byType[t].length + ' offer' + (byType[t].length!==1?'s':'') + '</span>'
-      + '</div><div class="ins-grid">';
-    byType[t].forEach(function(o) {
-      var disc = o.disc > 0 ? '<span class="disc-badge">-' + o.disc + '%</span>'
-        : o.save > 0 ? '<span class="disc-badge">Save $' + o.save + '</span>' : '';
-      var link = o.url
-        ? '<a class="card-link" href="' + esc(o.url) + '" target="_blank" rel="noopener" aria-label="View offer from ' + esc(o.insurer) + '">View offer →</a>'
-        : '';
-      html += '<article class="ins-card">'
-        + '<div class="ins-card-head">'
-        + '<span class="vendor-badge vb-ins">' + esc(o.insurer) + '</span>'
-        + '<span class="ins-type-badge">' + esc(o.type) + '</span>' + disc
-        + '</div>'
-        + '<h4 class="ins-title">' + esc(o.title) + '</h4>'
-        + (o.desc ? '<p class="ins-desc">' + esc(o.desc.slice(0,120)) + '</p>' : '')
-        + link + '</article>';
-    });
-    html += '</div></section>';
-  });
-  document.getElementById('insOutput').innerHTML = html;
-}
-
-// ── LIVE SPECIALS DATA ────────────────────────────────────────────
+// LIVE DATA
 var LIVE = {
   woolworths: { name:'Woolworths', c:'#15803d', b:'#dcfce7', links:[
     {n:'Half Price Specials', u:'https://www.woolworths.com.au/shop/browse/specials/half-price'},
@@ -1758,448 +746,27 @@ var LIVE = {
   ]},
 };
 
-function loadLive(id, tabEl) {
-  document.querySelectorAll('.live-tab').forEach(function(t) {
-    t.setAttribute('aria-selected','false');
-  });
-  if (tabEl) tabEl.setAttribute('aria-selected','true');
-  var r = LIVE[id]; if (!r) return;
-  var html = r.links.map(function(lk) {
-    return '<a class="live-card" href="' + esc(lk.u) + '" target="_blank" rel="noopener"'
-      + ' aria-label="' + esc(r.name) + ': ' + esc(lk.n) + ' (opens in new tab)">'
-      + '<span class="live-badge">' + esc(r.name) + '</span>'
-      + '<span class="live-name">' + esc(lk.n) + '</span>'
-      + '<span class="live-cta-txt" aria-hidden="true">Browse live &#8594;</span>'
-      + '</a>';
-  }).join('');
-  document.getElementById('liveGrid').innerHTML = html;
-}
+function loadLive(id,tabEl){document.querySelectorAll('.live-tab').forEach(function(t){t.setAttribute('aria-selected','false');});if(tabEl)tabEl.setAttribute('aria-selected','true');var r=LIVE[id];if(!r)return;var h=r.links.map(function(lk){return'<a class="live-card" href="'+esc(lk.u)+'" target="_blank" rel="noopener" aria-label="'+esc(r.name)+': '+esc(lk.n)+' (opens in new tab)"><span class="live-badge">'+esc(r.name)+'</span><span class="live-name">'+esc(lk.n)+'</span><span class="live-cta" aria-hidden="true">Browse live &#8594;</span></a>';}).join('');document.getElementById('liveGrid').innerHTML=h;}
+function setFilter(el){document.querySelectorAll('.fb').forEach(function(b){b.setAttribute('aria-pressed','false');});el.setAttribute('aria-pressed','true');activeFilter=el.dataset.cat;searchQ='';document.getElementById('fi').value='';renderDeals();}
+function setFilterById(cat){var el=document.querySelector('[data-cat="'+cat+'"]');if(el)setFilter(el);}
+function doSearch(){searchQ=(document.getElementById('hs').value||'').trim();document.getElementById('fi').value=searchQ;activeFilter='all';document.querySelectorAll('.fb').forEach(function(b){b.setAttribute('aria-pressed','false');});var a=document.querySelector('[data-cat="all"]');if(a)a.setAttribute('aria-pressed','true');document.querySelectorAll('.qb').forEach(function(b){b.setAttribute('aria-pressed','false');});window.scrollTo({top:500,behavior:'smooth'});renderDeals();}
+function qs(el,term){document.querySelectorAll('.qb').forEach(function(b){b.setAttribute('aria-pressed','false');});el.setAttribute('aria-pressed','true');document.getElementById('hs').value=term;doSearch();}
+function openSubscribe(){var m=document.getElementById('subscribeModal');m.removeAttribute('hidden');document.body.style.overflow='hidden';setTimeout(function(){document.getElementById('subEmail').focus();},50);}
+function closeSubscribe(){document.getElementById('subscribeModal').setAttribute('hidden','');document.body.style.overflow='';document.getElementById('modalForm').style.display='block';document.getElementById('modalSuccess').style.display='none';var b=document.getElementById('subSubmitBtn');if(b){b.disabled=false;b.textContent='Subscribe to deal alerts \uD83D\uDD14';}}
+document.addEventListener('keydown',function(ev){if(ev.key==='Escape')closeSubscribe();});
+function submitSubscribe(ev){ev.preventDefault();var name=(document.getElementById('subName').value||'').trim(),email=(document.getElementById('subEmail').value||'').trim();if(!email||email.indexOf('@')===-1){document.getElementById('subEmail').focus();return;}var cats=[];document.querySelectorAll('input[name="cats"]:checked').forEach(function(cb){cats.push(cb.value);});var btn=document.getElementById('subSubmitBtn');btn.disabled=true;btn.textContent='Subscribing\u2026';if(!APPS_SCRIPT_URL||APPS_SCRIPT_URL.indexOf('YOUR_')!==-1){showSubSuccess(name||'there');return;}var cb='sub_'+Date.now(),sc=document.createElement('script');var tim=setTimeout(function(){if(sc.parentNode)sc.parentNode.removeChild(sc);delete window[cb];showSubSuccess(name||'there');},12000);window[cb]=function(){clearTimeout(tim);if(sc.parentNode)sc.parentNode.removeChild(sc);delete window[cb];showSubSuccess(name||'there');};sc.onerror=function(){clearTimeout(tim);if(sc.parentNode)sc.parentNode.removeChild(sc);delete window[cb];showSubSuccess(name||'there');};sc.src=APPS_SCRIPT_URL+'?action=subscribe&name='+encodeURIComponent(name)+'&email='+encodeURIComponent(email)+'&cats='+encodeURIComponent(cats.join(','))+'&callback='+cb;document.head.appendChild(sc);}
+function showSubSuccess(name){document.getElementById('successName').textContent=name;document.getElementById('modalForm').style.display='none';document.getElementById('modalSuccess').style.display='block';}
+function cpyCode(code,btn){navigator.clipboard.writeText(code).then(function(){btn.textContent='Copied!';setTimeout(function(){btn.textContent='Copy';},1800);});}
+function isGenRet(v){return['big w','bigw','kmart','target','myer','officeworks','harvey norman','kogan','catch','bunnings','ikea'].some(function(x){return(v||'').toLowerCase().indexOf(x)!==-1;});}
+function setTitle(t,sub){document.getElementById('ctitle').textContent=t;document.getElementById('csub').textContent=sub||'';}
+function clearErr(){document.getElementById('errArea').innerHTML='';}
+function setErr(m){document.getElementById('errArea').innerHTML=m?'<div class="notice" role="alert">'+m+'</div>':'';}
+function s(v){return String(v||'');}function n(v){var x=parseFloat(v);return isNaN(x)?null:x;}
+function esc(v){return String(v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function fmt(ts){return new Date(ts).toLocaleString('en-AU',{hour:'2-digit',minute:'2-digit',day:'numeric',month:'short'});}
+function readCache(){try{var o=JSON.parse(localStorage.getItem(CACHE_KEY)||'null');return o&&(o.deals||[]).length?o:null;}catch(e){return null;}}
+function saveCache(d){try{localStorage.setItem(CACHE_KEY,JSON.stringify({ts:Date.now(),deals:d.deals||[],coupons:d.coupons||[],fuel:d.fuel||[],insurance:d.insurance||[]}));}catch(e){}}
 
-function toggleHow(btn) {
-  var id   = btn.getAttribute('aria-controls');
-  var body = document.getElementById(id);
-  var open = btn.getAttribute('aria-expanded') === 'true';
-  btn.setAttribute('aria-expanded', open ? 'false' : 'true');
-  if (open) { body.setAttribute('hidden',''); }
-  else      { body.removeAttribute('hidden'); }
-  var chev = btn.querySelector('.how-chevron');
-  if (chev) chev.style.transform = open ? '' : 'rotate(90deg)';
-}
-
-// ── FILTER & SEARCH ───────────────────────────────────────────────
-function setFilter(el) {
-  document.querySelectorAll('.filter-btn').forEach(function(b) {
-    b.setAttribute('aria-pressed','false');
-  });
-  el.setAttribute('aria-pressed','true');
-  activeFilter = el.dataset.cat;
-  searchQ = '';
-  document.getElementById('fi').value = '';
-  renderDeals();
-}
-function setFilterById(cat) {
-  var el = document.querySelector('[data-cat="' + cat + '"]');
-  if (el) setFilter(el);
-}
-function doSearch() {
-  searchQ = (document.getElementById('hs').value || '').trim();
-  document.getElementById('fi').value = searchQ;
-  activeFilter = 'all';
-  document.querySelectorAll('.filter-btn').forEach(function(b) { b.setAttribute('aria-pressed','false'); });
-  var allBtn = document.querySelector('[data-cat="all"]');
-  if (allBtn) allBtn.setAttribute('aria-pressed','true');
-  document.querySelectorAll('.quick-btn').forEach(function(b) { b.setAttribute('aria-pressed','false'); });
-  window.scrollTo({ top: 500, behavior: 'smooth' });
-  renderDeals();
-}
-function qs(el, term) {
-  document.querySelectorAll('.quick-btn').forEach(function(b) { b.setAttribute('aria-pressed','false'); });
-  el.setAttribute('aria-pressed','true');
-  document.getElementById('hs').value = term;
-  doSearch();
-}
-
-// ── HELPERS ───────────────────────────────────────────────────────
-function isGenRet(v) {
-  var r = ['big w','bigw','kmart','target','myer','officeworks','harvey norman','kogan','catch','bunnings','ikea'];
-  var vl = (v||'').toLowerCase();
-  return r.some(function(x) { return vl.indexOf(x) !== -1; });
-}
-function vbadge(v, cat) {
-  var n = (v||'').toLowerCase();
-  var base = 'v-badge ';
-  if (n.indexOf('woolworths')!==-1||n.indexOf('woolies')!==-1) return base+'vd-ww';
-  if (n.indexOf('coles')!==-1)       return base+'vd-coles';
-  if (n.indexOf('aldi')!==-1)        return base+'vd-aldi';
-  if (n.indexOf('amazon')!==-1)      return base+'vd-amz';
-  if (n.indexOf('big w')!==-1||n.indexOf('bigw')!==-1) return base+'vd-bw';
-  if (n.indexOf('chemist')!==-1||n.indexOf('priceline')!==-1) return base+'vd-cw';
-  if (n.indexOf('jb hi-fi')!==-1||n.indexOf('jb hifi')!==-1) return base+'vd-jb';
-  if (cat==='coupon')                return base+'vd-cpn';
-  if (cat==='insurance'||cat==='finance') return base+'vd-ins';
-  if (cat==='fuel')                  return base+'vd-fuel';
-  if (cat==='travel')                return base+'vd-travel';
-  if (cat==='telco'||cat==='nbn')    return base+'vd-nbn';
-  return base+'vd-def';
-}
-function cpyCode(code, btn) {
-  navigator.clipboard.writeText(code).then(function() {
-    btn.textContent = 'Copied!';
-    btn.setAttribute('aria-label', 'Copied');
-    setTimeout(function() {
-      btn.textContent = 'Copy';
-      btn.setAttribute('aria-label', 'Copy coupon code ' + code);
-    }, 1800);
-  });
-}
-function setTitle(t, sub) {
-  document.getElementById('ctitle').textContent = t;
-  document.getElementById('csub').textContent = sub || '';
-}
-function setSubtitle(m) { document.getElementById('csub').textContent = m; }
-function clearErr() { document.getElementById('errArea').innerHTML = ''; }
-function setErr(m) { document.getElementById('errArea').innerHTML = m ? '<div class="notice" role="alert">' + m + '</div>' : ''; }
-function s(v) { return String(v||''); }
-function n(v) { var x = parseFloat(v); return isNaN(x) ? null : x; }
-function esc(v) { return String(v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-function fmt(ts) { return new Date(ts).toLocaleString('en-AU',{hour:'2-digit',minute:'2-digit',day:'numeric',month:'short'}); }
-function readCache() {
-  try { var o=JSON.parse(localStorage.getItem(CACHE_KEY)||'null'); return o&&(o.deals||[]).length?o:null; }
-  catch(e) { return null; }
-}
-function saveCache(d) {
-  try { localStorage.setItem(CACHE_KEY, JSON.stringify({ts:Date.now(),deals:d.deals||[],coupons:d.coupons||[],fuel:d.fuel||[],insurance:d.insurance||[]})); }
-  catch(e) {}
-}
-
-// ── SUBSCRIBE MODAL ───────────────────────────────────────────────
-var SUBSCRIBE_URL = APPS_SCRIPT_URL;
-
-function openSubscribe() {
-  var m = document.getElementById('subscribeModal');
-  m.removeAttribute('hidden');
-  document.body.style.overflow = 'hidden';
-  setTimeout(function(){ document.getElementById('subEmail').focus(); }, 50);
-}
-function closeSubscribe() {
-  document.getElementById('subscribeModal').setAttribute('hidden','');
-  document.body.style.overflow = '';
-  document.getElementById('modalForm').style.display = 'block';
-  document.getElementById('modalSuccess').style.display = 'none';
-  var btn = document.getElementById('subSubmitBtn');
-  btn.disabled = false;
-  btn.textContent = 'Subscribe to deal alerts \uD83D\uDD14';
-}
-document.addEventListener('keydown', function(ev) {
-  if (ev.key === 'Escape') closeSubscribe();
-});
-function submitSubscribe(ev) {
-  ev.preventDefault();
-  var name  = (document.getElementById('subName').value  || '').trim();
-  var email = (document.getElementById('subEmail').value || '').trim();
-  if (!email || email.indexOf('@') === -1) {
-    document.getElementById('subEmail').focus(); return;
-  }
-  var cats = [];
-  document.querySelectorAll('input[name="cats"]:checked').forEach(function(cb){ cats.push(cb.value); });
-  var btn = document.getElementById('subSubmitBtn');
-  btn.disabled = true; btn.textContent = 'Subscribing\u2026';
-  if (!SUBSCRIBE_URL || SUBSCRIBE_URL.indexOf('YOUR_') !== -1) {
-    showSubSuccess(name || 'there'); return;
-  }
-  var cb = 'sub_' + Date.now(), sc = document.createElement('script');
-  var timer = setTimeout(function(){
-    if (sc.parentNode) sc.parentNode.removeChild(sc);
-    delete window[cb];
-    showSubSuccess(name || 'there');
-  }, 12000);
-  window[cb] = function(){
-    clearTimeout(timer);
-    if (sc.parentNode) sc.parentNode.removeChild(sc);
-    delete window[cb];
-    showSubSuccess(name || 'there');
-  };
-  sc.onerror = function(){
-    clearTimeout(timer);
-    if (sc.parentNode) sc.parentNode.removeChild(sc);
-    delete window[cb];
-    showSubSuccess(name || 'there');
-  };
-  sc.src = SUBSCRIBE_URL
-    + '?action=subscribe'
-    + '&name='  + encodeURIComponent(name)
-    + '&email=' + encodeURIComponent(email)
-    + '&cats='  + encodeURIComponent(cats.join(','))
-    + '&callback=' + cb;
-  document.head.appendChild(sc);
-}
-function showSubSuccess(name) {
-  document.getElementById('successName').textContent = name;
-  document.getElementById('modalForm').style.display = 'none';
-  document.getElementById('modalSuccess').style.display = 'block';
-}
-
-
-
-// ── Patch JS references for new HTML IDs ─────────────────────────
-// All functions already use 'fi','hs','ri','ctitle','csub' from previous rebuild.
-
-// ── vbadge — returns new CSS classes ────────────────────────────
-function vbadge(v, cat) {
-  var n = (v||'').toLowerCase();
-  if (n.indexOf('woolworths')!==-1||n.indexOf('woolies')!==-1) return 'vbadge vb-ww';
-  if (n.indexOf('coles')!==-1)       return 'vbadge vb-coles';
-  if (n.indexOf('aldi')!==-1)        return 'vbadge vb-aldi';
-  if (n.indexOf('amazon')!==-1)      return 'vbadge vb-amz';
-  if (n.indexOf('big w')!==-1||n.indexOf('bigw')!==-1) return 'vbadge vb-bw';
-  if (n.indexOf('chemist')!==-1||n.indexOf('priceline')!==-1) return 'vbadge vb-cw';
-  if (n.indexOf('jb hi-fi')!==-1||n.indexOf('jb hifi')!==-1) return 'vbadge vb-jb';
-  if (cat==='coupon')                return 'vbadge vb-cpn';
-  if (cat==='insurance'||cat==='finance') return 'vbadge vb-ins';
-  if (cat==='fuel')                  return 'vbadge vb-fuel';
-  if (cat==='travel')                return 'vbadge vb-travel';
-  if (cat==='telco'||cat==='nbn')    return 'vbadge vb-nbn';
-  return 'vbadge vb-def';
-}
-
-// ── Category stripe class ────────────────────────────────────────
-function catCls(cat) {
-  var m = { woolworths:'cat-grocery', coles:'cat-grocery', aldi:'cat-grocery',
-    grocery:'cat-grocery', retail:'cat-retail', chemist:'cat-chemist',
-    travel:'cat-travel', telco:'cat-telco', nbn:'cat-nbn',
-    energy:'cat-energy', coupon:'cat-coupon', fuel:'cat-fuel',
-    insurance:'cat-insurance', food:'cat-food', entertainment:'cat-retail',
-    amazon:'cat-retail' };
-  return m[cat] || '';
-}
-
-// ── HOW-TO per category ──────────────────────────────────────────
-var HOW_TO = {
-  woolworths: 'Add to cart on woolworths.com.au or the Woolworths app. Specials apply in-store and online. Everyday Rewards members earn extra points. Specials change each Wednesday.',
-  coles:      'Available in-store and on coles.com.au. Flybuys members earn bonus points on specials. Half-price items rotate weekly — usually resets Wednesday.',
-  aldi:       'ALDI Special Buys are in-store only and sell out fast. Available from Wednesday and Saturday. No online shopping for Special Buys — get in early.',
-  amazon:     'Add to cart and checkout on amazon.com.au. Prime members get free delivery. Lightning deals are time-limited — act quickly. Check Subscribe & Save for recurring discounts.',
-  retail:     'Click View deal to go to the retailer's site. Check if the deal is available in-store near Point Cook. Some deals are online-only.',
-  chemist:    'Available in Chemist Warehouse stores or online at chemistwarehouse.com.au. Half-price specials rotate weekly. No price-match needed — already heavily discounted.',
-  travel:     'Click through to the airline or hotel booking site. Travel prices are time-limited. Compare across Webjet, Skyscanner and Finder first. Stack with Cashrewards for extra savings on top.',
-  telco:      'Click See current price to view the live plan on the carrier's website. Compare plans via WhistleOut or Finder.com.au before signing up. No lock-in plans let you switch anytime — worth doing every 12 months.',
-  nbn:        'Click through to check current pricing. Many NBN providers offer months free on new connections. Compare via Aussie Broadband, Superloop and TPG. Check Finder for current signup bonuses.',
-  energy:     'Get a quote on the provider's website. Always compare via Energy Made Easy (govt) at energymadeeasy.gov.au first. Switching electricity in VIC takes 10 minutes and can save $200–$500/year.',
-  insurance:  'Click through to get a personalised quote. Prices vary by your circumstances. Always compare at least 3 providers via Compare The Market or Finder before buying.',
-  coupon:     'Copy the code above. Go to the retailer's website, add items to cart, then paste the code at checkout. Check the deal post for expiry — most OzBargain codes last 24–72 hours.',
-  fuel:       'Price shown is at a specific station at time of scrape. Use MotorMouth (motormouth.com.au/postcode=3030) or GasBuddy to find cheapest fuel near Point Cook right now.',
-  entertainment: 'Check the cinema or event website for booking. Tuesday discount tickets (Event, Hoyts, Village) must usually be booked on the day. Meerkat Movies via Compare The Market gives 2-for-1 on Tuesdays.',
-  food:       'Open the Uber Eats, Menulog or DoorDash app. Apply the promo code at checkout. Codes are often new-user only or time-limited. Uber One members get $0 delivery on eligible restaurants.',
-};
-
-function howTo(cat, isCoupon) {
-  if (isCoupon) return HOW_TO.coupon;
-  return HOW_TO[cat] || 'Click View deal to open the retailer's page for full details and to purchase.';
-}
-
-// ── dealCard — rewritten to use new CSS ─────────────────────────
-function dealCard(d) {
-  var vc   = vbadge(d.vendor, d.cat);
-  var cc   = catCls(d.cat);
-  var disc = d.disc > 0
-    ? '<span class="disc-pill" aria-label="' + d.disc + ' percent off">-' + d.disc + '%</span>' : '';
-
-  // Price
-  var priceHtml = '';
-  if (d.pNow && d.pNow > 0) {
-    var sav = (d.pWas && d.pWas > d.pNow)
-      ? Math.round(((d.pWas - d.pNow) / d.pWas) * 100) : 0;
-    priceHtml = '<div class="price-row">'
-      + '<span class="price-now">$' + d.pNow.toFixed(2) + '</span>'
-      + (d.pWas && d.pWas > d.pNow
-        ? '<span class="price-was">$' + d.pWas.toFixed(2) + '</span>'
-          + (sav > 0 ? '<span class="save-pill">Save ' + sav + '%</span>' : '')
-        : '')
-      + '</div>';
-  } else if (d.url) {
-    var ctaLbl = (d.cat==='telco'||d.cat==='nbn') ? 'Check current plan price'
-      : d.cat==='energy'    ? 'Compare rates on their site'
-      : d.cat==='insurance' ? 'Get a quote'
-      : 'Check current price';
-    priceHtml = '<div class="price-cta"><span aria-hidden="true">&#128178;</span><span>' + ctaLbl + '</span></div>';
-  }
-
-  // Coupon
-  var cpnHtml = d._cpn && d._code
-    ? '<div class="cpn-row"><span class="cpn-code" aria-label="Coupon code ' + esc(d._code) + '">'
-      + esc(d._code) + '</span>'
-      + '<button class="copy-btn" onclick="cpyCode('' + esc(d._code) + '',this)">Copy</button></div>' : '';
-
-  // Link
-  var noPrice = !d.pNow || d.pNow <= 0;
-  var linkHtml = d.url
-    ? '<a class="' + (noPrice ? 'live-btn' : 'card-link') + '" href="' + esc(d.url) + '" target="_blank" rel="noopener">'
-      + (noPrice ? 'See current price &#8594;' : 'View deal &#8594;') + '</a>'
-    : '<span></span>';
-
-  // How to avail
-  var hw = howTo(d.cat, !!d._cpn);
-  var hwId = 'hw_' + Math.random().toString(36).slice(2,9);
-  var howHtml = '<div class="how-wrap">'
-    + '<button class="how-btn" onclick="toggleHow(this)" aria-expanded="false" aria-controls="' + hwId + '">'
-    + '<span>&#128161; How to avail</span>'
-    + '<span class="how-chev" aria-hidden="true">&#8250;</span>'
-    + '</button>'
-    + '<div class="how-body" id="' + hwId + '" hidden>' + esc(hw) + '</div>'
-    + '</div>';
-
-  return '<article class="deal-card ' + cc + '">'
-    + '<div class="card-body">'
-    +   '<div class="card-top"><span class="' + vc + '">' + esc(d.vendor) + '</span>' + disc + '</div>'
-    +   '<h3 class="card-title">' + esc(d.title) + '</h3>'
-    +   (d.desc ? '<p class="card-desc">' + esc(d.desc.slice(0,115)) + '</p>' : '')
-    +   priceHtml + cpnHtml
-    + '</div>'
-    + '<div class="card-foot">' + linkHtml + '</div>'
-    + howHtml
-    + '</article>';
-}
-
-// ── loadLive — uses .live-tab ────────────────────────────────────
-function loadLive(id, tabEl) {
-  document.querySelectorAll('.live-tab').forEach(function(t){t.setAttribute('aria-selected','false');});
-  if (tabEl) tabEl.setAttribute('aria-selected','true');
-  var r = LIVE[id]; if (!r) return;
-  var h = r.links.map(function(lk){
-    return '<a class="live-card" href="' + esc(lk.u) + '" target="_blank" rel="noopener"'
-      + ' aria-label="' + esc(r.name) + ': ' + esc(lk.n) + ' (opens in new tab)">'
-      + '<span class="live-badge">' + esc(r.name) + '</span>'
-      + '<span class="live-name">' + esc(lk.n) + '</span>'
-      + '<span class="live-cta" aria-hidden="true">Browse live &#8594;</span>'
-      + '</a>';
-  }).join('');
-  document.getElementById('liveGrid').innerHTML = h;
-}
-
-// ── toggleHow ───────────────────────────────────────────────────
-function toggleHow(btn) {
-  var id   = btn.getAttribute('aria-controls');
-  var body = document.getElementById(id);
-  var open = btn.getAttribute('aria-expanded') === 'true';
-  btn.setAttribute('aria-expanded', open ? 'false' : 'true');
-  if (open) body.setAttribute('hidden','');
-  else body.removeAttribute('hidden');
-  var chev = btn.querySelector('.how-chev');
-  if (chev) chev.style.transform = open ? '' : 'rotate(90deg)';
-}
-
-// ── Quick search ─────────────────────────────────────────────────
-function qs(el, term) {
-  document.querySelectorAll('.qbtn').forEach(function(b){b.setAttribute('aria-pressed','false');});
-  el.setAttribute('aria-pressed','true');
-  document.getElementById('hs').value = term;
-  doSearch();
-}
-
-// ── Fuel — uses new CSS ──────────────────────────────────────────
-function ftc(t){ return ({ULP:'ULP',E10:'E10',P95:'P95',P98:'P98',Diesel:'Diesel',LPG:'LPG'})[t]||'ULP'; }
-
-function renderFuelSummary() {
-  var bt = {};
-  fuel.forEach(function(f){ if(!bt[f.type]||f.price<bt[f.type].price) bt[f.type]=f; });
-  var ord=['ULP','E10','P95','P98','Diesel','LPG'];
-  var best=ord.filter(function(t){return bt[t];}).map(function(t){return bt[t];});
-  if (!best.length) return;
-  var h = '<div class="fuel-panel" role="region" aria-label="Best fuel prices">'
-    + '<div class="fuel-ph"><div class="fuel-ph-title">&#9981; Best fuel prices near Point Cook</div>'
-    + '<a class="fuel-map-link" href="https://www.motormouth.com.au/fuel-price-map?postcode=3030" target="_blank" rel="noopener">Live map &#8594;</a>'
-    + '</div><div class="fuel-body">';
-  best.forEach(function(f){
-    var tc=ftc(f.type);
-    h+='<div class="fuel-card best"><div class="fuel-type-bar ftb-'+tc+'">'+esc(f.type)+'</div>'
-      +'<div class="fuel-card-body">'
-      +'<div class="fuel-price">'+f.price.toFixed(1)+'&cent;</div>'
-      +'<div class="fuel-brand">'+esc(f.brand||f.name)+'</div>'
-      +'<div class="fuel-loc">'+esc(f.suburb||'')+'</div>'
-      +'<span class="fuel-best-tag">&#9733; Cheapest</span>'
-      +'</div></div>';
-  });
-  h+='</div></div>';
-  document.getElementById('fuelOutput').innerHTML=h;
-}
-
-function renderFuel(q) {
-  if (!fuel.length) {
-    document.getElementById('fuelOutput').innerHTML='<div class="deals-grid"><div class="empty-state"><h3>No fuel data yet</h3><p>Add your free VIC Fuel API key in Script Properties.</p></div></div>';
-    return;
-  }
-  var items=fuel.filter(function(f){
-    return !q||(f.name||'').toLowerCase().indexOf(q)!==-1||(f.brand||'').toLowerCase().indexOf(q)!==-1||(f.suburb||'').toLowerCase().indexOf(q)!==-1;
-  });
-  var bt={};
-  items.forEach(function(f){(bt[f.type]=bt[f.type]||[]).push(f);});
-  Object.keys(bt).forEach(function(t){bt[t].sort(function(a,b){return a.price-b.price;});});
-  var ord=['ULP','E10','P95','P98','Diesel','LPG'];
-  var types=ord.filter(function(t){return bt[t];}).concat(Object.keys(bt).filter(function(t){return ord.indexOf(t)===-1;}));
-  var h='<div class="fuel-panel" role="region" aria-label="Fuel prices">'
-    +'<div class="fuel-ph">'
-    +'<div class="fuel-ph-title">&#9981; Fuel Prices &mdash; VIC, cheapest first</div>'
-    +'<a class="fuel-map-link" href="https://www.motormouth.com.au/fuel-price-map?postcode=3030" target="_blank" rel="noopener">Live map &#8594;</a>'
-    +'</div><div class="fuel-body">';
-  types.forEach(function(t){
-    bt[t].forEach(function(f,i){
-      var tc=ftc(t),best=i===0;
-      h+='<div class="fuel-card'+(best?' best':'')+'"><div class="fuel-type-bar ftb-'+tc+'">'+esc(t)+(best?' &#9733;':'')+'</div>'
-        +'<div class="fuel-card-body"><div class="fuel-price">'+f.price.toFixed(1)+'&cent;</div>'
-        +'<div class="fuel-brand">'+esc(f.brand||f.name)+'</div>'
-        +'<div class="fuel-loc">'+esc(f.name)+(f.suburb?', '+esc(f.suburb):'')+'</div>'
-        +(best?'<span class="fuel-best-tag">&#9733; Cheapest</span>':'')
-        +'</div></div>';
-    });
-  });
-  h+='</div></div>';
-  document.getElementById('fuelOutput').innerHTML=h;
-}
-
-function renderIns(q) {
-  var items=insurance.filter(function(o){
-    return !q||o.title.toLowerCase().indexOf(q)!==-1||(o.insurer||'').toLowerCase().indexOf(q)!==-1;
-  });
-  if (!items.length){
-    document.getElementById('insOutput').innerHTML='<div class="deals-grid"><div class="empty-state"><h3>No insurance offers</h3><p>Run the insurance scraper from your Google Sheet.</p></div></div>';
-    return;
-  }
-  var bt={};
-  items.forEach(function(o){(bt[o.type]=bt[o.type]||[]).push(o);});
-  var ord=['Car','Home','Health','Pet','Travel','Life','Income Protection','General'];
-  var types=ord.filter(function(t){return bt[t];}).concat(Object.keys(bt).filter(function(t){return ord.indexOf(t)===-1;}));
-  var h='';
-  types.forEach(function(t){
-    h+='<div style="margin-bottom:var(--s6)"><div class="sec-head"><h3 class="sec-title">&#128737;&#65039; '+esc(t)+' Insurance</h3><span class="sec-count">'+bt[t].length+' offer'+(bt[t].length!==1?'s':'')+'</span></div><div class="ins-grid">';
-    bt[t].forEach(function(o){
-      var disc=o.disc>0?'<span class="disc-pill">-'+o.disc+'%</span>':o.save>0?'<span class="disc-pill">Save $'+o.save+'</span>':'';
-      var lnk=o.url?'<a class="card-link" href="'+esc(o.url)+'" target="_blank" rel="noopener">View offer &#8594;</a>':'';
-      h+='<article class="ins-card">'
-        +'<div class="ins-card-top"><span class="vbadge vb-ins">'+esc(o.insurer)+'</span><span class="ins-type">'+esc(o.type)+'</span>'+disc+'</div>'
-        +'<div class="ins-body"><h4 class="ins-title">'+esc(o.title)+'</h4>'
-        +(o.desc?'<p class="ins-desc">'+esc(o.desc.slice(0,120))+'</p>':'')
-        +lnk+'</div></article>';
-    });
-    h+='</div></div>';
-  });
-  document.getElementById('insOutput').innerHTML=h;
-}
-
-// ── Boot — show proper empty state when URL not set ──────────────
-(function patchBoot(){
-  var origBoot = window.addEventListener;
-  // Already running — just patch the check
-})();
-
-// Override setupBanner reference
-document.addEventListener('DOMContentLoaded', function() {
-  // If original boot already ran (from the embedded JS above), it may have
-  // tried to find 'setupNotice' or 'setupBanner'. Ensure banner is shown.
-  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.indexOf('YOUR_') !== -1) {
-    var b = document.getElementById('setupBanner');
-    if (b) b.style.display = 'block';
-  }
-});
 </script>
 </body>
 </html>
