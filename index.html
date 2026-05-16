@@ -361,7 +361,7 @@ body{font-family:var(--fb);font-size:15px;line-height:1.6;background:var(--bg);c
       <li><button class="fb" data-cat="telco" aria-pressed="false" onclick="setFilter(this)"><span class="fi">&#128241;</span><span class="fl">Mobile Plans</span><span class="fc" id="cnt-telco"></span></button></li>
       <li><button class="fb" data-cat="nbn" aria-pressed="false" onclick="setFilter(this)"><span class="fi">&#127760;</span><span class="fl">NBN &amp; Internet</span><span class="fc" id="cnt-nbn"></span></button></li>
       <li><button class="fb" data-cat="energy" aria-pressed="false" onclick="setFilter(this)"><span class="fi">&#9889;</span><span class="fl">Energy</span><span class="fc" id="cnt-energy"></span></button></li>
-      <li><button class="fb" data-cat="gaming" aria-pressed="false" onclick="setFilter(this)"><span class="fi">&#127918;</span><span class="fl">Gaming &amp; Digital</span><span class="fc" id="cnt-gaming"></span></button></li>
+      <li><button class="fb" data-cat="gaming" aria-pressed="false" onclick="setFilter(this)"><span class="fi">&#127918;</span><span class="fl">Software &amp; Products</span><span class="fc" id="cnt-gaming"></span></button></li>
         <li><button class="fb" data-cat="entertainment" aria-pressed="false" onclick="setFilter(this)"><span class="fi">&#127916;</span><span class="fl">Movies &amp; Fun</span><span class="fc" id="cnt-ent"></span></button></li>
       <li><div class="fdiv"></div></li>
       <li><button class="fb" data-cat="coupon" aria-pressed="false" onclick="setFilter(this)"><span class="fi">&#127981;</span><span class="fl">Coupon Codes</span><span class="fc" id="cnt-cpn"></span></button></li>
@@ -401,7 +401,7 @@ body{font-family:var(--fb);font-size:15px;line-height:1.6;background:var(--bg);c
           <li><button class="live-tab" role="tab" aria-selected="false" onclick="loadLive('movies',this)">&#127916; Movies</button></li>
           <li><button class="live-tab" role="tab" aria-selected="false" onclick="loadLive('streaming',this)">&#128250; Streaming</button></li>
           <li><button class="live-tab" role="tab" aria-selected="false" onclick="loadLive('ubereats',this)">&#128757; Uber Eats</button></li>
-          <li><button class="live-tab" role="tab" aria-selected="false" onclick="loadLive('gaming',this)">&#127918; Gaming</button></li>
+          <li><button class="live-tab" role="tab" aria-selected="false" onclick="loadLive('gaming',this)">&#128187; Software &amp; Products</button></li>
         </ul>
       </div>
       <div class="live-cards" id="liveGrid" role="tabpanel"><p style="grid-column:1/-1;color:var(--ink3);font-size:13.5px;padding:4px">Select a retailer tab above.</p></div>
@@ -567,7 +567,7 @@ var LIVE = {
     {n:'Apple TV+ AU',               u:'https://tv.apple.com/au'},
     {n:'OzBargain — Streaming',      u:'https://www.ozbargain.com.au/tag/streaming'},
   ]},
-  gaming: { name:'Gaming & Digital', links:[
+  gaming: { name:'Software & Products', links:[
     {n:'G2A — All Deals',               u:'https://www.g2a.com/deals'},
     {n:'G2A — Gift Cards',              u:'https://www.g2a.com/category/gift-cards-c20'},
     {n:'G2A — Game Keys (Steam)',       u:'https://www.g2a.com/category/steam-c1'},
@@ -751,7 +751,7 @@ var HARDCODED_PLANS = [
   {vendor:'Amber Electric',cat:'energy',title:'Amber Electric — Wholesale Electricity Pricing',desc:'Amber passes through wholesale electricity prices. Best for solar + battery homes.',url:'https://www.amber.com.au'},
   {vendor:'Origin Energy',cat:'energy',title:'Origin Energy — Spike Rewards for Off-Peak Usage',desc:'Origin electricity and gas with Spike rewards. Always compare via energymadeeasy.gov.au first.',url:'https://www.origin.com.au/plans/electricity'},
 
-  // Gaming & Digital Deals
+  // Software & Products
   {vendor:'G2A',cat:'gaming',title:'G2A — Game Keys, Gift Cards & Subscriptions',desc:'World’s largest digital marketplace. Game keys, gift cards (Netflix, Amazon, Steam), software and subscriptions often 30-80% cheaper than retail. Check region before buying.',url:'https://www.g2a.com/deals'},
   {vendor:'G2A',cat:'gaming',title:'G2A — Gift Cards (Netflix, Amazon, Steam, Google Play)',desc:'Discounted digital gift cards. Netflix, Amazon, Steam, Google Play, iTunes and more below retail price.',url:'https://www.g2a.com/category/gift-cards-c20'},
   {vendor:'G2A',cat:'gaming',title:'G2A — Software Licences (Windows, Office, Adobe)',desc:'Discounted software keys. Windows 11 Pro, Microsoft Office, Adobe Creative Cloud and antivirus at fraction of retail.',url:'https://www.g2a.com/category/software-c17'},
@@ -843,7 +843,7 @@ function renderDeals() {
     aldi:'ALDI Deals', amazon:'Amazon AU', retail:'Retail Deals',
     chemist:'Health & Beauty', telco:'Mobile Plans', nbn:'NBN & Internet',
     energy:'Energy Deals', travel:'Travel Deals',
-    entertainment:'Movies & Entertainment', gaming:'Gaming & Digital Deals', coupon:'Coupon Codes'};
+    entertainment:'Movies & Entertainment', gaming:'Software & Products', coupon:'Coupon Codes'};
   setTitle(labels[activeFilter]||'Deals', items.length+' result'+(items.length!==1?'s':''));
 
   if (activeFilter==='woolworths'||activeFilter==='coles') {
