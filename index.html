@@ -149,7 +149,7 @@ body{font-family:var(--fb);font-size:15px;line-height:1.6;background:var(--bg);c
 .deal-card.cg-telco::after{background:#0d9488}.deal-card.cg-nbn::after{background:#2563eb}
 .deal-card.cg-energy::after{background:#d97706}.deal-card.cg-coupon::after{background:#7c3aed}
 .deal-card.cg-fuel::after{background:#9333ea}.deal-card.cg-ins::after{background:#1e40af}
-.deal-card.cg-food::after{background:#ea580c}.deal-card.cg-def::after{background:var(--border2)}
+.deal-card.cg-food::after{background:#ea580c}.deal-card.cg-gaming::after{background:#6366f1}.deal-card.cg-def::after{background:var(--border2)}
 .card-body{padding:var(--g4) var(--g4) var(--g4) calc(var(--g4) + 4px);display:flex;flex-direction:column;gap:var(--g3);flex:1}
 .card-top{display:flex;align-items:center;justify-content:space-between;gap:var(--g2)}
 .vbadge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:999px;font-family:var(--fh);font-size:10.5px;font-weight:700;white-space:nowrap;background:var(--surface2);color:var(--ink2);border:1px solid var(--border2)}
@@ -165,7 +165,7 @@ body{font-family:var(--fb);font-size:15px;line-height:1.6;background:var(--bg);c
 .vb-travel{background:#fff7ed;color:#c2410c;border-color:#fed7aa}
 .vb-nbn{background:#ecfdf5;color:#065f46;border-color:#a7f3d0}
 .vb-cpn{background:#f5f3ff;color:#6d28d9;border-color:#ddd6fe}
-.vb-def{background:var(--surface2);color:var(--ink2);border-color:var(--border2)}
+.vb-gaming{background:#eef2ff;color:#4338ca;border-color:#c7d2fe}.vb-def{background:var(--surface2);color:var(--ink2);border-color:var(--border2)}
 @media(prefers-color-scheme:dark){
   .vb-ww{background:#052e16;color:#4ade80;border-color:#14532d}.vb-coles{background:#2a1210;color:#f87171;border-color:#7f1d1d}
   .vb-aldi{background:#0c1a3d;color:#93c5fd;border-color:#1e3a8a}.vb-amz{background:#2a1500;color:#fb923c;border-color:#7c2d12}
@@ -361,7 +361,8 @@ body{font-family:var(--fb);font-size:15px;line-height:1.6;background:var(--bg);c
       <li><button class="fb" data-cat="telco" aria-pressed="false" onclick="setFilter(this)"><span class="fi">&#128241;</span><span class="fl">Mobile Plans</span><span class="fc" id="cnt-telco"></span></button></li>
       <li><button class="fb" data-cat="nbn" aria-pressed="false" onclick="setFilter(this)"><span class="fi">&#127760;</span><span class="fl">NBN &amp; Internet</span><span class="fc" id="cnt-nbn"></span></button></li>
       <li><button class="fb" data-cat="energy" aria-pressed="false" onclick="setFilter(this)"><span class="fi">&#9889;</span><span class="fl">Energy</span><span class="fc" id="cnt-energy"></span></button></li>
-      <li><button class="fb" data-cat="entertainment" aria-pressed="false" onclick="setFilter(this)"><span class="fi">&#127916;</span><span class="fl">Movies &amp; Fun</span><span class="fc" id="cnt-ent"></span></button></li>
+      <li><button class="fb" data-cat="gaming" aria-pressed="false" onclick="setFilter(this)"><span class="fi">&#127918;</span><span class="fl">Gaming &amp; Digital</span><span class="fc" id="cnt-gaming"></span></button></li>
+        <li><button class="fb" data-cat="entertainment" aria-pressed="false" onclick="setFilter(this)"><span class="fi">&#127916;</span><span class="fl">Movies &amp; Fun</span><span class="fc" id="cnt-ent"></span></button></li>
       <li><div class="fdiv"></div></li>
       <li><button class="fb" data-cat="coupon" aria-pressed="false" onclick="setFilter(this)"><span class="fi">&#127981;</span><span class="fl">Coupon Codes</span><span class="fc" id="cnt-cpn"></span></button></li>
       <li><button class="fb" data-cat="fuel" aria-pressed="false" onclick="setFilter(this)"><span class="fi">&#9981;</span><span class="fl">Fuel Prices</span><span class="fc" id="cnt-fuel"></span></button></li>
@@ -400,6 +401,7 @@ body{font-family:var(--fb);font-size:15px;line-height:1.6;background:var(--bg);c
           <li><button class="live-tab" role="tab" aria-selected="false" onclick="loadLive('movies',this)">&#127916; Movies</button></li>
           <li><button class="live-tab" role="tab" aria-selected="false" onclick="loadLive('streaming',this)">&#128250; Streaming</button></li>
           <li><button class="live-tab" role="tab" aria-selected="false" onclick="loadLive('ubereats',this)">&#128757; Uber Eats</button></li>
+          <li><button class="live-tab" role="tab" aria-selected="false" onclick="loadLive('gaming',this)">&#127918; Gaming</button></li>
         </ul>
       </div>
       <div class="live-cards" id="liveGrid" role="tabpanel"><p style="grid-column:1/-1;color:var(--ink3);font-size:13.5px;padding:4px">Select a retailer tab above.</p></div>
@@ -565,6 +567,20 @@ var LIVE = {
     {n:'Apple TV+ AU',               u:'https://tv.apple.com/au'},
     {n:'OzBargain — Streaming',      u:'https://www.ozbargain.com.au/tag/streaming'},
   ]},
+  gaming: { name:'Gaming & Digital', links:[
+    {n:'G2A — All Deals',               u:'https://www.g2a.com/deals'},
+    {n:'G2A — Gift Cards',              u:'https://www.g2a.com/category/gift-cards-c20'},
+    {n:'G2A — Game Keys (Steam)',       u:'https://www.g2a.com/category/steam-c1'},
+    {n:'G2A — Software Licences',       u:'https://www.g2a.com/category/software-c17'},
+    {n:'G2A — Subscriptions',           u:'https://www.g2a.com/category/subscriptions-c136'},
+    {n:'Epic Games — Free Games',        u:'https://store.epicgames.com/en-US/free-games'},
+    {n:'Humble Bundle — Current Bundle', u:'https://www.humblebundle.com'},
+    {n:'Steam — Specials & Sales',      u:'https://store.steampowered.com/specials'},
+    {n:'Fanatical — Bundle Deals',      u:'https://www.fanatical.com/en/bundles'},
+    {n:'CDKeys — Cheap Keys',           u:'https://www.cdkeys.com'},
+    {n:'Green Man Gaming — Sales',      u:'https://www.greenmangaming.com/sale/'},
+    {n:'OzBargain — Gaming Deals',      u:'https://www.ozbargain.com.au/cat/gaming'},
+  ]},
   ubereats: { name:'Uber Eats', links:[
     {n:'Uber One — Member Offers',   u:'https://www.ubereats.com/au/uber-one'},
     {n:'Daily Promotions',           u:'https://www.ubereats.com/au/promotions'},
@@ -705,7 +721,7 @@ function updateStats() {
   var cm = {all:deals.length, ww:c('woolworths'), coles:c('coles'), aldi:c('aldi'),
     amz:c('amazon'), ret:cRet(), cw:c('chemist'), travel:c('travel'),
     telco:c('telco'), nbn:c('nbn'), energy:c('energy'),
-    ent:c('entertainment')+c('food'), cpn:coupons.length, fuel:fuel.length, ins:insurance.length};
+    ent:c('entertainment')+c('food'), gaming:getHardcodedPool('gaming').length, cpn:coupons.length, fuel:fuel.length, ins:insurance.length};
   Object.keys(cm).forEach(function(k){var el=document.getElementById('cnt-'+k);if(el)el.textContent=cm[k]||'';});
 }
 function c(cat){ return deals.filter(function(d){return d.cat===cat;}).length; }
@@ -734,6 +750,19 @@ var HARDCODED_PLANS = [
   {vendor:'ReAmped Energy',cat:'energy',title:'ReAmped Energy — Consistently Cheapest in AU',desc:'Repeatedly ranks among cheapest on Energy Made Easy. Flat-rate, no lock-in, no exit fees.',url:'https://www.reamped.com.au'},
   {vendor:'Amber Electric',cat:'energy',title:'Amber Electric — Wholesale Electricity Pricing',desc:'Amber passes through wholesale electricity prices. Best for solar + battery homes.',url:'https://www.amber.com.au'},
   {vendor:'Origin Energy',cat:'energy',title:'Origin Energy — Spike Rewards for Off-Peak Usage',desc:'Origin electricity and gas with Spike rewards. Always compare via energymadeeasy.gov.au first.',url:'https://www.origin.com.au/plans/electricity'},
+
+  // Gaming & Digital Deals
+  {vendor:'G2A',cat:'gaming',title:'G2A — Game Keys, Gift Cards & Subscriptions',desc:'World’s largest digital marketplace. Game keys, gift cards (Netflix, Amazon, Steam), software and subscriptions often 30-80% cheaper than retail. Check region before buying.',url:'https://www.g2a.com/deals'},
+  {vendor:'G2A',cat:'gaming',title:'G2A — Gift Cards (Netflix, Amazon, Steam, Google Play)',desc:'Discounted digital gift cards. Netflix, Amazon, Steam, Google Play, iTunes and more below retail price.',url:'https://www.g2a.com/category/gift-cards-c20'},
+  {vendor:'G2A',cat:'gaming',title:'G2A — Software Licences (Windows, Office, Adobe)',desc:'Discounted software keys. Windows 11 Pro, Microsoft Office, Adobe Creative Cloud and antivirus at fraction of retail.',url:'https://www.g2a.com/category/software-c17'},
+  {vendor:'G2A',cat:'gaming',title:'G2A — Subscriptions (Spotify, YouTube Premium, ChatGPT Plus)',desc:'Discounted subscription codes. Spotify, YouTube Premium, Canva, Duolingo, ChatGPT Plus and more below RRP.',url:'https://www.g2a.com/category/subscriptions-c136'},
+  {vendor:'Epic Games Store',cat:'gaming',title:'Epic Games Store — Free PC Game Every Week',desc:'Epic gives away a free PC game every week. Claim during the window and own it permanently at no cost.',url:'https://store.epicgames.com/en-US/free-games'},
+  {vendor:'Humble Bundle',cat:'gaming',title:'Humble Bundle — Pay What You Want for Games',desc:'Weekly game bundles, pay what you want. Portion goes to charity. Great value for indie and AAA titles.',url:'https://www.humblebundle.com'},
+  {vendor:'Steam',cat:'gaming',title:'Steam — Current PC Game Sales & Specials',desc:'Steam Weekend Deals, Daily Deals and seasonal sales. Wishlist games to get notified when they go on sale.',url:'https://store.steampowered.com/specials'},
+  {vendor:'Fanatical',cat:'gaming',title:'Fanatical — Steam Game Bundles & Flash Sales',desc:'Curated Steam game bundles and flash sales. All keys are official. Often the cheapest source for bundle packs.',url:'https://www.fanatical.com/en/'},
+  {vendor:'CDKeys',cat:'gaming',title:'CDKeys — Cheap Keys (PC, Xbox, PlayStation, Nintendo)',desc:'Discounted game keys for all platforms. Usually 10-40% cheaper than official stores. Good for console credit too.',url:'https://www.cdkeys.com'},
+  {vendor:'Green Man Gaming',cat:'gaming',title:'Green Man Gaming — Authorised Publisher Sales',desc:'Official publisher keys up to 85% off. Regular sales and flash deals on PC games.',url:'https://www.greenmangaming.com/sale/'},
+  {vendor:'OzBargain',cat:'gaming',title:'OzBargain — Gaming Deals (Community)',desc:'Community-sourced gaming deals posted as they go live. Keys, console deals, peripherals and subscriptions.',url:'https://www.ozbargain.com.au/cat/gaming'},
 ];
 
 function getHardcodedPool(cat) {
@@ -775,9 +804,9 @@ function renderDeals() {
 
   var pool = deals.slice();
   // Always merge hardcoded plans for these categories so they show even before scraper runs
-  if (activeFilter==='telco'||activeFilter==='nbn'||activeFilter==='energy'||activeFilter==='all') {
+  if (activeFilter==='telco'||activeFilter==='nbn'||activeFilter==='energy'||activeFilter==='gaming'||activeFilter==='all') {
     var hc = (activeFilter==='all')
-      ? getHardcodedPool('telco').concat(getHardcodedPool('nbn')).concat(getHardcodedPool('energy'))
+      ? getHardcodedPool('telco').concat(getHardcodedPool('nbn')).concat(getHardcodedPool('energy')).concat(getHardcodedPool('gaming'))
       : getHardcodedPool(activeFilter);
     // Only add hardcoded if not already in scraped deals (avoid duplicates by title)
     var existingTitles = pool.map(function(d){return d.title.toLowerCase().slice(0,40);});
@@ -814,7 +843,7 @@ function renderDeals() {
     aldi:'ALDI Deals', amazon:'Amazon AU', retail:'Retail Deals',
     chemist:'Health & Beauty', telco:'Mobile Plans', nbn:'NBN & Internet',
     energy:'Energy Deals', travel:'Travel Deals',
-    entertainment:'Movies & Entertainment', coupon:'Coupon Codes'};
+    entertainment:'Movies & Entertainment', gaming:'Gaming & Digital Deals', coupon:'Coupon Codes'};
   setTitle(labels[activeFilter]||'Deals', items.length+' result'+(items.length!==1?'s':''));
 
   if (activeFilter==='woolworths'||activeFilter==='coles') {
@@ -854,13 +883,14 @@ var HOW_TO = {
   coupon:'Copy the code above. Go to the retailer site, add items to cart, paste at checkout. Check expiry.',
   fuel:'Price is at a specific station at time of scrape. Use motormouth.com.au with postcode 3030 to find cheapest near Point Cook.',
   entertainment:'Check the cinema website for booking. Discount Tuesdays must usually be booked on the day.',
+  gaming:'Click through to buy. For G2A and CDKeys you receive a key to activate on Steam/Xbox/PlayStation. Always check the region (AU or Global) before buying. Epic Games free games must be claimed during the offer window.',
   food:'Open the app (Uber Eats, Menulog or DoorDash) and apply the promo code at checkout.',
 };
 function howTo(cat,cpn){ if(cpn)return HOW_TO.coupon; return HOW_TO[cat]||'Click View deal to open the retailer page for full details.'; }
 
 // ── DEAL CARD ─────────────────────────────────────────────────────
 function catCls(cat){
-  var m={woolworths:'cg-grocery',coles:'cg-grocery',aldi:'cg-grocery',grocery:'cg-grocery',
+  var m={woolworths:'cg-grocery',coles:'cg-grocery',aldi:'cg-grocery',grocery:'cg-grocery',gaming:'cg-gaming',
     retail:'cg-retail',amazon:'cg-retail',chemist:'cg-chemist',travel:'cg-travel',
     telco:'cg-telco',nbn:'cg-nbn',energy:'cg-energy',coupon:'cg-coupon',
     fuel:'cg-fuel',insurance:'cg-ins',food:'cg-food',entertainment:'cg-retail'};
@@ -875,6 +905,7 @@ function vbadge(v,cat){
   if(nm.indexOf('big w')!==-1||nm.indexOf('bigw')!==-1) return'vbadge vb-bw';
   if(nm.indexOf('chemist')!==-1||nm.indexOf('priceline')!==-1) return'vbadge vb-cw';
   if(nm.indexOf('jb hi-fi')!==-1||nm.indexOf('jb hifi')!==-1) return'vbadge vb-jb';
+  if(cat==='gaming') return'vbadge vb-gaming';
   if(cat==='coupon') return'vbadge vb-cpn';
   if(cat==='insurance'||cat==='finance') return'vbadge vb-ins';
   if(cat==='fuel') return'vbadge vb-fuel';
