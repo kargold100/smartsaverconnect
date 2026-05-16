@@ -580,6 +580,16 @@ var LIVE = {
     {n:'CDKeys — Cheap Keys',           u:'https://www.cdkeys.com'},
     {n:'Green Man Gaming — Sales',      u:'https://www.greenmangaming.com/sale/'},
     {n:'OzBargain — Gaming Deals',      u:'https://www.ozbargain.com.au/cat/gaming'},
+    {n:'Microsoft 365 — Plans',              u:'https://www.microsoft.com/en-au/microsoft-365'},
+    {n:'Google One — Storage Plans',          u:'https://one.google.com/about/plans'},
+    {n:'Adobe Creative Cloud — Plans',        u:'https://www.adobe.com/au/creativecloud/plans.html'},
+    {n:'Apple One — Bundle',                  u:'https://www.apple.com/au/apple-one/'},
+    {n:'NordVPN — Current Deal',              u:'https://nordvpn.com/'},
+    {n:'1Password — Password Manager',        u:'https://1password.com/'},
+    {n:'ChatGPT Plus — OpenAI',               u:'https://chat.openai.com/'},
+    {n:'Claude Pro — Anthropic',              u:'https://claude.ai/upgrade'},
+    {n:'Canva Pro — Design Tool',             u:'https://www.canva.com/pricing/'},
+    {n:'Xero — AU Accounting',               u:'https://www.xero.com/au/pricing-plans/'},
   ]},
   ubereats: { name:'Uber Eats', links:[
     {n:'Uber One — Member Offers',   u:'https://www.ubereats.com/au/uber-one'},
@@ -763,6 +773,47 @@ var HARDCODED_PLANS = [
   {vendor:'CDKeys',cat:'gaming',title:'CDKeys — Cheap Keys (PC, Xbox, PlayStation, Nintendo)',desc:'Discounted game keys for all platforms. Usually 10-40% cheaper than official stores. Good for console credit too.',url:'https://www.cdkeys.com'},
   {vendor:'Green Man Gaming',cat:'gaming',title:'Green Man Gaming — Authorised Publisher Sales',desc:'Official publisher keys up to 85% off. Regular sales and flash deals on PC games.',url:'https://www.greenmangaming.com/sale/'},
   {vendor:'OzBargain',cat:'gaming',title:'OzBargain — Gaming Deals (Community)',desc:'Community-sourced gaming deals posted as they go live. Keys, console deals, peripherals and subscriptions.',url:'https://www.ozbargain.com.au/cat/gaming'},
+  // Microsoft / Office 365
+  {vendor:'Microsoft',cat:'gaming',title:'Microsoft 365 Personal — Word, Excel, PowerPoint + 1TB OneDrive',desc:'Full Office apps for 1 person plus 1TB OneDrive cloud storage. Check current AU pricing. Compare with authorised resellers like G2A or CDKeys for cheaper licence keys.',url:'https://www.microsoft.com/en-au/microsoft-365/personal'},
+  {vendor:'Microsoft',cat:'gaming',title:'Microsoft 365 Family — Up to 6 People',desc:'Office apps plus 1TB OneDrive per user for up to 6 people. Best value for households. Compare resellers vs Microsoft direct.',url:'https://www.microsoft.com/en-au/microsoft-365/family'},
+  {vendor:'Microsoft',cat:'gaming',title:'Microsoft Office 2024 Home & Student — One-Time Purchase',desc:'Permanent licence for Word, Excel and PowerPoint. No subscription. Compare prices on G2A and CDKeys vs Microsoft direct before buying.',url:'https://www.microsoft.com/en-au/d/office-home-student-2024'},
+  {vendor:'Microsoft',cat:'gaming',title:'Microsoft Copilot Pro — AI in Word, Excel & Outlook',desc:'Adds AI assistant to Microsoft 365 apps. Requires an active Microsoft 365 subscription. Check current AU pricing.',url:'https://www.microsoft.com/en-au/store/b/copilotpro'},
+  {vendor:'Microsoft',cat:'gaming',title:'Microsoft Azure — Free Credits & Always-Free Services',desc:'Azure free account includes $200 credit for 30 days plus 55+ always-free services. Free for 12 months on popular services.',url:'https://azure.microsoft.com/en-au/free/'},
+  {vendor:'Microsoft',cat:'gaming',title:'Microsoft Visual Studio Community — Free IDE for Developers',desc:'Visual Studio Community edition is free for individuals and small teams. Full-featured IDE for .NET, C++, Python and more.',url:'https://visualstudio.microsoft.com/free-developer-offers/'},
+  // Google
+  {vendor:'Google',cat:'gaming',title:'Google One — Cloud Storage Plans (Drive, Gmail, Photos)',desc:'Expands storage across Drive, Gmail and Google Photos. Plans from 100GB (~$2.49/month) to 2TB (~$12.99/month) in AU. Family sharing included.',url:'https://one.google.com/about/plans'},
+  {vendor:'Google',cat:'gaming',title:'Google Workspace — Business Email, Drive & Meet',desc:'Gmail for business, Drive, Docs, Sheets, Meet and more. 14-day free trial. Business Starter includes 30GB storage per user.',url:'https://workspace.google.com/pricing'},
+  {vendor:'Google',cat:'gaming',title:'Google Play Gift Cards — Apps, Games, Movies & Subscriptions',desc:'Available at Coles, Woolworths and online. Use for Google Play apps, games, movies, books and YouTube Premium subscriptions.',url:'https://play.google.com/intl/en_au/about/giftcards/'},
+  {vendor:'Google',cat:'gaming',title:'Google Gemini Advanced — AI Premium via Google One',desc:'Google Gemini Advanced via Google One AI Premium plan. Includes 2TB storage plus AI features across Google apps. Check current AU pricing.',url:'https://one.google.com/about/ai-premium'},
+  // Apple
+  {vendor:'Apple',cat:'gaming',title:'Apple One — Bundle (Music, TV+, Arcade, iCloud+)',desc:'Bundles Apple Music, TV+, Arcade and iCloud+ in one plan. Individual or Family options. Often cheaper than buying services separately.',url:'https://www.apple.com/au/apple-one/'},
+  {vendor:'Apple',cat:'gaming',title:'Apple iCloud+ — Storage Plans (50GB $1.49/month AU)',desc:'iCloud+ plans from $1.49/month (50GB) to $17.99/month (2TB) in AU. Includes Hide My Email, Private Relay and HomeKit Secure Video.',url:'https://www.apple.com/au/icloud/'},
+  {vendor:'Apple',cat:'gaming',title:'Apple Music — Individual, Family & Student Plans',desc:'100M+ songs. Student plan ~$6.99/month, Individual ~$11.99/month, Family (6 users) ~$17.99/month in AU. 1 month free trial.',url:'https://www.apple.com/au/apple-music/'},
+  {vendor:'Apple',cat:'gaming',title:'Apple TV+ — Streaming Service',desc:'Apple originals including Severance, Ted Lasso and The Morning Show. Often included free with new Apple device purchase.',url:'https://www.apple.com/au/apple-tv-plus/'},
+  // Adobe
+  {vendor:'Adobe',cat:'gaming',title:'Adobe Creative Cloud All Apps — Photography, Design & Video',desc:'Photoshop, Illustrator, Premiere Pro, After Effects and 20+ apps. Student & teacher plans ~65% cheaper with valid .edu email.',url:'https://www.adobe.com/au/creativecloud/plans.html'},
+  {vendor:'Adobe',cat:'gaming',title:'Adobe CC Student & Teacher Plan — ~65% Off',desc:'Verified students and teachers get massive discount on Adobe CC All Apps. Requires valid .edu email or institutional verification.',url:'https://www.adobe.com/au/creativecloud/buy/students.html'},
+  {vendor:'Adobe',cat:'gaming',title:'Adobe Acrobat Pro — PDF Editor',desc:'Create, edit, sign and secure PDFs. Compare vs free alternatives like PDFgear before buying the subscription.',url:'https://www.adobe.com/au/acrobat/acrobat-pro.html'},
+  {vendor:'Adobe',cat:'gaming',title:'Adobe Express — Free Online Design Tool',desc:'Adobe Express (formerly Spark) is free for basic use. Create social graphics, flyers and short videos quickly. No design experience needed.',url:'https://www.adobe.com/au/express/'},
+  // Security & Privacy
+  {vendor:'NordVPN',cat:'gaming',title:'NordVPN — VPN Service (Regular 60-70% Off Deals)',desc:'NordVPN regularly discounts 2-year plans by 60-70%. Always check the current deal before buying — price changes frequently. Good for streaming AU content overseas.',url:'https://nordvpn.com/'},
+  {vendor:'1Password',cat:'gaming',title:'1Password — Password Manager',desc:'Individual ~$3.99/month AU, Family (5 users) ~$6.99/month. Student discount available. Stores passwords, cards and secure notes.',url:'https://1password.com/'},
+  {vendor:'Bitdefender',cat:'gaming',title:'Bitdefender Total Security — Antivirus & Internet Security',desc:'Top-rated antivirus for Windows, Mac, iOS and Android. First-year subscription often 50% off. Compares well with Norton and McAfee.',url:'https://www.bitdefender.com/en-au/'},
+  {vendor:'Norton',cat:'gaming',title:'Norton 360 — Antivirus, VPN & Dark Web Monitoring',desc:'Antivirus plus VPN plus dark web monitoring in one bundle. First-year pricing often 50-70% off. Check current AU deal before buying.',url:'https://au.norton.com/norton-360'},
+  {vendor:'Malwarebytes',cat:'gaming',title:'Malwarebytes Free — Remove Existing Malware',desc:'Malwarebytes free version scans and removes existing malware. Premium adds real-time protection. Compare with Windows Defender which is built in and free.',url:'https://www.malwarebytes.com'},
+  // AI Tools
+  {vendor:'ChatGPT / OpenAI',cat:'gaming',title:'ChatGPT Plus — GPT-4o Access (~$29 AUD/month)',desc:'ChatGPT Plus gives access to GPT-4o, DALL-E image generation and advanced data analysis. Available on G2A cheaper or direct from OpenAI.',url:'https://chat.openai.com/'},
+  {vendor:'Claude / Anthropic',cat:'gaming',title:'Claude Pro — AI Assistant Premium Plan',desc:'Claude Pro gives priority access, higher usage limits and early access to new features. Great for writing, coding and analysis tasks.',url:'https://claude.ai/upgrade'},
+  {vendor:'Midjourney',cat:'gaming',title:'Midjourney — AI Image Generation (from ~$12 USD/month)',desc:'Midjourney generates stunning images from text prompts. Basic plan ~$12 USD/month. Access via Discord. No free tier currently.',url:'https://www.midjourney.com/account/'},
+  {vendor:'Canva',cat:'gaming',title:'Canva Pro — Design Tool (Free for Students & Non-Profits)',desc:'Canva Pro is free for students (via Canva for Education) and registered non-profits. All others can use the free tier or check current Pro pricing.',url:'https://www.canva.com/pricing/'},
+  {vendor:'Notion',cat:'gaming',title:'Notion — Free for Personal Use',desc:'Notion is free for personal use with unlimited pages and blocks. Plus plan adds unlimited file uploads. Education plan is free with .edu email.',url:'https://www.notion.so/pricing'},
+  // Productivity & Collaboration
+  {vendor:'Slack',cat:'gaming',title:'Slack — Team Messaging (Free Plan Available)',desc:'Slack free plan for small teams with 90-day message history. Pro plan adds unlimited history and more integrations. Check current AU pricing.',url:'https://slack.com/intl/en-au/pricing'},
+  {vendor:'Zoom',cat:'gaming',title:'Zoom — Free 40-Min Meetings (Pro Removes Limit)',desc:'Zoom free plan for meetings up to 40 minutes with 100 participants. Pro plan removes the time limit. Check current AU pricing.',url:'https://zoom.us/pricing'},
+  {vendor:'Dropbox',cat:'gaming',title:'Dropbox — Cloud Storage (Compare vs Google One & iCloud)',desc:'Dropbox Plus, Professional and Business plans. Compare per-GB cost vs Google One and iCloud+ for best value in AU.',url:'https://www.dropbox.com/plans'},
+  // Australian Business Software
+  {vendor:'Xero',cat:'gaming',title:'Xero — Accounting Software for AU Small Business',desc:'Most popular cloud accounting for Australian SMBs. Starter, Standard and Premium plans. 30-day free trial. Often bundled with bookkeeping services.',url:'https://www.xero.com/au/pricing-plans/'},
+  {vendor:'MYOB',cat:'gaming',title:'MYOB — Australian Business Accounting & Payroll',desc:'MYOB AccountRight and Business plans for AU sole traders and companies. BAS and GST built in. Free trial available.',url:'https://www.myob.com/au/accounting-software'},
 ];
 
 function getHardcodedPool(cat) {
