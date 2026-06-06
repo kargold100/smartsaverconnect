@@ -484,6 +484,117 @@ var TTL = 2*60*60*1000;
 var deals=[], coupons=[], fuel=[], insurance=[];
 var activeFilter='all', searchQ='';
 
+
+// ── BROWSER-SIDE AMAZON DEAL FETCHER ─────────────────────────────
+// Apps Script can't reach Amazon (GCP IP blocked).
+// This runs in the USER'S BROWSER with their real home IP.
+// Called when user clicks the Amazon category or the Live Specials Amazon tab.
+
+var amazonDealsCache = null;
+var amazonFetchTime  = 0;
+var AMAZON_CACHE_TTL = 30 * 60 * 1000; // 30 min
+
+function fetchAmazonBrowser(callback) {
+  // Return cache if fresh
+  if (amazonDealsCache && (Date.now() - amazonFetchTime < AMAZON_CACHE_TTL)) {
+    callback(amazonDealsCache);
+    return;
+  }
+
+  // Show loading state
+  document.getElementById('infoArea').innerHTML =
+    '<div class="info-note">&#128257; Fetching live Amazon AU deals from your browser&hellip;</div>';
+
+  // Strategy 1: Amazon AU deals via allorigins CORS proxy
+  // allorigins routes through their own servers - may still be blocked
+  // Strategy 2: Use Amazon's public RSS feeds via rss2json.com (free tier, 10k/day)
+  var RSS_FEEDS = [
+    'https://www.amazon.com.au/gp/rss/movers-and-shakers/electronics/ref=zg_ms_elec_rss_e',
+    'https://www.amazon.com.au/gp/rss/new-releases/electronics',
+    'https://www.amazon.com.au/gp/rss/new-releases/computers',
+    'https://www.amazon.com.au/gp/rss/new-releases/home',
+  ];
+
+  var rssUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' +
+    encodeURIComponent(RSS_FEEDS[Math.floor(Math.random() * RSS_FEEDS.length)]) +
+    '&api_key=yqnqwf5dcqoeyohm4zsgwcgb7rj04dmdflmylxmg&count=20';
+
+  fetch(rssUrl)
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      document.getElementById('infoArea').innerHTML = '';
+      if (!data || !data.items || !data.items.length) {
+        // Fallback: show curated Amazon deal links
+        showAmazonFallback();
+        return;
+      }
+      var amzDeals = data.items.map(function(item) {
+        return {
+          vendor: 'Amazon AU',
+          cat: 'amazon',
+          title: item.title || 'Amazon Deal',
+          desc: (item.description || '').replace(/<[^>]+>/g,'').slice(0,115),
+          pNow: null, pWas: null, disc: 0,
+          url: item.link || 'https://www.amazon.com.au/deals',
+          ts: item.pubDate || ''
+        };
+      });
+      amazonDealsCache = amzDeals;
+      amazonFetchTime  = Date.now();
+      callback(amzDeals);
+    })
+    .catch(function(err) {
+      document.getElementById('infoArea').innerHTML = '';
+      showAmazonFallback();
+    });
+}
+
+function showAmazonFallback() {
+  // RSS fetch failed - show the best curated Amazon deal links as Live cards
+  var fallbackLinks = [
+    {title:'Amazon AU — All Deals & Offers',           url:'https://www.amazon.com.au/deals'},
+    {title:'Amazon AU — Today’s Lightning Deals',     url:'https://www.amazon.com.au/gp/goldbox'},
+    {title:'Amazon AU — Electronics Sale',             url:'https://www.amazon.com.au/deals?category=electronics'},
+    {title:'Amazon AU — Home & Kitchen',               url:'https://www.amazon.com.au/deals?category=home'},
+    {title:'Amazon AU — Computers & Accessories',      url:'https://www.amazon.com.au/deals?category=computers'},
+    {title:'Amazon AU — Toys & Games',                 url:'https://www.amazon.com.au/deals?category=toys'},
+    {title:'Amazon AU — Sports & Outdoors',            url:'https://www.amazon.com.au/deals?category=sports'},
+    {title:'Amazon AU — Beauty & Personal Care',       url:'https://www.amazon.com.au/deals?category=beauty'},
+    {title:'Amazon AU — Books',                        url:'https://www.amazon.com.au/deals?category=books'},
+    {title:'Amazon AU — Prime Member Deals',           url:'https://www.amazon.com.au/prime'},
+    {title:'Amazon AU — Subscribe & Save',             url:'https://www.amazon.com.au/subscribe-save'},
+    {title:'Amazon AU — New Releases (Electronics)',   url:'https://www.amazon.com.au/gp/new-releases/electronics'},
+    {title:'Amazon AU — Best Sellers',                 url:'https://www.amazon.com.au/gp/bestsellers'},
+    {title:'Amazon AU — Movers & Shakers',            url:'https://www.amazon.com.au/gp/movers-and-shakers'},
+    {title:'OzBargain — Amazon Deals (Community)',    url:'https://www.ozbargain.com.au/tag/amazon'},
+    {title:'Camel Camel Camel — Amazon Price Tracker',url:'https://camelcamelcamel.com.au'},
+  ];
+
+  var h = '<div class="deals-grid">';
+  fallbackLinks.forEach(function(lk) {
+    h += '<article class="deal-card cg-retail">'
+      + '<div class="card-body">'
+      + '<div class="card-top"><span class="vbadge vb-amz">Amazon AU</span></div>'
+      + '<h3 class="card-title">' + esc(lk.title) + '</h3>'
+      + '<p class="card-desc">Click to browse current deals directly on Amazon AU. Prices update in real time on their site.</p>'
+      + '<div class="price-cta"><span>&#128722;</span><span>Browse live deals on Amazon AU</span></div>'
+      + '</div>'
+      + '<div class="card-foot"><a class="live-btn" href="' + esc(lk.url) + '" target="_blank" rel="noopener">Browse Amazon &#8594;</a></div>'
+      + '<div class="how-wrap"><button class="how-btn" onclick="toggleHow(this)" aria-expanded="false" aria-controls="hw_amz_' + Math.random().toString(36).slice(2,7) + '">'
+      + '<span>&#128161; How to avail</span><span class="how-chev">&#8250;</span></button>'
+      + '<div class="how-body" id="hw_amz_' + Math.random().toString(36).slice(2,7) + '" hidden>'
+      + 'Add to cart and checkout on amazon.com.au. Prime members get free delivery. Lightning deals are time-limited — act quickly. Check Subscribe & Save for recurring discounts.'
+      + '</div></div>'
+      + '</article>';
+  });
+  h += '</div>';
+  document.getElementById('dealOutput').innerHTML = h;
+  document.getElementById('infoArea').innerHTML =
+    '<div class="info-note">Amazon blocks automated requests from servers. Showing direct deal links instead. '
+    + 'Click any to browse live prices on Amazon AU. '
+    + 'For price tracking, use <a href="https://camelcamelcamel.com.au" target="_blank" rel="noopener">CamelCamelCamel AU</a>.</div>';
+}
+
 // ── LIVE RETAILER DATA ──────────────────────────────────────────
 var LIVE = {
   woolworths: { name:'Woolworths', links:[
@@ -896,6 +1007,24 @@ function renderDeals() {
     energy:'Energy Deals', travel:'Travel Deals',
     entertainment:'Movies & Entertainment', gaming:'Software & Products', coupon:'Coupon Codes'};
   setTitle(labels[activeFilter]||'Deals', items.length+' result'+(items.length!==1?'s':''));
+
+  // For Amazon: try browser-side fetch first (Apps Script blocked by Amazon IP filter)
+  if (activeFilter==='amazon') {
+    setTitle('Amazon AU Deals', 'Fetching live deals from your browser…');
+    fetchAmazonBrowser(function(amzDeals) {
+      if (amzDeals && amzDeals.length) {
+        var h = '<div class="deals-grid">';
+        amzDeals.slice(0,48).forEach(function(d) { h += dealCard(d); });
+        h += '</div>';
+        document.getElementById('dealOutput').innerHTML = h;
+        setTitle('Amazon AU Deals', amzDeals.length + ' live items from Amazon AU');
+        if (activeFilter === 'amazon') renderFuelSummary && null; // skip fuel
+      } else {
+        showAmazonFallback();
+      }
+    });
+    return;
+  }
 
   if (activeFilter==='woolworths'||activeFilter==='coles') {
     var rn = activeFilter.charAt(0).toUpperCase()+activeFilter.slice(1);
