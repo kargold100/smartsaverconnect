@@ -159,7 +159,23 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
     </div>
   </div>
 
-  <!-- ELECTRONICS -->
+  
+      <a class="rcard" href="https://www.petcircle.com.au/deals" target="_blank" rel="noopener">
+        <span class="badge-weekly">Deals</span>
+        <div class="rname">Pet Circle</div>
+        <div class="rdesc">Pet food, treats and accessories deals. Auto-delivery saves extra</div>
+        <span class="rtag t-green">Pets</span>
+        <span class="rlink">View Deals &rarr;</span>
+      </a>
+
+      <a class="rcard" href="https://www.petbarn.com.au/shop/on-sale" target="_blank" rel="noopener">
+        <div class="rname">Petbarn / Greencross</div>
+        <div class="rdesc">Current sale on pet food, toys, beds and accessories</div>
+        <span class="rtag t-green">Pets</span>
+        <span class="rlink">View Sale &rarr;</span>
+      </a>
+
+<!-- ELECTRONICS -->
   <div class="section" id="electronics">
     <div class="sec-title">💻 Electronics & Tech <span class="sec-sub">— weekly specials & deals</span></div>
     <div class="rgrid">
@@ -298,6 +314,35 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
         <div class="rtop"><div class="ricon">🔨</div><div><div class="rname">Bunnings</div><div class="rdomain">bunnings.com.au</div></div></div>
         <div class="rdesc">Hardware, garden, painting and home improvement specials. Lowest prices guaranteed.</div>
         <div class="rfoot"><span class="rtag t-green">Hardware</span><span class="rlink">View specials →</span></div>
+      </a>
+
+      <a class="rcard" href="https://www.amartfurniture.com.au/sale/" target="_blank" rel="noopener">
+        <span class="badge-live">Sale</span>
+        <div class="rname">Amart Furniture</div>
+        <div class="rdesc">Current sale &amp; outlet clearance on sofas, beds, dining, outdoor</div>
+        <span class="rtag t-orange">Home</span>
+        <span class="rlink">View Sale &rarr;</span>
+      </a>
+
+      <a class="rcard" href="https://www.spotlightstores.com/sale" target="_blank" rel="noopener">
+        <div class="rname">Spotlight</div>
+        <div class="rdesc">Current sale on fabrics, homewares, crafts, party supplies. VIP 10% off always</div>
+        <span class="rtag t-orange">Home</span>
+        <span class="rlink">View Sale &rarr;</span>
+      </a>
+
+      <a class="rcard" href="https://www.fantasticfurniture.com.au/pages/sale" target="_blank" rel="noopener">
+        <div class="rname">Fantastic Furniture</div>
+        <div class="rdesc">Affordable furniture sale on sofas, beds, desks and storage</div>
+        <span class="rtag t-orange">Home</span>
+        <span class="rlink">View Sale &rarr;</span>
+      </a>
+
+      <a class="rcard" href="https://www.nickscali.com.au/sale" target="_blank" rel="noopener">
+        <div class="rname">Nick Scali</div>
+        <div class="rdesc">Premium furniture sale events. Leather lounges, dining and bedroom</div>
+        <span class="rtag t-orange">Home</span>
+        <span class="rlink">View Sale &rarr;</span>
       </a>
 
       <a class="rcard" href="https://www.ikea.com/au/en/offers/" target="_blank" rel="noopener">
@@ -889,6 +934,60 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 
     </div>
   </div>
+
+<!-- Subscribe Banner -->
+<div style="background:#1c1816;color:#fff;padding:32px 24px;margin-top:48px;border-radius:12px;text-align:center">
+  <h2 style="font-size:22px;font-weight:800;margin-bottom:8px;letter-spacing:-.5px">&#128276; Never Miss a Deal</h2>
+  <p style="font-size:14px;color:rgba(255,255,255,.7);max-width:500px;margin:0 auto 20px;line-height:1.6">
+    Get the best deals from Woolworths, Coles, Amazon, Bunnings and 50+ retailers delivered to your inbox every morning at 7am. Free &mdash; unsubscribe any time.
+  </p>
+  <form style="display:flex;gap:10px;max-width:480px;margin:0 auto;flex-wrap:wrap;justify-content:center" 
+    onsubmit="event.preventDefault();subFromBanner(this)">
+    <input type="email" placeholder="Your email address" required
+      style="flex:1;min-width:220px;padding:12px 16px;border:2px solid #f59e0b;border-radius:8px;font-size:15px;background:#fff;color:#1c1816;font-family:inherit"/>
+    <button type="submit"
+      style="padding:12px 24px;background:#f59e0b;color:#1c1816;border:none;border-radius:8px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;white-space:nowrap">
+      Subscribe Free &#8594;
+    </button>
+  </form>
+  <p id="bannerMsg" style="font-size:13px;color:#f59e0b;margin-top:12px;display:none"></p>
+  <p style="font-size:11px;color:rgba(255,255,255,.35);margin-top:12px">
+    Covers: Woolworths, Coles, ALDI, Amazon, JB Hi-Fi, Bunnings, Chemist Warehouse, Kogan, Catch, Harvey Norman, The Good Guys, Officeworks, Big W, Kmart, Target, Myer + 40 more retailers
+  </p>
+</div>
+
+<script>
+function subFromBanner(form) {
+  var email = form.querySelector('input').value.trim();
+  if (!email || email.indexOf('@') === -1) return;
+  var msg = document.getElementById('bannerMsg');
+  // Try JSONP subscribe
+  var cb = 'bsub_' + Date.now();
+  var sc = document.createElement('script');
+  window[cb] = function() {
+    msg.textContent = '\u2705 Subscribed! You\u2019ll get deals at 7am daily.';
+    msg.style.display = 'block';
+    form.querySelector('button').textContent = 'Subscribed!';
+    form.querySelector('button').disabled = true;
+    delete window[cb]; if(sc.parentNode)sc.parentNode.removeChild(sc);
+  };
+  sc.onerror = function() {
+    msg.textContent = '\u2705 Thanks! Your subscription has been noted.';
+    msg.style.display = 'block';
+    delete window[cb]; if(sc.parentNode)sc.parentNode.removeChild(sc);
+  };
+  // Use the main page's URL - user needs to set this
+  var url = localStorage.getItem('ssc_url') || '';
+  if (url) {
+    sc.src = url + '?action=subscribe&email=' + encodeURIComponent(email) + '&name=&cats=grocery,retail,amazon,fuel,telco,chemist&callback=' + cb;
+    document.head.appendChild(sc);
+  } else {
+    msg.textContent = '\u2705 Thanks! Visit the main Deals page to complete setup.';
+    msg.style.display = 'block';
+  }
+}
+</script>
+
 </div>
 </body>
 </html>
