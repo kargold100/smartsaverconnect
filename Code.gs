@@ -1051,6 +1051,8 @@ function getHardcodedTelcoPlans() {
 function runFuel() {
   const t0 = Date.now(), ss = SpreadsheetApp.openById(SHEET_ID);
   let prices = [];
+
+  // Source 1: VIC Fuel Price Direct API (needs key from https://fuelprices.nsw.gov.au)
   const apiKey = PropertiesService.getScriptProperties().getProperty('VIC_FUEL_API_KEY')||'';
   if (apiKey) {
     const data = getJson('https://fppdirectapi-prod.azurewebsites.net/Subscriber/GetFullSiteDetails?countryId=21&geoRegionLevel=3&geoRegionId=4',
@@ -1065,10 +1067,80 @@ function runFuel() {
       console.log('VIC Fuel API: '+prices.length);
     }
   }
-  getFuelFallback().forEach(f=>{
-    const k=(f.stationName+'|'+f.fuelType).toLowerCase();
-    if (!prices.some(p=>(p.stationName+'|'+p.fuelType).toLowerCase()===k)) prices.push(f);
-  });
+
+  // Source 2: NSW FuelCheck API (free, no key needed for basic access)
+  if (prices.length === 0) {
+    try {
+      const nswData = getJson('https://api.onegov.nsw.gov.au/FuelPriceCheck/v1/fuel/prices/bylocation?latitude=-37.90&longitude=144.75&radius=15&fueltype=P95&sortby=price&sortascending=true',
+        {'apikey': 'empty', 'transactionid': 'ssc_' + Date.now(), 'requesttimestamp': new Date().toISOString()});
+      if (nswData && nswData.stations) {
+        nswData.stations.forEach((s, i) => {
+          if (i > 30) return;
+          prices.push({
+            stationName: s.name || s.stationname || '', brand: s.brand || guessBrand(s.name || ''),
+            fuelType: normFuel(s.fueltype || 'ULP'), priceCents: parseFloat(s.price) || 0,
+            suburb: s.suburb || '', postcode: s.postcode || '', state: 'VIC', scrapedAt: now()
+          });
+        });
+        console.log('NSW API fallback: ' + prices.length);
+      }
+    } catch(e) { console.log('NSW Fuel API: ' + e.message); }
+  }
+
+  // Source 3: Scrape Motormouth RSS (free, public)
+  if (prices.length === 0) {
+    try {
+      const mmText = get('https://www.motormouth.com.au/rss/fuel-prices-3030.xml');
+      if (mmText) {
+        const items = rssItems(mmText);
+        items.forEach((item, i) => {
+          const title = item.getChildText('title') || '';
+          const desc = item.getChildText('description') || '';
+          const priceMatch = desc.match(/([\d.]+)\s*c/i);
+          const typeMatch = title.match(/(ULP|E10|P95|P98|Diesel|LPG)/i);
+          if (priceMatch && typeMatch) {
+            prices.push({
+              stationName: title.replace(/\s*[-–]\s*\d.*/, '').trim(),
+              brand: guessBrand(title), fuelType: normFuel(typeMatch[1]),
+              priceCents: parseFloat(priceMatch[1]),
+              suburb: 'Point Cook', postcode: '3030', state: 'VIC', scrapedAt: now()
+            });
+          }
+        });
+        console.log('Motormouth RSS: ' + prices.length);
+      }
+    } catch(e) { console.log('Motormouth: ' + e.message); }
+  }
+
+  // Source 4: PetrolSpy API (free, public, covers VIC)
+  if (prices.length === 0) {
+    try {
+      const psData = getJson('https://petrolspy.com.au/webservice-1/station/box?neLat=-37.80&neLng=144.82&swLat=-37.95&swLng=144.68');
+      if (psData && psData.message && psData.message.list) {
+        psData.message.list.forEach(s => {
+          Object.entries(s.prices || {}).forEach(([fuelId, priceObj]) => {
+            const p = parseFloat(priceObj.amount);
+            if (!p || p < 80 || p > 350) return;
+            prices.push({
+              stationName: s.name||'', brand: s.brand||guessBrand(s.name||''),
+              fuelType: normFuel(fuelId), priceCents: p,
+              suburb: s.suburb||'Point Cook area', postcode: s.postcode||'3030',
+              state:'VIC', scrapedAt: now()
+            });
+          });
+        });
+        console.log('PetrolSpy: ' + prices.length);
+      }
+    } catch(e) { console.log('PetrolSpy: ' + e.message); }
+  }
+
+  // Source 5: Fallback hardcoded (last resort — clearly marked as estimates)
+  if (prices.length === 0) {
+    console.log('All fuel APIs failed. Using hardcoded fallback. For live prices, set VIC_FUEL_API_KEY in Script Properties.');
+    console.log('Free key signup: https://www.fuelcheck.nsw.gov.au/app/fuel-api-subscriber');
+    getFuelFallback().forEach(f => prices.push(f));
+  }
+
   const seen={},out=[];
   prices.forEach(p=>{
     if (!p.priceCents||!p.fuelType||p.priceCents<80||p.priceCents>350) return;

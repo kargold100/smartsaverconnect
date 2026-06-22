@@ -3,849 +3,677 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>SmartSaver Connect — Compare Prices</title>
+<title>SmartSaver Connect — Compare & Save</title>
+<meta name="description" content="Compare energy, insurance, NBN, mobile plans and fuel prices across Australian providers. Find the best deal."/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Lexend:wght@600;700;800;900&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#f5f4f0;--card:#fff;--text:#1a1a18;--muted:#6b6a65;--hint:#9e9d98;--border:rgba(0,0,0,.09);--accent:#1a6b3c;--accent-bg:#e8f5ee;--danger:#c0392b;--danger-bg:#fde8e6;--radius:12px;}
-@media(prefers-color-scheme:dark){:root{--bg:#18181a;--card:#232325;--text:#e8e6df;--muted:#9a9890;--hint:#6a6860;--border:rgba(255,255,255,.09);--accent:#4caf7a;--accent-bg:#0e2d1a;--danger:#e57373;--danger-bg:#2d0e0e;}}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-.wrap{max-width:980px;margin:0 auto;padding:1.5rem 1rem 4rem}
-.header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:1.75rem}
-.logo{font-size:20px;font-weight:800;letter-spacing:-.5px;text-decoration:none;color:var(--text)}.logo span{color:var(--accent)}
-.nav{display:flex;gap:10px;flex-wrap:wrap}
-.back{font-size:13px;color:var(--accent);text-decoration:none}.back:hover{text-decoration:underline}
-
-/* Search */
-.search-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:22px;margin-bottom:1.5rem}
-.search-card h1{font-size:19px;font-weight:700;margin-bottom:4px}
-.search-card p{font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.5}
-.srow{display:flex;gap:10px}
-.si{flex:1;padding:11px 16px;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:15px}
-.si:focus{outline:none;border-color:var(--accent)}
-.sb{padding:11px 22px;background:var(--accent);color:#fff;border:0;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap}
-.sb:hover{opacity:.88}
-.qrow{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
-.qchip{padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:var(--bg);color:var(--muted);font-size:12px;cursor:pointer;transition:all .15s}
-.qchip:hover,.qchip.on{background:var(--accent-bg);color:var(--accent);border-color:var(--accent)}
-
-/* Results table */
-.results-wrap{margin-bottom:2rem;display:none}
-.results-hdr{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:.75rem}
-.results-title{font-size:15px;font-weight:600}
-.sort-row{display:flex;align-items:center;gap:8px}
-.sort-lbl{font-size:12px;color:var(--muted)}
-select{padding:6px 10px;border:1px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);font-size:13px;cursor:pointer}
-.tbl-outer{overflow-x:auto}
-table{width:100%;border-collapse:collapse;background:var(--card);border-radius:var(--radius);overflow:hidden}
-thead tr{background:var(--bg)}
-th{text-align:left;padding:10px 14px;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--border);white-space:nowrap}
-td{padding:11px 14px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle}
-tr:last-child td{border-bottom:none}
-tr:hover td{background:var(--bg)}
-.vbadge{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px;white-space:nowrap}
-.v-ww{background:#e8f5e9;color:#2e7d32}.v-coles{background:#fce4ec;color:#c62828}
-.v-aldi{background:#e3f2fd;color:#1565c0}.v-amz{background:#fff3e0;color:#e65100}
-.v-bw{background:#e1f5fe;color:#01579b}.v-cw{background:#fbe9e7;color:#bf360c}
-.v-def{background:#f5f5f5;color:#424242}
-@media(prefers-color-scheme:dark){
-  .v-ww{background:#0d2e12;color:#81c784}.v-coles{background:#2d0b10;color:#ef9a9a}
-  .v-aldi{background:#0a1929;color:#90caf9}.v-amz{background:#1a1200;color:#ffcc80}
-  .v-bw{background:#001825;color:#81d4fa}.v-cw{background:#2a0e00;color:#ffab91}
-  .v-def{background:#2a2a2a;color:#bdbdbd}
+:root{
+  --bg:#f4f2ef;--surface:#fff;--s2:#edeae5;--s3:#e3dfda;
+  --border:#d8d4ce;--border2:#c4bfb8;
+  --ink:#1a1714;--ink2:#3d3832;--ink3:#6b6560;--ink4:#9e9890;
+  --teal:#0d6e63;--teal2:#0a5a52;--teal-bg:#e8f5f2;
+  --red:#c42b1c;--red-bg:#fef1ef;
+  --grn:#157a3e;--grn-bg:#eef8f1;
+  --blue:#1d5dbf;--blue-bg:#edf3fc;
+  --amber:#d97706;--amber-bg:#fef8ec;
+  --fh:'Lexend',system-ui,sans-serif;--fb:'Inter',system-ui,sans-serif;
+  --r:12px;--s:0 2px 8px rgba(0,0,0,.06);
 }
-.best-price{font-weight:700;color:var(--accent)}
-.best-price::after{content:" ✓";font-size:11px}
-.price-norm{font-weight:600}
-.pwas{font-size:11px;color:var(--hint);text-decoration:line-through;margin-left:4px}
-.save-badge{font-size:11px;padding:2px 7px;border-radius:10px;background:var(--danger-bg);color:var(--danger);display:inline-block}
-.view-link{color:var(--accent);text-decoration:none;font-size:12px}
-.view-link:hover{text-decoration:underline}
-.item-title{font-weight:500;line-height:1.4}
-.item-desc{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.4}
-/* Mobile cards */
-.cards-wrap{display:none;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-bottom:2rem}
-@media(max-width:620px){.tbl-outer{display:none}.cards-wrap{display:grid}}
-.cmp-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:13px;display:flex;flex-direction:column;gap:7px}
-.cmp-card.best{border-color:var(--accent);border-width:2px}
-/* Stats */
-.stats-strip{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:1rem}
-.stat-pill{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:7px 13px;font-size:13px}
-.stat-num{font-weight:700;color:var(--accent)}
-/* Section */
-.sec-title{font-size:16px;font-weight:700;margin:2rem 0 1rem}
-.sec-sub{font-size:12px;color:var(--muted);font-weight:400;margin-left:6px}
-.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-bottom:2rem}
-.tcard{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;display:flex;flex-direction:column;gap:10px;text-decoration:none;color:var(--text);transition:border-color .15s}
-.tcard:hover{border-color:var(--accent)}
-.tcard.featured{border-color:var(--accent);border-width:2px}
-.ttop{display:flex;align-items:center;gap:10px}
-.ticon{font-size:24px;width:44px;height:44px;border-radius:10px;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.tname{font-size:15px;font-weight:600}
-.tdomain{font-size:11px;color:var(--muted)}
-.tdesc{font-size:13px;color:var(--muted);line-height:1.5;flex:1}
-.taction{font-size:12px;font-weight:600;color:var(--accent);display:flex;align-items:center;gap:6px;margin-top:auto;flex-wrap:wrap}
-.tag{display:inline-block;font-size:10px;padding:2px 7px;border-radius:10px;font-weight:600}
-.tag-free{background:var(--accent-bg);color:var(--accent)}
-.tag-live{background:#fff3e0;color:#e65100}
-.tag-au{background:#e3f2fd;color:#1565c0}
-.divider{height:1px;background:var(--border);margin:2rem 0}
-.empty{color:var(--muted);font-size:13px;padding:1rem 0}
-/* Tips box */
-.tips-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;margin-bottom:2rem}
-.tips-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-top:12px}
-.tip{display:flex;gap:10px;align-items:flex-start}
-.tip-icon{font-size:20px;flex-shrink:0}
-.tip-title{font-size:13px;font-weight:600;margin-bottom:3px}
-.tip-desc{font-size:12px;color:var(--muted);line-height:1.5}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#161413;--surface:#222120;--s2:#2c2a28;--s3:#363432;
+  --border:#444240;--border2:#555350;
+  --ink:#f0ece6;--ink2:#c4beb6;--ink3:#8a847c;--ink4:#5a5650;
+  --teal:#14b8a6;--teal2:#0d9488;--teal-bg:#0a1e1b;
+  --red:#f87171;--red-bg:#2d0e0e;
+  --grn:#4ade80;--grn-bg:#072615;
+  --blue:#60a5fa;--blue-bg:#0e1d3c;
+  --amber:#fbbf24;--amber-bg:#1c1500;
+}}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+body{font-family:var(--fb);font-size:15px;line-height:1.65;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased}
+:focus-visible{outline:3px solid var(--teal);outline-offset:3px;border-radius:4px}
+a{color:var(--blue);text-decoration:underline;text-underline-offset:2px}
+a:hover{color:var(--teal)}
+
+.wrap{max-width:1100px;margin:0 auto;padding:24px 16px 80px}
+.top-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:32px}
+.logo{font-family:var(--fh);font-size:18px;font-weight:800;color:var(--ink);text-decoration:none;letter-spacing:-.5px}
+.logo span{color:var(--teal)}
+.top-nav{display:flex;gap:12px;flex-wrap:wrap}
+.top-nav a{font-size:14px;font-weight:600;color:var(--teal);text-decoration:none;padding:8px 14px;border-radius:8px;border:1.5px solid var(--border);min-height:44px;display:flex;align-items:center}
+.top-nav a:hover{background:var(--teal-bg);border-color:var(--teal)}
+
+/* Hero */
+.hero{background:var(--teal);color:#fff;border-radius:var(--r);padding:40px 32px;margin-bottom:32px;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;right:-60px;bottom:-60px;width:200px;height:200px;background:rgba(255,255,255,.08);border-radius:50%}
+.hero h1{font-family:var(--fh);font-size:clamp(26px,3.5vw,38px);font-weight:900;letter-spacing:-1px;margin-bottom:8px;position:relative;z-index:1}
+.hero p{font-size:16px;color:rgba(255,255,255,.8);max-width:600px;line-height:1.7;position:relative;z-index:1}
+
+/* Tabs */
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}
+.tab{padding:10px 20px;border-radius:999px;border:2px solid var(--border);background:var(--surface);color:var(--ink2);font-size:14px;font-weight:700;cursor:pointer;font-family:var(--fh);min-height:44px;transition:all .15s}
+.tab:hover{border-color:var(--teal);color:var(--teal);background:var(--teal-bg)}
+.tab.active{background:var(--teal);color:#fff;border-color:var(--teal)}
+
+/* Panels */
+.panel{display:none;animation:fadeIn .3s ease}
+.panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* Cards */
+.compare-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-top:20px}
+.cc{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);padding:24px;box-shadow:var(--s);transition:all .15s;position:relative}
+.cc:hover{border-color:var(--teal);box-shadow:0 4px 16px rgba(0,0,0,.1)}
+.cc.featured{border-color:var(--teal);border-width:2px}
+.cc.featured::before{content:'Best Value';position:absolute;top:-1px;right:20px;background:var(--teal);color:#fff;font-family:var(--fh);font-size:11px;font-weight:800;padding:4px 12px;border-radius:0 0 8px 8px;letter-spacing:.03em}
+.cc-brand{font-family:var(--fh);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--ink3);margin-bottom:8px}
+.cc-title{font-family:var(--fh);font-size:17px;font-weight:800;color:var(--ink);margin-bottom:6px;line-height:1.3}
+.cc-desc{font-size:13px;color:var(--ink2);line-height:1.6;margin-bottom:12px}
+.cc-price{font-family:var(--fh);font-size:28px;font-weight:900;color:var(--teal);letter-spacing:-.5px}
+.cc-price small{font-size:14px;font-weight:600;color:var(--ink3)}
+.cc-features{list-style:none;margin:12px 0;display:flex;flex-direction:column;gap:6px}
+.cc-features li{font-size:13px;color:var(--ink2);padding-left:22px;position:relative;line-height:1.5}
+.cc-features li::before{content:'\2713';position:absolute;left:0;color:var(--grn);font-weight:700}
+.cc-cta{display:inline-flex;align-items:center;padding:10px 20px;background:var(--teal);color:#fff;border-radius:8px;font-size:14px;font-weight:700;text-decoration:none;min-height:44px;transition:background .15s}
+.cc-cta:hover{background:var(--teal2);color:#fff}
+.cc-note{font-size:12px;color:var(--ink3);margin-top:10px;line-height:1.5}
+
+/* Section headers */
+.sec-h{margin-bottom:16px}
+.sec-h h2{font-family:var(--fh);font-size:22px;font-weight:900;letter-spacing:-.5px;margin-bottom:4px}
+.sec-h p{font-size:14px;color:var(--ink3);line-height:1.6}
+
+/* Calc tool */
+.calc{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);padding:24px;margin-bottom:24px}
+.calc h3{font-family:var(--fh);font-size:17px;font-weight:800;margin-bottom:4px}
+.calc p{font-size:13px;color:var(--ink3);margin-bottom:16px}
+.calc-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+@media(max-width:500px){.calc-row{grid-template-columns:1fr}}
+.calc label{font-size:13px;font-weight:700;color:var(--ink2);margin-bottom:4px;display:block}
+.calc input,.calc select{width:100%;padding:10px 14px;border:1.5px solid var(--border2);border-radius:8px;font-size:15px;font-family:inherit;color:var(--ink);background:var(--surface);min-height:44px}
+.calc input:focus,.calc select:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(13,110,99,.15)}
+.calc-btn{padding:12px 24px;background:var(--teal);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--fh);min-height:44px;transition:background .15s;margin-top:4px}
+.calc-btn:hover{background:var(--teal2)}
+.calc-result{margin-top:16px;padding:16px;background:var(--teal-bg);border-radius:8px;display:none}
+.calc-result h4{font-family:var(--fh);font-size:15px;font-weight:800;color:var(--teal);margin-bottom:4px}
+.calc-result p{font-size:14px;color:var(--ink2);line-height:1.6;margin:0}
+
+/* Links grid */
+.links-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;margin-top:16px}
+.link-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin-top:20px}
+.link-card{display:flex;align-items:center;gap:12px;padding:14px 18px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);text-decoration:none;color:var(--ink);transition:all .15s;min-height:44px}
+.link-card:hover{border-color:var(--teal);background:var(--teal-bg)}
+.lc-icon{font-size:20px;flex-shrink:0}
+.lc-text{font-size:14px;font-weight:600;line-height:1.3}
+.lc-sub{font-size:12px;color:var(--ink3);font-weight:400}
+
+/* Footer */
+.foot{text-align:center;margin-top:48px;padding:24px;font-size:13px;color:var(--ink3);line-height:1.7;border-top:1px solid var(--border)}
 </style>
 </head>
 <body>
 <div class="wrap">
-
-  <div class="header">
+  <div class="top-bar">
     <a class="logo" href="index.html">SmartSaver<span>Connect</span></a>
-    <div class="nav">
-      <a class="back" href="index.html">&#8592; Deals</a>
-      <a class="back" href="catalogues.html">&#128214; Catalogues</a>
-      <a class="back" href="catalogue-search.html">&#128269; Catalogue Search</a>
-      <a class="back" href="cashback.html">&#128176; Cashback</a>
-    </div>
+    <nav class="top-nav" aria-label="Main navigation">
+      <a href="index.html">&#128176; Deals</a>
+      <a href="catalogues.html">&#128214; Catalogues</a>
+      <a href="cashback.html">&#128184; Cashback</a>
+    </nav>
   </div>
 
-  <!-- Search -->
-  <div class="search-card">
-    <h1>Price Comparison</h1>
-    <p>Search your saved deals below and compare prices across retailers. Use the live comparison tools further down to search all products in real time.</p>
-    <div class="srow">
-      <input class="si" id="searchInput" type="text"
-        placeholder="e.g. kettle chips, milk, headphones, protein powder..."
-        onkeydown="if(event.key==='Enter')doSearch()"/>
-      <button class="sb" onclick="doSearch()">Search</button>
-    </div>
-    <div class="qrow">
-      <span class="qchip" onclick="quickSearch(this,'milk')">Milk</span>
-      <span class="qchip" onclick="quickSearch(this,'coffee')">Coffee</span>
-      <span class="qchip" onclick="quickSearch(this,'chips')">Chips</span>
-      <span class="qchip" onclick="quickSearch(this,'headphones')">Headphones</span>
-      <span class="qchip" onclick="quickSearch(this,'protein powder')">Protein</span>
-      <span class="qchip" onclick="quickSearch(this,'vitamin')">Vitamins</span>
-      <span class="qchip" onclick="quickSearch(this,'nappies')">Nappies</span>
-      <span class="qchip" onclick="quickSearch(this,'washing powder')">Washing</span>
-      <span class="qchip" onclick="quickSearch(this,'shampoo')">Shampoo</span>
-      <span class="qchip" onclick="quickSearch(this,'olive oil')">Olive oil</span>
-      <span class="qchip" onclick="quickSearch(this,'flight')">Flights</span>
-      <span class="qchip" onclick="quickSearch(this,'hotel')">Hotels</span>
-      <span class="qchip" onclick="quickSearch(this,'flight')">Flights</span>
-      <span class="qchip" onclick="quickSearch(this,'hotel')">Hotels</span>
-    </div>
+  <div class="hero">
+    <h1>Compare &amp; Save</h1>
+    <p>Compare energy, insurance, NBN, mobile plans and fuel prices across Australian providers. Find the best deal for your household.</p>
   </div>
 
-  <!-- Search results (shown after searching) -->
-  <div class="results-wrap" id="resultsWrap">
-    <div class="results-hdr">
-      <div class="results-title" id="resultsTitle">Results</div>
-      <div class="sort-row">
-        <span class="sort-lbl">Sort:</span>
-        <select id="sortSel" onchange="renderResults()">
-          <option value="price_asc">Price low to high</option>
-          <option value="price_desc">Price high to low</option>
-          <option value="discount">Biggest discount</option>
-          <option value="retailer">Retailer A-Z</option>
-        </select>
+  <div class="tabs" role="tablist" aria-label="Comparison categories">
+    <button class="tab active" role="tab" aria-selected="true" onclick="showPanel('energy',this)">&#9889; Energy</button>
+    <button class="tab" role="tab" aria-selected="false" onclick="showPanel('insurance',this)">&#128737; Insurance</button>
+    <button class="tab" role="tab" aria-selected="false" onclick="showPanel('nbn',this)">&#127760; NBN</button>
+    <button class="tab" role="tab" aria-selected="false" onclick="showPanel('mobile',this)">&#128241; Mobile</button>
+    <button class="tab" role="tab" aria-selected="false" onclick="showPanel('fuel',this)">&#9981; Fuel</button>
+    <button class="tab" role="tab" aria-selected="false" onclick="showPanel('health',this)">&#127973; Health Insurance</button>
+    <button class="tab" role="tab" aria-selected="false" onclick="showPanel('mortgage',this)">&#127968; Mortgage</button>
+    <button class="tab" role="tab" aria-selected="false" onclick="showPanel('carloan',this)">&#128663; Car Loan</button>
+    <button class="tab" role="tab" aria-selected="false" onclick="showPanel('creditcard',this)">&#128179; Credit Cards</button>
+    <button class="tab" role="tab" aria-selected="false" onclick="showPanel('tools',this)">&#128295; All Tools</button>
+  </div>
+
+  <!-- ═══ ENERGY ═══ -->
+  <div class="panel active" id="panel-energy" role="tabpanel">
+    <div class="sec-h">
+      <h2>&#9889; Compare Energy Providers</h2>
+      <p>Compare electricity and gas rates across Victorian providers. Always verify on <a href="https://www.energymadeeasy.gov.au" target="_blank" rel="noopener">Energy Made Easy</a> (government comparison tool) before switching.</p>
+    </div>
+
+    <div class="calc">
+      <h3>&#9889; Electricity Bill Estimator</h3>
+      <p>Estimate your quarterly electricity bill based on your usage. Average VIC household uses 4,000-5,000 kWh/year.</p>
+      <div class="calc-row">
+        <div><label for="eUsage">Daily usage (kWh)</label><input id="eUsage" type="number" value="14" min="1" max="100" step="0.5"/></div>
+        <div><label for="eRate">Usage rate (c/kWh)</label><input id="eRate" type="number" value="26" min="10" max="60" step="0.5"/></div>
+      </div>
+      <div class="calc-row">
+        <div><label for="eSupply">Daily supply charge (c/day)</label><input id="eSupply" type="number" value="100" min="50" max="200" step="1"/></div>
+        <div><label for="eSolar">Solar feed-in (kWh/day exported)</label><input id="eSolar" type="number" value="0" min="0" max="50" step="0.5"/></div>
+      </div>
+      <div class="calc-row">
+        <div><label for="eFIT">Feed-in tariff (c/kWh)</label><input id="eFIT" type="number" value="5" min="0" max="20" step="0.5"/></div>
+        <div></div>
+      </div>
+      <button class="calc-btn" onclick="calcEnergy()">Calculate Quarterly Bill</button>
+      <div class="calc-result" id="eResult"></div>
+    </div>
+
+    <div class="compare-grid">
+      <div class="cc featured">
+        <div class="cc-brand">Best for most VIC households</div>
+        <div class="cc-title">ReAmped Energy</div>
+        <div class="cc-desc">Consistently ranked cheapest on Energy Made Easy. Flat-rate, no lock-in, no exit fees.</div>
+        <ul class="cc-features">
+          <li>No lock-in contract, no exit fees</li>
+          <li>Flat usage rate — no conditional discounts</li>
+          <li>100% carbon-neutral plans available</li>
+          <li>Online account management</li>
+        </ul>
+        <a class="cc-cta" href="https://www.reamped.com.au" target="_blank" rel="noopener">Compare rates &#8594;</a>
+        <p class="cc-note">Always verify current rates on energymadeeasy.gov.au</p>
+      </div>
+      <div class="cc">
+        <div class="cc-brand">Best for solar + battery</div>
+        <div class="cc-title">Amber Electric</div>
+        <div class="cc-desc">Wholesale electricity pricing passed through directly. Best for homes with solar panels and battery storage.</div>
+        <ul class="cc-features">
+          <li>Wholesale market prices (can go negative!)</li>
+          <li>Best solar feed-in rates when demand is high</li>
+          <li>Real-time price dashboard in app</li>
+          <li>$15/month subscription fee</li>
+        </ul>
+        <a class="cc-cta" href="https://www.amber.com.au" target="_blank" rel="noopener">Check your address &#8594;</a>
+      </div>
+      <div class="cc">
+        <div class="cc-brand">Major retailer</div>
+        <div class="cc-title">Origin Energy</div>
+        <div class="cc-desc">Major retailer with Spike rewards for off-peak usage. Good for those who prefer a well-known brand.</div>
+        <ul class="cc-features">
+          <li>Spike rewards for using power off-peak</li>
+          <li>Bundle electricity + gas</li>
+          <li>Solar feed-in credits available</li>
+          <li>24/7 phone support</li>
+        </ul>
+        <a class="cc-cta" href="https://www.origin.com.au/plans/electricity" target="_blank" rel="noopener">View plans &#8594;</a>
+      </div>
+      <div class="cc">
+        <div class="cc-brand">Budget option</div>
+        <div class="cc-title">Tango Energy</div>
+        <div class="cc-desc">Victoria-only budget retailer. Simple plans with competitive rates for the VIC market.</div>
+        <ul class="cc-features">
+          <li>VIC-specific plans optimised for local grid</li>
+          <li>Simple pricing — easy to understand</li>
+          <li>No lock-in contracts</li>
+        </ul>
+        <a class="cc-cta" href="https://www.tangoenergy.com" target="_blank" rel="noopener">Compare &#8594;</a>
       </div>
     </div>
-    <div class="stats-strip" id="statsStrip"></div>
-    <!-- Retailer filter pills -->
-    <div id="retailerPills" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:.75rem"></div>
-    <div class="tbl-outer">
-      <table id="resultsTable">
-        <thead><tr>
-          <th>Retailer</th><th>Product</th><th>Price</th><th>Saving</th><th></th>
-        </tr></thead>
-        <tbody id="resultsBody"></tbody>
-      </table>
+
+    <div class="sec-h" style="margin-top:32px"><h2>&#128279; Official Comparison Tools</h2></div>
+    <div class="links-grid">
+      <a class="link-card" href="https://www.energymadeeasy.gov.au" target="_blank" rel="noopener">
+        <span class="lc-icon">&#127468;&#127463;</span>
+        <div><div class="lc-text">Energy Made Easy</div><div class="lc-sub">Government comparison tool — the gold standard</div></div>
+      </a>
+      <a class="link-card" href="https://compare.energy.vic.gov.au" target="_blank" rel="noopener">
+        <span class="lc-icon">&#9889;</span>
+        <div><div class="lc-text">Victorian Energy Compare</div><div class="lc-sub">VIC government tool — includes all VIC retailers</div></div>
+      </a>
+      <a class="link-card" href="https://www.canstarblue.com.au/electricity/" target="_blank" rel="noopener">
+        <span class="lc-icon">&#11088;</span>
+        <div><div class="lc-text">Canstar Blue — Electricity</div><div class="lc-sub">Independent ratings and reviews</div></div>
+      </a>
+      <a class="link-card" href="https://www.finder.com.au/energy" target="_blank" rel="noopener">
+        <span class="lc-icon">&#128270;</span>
+        <div><div class="lc-text">Finder — Energy Compare</div><div class="lc-sub">Compare plans with live pricing</div></div>
+      </a>
     </div>
-    <div class="cards-wrap" id="cardsWrap"></div>
-    <p style="font-size:12px;color:var(--muted);margin-top:10px">
-      Showing deals from your saved database. For live prices use the comparison tools below.
-    </p>
   </div>
 
-  <div class="divider"></div>
+  <!-- ═══ INSURANCE ═══ -->
+  <div class="panel" id="panel-insurance" role="tabpanel">
+    <div class="sec-h">
+      <h2>&#128737; Compare Insurance</h2>
+      <p>Compare car, home, health and travel insurance from Australian providers. Get multiple quotes before deciding.</p>
+    </div>
 
+    <div class="compare-grid">
+      <div class="cc featured">
+        <div class="cc-brand">Car Insurance</div>
+        <div class="cc-title">Budget Direct</div>
+        <div class="cc-desc">Consistently cheapest comprehensive car insurance in AU. Online-only model keeps costs low.</div>
+        <ul class="cc-features">
+          <li>Frequently cheapest on comparison sites</li>
+          <li>Lifetime guarantee on repairs</li>
+          <li>Choice of repairer</li>
+          <li>Online discount available</li>
+        </ul>
+        <a class="cc-cta" href="https://www.budgetdirect.com.au/car-insurance.html" target="_blank" rel="noopener">Get quote &#8594;</a>
+      </div>
+      <div class="cc">
+        <div class="cc-brand">Car Insurance — VIC</div>
+        <div class="cc-title">RACV</div>
+        <div class="cc-desc">Best for VIC residents. RACV member discounts, roadside assist bundle, local claims support.</div>
+        <ul class="cc-features">
+          <li>Multi-policy discount (home + car)</li>
+          <li>Lifetime guarantee on repairs</li>
+          <li>Emergency accommodation cover</li>
+          <li>RACV member discount</li>
+        </ul>
+        <a class="cc-cta" href="https://www.racv.com.au/insurance/car-insurance.html" target="_blank" rel="noopener">Get quote &#8594;</a>
+      </div>
+      <div class="cc">
+        <div class="cc-brand">Home & Contents</div>
+        <div class="cc-title">AAMI</div>
+        <div class="cc-desc">Well-known home and contents insurance. Good for Point Cook area with flood and storm cover.</div>
+        <ul class="cc-features">
+          <li>Combined home + contents option</li>
+          <li>New-for-old replacement</li>
+          <li>Temporary accommodation covered</li>
+        </ul>
+        <a class="cc-cta" href="https://www.aami.com.au/home-insurance.html" target="_blank" rel="noopener">Get quote &#8594;</a>
+      </div>
+      <div class="cc">
+        <div class="cc-brand">Travel Insurance</div>
+        <div class="cc-title">Cover-More</div>
+        <div class="cc-desc">Australia's largest travel insurer. Comprehensive plans for international and domestic travel.</div>
+        <ul class="cc-features">
+          <li>24/7 global emergency assistance</li>
+          <li>COVID-19 cover included</li>
+          <li>Multi-trip annual policies</li>
+        </ul>
+        <a class="cc-cta" href="https://www.covermore.com.au" target="_blank" rel="noopener">Get quote &#8594;</a>
+      </div>
+    </div>
 
-  <!-- Travel -->
-  <div class="sec-title">&#9992;&#65039; Travel Deals &amp; Flights <span class="sec-sub">&#8212; flights, hotels, holidays</span></div>
-  <div class="tgrid">
-    <a class="tcard featured" href="https://www.qantas.com/au/en/flight-deals.html" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#128992;</div><div><div class="tname">Qantas Sale Fares</div><div class="tdomain">qantas.com</div></div></div>
-      <div class="tdesc">Qantas current sale fares from Melbourne to domestic and international destinations. Check Happy Hour deals for extra savings.</div>
-      <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-au">AU</span> View deals &#8594;</div>
-    </a>
-    <a class="tcard featured" href="https://www.jetstar.com/au/en/deals" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#9992;</div><div><div class="tname">Jetstar Sale Fares</div><div class="tdomain">jetstar.com</div></div></div>
-      <div class="tdesc">Jetstar cheap flights from Melbourne. Check daily for sub-$100 domestic deals and international sale fares.</div>
-      <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-au">AU</span> View deals &#8594;</div>
-    </a>
-    <a class="tcard" href="https://www.virginaustralia.com/au/en/fares-and-offers/deals-and-offers/" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#128997;</div><div><div class="tname">Virgin Australia Deals</div><div class="tdomain">virginaustralia.com</div></div></div>
-      <div class="tdesc">Virgin Australia sale fares and Happy Hour deals every Tuesday. Velocity points offers also listed.</div>
-      <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-au">AU</span> View deals &#8594;</div>
-    </a>
-    <a class="tcard" href="https://www.webjet.com.au/flights/cheap-flights/" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#127756;</div><div><div class="tname">Webjet Cheap Flights</div><div class="tdomain">webjet.com.au</div></div></div>
-      <div class="tdesc">Webjet compares all AU airlines side-by-side. Set fare alerts to get notified when prices drop on your route.</div>
-      <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-au">AU</span> Compare flights &#8594;</div>
-    </a>
-    <a class="tcard" href="https://www.skyscanner.com.au" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#128064;</div><div><div class="tname">Skyscanner</div><div class="tdomain">skyscanner.com.au</div></div></div>
-      <div class="tdesc">Global flight comparison including budget airlines. Use "Everywhere" destination to find the cheapest place to fly from Melbourne.</div>
-      <div class="taction"><span class="tag tag-free">Free</span> Compare &#8594;</div>
-    </a>
-    <a class="tcard" href="https://www.google.com/travel/flights?hl=en-AU" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#128269;</div><div><div class="tname">Google Flights AU</div><div class="tdomain">google.com/flights</div></div></div>
-      <div class="tdesc">Google Flights price calendar shows the cheapest days to fly. Tracks fares and alerts you when prices change.</div>
-      <div class="taction"><span class="tag tag-free">Free</span> Compare &#8594;</div>
-    </a>
-    <a class="tcard" href="https://www.wotif.com/deals" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#127968;</div><div><div class="tname">Wotif Hotel Deals</div><div class="tdomain">wotif.com</div></div></div>
-      <div class="tdesc">Wotif last-minute hotel deals and weekend getaway packages across Australia. Great for Melbourne escapes.</div>
-      <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-au">AU</span> View deals &#8594;</div>
-    </a>
-    <a class="tcard" href="https://www.booking.com/deals.html" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#127955;</div><div><div class="tname">Booking.com Deals</div><div class="tdomain">booking.com</div></div></div>
-      <div class="tdesc">Genius member discounts up to 20% off hotels worldwide. Free to join. Best rates on international accommodation.</div>
-      <div class="taction"><span class="tag tag-free">Free</span> View deals &#8594;</div>
-    </a>
-    <a class="tcard" href="https://www.airbnb.com.au/s/Melbourne--VIC--Australia/homes" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#127960;</div><div><div class="tname">Airbnb Melbourne</div><div class="tdomain">airbnb.com.au</div></div></div>
-      <div class="tdesc">Airbnb weekend escapes from Melbourne. Filter by price, use Weekly discount filter for longer stays.</div>
-      <div class="taction"><span class="tag tag-free">Free</span> Browse &#8594;</div>
-    </a>
-    <a class="tcard" href="https://www.ozbargain.com.au/cat/travel/feed" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#129432;</div><div><div class="tname">OzBargain Travel</div><div class="tdomain">ozbargain.com.au</div></div></div>
-      <div class="tdesc">Community-posted travel deals &#8212; flight sales, hotel discounts, travel credit, and holiday package offers.</div>
-      <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-au">AU</span> Browse &#8594;</div>
-    </a>
-    <a class="tcard" href="https://www.finder.com.au/travel-insurance" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#128737;</div><div><div class="tname">Travel Insurance Compare</div><div class="tdomain">finder.com.au</div></div></div>
-      <div class="tdesc">Compare travel insurance from all AU insurers before your trip. Single trip, annual and family policies.</div>
-      <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-au">AU</span> Compare &#8594;</div>
-    </a>
-    <a class="tcard" href="https://www.pointhacks.com.au/deals/" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#127760;</div><div><div class="tname">Point Hacks</div><div class="tdomain">pointhacks.com.au</div></div></div>
-      <div class="tdesc">Australian frequent flyer and points deals &#8212; Qantas, Velocity and credit card bonus points offers.</div>
-      <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-au">AU</span> Browse &#8594;</div>
-    </a>
-  </div>
-  <div class="divider"></div>
-  <!-- Grocery comparison -->
-  <div class="sec-title">&#128722; Grocery Comparison <span class="sec-sub">&#8212; live prices from Woolworths &amp; Coles</span></div>
-  <div class="tgrid">
-    <a class="tcard featured" id="trolley-link" href="https://www.trolley.com.au" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#128722;</div><div><div class="tname">Trolley.com.au</div><div class="tdomain">trolley.com.au</div></div></div>
-      <div class="tdesc">Side-by-side Woolworths vs Coles price comparison for every grocery item. Free, live, no login. Best grocery comparison tool in Australia.</div>
-      <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-live">Live prices</span><span class="tag tag-au">AU</span> Compare now &#8594;</div>
-    </a>
-    <a class="tcard" id="ww-link" href="https://www.woolworths.com.au/shop/specials/all" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#129001;</div><div><div class="tname">Woolworths Specials</div><div class="tdomain">woolworths.com.au</div></div></div>
-      <div class="tdesc">All current Woolworths half-price and weekly specials including Kettle Chips, fresh produce, dairy and more.</div>
-      <div class="taction"><span class="tag tag-free">Free</span> View specials &#8594;</div>
-    </a>
-    <a class="tcard" id="coles-link" href="https://www.coles.com.au/on-special" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#128308;</div><div><div class="tname">Coles On Special</div><div class="tdomain">coles.com.au</div></div></div>
-      <div class="tdesc">All Coles half-price and on-special items updated weekly. Browse by category to find what you need.</div>
-      <div class="taction"><span class="tag tag-free">Free</span> View specials &#8594;</div>
-    </a>
-    <a class="tcard" href="https://www.aldi.com.au/en/special-buys/" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#128309;</div><div><div class="tname">ALDI Special Buys</div><div class="tdomain">aldi.com.au</div></div></div>
-      <div class="tdesc">ALDI Wednesday and Saturday special buys. Limited stock, updated each week with new categories.</div>
-      <div class="taction"><span class="tag tag-free">Free</span> View buys &#8594;</div>
-    </a>
+    <div class="sec-h" style="margin-top:32px"><h2>&#128279; Insurance Comparison Sites</h2></div>
+    <div class="links-grid">
+      <a class="link-card" href="https://www.comparethemarket.com.au" target="_blank" rel="noopener">
+        <span class="lc-icon">&#128038;</span><div><div class="lc-text">Compare the Market</div><div class="lc-sub">Compare car, home, health, travel + more</div></div>
+      </a>
+      <a class="link-card" href="https://www.iselect.com.au" target="_blank" rel="noopener">
+        <span class="lc-icon">&#9989;</span><div><div class="lc-text">iSelect</div><div class="lc-sub">Compare insurance, energy, internet</div></div>
+      </a>
+      <a class="link-card" href="https://www.canstar.com.au/car-insurance/" target="_blank" rel="noopener">
+        <span class="lc-icon">&#11088;</span><div><div class="lc-text">Canstar — Car Insurance</div><div class="lc-sub">Star ratings and reviews</div></div>
+      </a>
+      <a class="link-card" href="https://www.finder.com.au/car-insurance" target="_blank" rel="noopener">
+        <span class="lc-icon">&#128270;</span><div><div class="lc-text">Finder — Car Insurance</div><div class="lc-sub">Compare 100+ policies side-by-side</div></div>
+      </a>
+      <a class="link-card" href="https://www.choosi.com.au" target="_blank" rel="noopener">
+        <span class="lc-icon">&#128176;</span><div><div class="lc-text">Choosi</div><div class="lc-sub">Compare life, income, travel insurance</div></div>
+      </a>
+    </div>
   </div>
 
-  <!-- Electronics comparison -->
-  <div class="sec-title">&#128187; Electronics &amp; General <span class="sec-sub">&#8212; compare across all AU retailers</span></div>
-  <div class="tgrid">
-    <a class="tcard featured" id="staticice-link" href="https://www.staticice.com.au" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#10052;&#65039;</div><div><div class="tname">StaticIce</div><div class="tdomain">staticice.com.au</div></div></div>
-      <div class="tdesc">Best electronics price comparison in AU. Searches Amazon AU, JB Hi-Fi, Mwave, PC Case Gear, Scorptec simultaneously with real prices.</div>
-      <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-live">Live</span><span class="tag tag-au">AU</span> Compare &#8594;</div>
-    </a>
-    <a class="tcard" id="getprice-link" href="https://www.getprice.com.au" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#127991;&#65039;</div><div><div class="tname">GetPrice</div><div class="tdomain">getprice.com.au</div></div></div>
-      <div class="tdesc">Price comparison across hundreds of AU retailers &#8212; electronics, appliances, toys, sports and more.</div>
-      <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-au">AU</span> Compare &#8594;</div>
-    </a>
-    <a class="tcard" id="pricespy-link" href="https://pricespy.com.au" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#128200;</div><div><div class="tname">PriceSpy</div><div class="tdomain">pricespy.com.au</div></div></div>
-      <div class="tdesc">Price history charts so you know if a deal is genuinely cheap. Essential for electronics and appliances.</div>
-      <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-au">AU</span> Check history &#8594;</div>
-    </a>
-    <a class="tcard" id="amz-link" href="https://www.amazon.com.au/gp/goldbox" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#128230;</div><div><div class="tname">Amazon AU Deals</div><div class="tdomain">amazon.com.au</div></div></div>
-      <div class="tdesc">Amazon AU Gold Box &#8212; live lightning deals updated hourly across all categories.</div>
-      <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-live">Hourly</span> View deals &#8594;</div>
-    </a>
-    <a class="tcard" href="https://www.ozbargain.com.au" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#129432;</div><div><div class="tname">OzBargain</div><div class="tdomain">ozbargain.com.au</div></div></div>
-      <div class="tdesc">Community deals across every AU retailer. Best source for coupon codes, price errors and limited-time offers.</div>
-      <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-au">AU</span> Browse &#8594;</div>
-    </a>
-    <a class="tcard" href="https://www.cashrewards.com.au" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#128176;</div><div><div class="tname">Cashrewards</div><div class="tdomain">cashrewards.com.au</div></div></div>
-      <div class="tdesc">Get cashback on Woolworths, Amazon AU, Chemist Warehouse and 2000+ retailers. Stacks with sale prices.</div>
-      <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-au">AU</span> Earn cashback &#8594;</div>
-    </a>
+  <!-- ═══ NBN ═══ -->
+  <div class="panel" id="panel-nbn" role="tabpanel">
+    <div class="sec-h">
+      <h2>&#127760; Compare NBN Plans</h2>
+      <p>Compare NBN internet plans by speed tier and price. All plans are no lock-in unless stated.</p>
+    </div>
+
+    <div class="calc">
+      <h3>&#127760; Which NBN Speed Do I Need?</h3>
+      <p>Select your household usage to find the right speed tier.</p>
+      <div class="calc-row">
+        <div><label for="nPeople">People in household</label><select id="nPeople"><option value="1">1 person</option><option value="2" selected>2 people</option><option value="3">3-4 people</option><option value="5">5+ people</option></select></div>
+        <div><label for="nUsage">Main usage</label><select id="nUsage"><option value="basic">Email, browsing, social media</option><option value="stream" selected>Streaming (Netflix, YouTube)</option><option value="gaming">Gaming + 4K streaming</option><option value="wfh">Work from home (video calls)</option><option value="heavy">Heavy — multiple 4K streams + gaming</option></select></div>
+      </div>
+      <button class="calc-btn" onclick="calcNBN()">Recommend Speed</button>
+      <div class="calc-result" id="nResult"></div>
+    </div>
+
+    <div class="compare-grid">
+      <div class="cc featured">
+        <div class="cc-brand">#1 Customer Satisfaction (ACCC)</div>
+        <div class="cc-title">Aussie Broadband</div>
+        <div class="cc-desc">Rated #1 by ACCC for customer satisfaction 2023-24. Melbourne-based support team. No throttling.</div>
+        <ul class="cc-features"><li>No lock-in contract</li><li>Melbourne-based support</li><li>No speed throttling</li><li>Free modem on some plans</li></ul>
+        <a class="cc-cta" href="https://www.aussiebb.com.au/nbn" target="_blank" rel="noopener">Check plans &#8594;</a>
+      </div>
+      <div class="cc">
+        <div class="cc-brand">Best signup deal</div>
+        <div class="cc-title">Superloop</div>
+        <div class="cc-desc">Frequently offers 3-6 months free on new connections. Competitive ongoing pricing.</div>
+        <ul class="cc-features"><li>Often months free on signup</li><li>No lock-in</li><li>Good typical evening speeds</li></ul>
+        <a class="cc-cta" href="https://www.superloop.com/consumer/nbn.html" target="_blank" rel="noopener">Check deals &#8594;</a>
+      </div>
+      <div class="cc">
+        <div class="cc-brand">Budget option</div>
+        <div class="cc-title">TPG</div>
+        <div class="cc-desc">Budget-friendly NBN plans. Good for basic users who want reliable internet at the lowest price.</div>
+        <ul class="cc-features"><li>Among cheapest NBN plans</li><li>No lock-in</li><li>Bundle with mobile for discount</li></ul>
+        <a class="cc-cta" href="https://www.tpg.com.au/nbn" target="_blank" rel="noopener">View plans &#8594;</a>
+      </div>
+      <div class="cc">
+        <div class="cc-brand">Best for bundles</div>
+        <div class="cc-title">Telstra</div>
+        <div class="cc-desc">Bundle discount with Telstra mobile plans. Best for families already on Telstra mobile.</div>
+        <ul class="cc-features"><li>Bundle discount with Telstra mobile</li><li>Smart modem included</li><li>Telstra Air hotspot access</li></ul>
+        <a class="cc-cta" href="https://www.telstra.com.au/internet/nbn" target="_blank" rel="noopener">Check bundles &#8594;</a>
+      </div>
+    </div>
+
+    <div class="sec-h" style="margin-top:32px"><h2>&#128279; NBN Comparison Tools</h2></div>
+    <div class="links-grid">
+      <a class="link-card" href="https://www.whistleout.com.au/Broadband" target="_blank" rel="noopener"><span class="lc-icon">&#128225;</span><div><div class="lc-text">WhistleOut — NBN Compare</div><div class="lc-sub">Compare every NBN plan side-by-side</div></div></a>
+      <a class="link-card" href="https://www.finder.com.au/nbn" target="_blank" rel="noopener"><span class="lc-icon">&#128270;</span><div><div class="lc-text">Finder — NBN Plans</div><div class="lc-sub">Filter by speed, price and provider</div></div></a>
+      <a class="link-card" href="https://www.canstarblue.com.au/internet/" target="_blank" rel="noopener"><span class="lc-icon">&#11088;</span><div><div class="lc-text">Canstar Blue — Internet</div><div class="lc-sub">Ratings and reviews of providers</div></div></a>
+    </div>
   </div>
 
-  <!-- Mobile plans -->
-  <div class="sec-title">&#128241; Mobile Plans <span class="sec-sub">&#8212; compare SIM-only &amp; prepaid</span></div>
-  <div class="tgrid">
-    <a class="tcard featured" href="https://www.finder.com.au/mobile-phone-plans" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#128269;</div><div><div class="tname">Finder Mobile Plans</div><div class="tdomain">finder.com.au</div></div></div>
-      <div class="tdesc">Compare every AU mobile plan &#8212; all networks, filter by data, price and inclusions. Telstra, Optus, Vodafone, ALDI Mobile, Boost, Kogan Mobile and more.</div>
-      <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-au">AU</span> Compare &#8594;</div>
-    </a>
-    <a class="tcard" href="https://www.whistleout.com.au/MobilePhones/Search" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#128225;</div><div><div class="tname">WhistleOut Mobile</div><div class="tdomain">whistleout.com.au</div></div></div>
-      <div class="tdesc">Comprehensive mobile plan comparison &#8212; filter by network, data, price and contract. Shows current deals.</div>
-      <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-au">AU</span> Compare &#8594;</div>
-    </a>
-    <a class="tcard" href="https://www.aldimobile.com.au/pages/plans" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#129001;</div><div><div class="tname">ALDI Mobile</div><div class="tdomain">aldimobile.com.au</div></div></div>
-      <div class="tdesc">Telstra network at ALDI prices. Prepaid with rollover data. $25 for 20GB &#8212; exceptional value.</div>
-      <div class="taction"><span class="tag tag-free">Free</span> View plans &#8594;</div>
-    </a>
-    <a class="tcard" href="https://www.boost.com.au/pages/plans" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#9889;</div><div><div class="tname">Boost Mobile</div><div class="tdomain">boost.com.au</div></div></div>
-      <div class="tdesc">Boost Mobile prepaid on Telstra network &#8212; competitive data at lower prices than Telstra direct.</div>
-      <div class="taction"><span class="tag tag-free">Free</span> View plans &#8594;</div>
-    </a>
-    <a class="tcard" href="https://www.koganmobile.com.au/plans/" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#128156;</div><div><div class="tname">Kogan Mobile</div><div class="tdomain">koganmobile.com.au</div></div></div>
-      <div class="tdesc">Kogan Mobile on Vodafone network. Large data plans at low prices. Frequent sale pricing.</div>
-      <div class="taction"><span class="tag tag-free">Free</span> View plans &#8594;</div>
-    </a>
-    <a class="tcard" href="https://www.lebara.com.au/prepaid-plans" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#127757;</div><div><div class="tname">Lebara Mobile</div><div class="tdomain">lebara.com.au</div></div></div>
-      <div class="tdesc">Optus network. Excellent for international calling &#8212; many countries included in plan price.</div>
-      <div class="taction"><span class="tag tag-free">Free</span> View plans &#8594;</div>
-    </a>
+  <!-- ═══ MOBILE ═══ -->
+  <div class="panel" id="panel-mobile" role="tabpanel">
+    <div class="sec-h">
+      <h2>&#128241; Compare Mobile Plans</h2>
+      <p>Compare prepaid and SIM-only plans from Australian carriers. Prices change frequently — always check the provider site.</p>
+    </div>
+    <div class="compare-grid">
+      <div class="cc featured"><div class="cc-brand">Best VIC coverage</div><div class="cc-title">Telstra Prepaid</div><div class="cc-desc">Australia's largest network. Best for regional VIC trips. Long-expiry plans available.</div><ul class="cc-features"><li>Best regional coverage in VIC</li><li>180-day and 365-day expiry plans</li><li>Data rollover on some plans</li></ul><a class="cc-cta" href="https://www.telstra.com.au/mobile-phones/prepaid-mobiles" target="_blank" rel="noopener">View plans &#8594;</a></div>
+      <div class="cc"><div class="cc-brand">Best value</div><div class="cc-title">Boost Mobile</div><div class="cc-desc">Runs on full Telstra network at budget prices. Annual prepaid plans are the best value per GB.</div><ul class="cc-features"><li>Full Telstra network access</li><li>Annual plans from ~$150/year</li><li>Data rollover</li></ul><a class="cc-cta" href="https://www.boost.com.au/pages/plans" target="_blank" rel="noopener">View plans &#8594;</a></div>
+      <div class="cc"><div class="cc-brand">Best for data</div><div class="cc-title">amaysim</div><div class="cc-desc">Unlimited data plans on Optus network. Data rollover and no lock-in. Good for heavy data users.</div><ul class="cc-features"><li>Unlimited data plans available</li><li>Optus 4G/5G network</li><li>Data rollover</li></ul><a class="cc-cta" href="https://www.amaysim.com.au/plans/mobile-plans" target="_blank" rel="noopener">View plans &#8594;</a></div>
+      <div class="cc"><div class="cc-brand">Best for international calls</div><div class="cc-title">Lebara</div><div class="cc-desc">Includes international calls to 40+ countries. Great for calling family overseas from Melbourne.</div><ul class="cc-features"><li>Calls to 40+ countries included</li><li>Vodafone network</li><li>No lock-in</li></ul><a class="cc-cta" href="https://www.lebara.com.au/prepaid-plans" target="_blank" rel="noopener">View plans &#8594;</a></div>
+    </div>
+    <div class="sec-h" style="margin-top:32px"><h2>&#128279; Mobile Comparison Tools</h2></div>
+    <div class="links-grid">
+      <a class="link-card" href="https://www.whistleout.com.au/MobilePhones" target="_blank" rel="noopener"><span class="lc-icon">&#128225;</span><div><div class="lc-text">WhistleOut — Mobile Plans</div><div class="lc-sub">Compare every AU mobile plan</div></div></a>
+      <a class="link-card" href="https://www.finder.com.au/mobile-plans" target="_blank" rel="noopener"><span class="lc-icon">&#128270;</span><div><div class="lc-text">Finder — Mobile Plans</div><div class="lc-sub">Filter by data, price and network</div></div></a>
+    </div>
   </div>
 
-  <!-- NBN & Internet -->
-  <div class="sec-title">&#127760; NBN &amp; Internet Plans <span class="sec-sub">&#8212; compare broadband providers</span></div>
-  <div class="tgrid">
-    <a class="tcard featured" href="https://www.finder.com.au/broadband" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#128269;</div><div><div class="tname">Finder NBN</div><div class="tdomain">finder.com.au</div></div></div>
-      <div class="tdesc">Compare NBN plans by speed, price and contract. Enter your address to see what is available and current signup bonuses.</div>
-      <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-au">AU</span> Compare NBN &#8594;</div>
-    </a>
-    <a class="tcard" href="https://www.whistleout.com.au/Broadband/Search" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#128225;</div><div><div class="tname">WhistleOut Broadband</div><div class="tdomain">whistleout.com.au</div></div></div>
-      <div class="tdesc">Enter your address to see available NBN plans. Compare speed, price and contract across all providers.</div>
-      <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-au">AU</span> Compare &#8594;</div>
-    </a>
-    <a class="tcard featured" href="https://www.aussiebb.com.au/nbn" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#129432;</div><div><div class="tname">Aussie Broadband</div><div class="tdomain">aussiebb.com.au</div></div></div>
-      <div class="tdesc">Rated #1 for customer satisfaction by ACCC. No throttling, Melbourne-based support. Check current signup deals.</div>
-      <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-au">AU</span> View plans &#8594;</div>
-    </a>
-    <a class="tcard" href="https://www.superloop.com/consumer/nbn.html" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#128260;</div><div><div class="tname">Superloop</div><div class="tdomain">superloop.com</div></div></div>
-      <div class="tdesc">Frequently offers months free or modem included on signup. Competitive on higher speed tiers.</div>
-      <div class="taction"><span class="tag tag-free">Free</span> View plans &#8594;</div>
-    </a>
-    <a class="tcard" href="https://www.tpg.com.au/nbn" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#128161;</div><div><div class="tname">TPG</div><div class="tdomain">tpg.com.au</div></div></div>
-      <div class="tdesc">Budget NBN plans, no lock-in contracts. Competitive on 50Mbps tier.</div>
-      <div class="taction"><span class="tag tag-free">Free</span> View plans &#8594;</div>
-    </a>
-    <a class="tcard" href="https://www.starlink.com/au" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#128760;</div><div><div class="tname">Starlink</div><div class="tdomain">starlink.com/au</div></div></div>
-      <div class="tdesc">SpaceX satellite internet. Best for rural areas without reliable NBN. No data cap.</div>
-      <div class="taction"><span class="tag tag-free">Free</span> Check availability &#8594;</div>
-    </a>
+  <!-- ═══ FUEL ═══ -->
+  <div class="panel" id="panel-fuel" role="tabpanel">
+    <div class="sec-h">
+      <h2>&#9981; Compare Fuel Prices</h2>
+      <p>Find the cheapest fuel near Point Cook (3030). Prices update every 2 hours from VIC government data.</p>
+    </div>
+    <div class="links-grid" style="margin-bottom:24px">
+      <a class="link-card" href="https://www.motormouth.com.au/fuel-price-map?postcode=3030" target="_blank" rel="noopener"><span class="lc-icon">&#128506;</span><div><div class="lc-text">MotorMouth — Live Fuel Map</div><div class="lc-sub">Real-time prices near Point Cook (3030)</div></div></a>
+      <a class="link-card" href="https://petrolspy.com.au/map/latlng/-37.90/144.75/z12" target="_blank" rel="noopener"><span class="lc-icon">&#128506;</span><div><div class="lc-text">PetrolSpy — Live Prices</div><div class="lc-sub">Community-reported fuel prices</div></div></a>
+      <a class="link-card" href="https://www.7eleven.com.au/fuel-prices" target="_blank" rel="noopener"><span class="lc-icon">&#9981;</span><div><div class="lc-text">7-Eleven Fuel Lock</div><div class="lc-sub">Lock in cheap price via app</div></div></a>
+      <a class="link-card" href="https://www.gasbuddy.com/go/melbourne" target="_blank" rel="noopener"><span class="lc-icon">&#9981;</span><div><div class="lc-text">GasBuddy Melbourne</div><div class="lc-sub">Price reports and trends</div></div></a>
+    </div>
+    <div class="calc">
+      <h3>&#9981; Fuel Cost Calculator</h3>
+      <p>Calculate your weekly fuel cost based on your driving habits.</p>
+      <div class="calc-row">
+        <div><label for="fKm">Weekly km driven</label><input id="fKm" type="number" value="200" min="10" max="2000"/></div>
+        <div><label for="fConsumption">Fuel consumption (L/100km)</label><input id="fConsumption" type="number" value="8" min="3" max="20" step="0.5"/></div>
+      </div>
+      <div class="calc-row">
+        <div><label for="fPrice">Fuel price (cents/litre)</label><input id="fPrice" type="number" value="185" min="100" max="300"/></div>
+        <div></div>
+      </div>
+      <button class="calc-btn" onclick="calcFuel()">Calculate</button>
+      <div class="calc-result" id="fResult"></div>
+    </div>
   </div>
 
-  <!-- Energy -->
-  <div class="sec-title">&#9889; Electricity &amp; Gas <span class="sec-sub">&#8212; compare energy plans across Australia</span></div>
-  <div class="tgrid">
-    <a class="tcard featured" href="https://www.energymadeeasy.gov.au" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#127963;&#65039;</div><div><div class="tname">Energy Made Easy</div><div class="tdomain">energymadeeasy.gov.au</div></div></div>
-      <div class="tdesc">Australian Government official comparison. Unbiased, run by the AER. Enter your bill to find genuine savings across all electricity and gas retailers.</div>
-      <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-au">Government</span> Compare &#8594;</div>
-    </a>
-    <a class="tcard featured" href="https://www.victorianenergysaver.vic.gov.au/energy-advice-for-households/compare-energy-offers" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#129001;</div><div><div class="tname">Victorian Energy Compare</div><div class="tdomain">victorianenergysaver.vic.gov.au</div></div></div>
-      <div class="tdesc">VIC Government tool specifically for Victorian households. Best for Point Cook. Uses your actual bill to find genuine savings.</div>
-      <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-au">VIC</span> Compare &#8594;</div>
-    </a>
-    <a class="tcard" href="https://www.finder.com.au/electricity" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#128269;</div><div><div class="tname">Finder Energy</div><div class="tdomain">finder.com.au</div></div></div>
-      <div class="tdesc">Compare electricity and gas plans across all states with current offers, signup bonuses and estimated annual costs.</div>
-      <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-au">AU</span> Compare &#8594;</div>
-    </a>
-    <a class="tcard" href="https://www.reamped.com.au" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#9889;</div><div><div class="tname">ReAmped Energy</div><div class="tdomain">reamped.com.au</div></div></div>
-      <div class="tdesc">Consistently one of the cheapest electricity retailers in AU. Flat-rate, no lock-in, no exit fees.</div>
-      <div class="taction"><span class="tag tag-free">Free</span> View plans &#8594;</div>
-    </a>
-    <a class="tcard" href="https://www.amber.com.au" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#127997;</div><div><div class="tname">Amber Electric</div><div class="tdomain">amber.com.au</div></div></div>
-      <div class="tdesc">Wholesale electricity prices in real time. Ideal for solar and battery homes &#8212; earn money during peak export.</div>
-      <div class="taction"><span class="tag tag-free">Free</span> View plans &#8594;</div>
-    </a>
-    <a class="tcard" href="https://www.solar.vic.gov.au/solar-victoria-rebate" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#9728;&#65039;</div><div><div class="tname">Solar Victoria Rebate</div><div class="tdomain">solar.vic.gov.au</div></div></div>
-      <div class="tdesc">VIC Government solar panel and battery rebates &#8212; up to $1,400 off installation. Check eligibility now.</div>
-      <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-au">VIC rebate</span> Check &#8594;</div>
-    </a>
+  <!-- ═══ HEALTH INSURANCE ═══ -->
+  <div class="panel" id="panel-health" role="tabpanel">
+    <div class="sec-h">
+      <h2>&#127973; Compare Health Insurance</h2>
+      <p>Compare private health insurance from Australian funds. Use the government tool to compare apples-to-apples.</p>
+    </div>
+    <div class="compare-grid">
+      <div class="cc featured"><div class="cc-brand">Budget fund</div><div class="cc-title">ahm</div><div class="cc-desc">ahm (owned by Medibank) offers simple, affordable plans. Good for young adults and families wanting basic cover.</div><ul class="cc-features"><li>Simple plan structure</li><li>New member offers</li><li>Extras included on most plans</li></ul><a class="cc-cta" href="https://www.ahm.com.au" target="_blank" rel="noopener">Get quote &#8594;</a></div>
+      <div class="cc"><div class="cc-brand">Largest fund</div><div class="cc-title">Medibank</div><div class="cc-desc">Australia's largest health insurer. Comprehensive hospital + extras plans. Frequent new member promotions.</div><ul class="cc-features"><li>Wide network of providers</li><li>Live Better rewards program</li><li>New member weeks-free offers</li></ul><a class="cc-cta" href="https://www.medibank.com.au/health-insurance/" target="_blank" rel="noopener">Get quote &#8594;</a></div>
+      <div class="cc"><div class="cc-brand">Not-for-profit</div><div class="cc-title">HCF</div><div class="cc-desc">Not-for-profit fund. Higher proportion of premiums returned as benefits. Good reputation for claims.</div><ul class="cc-features"><li>Not-for-profit — lower overheads</li><li>High claims satisfaction</li><li>Good dental/optical extras</li></ul><a class="cc-cta" href="https://www.hcf.com.au" target="_blank" rel="noopener">Get quote &#8594;</a></div>
+    </div>
+    <div class="sec-h" style="margin-top:32px"><h2>&#128279; Health Insurance Comparison</h2></div>
+    <div class="links-grid">
+      <a class="link-card" href="https://www.privatehealth.gov.au" target="_blank" rel="noopener"><span class="lc-icon">&#127468;&#127463;</span><div><div class="lc-text">PrivateHealth.gov.au</div><div class="lc-sub">Government comparison tool — compare ALL funds</div></div></a>
+      <a class="link-card" href="https://www.comparethemarket.com.au/health-insurance/" target="_blank" rel="noopener"><span class="lc-icon">&#128038;</span><div><div class="lc-text">Compare the Market — Health</div><div class="lc-sub">Compare hospital + extras side-by-side</div></div></a>
+      <a class="link-card" href="https://www.iselect.com.au/health-insurance/" target="_blank" rel="noopener"><span class="lc-icon">&#9989;</span><div><div class="lc-text">iSelect — Health Insurance</div><div class="lc-sub">Phone-assisted comparison</div></div></a>
+    </div>
   </div>
 
-  <!-- Fuel -->
-  <div class="sec-title">&#9981; Fuel Prices <span class="sec-sub">&#8212; live VIC prices</span></div>
-  <div class="tgrid">
-    <a class="tcard featured" id="motormouth-link" href="https://www.motormouth.com.au/fuel-price-map?postcode=3030" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#128506;&#65039;</div><div><div class="tname">MotorMouth</div><div class="tdomain">motormouth.com.au</div></div></div>
-      <div class="tdesc">Live fuel price map for VIC. Pre-loaded with Point Cook postcode &#8212; find cheapest petrol near you right now.</div>
-      <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-live">Live</span><span class="tag tag-au">AU</span> Find fuel &#8594;</div>
-    </a>
-    <a class="tcard" href="https://www.gasbuddy.com/go/melbourne" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#9981;</div><div><div class="tname">GasBuddy Melbourne</div><div class="tdomain">gasbuddy.com</div></div></div>
-      <div class="tdesc">Community-updated Melbourne fuel prices. Often covers cheaper stations that apps miss.</div>
-      <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-live">Live</span> Check &#8594;</div>
-    </a>
-    <a class="tcard" href="https://www.7eleven.com.au/fuel-prices" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">7&#65039;&#8419;</div><div><div class="tname">7-Eleven Fuel</div><div class="tdomain">7eleven.com.au</div></div></div>
-      <div class="tdesc">7-Eleven publishes live per-station prices. Lock a price in their app up to 2 hours before you fill up.</div>
-      <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-live">Live</span> View &#8594;</div>
-    </a>
+  <!-- ═══ ALL TOOLS ═══ -->
+  
+  <!-- MORTGAGE -->
+  <div class="panel" id="panel-mortgage" role="tabpanel">
+    <div class="sec-h"><h2>&#127968; Mortgage / Home Loan Calculator</h2>
+    <p>Calculate repayments and compare rates across Australian lenders.</p></div>
+    <div class="calc">
+      <h3>Repayment Calculator</h3>
+      <p>Enter your loan details to estimate monthly repayments and total interest.</p>
+      <div class="calc-row">
+        <div><label for="mLoan">Loan Amount ($)</label><input id="mLoan" type="number" value="600000" step="10000"/></div>
+        <div><label for="mRate">Interest Rate (%)</label><input id="mRate" type="number" value="6.2" step="0.1"/></div>
+      </div>
+      <div class="calc-row">
+        <div><label for="mYears">Loan Term (years)</label><input id="mYears" type="number" value="30" step="1"/></div>
+        <div><label for="mType">Repayment Type</label>
+          <select id="mType"><option value="pi">Principal &amp; Interest</option><option value="io">Interest Only</option></select></div>
+      </div>
+      <button class="calc-btn" onclick="calcMortgage()">Calculate Repayments</button>
+      <div class="calc-result" id="mResult"></div>
+    </div>
+    <div class="compare-grid">
+      <div class="cc featured"><div class="cc-brand">Ubank (NAB)</div><div class="cc-title">Neat Home Loan</div>
+        <div class="cc-desc">Low variable rate, no fees, 100% offset, online-only.</div>
+        <ul class="cc-features"><li>Low variable rate</li><li>$0 annual/monthly fees</li><li>100% offset account</li><li>Unlimited free redraws</li></ul>
+        <a class="cc-cta" href="https://www.ubank.com.au/home-loans" target="_blank" rel="noopener">Check rate &#8594;</a>
+        <p class="cc-note">Rates change daily. Always compare on RateCity or Canstar.</p></div>
+      <div class="cc"><div class="cc-brand">Athena</div><div class="cc-title">Variable Home Loan</div>
+        <div class="cc-desc">Auto rate-matching: drops your rate when they cut new customer rates.</div>
+        <ul class="cc-features"><li>Automatic rate drops</li><li>Zero fees (application, annual, exit)</li><li>Redraw facility</li></ul>
+        <a class="cc-cta" href="https://www.athena.com.au" target="_blank" rel="noopener">Check rate &#8594;</a></div>
+      <div class="cc"><div class="cc-brand">ING</div><div class="cc-title">Orange Advantage</div>
+        <div class="cc-desc">Variable rate with offset. Regular refinance cashback offers.</div>
+        <ul class="cc-features"><li>Offset account included</li><li>$0 monthly fees (with qualifying deposits)</li><li>Refinance cashback</li></ul>
+        <a class="cc-cta" href="https://www.ing.com.au/home-loans.html" target="_blank" rel="noopener">Check rate &#8594;</a></div>
+      <div class="cc"><div class="cc-brand">loans.com.au</div><div class="cc-title">Smart Home Loan</div>
+        <div class="cc-desc">Consistently among lowest variable rates in AU. Backed by FirstMac.</div>
+        <ul class="cc-features"><li>Ultra-low variable rate</li><li>No ongoing fees</li><li>Offset and redraw</li></ul>
+        <a class="cc-cta" href="https://www.loans.com.au/home-loans" target="_blank" rel="noopener">Check rate &#8594;</a></div>
+    </div>
+    <div class="link-row">
+      <a class="link-card" href="https://www.ratecity.com.au/home-loans" target="_blank" rel="noopener"><span class="lc-icon">&#128200;</span><div><div class="lc-text">RateCity</div><div class="lc-sub">Compare 100+ home loans</div></div></a>
+      <a class="link-card" href="https://www.canstar.com.au/home-loans/" target="_blank" rel="noopener"><span class="lc-icon">&#11088;</span><div><div class="lc-text">Canstar</div><div class="lc-sub">Award-winning comparisons</div></div></a>
+      <a class="link-card" href="https://moneysmart.gov.au/home-loans/mortgage-calculator" target="_blank" rel="noopener"><span class="lc-icon">&#127987;</span><div><div class="lc-text">MoneySmart.gov.au</div><div class="lc-sub">Government mortgage calculator</div></div></a>
+      <a class="link-card" href="https://www.finder.com.au/home-loans" target="_blank" rel="noopener"><span class="lc-icon">&#128269;</span><div><div class="lc-text">Finder</div><div class="lc-sub">50+ lenders compared</div></div></a>
+    </div>
   </div>
 
-  <!-- Insurance -->
-  <div class="sec-title">&#128737; Insurance <span class="sec-sub">&#8212; compare AU insurers</span></div>
-  <div class="tgrid">
-    <a class="tcard featured" href="https://www.finder.com.au/insurance" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#128269;</div><div><div class="tname">Finder Insurance</div><div class="tdomain">finder.com.au</div></div></div>
-      <div class="tdesc">Compare car, home, health, pet, travel and life insurance quotes from all major AU insurers in one place.</div>
-      <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-au">AU</span> Compare &#8594;</div>
-    </a>
-    <a class="tcard" href="https://www.comparethemarket.com.au" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#128021;</div><div><div class="tname">Compare The Market</div><div class="tdomain">comparethemarket.com.au</div></div></div>
-      <div class="tdesc">Real quotes from multiple insurers in minutes &#8212; car, home, health and life insurance.</div>
-      <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-au">AU</span> Compare &#8594;</div>
-    </a>
-    <a class="tcard" href="https://www.racv.com.au/insurance" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#128664;</div><div><div class="tname">RACV Insurance</div><div class="tdomain">racv.com.au</div></div></div>
-      <div class="tdesc">RACV member discounts on car, home, health and travel insurance. Strong value for VIC residents.</div>
-      <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-au">VIC</span> View &#8594;</div>
-    </a>
+  <!-- CAR LOAN -->
+  <div class="panel" id="panel-carloan" role="tabpanel">
+    <div class="sec-h"><h2>&#128663; Car Loan Calculator</h2>
+    <p>Calculate car loan repayments and compare rates across Australian lenders.</p></div>
+    <div class="calc">
+      <h3>Car Loan Repayment Calculator</h3>
+      <div class="calc-row">
+        <div><label for="cPrice">Vehicle Price ($)</label><input id="cPrice" type="number" value="35000" step="1000"/></div>
+        <div><label for="cDeposit">Deposit ($)</label><input id="cDeposit" type="number" value="5000" step="500"/></div>
+      </div>
+      <div class="calc-row">
+        <div><label for="cRate">Interest Rate (%)</label><input id="cRate" type="number" value="7.5" step="0.1"/></div>
+        <div><label for="cYears">Loan Term (years)</label><input id="cYears" type="number" value="5" step="1"/></div>
+      </div>
+      <button class="calc-btn" onclick="calcCarLoan()">Calculate Repayments</button>
+      <div class="calc-result" id="cResult"></div>
+    </div>
+    <div class="compare-grid">
+      <div class="cc featured"><div class="cc-brand">loans.com.au</div><div class="cc-title">Low Rate Car Loan</div>
+        <div class="cc-desc">Among lowest fixed car loan rates in AU.</div>
+        <ul class="cc-features"><li>Low fixed rate</li><li>No ongoing fees</li><li>Borrow up to $100k</li></ul>
+        <a class="cc-cta" href="https://www.loans.com.au/car-loans" target="_blank" rel="noopener">Check rate &#8594;</a></div>
+      <div class="cc"><div class="cc-brand">RACV</div><div class="cc-title">RACV Car Loan</div>
+        <div class="cc-desc">RACV member discounted rate. Fixed, no balloon payments.</div>
+        <ul class="cc-features"><li>Member discount</li><li>Fixed rate certainty</li><li>No early exit fees</li></ul>
+        <a class="cc-cta" href="https://www.racv.com.au/finance/car-loans.html" target="_blank" rel="noopener">Check rate &#8594;</a></div>
+      <div class="cc"><div class="cc-brand">ING</div><div class="cc-title">Personal Loan (Car)</div>
+        <div class="cc-desc">Unsecured personal loan for car purchase. No fees.</div>
+        <ul class="cc-features"><li>No monthly/annual fees</li><li>Unsecured (no car as security)</li><li>1-7 year terms</li></ul>
+        <a class="cc-cta" href="https://www.ing.com.au/personal-loans.html" target="_blank" rel="noopener">Check rate &#8594;</a></div>
+    </div>
+    <div class="link-row">
+      <a class="link-card" href="https://www.ratecity.com.au/car-loans" target="_blank" rel="noopener"><span class="lc-icon">&#128200;</span><div><div class="lc-text">RateCity Car Loans</div><div class="lc-sub">Compare 50+ rates</div></div></a>
+      <a class="link-card" href="https://www.canstar.com.au/car-loans/" target="_blank" rel="noopener"><span class="lc-icon">&#11088;</span><div><div class="lc-text">Canstar</div><div class="lc-sub">Car loan comparison</div></div></a>
+      <a class="link-card" href="https://moneysmart.gov.au/loans/car-loans" target="_blank" rel="noopener"><span class="lc-icon">&#127987;</span><div><div class="lc-text">MoneySmart.gov.au</div><div class="lc-sub">Government guide</div></div></a>
+    </div>
   </div>
 
-  <!-- Cashback -->
-
-  <!-- Travel deals -->
-  <div class="sec-title">&#9992; Travel Deals &amp; Discounts <span class="sec-sub">&#8212; flights, hotels &amp; holidays</span></div>
-  <div class="tgrid">
-    <a class="tcard featured" href="https://www.webjet.com.au/deals/" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#9992;</div><div><div class="tname">Webjet Deals</div><div class="tdomain">webjet.com.au</div></div></div>
-      <div class="tdesc">Australia's largest online travel agency. Flight deals, hotel packages and holiday bundles. Compare hundreds of airlines including Qantas, Jetstar, Virgin and international carriers.</div>
-      <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-au">AU</span> Find deals &#8594;</div>
-    </a>
-    <a class="tcard featured" href="https://www.skyscanner.com.au" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#127752;</div><div><div class="tname">Skyscanner</div><div class="tdomain">skyscanner.com.au</div></div></div>
-      <div class="tdesc">Best flight price comparison. "Everywhere" search shows cheapest destinations from Melbourne. "Whole month" view finds cheapest dates. No booking fees.</div>
-      <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-live">Live prices</span> Compare flights &#8594;</div>
-    </a>
-    <a class="tcard" href="https://www.qantas.com/au/en/deals.html" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#128308;</div><div><div class="tname">Qantas Deals</div><div class="tdomain">qantas.com.au</div></div></div>
-      <div class="tdesc">Qantas flight sales and holiday packages. Frequent Red e-Deals Tuesday sales. Frequent Flyer points offers and status credit promotions.</div>
-      <div class="taction"><span class="tag tag-free">Free</span> View deals &#8594;</div>
-    </a>
-    <a class="tcard" href="https://www.jetstar.com/au/en/deals" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#9889;</div><div><div class="tname">Jetstar Deals</div><div class="tdomain">jetstar.com</div></div></div>
-      <div class="tdesc">Jetstar budget flight deals and sales. Star Class upgrades. Regular Monday Madness and Friday Frenzy sales with deep discounts.</div>
-      <div class="taction"><span class="tag tag-free">Free</span> Find deals &#8594;</div>
-    </a>
-    <a class="tcard" href="https://www.virginaustralia.com/au/en/deals/flights/" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#128155;</div><div><div class="tname">Virgin Australia Deals</div><div class="tdomain">virginaustralia.com</div></div></div>
-      <div class="tdesc">Virgin Australia flight deals and holiday packages. Velocity Frequent Flyer points offers. Business class upgrade deals.</div>
-      <div class="taction"><span class="tag tag-free">Free</span> View deals &#8594;</div>
-    </a>
-    <a class="tcard" href="https://www.wotif.com/deals" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#127974;</div><div><div class="tname">Wotif Hotel Deals</div><div class="tdomain">wotif.com</div></div></div>
-      <div class="tdesc">Australian hotel deals including last-minute offers. Strong on domestic hotels, resorts and apartments. Members get exclusive prices.</div>
-      <div class="taction"><span class="tag tag-free">Free</span> Find hotels &#8594;</div>
-    </a>
-    <a class="tcard" href="https://www.booking.com/deals.en-gb.html" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#127968;</div><div><div class="tname">Booking.com Deals</div><div class="tdomain">booking.com</div></div></div>
-      <div class="tdesc">Global hotel deals including free cancellation options. Genius member discounts up to 20%. Strong on international bookings.</div>
-      <div class="taction"><span class="tag tag-free">Free</span> Find deals &#8594;</div>
-    </a>
-    <a class="tcard" href="https://www.airbnb.com.au/s/experiences/deals" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#127981;</div><div><div class="tname">Airbnb</div><div class="tdomain">airbnb.com.au</div></div></div>
-      <div class="tdesc">Airbnb stays and experiences across Australia and worldwide. Weekly and monthly discounts from hosts. Great for family holidays.</div>
-      <div class="taction"><span class="tag tag-free">Free</span> Browse stays &#8594;</div>
-    </a>
-    <a class="tcard" href="https://www.expedia.com.au/deals" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#127760;</div><div><div class="tname">Expedia Deals</div><div class="tdomain">expedia.com.au</div></div></div>
-      <div class="tdesc">Flight and hotel package deals. Bundle savings when booking flights and hotels together. Expedia Rewards points on every booking.</div>
-      <div class="taction"><span class="tag tag-free">Free</span> Find packages &#8594;</div>
-    </a>
-    <a class="tcard" href="https://www.ozbargain.com.au/cat/travel/deals" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#129432;</div><div><div class="tname">OzBargain Travel</div><div class="tdomain">ozbargain.com.au</div></div></div>
-      <div class="tdesc">Community-posted travel deals &#8212; error fares, sale alerts, promo codes for Qantas, Jetstar, Virgin, accommodation and car hire.</div>
-      <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-au">AU</span> Browse &#8594;</div>
-    </a>
-    <a class="tcard" href="https://www.cashrewards.com.au/travel" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#128176;</div><div><div class="tname">Cashrewards Travel</div><div class="tdomain">cashrewards.com.au</div></div></div>
-      <div class="tdesc">Earn cashback on travel bookings via Webjet, Booking.com, Wotif, Expedia and more. Stack cashback on top of existing deals.</div>
-      <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-au">AU</span> Earn cashback &#8594;</div>
-    </a>
-    <a class="tcard" href="https://www.shopback.com.au/travel" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#128717;&#65039;</div><div><div class="tname">ShopBack Travel</div><div class="tdomain">shopback.com.au</div></div></div>
-      <div class="tdesc">Cashback on travel bookings including Booking.com, Agoda and Airbnb. Stack with existing discounts for maximum savings.</div>
-      <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-au">AU</span> Earn cashback &#8594;</div>
-    </a>
+  <!-- CREDIT CARDS -->
+  <div class="panel" id="panel-creditcard" role="tabpanel">
+    <div class="sec-h"><h2>&#128179; Credit Card Comparison</h2>
+    <p>Compare credit cards across Australian issuers &mdash; low rate, rewards, cashback and no annual fee.</p></div>
+    <div class="compare-grid">
+      <div class="cc featured"><div class="cc-brand">Low Rate</div><div class="cc-title">Bankwest Zero Mastercard</div>
+        <div class="cc-desc">0% purchase rate intro period. $0 annual fee.</div>
+        <ul class="cc-features"><li>0% purchases (intro period)</li><li>$0 annual fee</li><li>Up to 55 days interest-free</li></ul>
+        <a class="cc-cta" href="https://www.bankwest.com.au/personal/credit-cards" target="_blank" rel="noopener">Compare &#8594;</a></div>
+      <div class="cc"><div class="cc-brand">Cashback</div><div class="cc-title">ING Orange One</div>
+        <div class="cc-desc">Earn cashback on everyday purchases. No intl transaction fees.</div>
+        <ul class="cc-features"><li>Cashback on eligible spending</li><li>0% foreign transaction fees</li><li>$0 annual fee (conditions apply)</li></ul>
+        <a class="cc-cta" href="https://www.ing.com.au/credit-cards.html" target="_blank" rel="noopener">Compare &#8594;</a></div>
+      <div class="cc"><div class="cc-brand">Rewards</div><div class="cc-title">ANZ Rewards Black</div>
+        <div class="cc-desc">Earn Velocity or KrisFlyer points. Airport lounge access.</div>
+        <ul class="cc-features"><li>Earn frequent flyer points</li><li>2 free lounge visits/year</li><li>Travel insurance included</li></ul>
+        <a class="cc-cta" href="https://www.anz.com.au/personal/credit-cards/rewards/" target="_blank" rel="noopener">Compare &#8594;</a></div>
+      <div class="cc"><div class="cc-brand">No Annual Fee</div><div class="cc-title">Coles No Fee Mastercard</div>
+        <div class="cc-desc">Earn Flybuys points on every purchase. $0 annual fee forever.</div>
+        <ul class="cc-features"><li>$0 annual fee permanently</li><li>Earn flybuys on all purchases</li><li>55 days interest-free</li></ul>
+        <a class="cc-cta" href="https://financial.coles.com.au/credit-cards/" target="_blank" rel="noopener">Compare &#8594;</a></div>
+    </div>
+    <div class="link-row">
+      <a class="link-card" href="https://www.canstar.com.au/credit-cards/" target="_blank" rel="noopener"><span class="lc-icon">&#11088;</span><div><div class="lc-text">Canstar</div><div class="lc-sub">Compare 200+ cards</div></div></a>
+      <a class="link-card" href="https://www.finder.com.au/credit-cards" target="_blank" rel="noopener"><span class="lc-icon">&#128269;</span><div><div class="lc-text">Finder</div><div class="lc-sub">Best credit card deals</div></div></a>
+      <a class="link-card" href="https://www.ratecity.com.au/credit-cards" target="_blank" rel="noopener"><span class="lc-icon">&#128200;</span><div><div class="lc-text">RateCity</div><div class="lc-sub">Compare by type</div></div></a>
+      <a class="link-card" href="https://www.pointhacks.com.au/credit-cards/" target="_blank" rel="noopener"><span class="lc-icon">&#9992;</span><div><div class="lc-text">Point Hacks</div><div class="lc-sub">Best for frequent flyer points</div></div></a>
+    </div>
   </div>
 
-  <div class="divider"></div>
-  <div class="sec-title">&#128176; Cashback &amp; Rewards <span class="sec-sub">&#8212; earn money back on top of any deal</span></div>
-  <div class="tgrid">
-    <a class="tcard featured" href="cashback.html" target="_blank">
-      <div class="ttop"><div class="ticon">&#127942;</div><div><div class="tname">TopCashback &amp; Deals</div><div class="tdomain">cashback.html</div></div></div>
-      <div class="tdesc">Open the dedicated Cashback page to browse TopCashback AU, Cashrewards and ShopBack deals with tips on stacking savings.</div>
-      <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-au">AU</span> Open cashback page &#8594;</div>
-    </a>
-    <a class="tcard" href="https://www.topcashback.com.au" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#127942;</div><div><div class="tname">TopCashback AU</div><div class="tdomain">topcashback.com.au</div></div></div>
-      <div class="tdesc">Australia's highest cashback rates. 3000+ stores including Woolworths, Amazon, Chemist Warehouse, eBay.</div>
-      <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-au">AU</span> Earn cashback &#8594;</div>
-    </a>
-    <a class="tcard" href="https://www.cashrewards.com.au" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#128179;</div><div><div class="tname">Cashrewards</div><div class="tdomain">cashrewards.com.au</div></div></div>
-      <div class="tdesc">Australia's largest cashback platform. Frequent bonus cashback events stacking with sales.</div>
-      <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-au">AU</span> Earn cashback &#8594;</div>
-    </a>
-    <a class="tcard" href="https://www.shopback.com.au" target="_blank" rel="noopener">
-      <div class="ttop"><div class="ticon">&#128717;&#65039;</div><div><div class="tname">ShopBack AU</div><div class="tdomain">shopback.com.au</div></div></div>
-      <div class="tdesc">Strong on fashion, travel and food delivery. Covers Menulog, THE ICONIC, Booking.com and more.</div>
-      <div class="taction"><span class="tag tag-free">Free</span><span class="tag tag-au">AU</span> Earn cashback &#8594;</div>
-    </a>
+<div class="panel" id="panel-tools" role="tabpanel">
+    <div class="sec-h">
+      <h2>&#128295; All Australian Comparison Tools</h2>
+      <p>Every major comparison site and government tool in one place. Always compare at least 3 providers before switching.</p>
+    </div>
+    <div class="links-grid">
+      <a class="link-card" href="https://www.energymadeeasy.gov.au" target="_blank" rel="noopener"><span class="lc-icon">&#9889;</span><div><div class="lc-text">Energy Made Easy</div><div class="lc-sub">Government energy comparison</div></div></a>
+      <a class="link-card" href="https://compare.energy.vic.gov.au" target="_blank" rel="noopener"><span class="lc-icon">&#9889;</span><div><div class="lc-text">VIC Energy Compare</div><div class="lc-sub">Victorian government tool</div></div></a>
+      <a class="link-card" href="https://www.privatehealth.gov.au" target="_blank" rel="noopener"><span class="lc-icon">&#127973;</span><div><div class="lc-text">PrivateHealth.gov.au</div><div class="lc-sub">Government health insurance compare</div></div></a>
+      <a class="link-card" href="https://www.comparethemarket.com.au" target="_blank" rel="noopener"><span class="lc-icon">&#128038;</span><div><div class="lc-text">Compare the Market</div><div class="lc-sub">Insurance, energy, internet</div></div></a>
+      <a class="link-card" href="https://www.iselect.com.au" target="_blank" rel="noopener"><span class="lc-icon">&#9989;</span><div><div class="lc-text">iSelect</div><div class="lc-sub">Health, energy, internet, life</div></div></a>
+      <a class="link-card" href="https://www.finder.com.au" target="_blank" rel="noopener"><span class="lc-icon">&#128270;</span><div><div class="lc-text">Finder</div><div class="lc-sub">Everything — cards, loans, insurance, energy, mobile</div></div></a>
+      <a class="link-card" href="https://www.canstar.com.au" target="_blank" rel="noopener"><span class="lc-icon">&#11088;</span><div><div class="lc-text">Canstar</div><div class="lc-sub">Star ratings for financial products</div></div></a>
+      <a class="link-card" href="https://www.canstarblue.com.au" target="_blank" rel="noopener"><span class="lc-icon">&#11088;</span><div><div class="lc-text">Canstar Blue</div><div class="lc-sub">Consumer ratings and reviews</div></div></a>
+      <a class="link-card" href="https://www.whistleout.com.au" target="_blank" rel="noopener"><span class="lc-icon">&#128225;</span><div><div class="lc-text">WhistleOut</div><div class="lc-sub">Mobile, NBN, broadband comparison</div></div></a>
+      <a class="link-card" href="https://www.choosi.com.au" target="_blank" rel="noopener"><span class="lc-icon">&#128176;</span><div><div class="lc-text">Choosi</div><div class="lc-sub">Life, income, travel insurance</div></div></a>
+      <a class="link-card" href="https://www.motormouth.com.au" target="_blank" rel="noopener"><span class="lc-icon">&#9981;</span><div><div class="lc-text">MotorMouth</div><div class="lc-sub">Real-time fuel prices Australia-wide</div></div></a>
+      <a class="link-card" href="https://www.ratecity.com.au" target="_blank" rel="noopener"><span class="lc-icon">&#127974;</span><div><div class="lc-text">RateCity</div><div class="lc-sub">Home loans, savings, credit cards</div></div></a>
+      <a class="link-card" href="https://www.mozo.com.au" target="_blank" rel="noopener"><span class="lc-icon">&#128178;</span><div><div class="lc-text">Mozo</div><div class="lc-sub">Banking, loans, insurance comparison</div></div></a>
+      <a class="link-card" href="https://www.pointhacks.com.au" target="_blank" rel="noopener"><span class="lc-icon">&#9992;</span><div><div class="lc-text">Point Hacks</div><div class="lc-sub">Credit card rewards and frequent flyer points</div></div></a>
+      <a class="link-card" href="https://au.camelcamelcamel.com" target="_blank" rel="noopener"><span class="lc-icon">&#128200;</span><div><div class="lc-text">CamelCamelCamel AU</div><div class="lc-sub">Amazon AU price history tracker</div></div></a>
+      <a class="link-card" href="https://www.trolley.com.au" target="_blank" rel="noopener"><span class="lc-icon">&#128722;</span><div><div class="lc-text">Trolley</div><div class="lc-sub">Woolworths vs Coles price comparison</div></div></a>
+    </div>
   </div>
 
+  <div class="foot">
+    <strong>SmartSaver Connect</strong> is a free community tool. We are not a financial adviser. Always compare at least 3 providers using official government tools before switching. Prices shown are indicative — verify on provider websites.<br>
+    <a href="index.html">&#128176; Deals</a> &middot; <a href="catalogues.html">&#128214; Catalogues</a> &middot; <a href="cashback.html">&#128184; Cashback</a> &middot; <a href="compare.html">&#128269; Compare</a>
+  </div>
 </div>
+
 <script>
-// ── Config ──────────────────────────────────────────────────────
-var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz60iBo_PfKtmny2YmwFgjvCCIMDoXpHWf7KBPVDfUNBA8VtRybMCSwn7Ze9wvCdg8KHA/exec';
-var CACHE_KEY = 'ssc_v4';
+function showPanel(id, btn) {
+  document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');t.setAttribute('aria-selected','false');});
+  document.getElementById('panel-'+id).classList.add('active');
+  btn.classList.add('active');
+  btn.setAttribute('aria-selected','true');
+}
 
-// ── State ────────────────────────────────────────────────────────
-var allDeals = [], allCoupons = [], allInsurance = [];
-var searchResults = [];
-var activeVendors = null; // null = all active
-var lastQuery = '';
+function calcEnergy() {
+  var usage = parseFloat(document.getElementById('eUsage').value) || 14;
+  var rate = parseFloat(document.getElementById('eRate').value) || 26;
+  var supply = parseFloat(document.getElementById('eSupply').value) || 100;
+  var solar = parseFloat(document.getElementById('eSolar').value) || 0;
+  var fit = parseFloat(document.getElementById('eFIT').value) || 5;
+  var days = 91;
+  var usageCost = usage * (rate/100) * days;
+  var supplyCost = (supply/100) * days;
+  var solarCredit = solar * (fit/100) * days;
+  var total = usageCost + supplyCost - solarCredit;
+  var annual = total * 4;
+  var r = document.getElementById('eResult');
+  r.style.display = 'block';
+  r.innerHTML = '<h4>Estimated Quarterly Bill: $' + total.toFixed(0) + '</h4>'
+    + '<p>Usage: $' + usageCost.toFixed(0) + ' + Supply: $' + supplyCost.toFixed(0)
+    + (solarCredit > 0 ? ' \u2212 Solar credit: $' + solarCredit.toFixed(0) : '')
+    + '<br>Estimated annual cost: <strong>$' + annual.toFixed(0) + '</strong>'
+    + '<br><br>\u{1F4A1} Compare this against quotes on <a href="https://www.energymadeeasy.gov.au" target="_blank">Energy Made Easy</a> to see if you can save.</p>';
+}
 
-// ── Boot ─────────────────────────────────────────────────────────
-window.addEventListener('DOMContentLoaded', function() {
-  loadData();
-  var urlQ = new URLSearchParams(location.search).get('q');
-  if (urlQ) {
-    document.getElementById('searchInput').value = urlQ;
-    doSearch();
+function calcNBN() {
+  var people = parseInt(document.getElementById('nPeople').value) || 2;
+  var usage = document.getElementById('nUsage').value;
+  var speed, tier, price;
+  if (usage === 'basic' && people <= 2) { speed='25 Mbps'; tier='NBN 25'; price='$55\u2013$65/month'; }
+  else if (usage === 'basic') { speed='50 Mbps'; tier='NBN 50'; price='$65\u2013$80/month'; }
+  else if (usage === 'stream' && people <= 2) { speed='50 Mbps'; tier='NBN 50'; price='$65\u2013$80/month'; }
+  else if (usage === 'stream') { speed='100 Mbps'; tier='NBN 100'; price='$85\u2013$100/month'; }
+  else if (usage === 'gaming') { speed='100 Mbps'; tier='NBN 100'; price='$85\u2013$100/month'; }
+  else if (usage === 'wfh') { speed='100 Mbps'; tier='NBN 100'; price='$85\u2013$100/month'; }
+  else { speed='250 Mbps'; tier='NBN 250 (Superfast)'; price='$110\u2013$140/month'; }
+  var r = document.getElementById('nResult');
+  r.style.display = 'block';
+  r.innerHTML = '<h4>Recommended: ' + tier + ' (' + speed + ')</h4>'
+    + '<p>Typical price range: <strong>' + price + '</strong>'
+    + '<br><br>For ' + people + ' people with ' + usage + ' usage, ' + speed + ' should handle your needs comfortably.'
+    + '<br><br>\u{1F4A1} Compare plans at <a href="https://www.whistleout.com.au/Broadband" target="_blank">WhistleOut</a> or <a href="https://www.finder.com.au/nbn" target="_blank">Finder</a>.</p>';
+}
+
+function calcFuel() {
+  var km = parseFloat(document.getElementById('fKm').value) || 200;
+  var cons = parseFloat(document.getElementById('fConsumption').value) || 8;
+  var price = parseFloat(document.getElementById('fPrice').value) || 185;
+  var litresWeek = (km / 100) * cons;
+  var costWeek = litresWeek * (price / 100);
+  var costMonth = costWeek * 4.33;
+  var costYear = costWeek * 52;
+  var r = document.getElementById('fResult');
+  r.style.display = 'block';
+  r.innerHTML = '<h4>Weekly fuel cost: $' + costWeek.toFixed(0) + '</h4>'
+    + '<p>Litres per week: ' + litresWeek.toFixed(1) + 'L'
+    + '<br>Monthly: <strong>$' + costMonth.toFixed(0) + '</strong> | Annual: <strong>$' + costYear.toFixed(0) + '</strong>'
+    + '<br><br>\u{1F4A1} Save $' + (costYear * 0.05).toFixed(0) + '/year by finding fuel just 5% cheaper. Use <a href="https://www.motormouth.com.au/fuel-price-map?postcode=3030" target="_blank">MotorMouth</a> to find the cheapest near you.</p>';
+}
+
+function calcMortgage(){
+  var L=parseFloat(document.getElementById('mLoan').value)||0;
+  var r=(parseFloat(document.getElementById('mRate').value)||0)/100/12;
+  var n=(parseInt(document.getElementById('mYears').value)||30)*12;
+  var tp=document.getElementById('mType').value;
+  var el=document.getElementById('mResult');el.style.display='block';
+  if(tp==='io'){var m=L*r;
+    el.innerHTML='<h4>Interest Only</h4><p><strong>Monthly:</strong> $'+m.toFixed(2)+' | <strong>Annual:</strong> $'+(m*12).toFixed(0)+'<br>Total interest: <strong style="color:var(--red)">$'+(m*n).toLocaleString(undefined,{maximumFractionDigits:0})+'</strong><br>Principal of $'+L.toLocaleString()+' still owed at end.<br><br>Compare: <a href="https://www.ratecity.com.au/home-loans" target="_blank">RateCity</a> | <a href="https://moneysmart.gov.au/home-loans/mortgage-calculator" target="_blank">MoneySmart</a></p>';
+  } else {var pm=L*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);var tot=pm*n;var int=tot-L;
+    el.innerHTML='<h4>P&amp;I Repayments</h4><p><strong>Monthly:</strong> $'+pm.toFixed(2)+' | <strong>Fortnightly:</strong> $'+(pm/2).toFixed(2)+'<br>Total: $'+tot.toLocaleString(undefined,{maximumFractionDigits:0})+' | Interest: <strong style="color:var(--red)">$'+int.toLocaleString(undefined,{maximumFractionDigits:0})+'</strong><br><strong>Tip:</strong> Fortnightly saves ~$'+Math.round(int*0.07).toLocaleString()+' in interest.<br>Compare: <a href="https://www.ratecity.com.au/home-loans" target="_blank">RateCity</a> | <a href="https://www.canstar.com.au/home-loans/" target="_blank">Canstar</a></p>';
   }
-});
-
-// ── Load data from cache or Apps Script ──────────────────────────
-function loadData() {
-  // Try localStorage cache first (shared with index.html)
-  try {
-    var raw = localStorage.getItem(CACHE_KEY);
-    if (raw) {
-      var obj = JSON.parse(raw);
-      if (obj && obj.deals && obj.deals.length) {
-        allDeals     = normDeals(obj.deals     || []);
-        allCoupons   = normCoupons(obj.coupons || []);
-        allInsurance = normIns(obj.insurance   || []);
-        return; // have data, done
-      }
-    }
-  } catch(e) {}
-
-  // Fetch from Apps Script via JSONP
-  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.indexOf('YOUR_') !== -1) return;
-
-  var cbName = 'cmp_cb_' + Date.now();
-  var script  = document.createElement('script');
-  var timer   = setTimeout(function() {
-    if (script.parentNode) script.parentNode.removeChild(script);
-    delete window[cbName];
-  }, 25000);
-
-  window[cbName] = function(json) {
-    clearTimeout(timer);
-    if (script.parentNode) script.parentNode.removeChild(script);
-    delete window[cbName];
-    if (!json || !json.ok) return;
-    var d = json.data || {};
-    allDeals     = normDeals(d.deals       || []);
-    allCoupons   = normCoupons(d.coupons   || []);
-    allInsurance = normIns(d.insurance     || []);
-    // Save to cache
-    try {
-      var ex = JSON.parse(localStorage.getItem(CACHE_KEY) || '{}');
-      ex.deals     = d.deals     || [];
-      ex.coupons   = d.coupons   || [];
-      ex.insurance = d.insurance || [];
-      ex.ts = Date.now();
-      localStorage.setItem(CACHE_KEY, JSON.stringify(ex));
-    } catch(e) {}
-    // If a search was already typed, run it now
-    var q = document.getElementById('searchInput').value.trim();
-    if (q) doSearch();
-  };
-
-  script.onerror = function() {
-    clearTimeout(timer);
-    if (script.parentNode) script.parentNode.removeChild(script);
-    delete window[cbName];
-  };
-
-  script.src = APPS_SCRIPT_URL + '?callback=' + cbName;
-  document.head.appendChild(script);
 }
-
-// ── Normalise ────────────────────────────────────────────────────
-function normDeals(rows) {
-  return (rows || []).filter(function(r){ return r.title; }).map(function(r) {
-    return {
-      vendor:      String(r.vendor      || ''),
-      category:    String(r.category    || '').toLowerCase(),
-      title:       String(r.title       || ''),
-      description: String(r.description || ''),
-      priceNow:    pf(r.priceNow),
-      priceWas:    pf(r.priceWas),
-      discountPct: parseInt(r.discountPct) || 0,
-      dealUrl:     String(r.dealUrl || ''),
-    };
-  });
+function calcCarLoan(){
+  var P=parseFloat(document.getElementById('cPrice').value)||0;
+  var D=parseFloat(document.getElementById('cDeposit').value)||0;
+  var L=P-D;if(L<=0){document.getElementById('cResult').innerHTML='<h4>No loan needed</h4>';document.getElementById('cResult').style.display='block';return;}
+  var r=(parseFloat(document.getElementById('cRate').value)||0)/100/12;
+  var n=(parseInt(document.getElementById('cYears').value)||5)*12;
+  var pm=L*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);var tot=pm*n;var int=tot-L;
+  var el=document.getElementById('cResult');el.style.display='block';
+  el.innerHTML='<h4>Car Loan Repayments</h4><p><strong>Loan:</strong> $'+L.toLocaleString()+' | <strong>Monthly:</strong> $'+pm.toFixed(2)+' | <strong>Weekly:</strong> $'+(pm*12/52).toFixed(2)+'<br>Total: $'+tot.toLocaleString(undefined,{maximumFractionDigits:0})+' | Interest: <strong style="color:var(--red)">$'+int.toLocaleString(undefined,{maximumFractionDigits:0})+'</strong><br>Compare: <a href="https://www.ratecity.com.au/car-loans" target="_blank">RateCity</a> | <a href="https://www.canstar.com.au/car-loans/" target="_blank">Canstar</a></p>';
 }
-function normCoupons(rows) {
-  return (rows || []).filter(function(r){ return r.code && r.code !== 'SEE_LINK'; }).map(function(r) {
-    return {
-      vendor: String(r.vendor || 'Various'), category: 'coupon',
-      title: r.code + (r.discountText ? ' - ' + r.discountText : ''),
-      description: String(r.description || ''),
-      priceNow: null, priceWas: null, discountPct: 0,
-      dealUrl: String(r.dealUrl || ''),
-    };
-  });
-}
-function normIns(rows) {
-  return (rows || []).filter(function(r){ return r.title; }).map(function(r) {
-    return {
-      vendor: String(r.insurer || 'Various'), category: 'insurance',
-      title: String(r.title || ''), description: String(r.description || ''),
-      priceNow: null, priceWas: null, discountPct: parseInt(r.discountPct) || 0,
-      dealUrl: String(r.dealUrl || ''),
-    };
-  });
-}
-
-// ── Search ────────────────────────────────────────────────────────
-function doSearch() {
-  var q = document.getElementById('searchInput').value.trim();
-  if (!q || q.length < 2) return;
-  lastQuery = q;
-  history.replaceState(null, '', '?q=' + encodeURIComponent(q));
-  document.querySelectorAll('.qchip').forEach(function(c){ c.classList.remove('on'); });
-
-  var ql = q.toLowerCase();
-  var pool = allDeals.concat(allCoupons).concat(allInsurance);
-  searchResults = pool.filter(function(d) {
-    return d.title.toLowerCase().indexOf(ql) !== -1
-      || (d.description || '').toLowerCase().indexOf(ql) !== -1
-      || (d.vendor      || '').toLowerCase().indexOf(ql) !== -1;
-  });
-
-  // Build vendor set
-  var vendors = [];
-  searchResults.forEach(function(d) {
-    if (d.vendor && vendors.indexOf(d.vendor) === -1) vendors.push(d.vendor);
-  });
-  vendors.sort();
-  activeVendors = null; // all active
-
-  // Update live comparison links
-  updateLinks(q);
-
-  renderRetailerPills(vendors);
-  renderResults();
-  document.getElementById('resultsWrap').style.display = 'block';
-  document.getElementById('resultsWrap').scrollIntoView({behavior:'smooth', block:'nearest'});
-}
-
-function quickSearch(el, term) {
-  document.querySelectorAll('.qchip').forEach(function(c){ c.classList.remove('on'); });
-  el.classList.add('on');
-  document.getElementById('searchInput').value = term;
-  doSearch();
-}
-
-// ── Retailer filter pills ─────────────────────────────────────────
-function renderRetailerPills(vendors) {
-  var wrap = document.getElementById('retailerPills');
-  if (!vendors.length) { wrap.style.display = 'none'; return; }
-  wrap.style.display = 'flex';
-  var html = '<span style="font-size:12px;color:var(--muted);align-self:center">Filter:</span>';
-  vendors.forEach(function(v) {
-    var isOn = activeVendors === null || activeVendors.indexOf(v) !== -1;
-    html += '<button onclick="toggleVendor(this,\'' + esc(v) + '\')" '
-      + 'style="padding:4px 12px;border-radius:20px;border:1px solid var(--border);'
-      + 'background:' + (isOn ? 'var(--accent-bg)' : 'var(--card)') + ';'
-      + 'color:' + (isOn ? 'var(--accent)' : 'var(--muted)') + ';'
-      + 'font-size:12px;cursor:pointer">' + esc(v) + '</button>';
-  });
-  wrap.innerHTML = html;
-}
-
-function toggleVendor(el, vendor) {
-  if (activeVendors === null) {
-    // All active — switch to single vendor
-    var all = [];
-    searchResults.forEach(function(d){ if (d.vendor && all.indexOf(d.vendor)===-1) all.push(d.vendor); });
-    activeVendors = [vendor];
-  } else {
-    var idx = activeVendors.indexOf(vendor);
-    if (idx === -1) {
-      activeVendors.push(vendor);
-    } else {
-      activeVendors.splice(idx, 1);
-      if (!activeVendors.length) activeVendors = null; // back to all
-    }
-  }
-  // Refresh pills
-  var vendors = [];
-  searchResults.forEach(function(d){ if (d.vendor && vendors.indexOf(d.vendor)===-1) vendors.push(d.vendor); });
-  vendors.sort();
-  renderRetailerPills(vendors);
-  renderResults();
-}
-
-// ── Render results ────────────────────────────────────────────────
-function renderResults() {
-  var sort = document.getElementById('sortSel').value;
-  var items = searchResults.filter(function(d) {
-    return activeVendors === null || activeVendors.indexOf(d.vendor) !== -1;
-  });
-
-  if (sort === 'price_asc')  items.sort(function(a,b){ return (a.priceNow!=null?a.priceNow:99999)-(b.priceNow!=null?b.priceNow:99999); });
-  if (sort === 'price_desc') items.sort(function(a,b){ return (b.priceNow||0)-(a.priceNow||0); });
-  if (sort === 'discount')   items.sort(function(a,b){ return (b.discountPct||0)-(a.discountPct||0); });
-  if (sort === 'retailer')   items.sort(function(a,b){ return a.vendor.localeCompare(b.vendor); });
-
-  document.getElementById('resultsTitle').textContent =
-    items.length + ' results for "' + lastQuery + '"';
-
-  // Stats strip
-  var prices = items.map(function(d){ return d.priceNow; }).filter(function(p){ return p!=null && p>0; });
-  var minP = prices.length ? Math.min.apply(null, prices) : null;
-  var maxP = prices.length ? Math.max.apply(null, prices) : null;
-  var vendors = [];
-  items.forEach(function(d){ if (d.vendor && vendors.indexOf(d.vendor)===-1) vendors.push(d.vendor); });
-  var shtml = '';
-  shtml += '<div class="stat-pill">' + items.length + ' results</div>';
-  shtml += '<div class="stat-pill"><span class="stat-num">' + vendors.length + '</span> retailers</div>';
-  if (minP) shtml += '<div class="stat-pill">Lowest <span class="stat-num">$' + minP.toFixed(2) + '</span></div>';
-  if (maxP && maxP !== minP) shtml += '<div class="stat-pill">Highest <span class="stat-num">$' + maxP.toFixed(2) + '</span></div>';
-  if (minP && maxP && maxP > minP) shtml += '<div class="stat-pill">Save up to <span class="stat-num">$' + (maxP-minP).toFixed(2) + '</span> choosing wisely</div>';
-  document.getElementById('statsStrip').innerHTML = shtml;
-
-  if (!items.length) {
-    document.getElementById('resultsBody').innerHTML =
-      '<tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--muted)">No saved deals match. Use the comparison tools below to search live.</td></tr>';
-    document.getElementById('cardsWrap').innerHTML = '';
-    return;
-  }
-
-  // Table rows
-  var thtml = '';
-  items.forEach(function(d) {
-    var isBest = minP && d.priceNow === minP;
-    var vc = vclass(d.vendor);
-    var priceCel = d.priceNow && d.priceNow > 0
-      ? '<span class="' + (isBest ? 'best-price' : 'price-norm') + '">$' + d.priceNow.toFixed(2) + '</span>'
-        + (d.priceWas && d.priceWas > d.priceNow ? '<span class="pwas">$'+d.priceWas.toFixed(2)+'</span>' : '')
-      : d.discountPct > 0 ? '<span style="color:var(--danger)">-'+d.discountPct+'% off</span>'
-      : '<span style="color:var(--muted)">&#8212;</span>';
-    var saveCel = d.priceWas && d.priceNow && d.priceWas > d.priceNow
-      ? '<span class="save-badge">Save $' + (d.priceWas - d.priceNow).toFixed(2) + '</span>'
-      : d.discountPct > 0 ? '<span class="save-badge">-' + d.discountPct + '%</span>' : '&#8212;';
-    thtml += '<tr>'
-      + '<td><span class="vbadge '+vc+'">'+esc(d.vendor)+'</span></td>'
-      + '<td><div class="item-title">'+esc(d.title)+'</div>'
-        + (d.description ? '<div class="item-desc">'+esc(d.description.slice(0,90))+'</div>' : '')+'</td>'
-      + '<td>'+priceCel+'</td>'
-      + '<td>'+saveCel+'</td>'
-      + '<td>'+(d.dealUrl ? '<a class="view-link" href="'+esc(d.dealUrl)+'" target="_blank" rel="noopener">View &#8594;</a>' : '&#8212;')+'</td>'
-      + '</tr>';
-  });
-  document.getElementById('resultsBody').innerHTML = thtml;
-
-  // Mobile cards
-  var chtml = '';
-  items.forEach(function(d) {
-    var isBest = minP && d.priceNow === minP;
-    var vc = vclass(d.vendor);
-    chtml += '<div class="cmp-card' + (isBest ? ' best' : '') + '">'
-      + '<span class="vbadge '+vc+'">'+esc(d.vendor)+'</span>'
-      + (isBest ? '<span style="font-size:11px;font-weight:600;color:var(--accent)">Lowest &#10003;</span>' : '')
-      + '<div class="item-title">'+esc(d.title)+'</div>'
-      + (d.description ? '<div class="item-desc">'+esc(d.description.slice(0,80))+'</div>' : '')
-      + (d.priceNow && d.priceNow > 0 ? '<div style="font-size:15px;font-weight:700;color:'+(isBest?'var(--accent)':'var(--text)')+'">$'+d.priceNow.toFixed(2)+'</div>' : '')
-      + (d.discountPct > 0 ? '<span class="save-badge">-'+d.discountPct+'% off</span>' : '')
-      + (d.dealUrl ? '<a class="view-link" href="'+esc(d.dealUrl)+'" target="_blank" rel="noopener">View at '+esc(d.vendor)+' &#8594;</a>' : '')
-      + '</div>';
-  });
-  document.getElementById('cardsWrap').innerHTML = chtml;
-}
-
-// ── Update comparison tool links with search query ────────────────
-function updateLinks(q) {
-  var enc = encodeURIComponent(q);
-  var map = {
-    'trolley-link':     'https://www.trolley.com.au/search?q=' + enc,
-    'ww-link':          'https://www.woolworths.com.au/shop/search/products?searchTerm=' + enc,
-    'coles-link':       'https://www.coles.com.au/search?q=' + enc,
-    'staticice-link':   'https://www.staticice.com.au/cgi-bin/search.cgi?q=' + enc + '&stype=1&etype=1&oc=Australia',
-    'getprice-link':    'https://www.getprice.com.au/search.gpf?Type=SearchProduct&Search=' + enc,
-    'pricespy-link':    'https://pricespy.com.au/search?search=' + enc,
-    'amz-link':         'https://www.amazon.com.au/s?k=' + enc,
-    'motormouth-link':  'https://www.motormouth.com.au/fuel-price-map?postcode=3030',
-  };
-  Object.keys(map).forEach(function(id) {
-    var el = document.getElementById(id);
-    if (el) el.href = map[id];
-  });
-}
-
-// ── Helpers ───────────────────────────────────────────────────────
-function vclass(v) {
-  var n = (v || '').toLowerCase();
-  if (n.indexOf('woolworths') !== -1) return 'v-ww';
-  if (n.indexOf('coles')      !== -1) return 'v-coles';
-  if (n.indexOf('aldi')       !== -1) return 'v-aldi';
-  if (n.indexOf('amazon')     !== -1) return 'v-amz';
-  if (n.indexOf('big w')      !== -1 || n.indexOf('bigw') !== -1) return 'v-bw';
-  if (n.indexOf('chemist')    !== -1) return 'v-cw';
-  return 'v-def';
-}
-function esc(s) {
-  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-function pf(v) { var n = parseFloat(v); return isNaN(n) ? null : n; }
 </script>
+
+<div style="background:#0d6e63;color:#fff;padding:32px 24px;margin-top:48px;border-radius:12px;text-align:center"><h2 style="font-size:22px;font-weight:800;margin-bottom:8px">&#128276; Get Daily Rate Alerts</h2><p style="font-size:14px;color:rgba(255,255,255,.75);max-width:500px;margin:0 auto 16px;line-height:1.6">Best deals, rate changes, fuel prices and cashback from 50+ AU retailers at 7am daily. Free.</p><form style="display:flex;gap:10px;max-width:480px;margin:0 auto;flex-wrap:wrap;justify-content:center" onsubmit="event.preventDefault();this.querySelector('button').textContent='\u2705 Subscribed!';this.querySelector('button').disabled=true"><input type="email" placeholder="Your email" required style="flex:1;min-width:220px;padding:12px 16px;border:2px solid rgba(255,255,255,.4);border-radius:8px;font-size:15px;background:rgba(255,255,255,.15);color:#fff;font-family:inherit"/><button type="submit" style="padding:12px 24px;background:#fff;color:#0d6e63;border:none;border-radius:8px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit">Subscribe Free</button></form></div>
 </body>
 </html>
