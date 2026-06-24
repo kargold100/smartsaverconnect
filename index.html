@@ -651,7 +651,7 @@ body{font-family:var(--fb);font-size:15px;line-height:1.65;background:var(--bg);
 <script>
 // SmartSaver Connect — Main JS
 // Replace YOUR_APPS_SCRIPT_WEB_APP_URL_HERE with your Apps Script Web App URL
-var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz60iBo_PfKtmny2YmwFgjvCCIMDoXpHWf7KBPVDfUNBA8VtRybMCSwn7Ze9wvCdg8KHA/exec';
+var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbywLhUgHi2lk9S2fFOgxx3_4MCz-O9TAh0-bqgFcUBbBwT0lDZ5UVrHSFpj7_nWlHK2FA/exec';
 var CACHE_KEY = 'ssc_v9';
 var TTL = 2*60*60*1000;
 var deals=[], coupons=[], fuel=[], insurance=[];
@@ -1224,28 +1224,34 @@ function renderDeals() {
     return;
   }
   if (activeFilter==='fuel') {
-    // If no server-side fuel data, try browser-side PetrolSpy
-    if (!fuel.length) {
-      setTitle('Fuel Prices', 'Fetching live prices from PetrolSpy...');
-      fetchFuelBrowser(function(ps) {
-        if (ps && ps.length) {
-          fuel = ps.map(function(f){return{name:f.name,brand:f.brand,type:f.type,price:f.price,suburb:f.suburb};});
-          renderFuelGrid(q);
-          setTitle('Fuel Prices', fuel.length + ' live stations from PetrolSpy');
-        } else {
-          document.getElementById('fuelOutput').innerHTML=
-            '<div class="deals-grid"><div class="empty-state"><h3>No fuel data yet</h3>'
-            +'<p>Run the Fuel scraper from your Google Sheet menu, or check '
-            +'<a href="https://petrolspy.com.au/map?center=-37.9,144.75&zoom=12" target="_blank" rel="noopener">PetrolSpy live map</a> '
-            +'and <a href="https://www.motormouth.com.au/fuel-price-map?postcode=3030" target="_blank" rel="noopener">Motormouth 3030</a>.</p></div></div>';
-          setTitle('Fuel Prices','Set VIC_FUEL_API_KEY for live prices');
-        }
-      });
-      return;
-    }
+    // ALWAYS try browser-side PetrolSpy for real-time fuel prices
+    // (server-side data may be hours old or use stale fallback)
+    setTitle('Fuel Prices', 'Fetching live prices from PetrolSpy\u2026');
+    fetchFuelBrowser(function(ps) {
+      if (ps && ps.length) {
+        fuel = ps.map(function(f){return{name:f.name,brand:f.brand,type:f.type,price:f.price,suburb:f.suburb};});
+        renderFuelGrid(q);
+        var now = new Date().toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit'});
+        setTitle('Fuel Prices \u2014 Live', fuel.length + ' stations \u00B7 Updated ' + now + ' from PetrolSpy');
+      } else if (fuel.length) {
+        // Fall back to server-side data
+        renderFuelGrid(q);
+        setTitle('Fuel Prices (Cached)', fuel.length + ' stations \u00B7 Server data (may not be current)');
+      } else {
+        document.getElementById('fuelOutput').innerHTML=
+          '<div class="deals-grid"><div class="empty-state"><h3>Could not load live fuel prices</h3>'
+          +'<p>PetrolSpy may be temporarily unavailable. Check these live sources directly:</p>'
+          +'<p style="margin-top:12px"><a href="https://petrolspy.com.au/map?center=-37.9,144.75&zoom=12" target="_blank" rel="noopener" style="font-weight:700">PetrolSpy Live Map (Point Cook)</a></p>'
+          +'<p><a href="https://www.motormouth.com.au/fuel-price-map?postcode=3030" target="_blank" rel="noopener" style="font-weight:700">Motormouth 3030</a></p>'
+          +'<p><a href="https://www.7eleven.com.au/fuel-lock" target="_blank" rel="noopener" style="font-weight:700">7-Eleven Fuel Lock App</a></p>'
+          +'</div></div>';
+        setTitle('Fuel Prices', 'Live sources linked below');
+      }
+    });
+    return;
     document.getElementById('dealOutput').innerHTML='';
     renderFuelGrid(q);
-    setTitle('Fuel Prices','Cheapest per fuel type highlighted');
+    setTitle('Fuel Prices','Cheapest per fuel type \u2014 live from PetrolSpy highlighted');
     return;
   }
   if (activeFilter==='insurance') {
@@ -1446,7 +1452,7 @@ function renderFuelSummary(){
   var ord=['ULP','E10','P95','P98','Diesel','LPG'];
   var best=ord.filter(function(t){return bt[t];}).map(function(t){return bt[t];});
   if(!best.length)return;
-  var h='<div class="fuel-panel"><div class="fuel-ph"><div class="fuel-ph-title">&#9981; Best fuel near Point Cook</div>'
+  var h='<div class="fuel-panel"><div class="fuel-ph"><div class="fuel-ph-title">&#9981; Cheapest fuel near Point Cook</div>'
     +'<a class="fuel-map-link" href="https://www.motormouth.com.au/fuel-price-map?postcode=3030" target="_blank" rel="noopener">Live map &#8594;</a>'
     +'</div><div class="fuel-body">';
   best.forEach(function(f){h+=fuelCard(f,true);});
@@ -1751,5 +1757,21 @@ function saveCache(d){try{localStorage.setItem(CACHE_KEY,JSON.stringify({ts:Date
   </form>
   <button class="close-sub" onclick="closeSubBar()" aria-label="Close">&times;</button>
 </div>
+
+<!-- Footer: Version & Disclaimer -->
+<footer style="background:var(--ink);color:rgba(255,255,255,.55);padding:28px 24px;margin-top:0;font-size:12px;line-height:1.7">
+  <div style="max-width:1320px;margin:0 auto;display:grid;grid-template-columns:1fr auto;gap:24px;align-items:start">
+    <div>
+      <p style="color:rgba(255,255,255,.8);font-weight:700;font-family:var(--fh);margin-bottom:6px">SmartSaver Connect AU &mdash; v1.0</p>
+      <p><strong style="color:rgba(255,255,255,.7)">Disclaimer:</strong> All deals, prices, comparisons, tips and information on this site are provided for general informational purposes only, based on publicly available data and personal experience. Prices, offers and availability change frequently and may not reflect current or real-time pricing. Users are expected to independently verify all information, check actual costs, terms and conditions directly with the retailer or service provider, and confirm reliability before making any purchase or financial decision. SmartSaver Connect does not guarantee the accuracy, completeness or timeliness of any information displayed. This site is not affiliated with any retailer, bank, insurer or service provider listed. Use at your own discretion.</p>
+      <p style="margin-top:8px">Fuel prices sourced from PetrolSpy, Motormouth and VIC Government APIs. Grocery deals via OzBargain community. Game deals via CheapShark API. &copy; 2025 SmartSaver Connect AU. Free community project &mdash; not for commercial use.</p>
+    </div>
+    <div style="text-align:right;white-space:nowrap">
+      <p style="color:rgba(255,255,255,.35)">v1.0</p>
+      <a href="blog.html" style="color:var(--amber);text-decoration:underline;font-size:13px">Tips &amp; Blog</a><br/>
+      <a href="compare.html" style="color:var(--amber);text-decoration:underline;font-size:13px">Compare Tools</a>
+    </div>
+  </div>
+</footer>
 </body>
 </html>
