@@ -377,7 +377,8 @@ body{font-family:var(--fb);font-size:15px;line-height:1.65;background:var(--bg);
       <li><a href="catalogue-search.html">Search</a></li>
       <li><a href="compare.html">Compare</a></li>
       <li><a href="catalogues.html">Catalogues</a></li>
-      <li><a href="cashback.html">Cashback</a></li>
+      <li><a href="cashback.html">Cashback</a>
+      <a href="blog.html">Blog &amp; Tips</a></li>
     </ul></nav>
     <div class="hdr-btns">
       <button class="btn-ghost" onclick="openSubmitDeal()">&#128230; Submit a Deal</button>
@@ -650,7 +651,7 @@ body{font-family:var(--fb);font-size:15px;line-height:1.65;background:var(--bg);
 <script>
 // SmartSaver Connect — Main JS
 // Replace YOUR_APPS_SCRIPT_WEB_APP_URL_HERE with your Apps Script Web App URL
-var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz60iBo_PfKtmny2YmwFgjvCCIMDoXpHWf7KBPVDfUNBA8VtRybMCSwn7Ze9wvCdg8KHA/exec';
+var APPS_SCRIPT_URL = 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
 var CACHE_KEY = 'ssc_v9';
 var TTL = 2*60*60*1000;
 var deals=[], coupons=[], fuel=[], insurance=[];
@@ -743,6 +744,32 @@ function showAmazonFallback() {
     +'To enable live product scraping, set up the <strong>Amazon Associates API</strong> (free): '
     +'<a href="https://affiliate-program.amazon.com.au" target="_blank" rel="noopener">Sign up here</a>, '
     +'then add your keys in Script Properties (AMAZON_ACCESS_KEY, AMAZON_SECRET_KEY, AMAZON_PARTNER_TAG).</div>';
+}
+
+// ── BROWSER-SIDE FUEL PRICE FETCHER ──────────────────────────
+// PetrolSpy API is CORS-friendly — works from browsers
+function fetchFuelBrowser(callback) {
+  // PetrolSpy covers Point Cook area (bounding box)
+  var url = 'https://petrolspy.com.au/webservice-1/station/box?neLat=-37.80&neLng=144.82&swLat=-37.95&swLng=144.68';
+  fetch(url).then(function(r){return r.json();}).then(function(data) {
+    if (!data||!data.message||!data.message.list) { callback(null); return; }
+    var prices = [];
+    data.message.list.forEach(function(s) {
+      Object.entries(s.prices||{}).forEach(function(entry) {
+        var fuelId = entry[0], priceObj = entry[1];
+        var p = parseFloat(priceObj.amount);
+        if (!p||p<80||p>350) return;
+        var fuelMap = {E10:'E10',U91:'ULP',P95:'P95',P98:'P98',DL:'Diesel',LPG:'LPG',
+          e10:'E10',u91:'ULP',p95:'P95',p98:'P98',diesel:'Diesel',lpg:'LPG'};
+        prices.push({
+          name: s.name||'Station', brand: s.brand||'',
+          type: fuelMap[fuelId]||fuelId, price: p,
+          suburb: s.suburb||'Point Cook area'
+        });
+      });
+    });
+    callback(prices);
+  }).catch(function(){ callback(null); });
 }
 
 // ── Auto-refresh timer ──────────────────────────────────────
@@ -968,7 +995,7 @@ function fetchFresh(spin) {
     cleanup();
     if (btn) { btn.disabled=false; ico.className=''; ico.innerHTML='&#8635;'; }
     if (!json || !json.ok) {
-      setErr('Apps Script error: ' + ((json && json.error) || 'unknown')
+      setErr('Apps Script error: ' + ((json && json.error) || 'unknown') 
         + '. Ensure Web App access is set to <strong>Anyone</strong>.');
       return;
     }
@@ -1197,6 +1224,25 @@ function renderDeals() {
     return;
   }
   if (activeFilter==='fuel') {
+    // If no server-side fuel data, try browser-side PetrolSpy
+    if (!fuel.length) {
+      setTitle('Fuel Prices', 'Fetching live prices from PetrolSpy...');
+      fetchFuelBrowser(function(ps) {
+        if (ps && ps.length) {
+          fuel = ps.map(function(f){return{name:f.name,brand:f.brand,type:f.type,price:f.price,suburb:f.suburb};});
+          renderFuelGrid(q);
+          setTitle('Fuel Prices', fuel.length + ' live stations from PetrolSpy');
+        } else {
+          document.getElementById('fuelOutput').innerHTML=
+            '<div class="deals-grid"><div class="empty-state"><h3>No fuel data yet</h3>'
+            +'<p>Run the Fuel scraper from your Google Sheet menu, or check '
+            +'<a href="https://petrolspy.com.au/map?center=-37.9,144.75&zoom=12" target="_blank" rel="noopener">PetrolSpy live map</a> '
+            +'and <a href="https://www.motormouth.com.au/fuel-price-map?postcode=3030" target="_blank" rel="noopener">Motormouth 3030</a>.</p></div></div>';
+          setTitle('Fuel Prices','Set VIC_FUEL_API_KEY for live prices');
+        }
+      });
+      return;
+    }
     document.getElementById('dealOutput').innerHTML='';
     renderFuelGrid(q);
     setTitle('Fuel Prices','Cheapest per fuel type highlighted');
@@ -1588,7 +1634,7 @@ function submitDeal() {
   var name = (document.getElementById('sdContactName').value||'').trim();
   var email = (document.getElementById('sdContactEmail').value||'').trim();
   var expiry = (document.getElementById('sdExpiry').value||'').trim();
-
+  
   if (!biz || !title || !url || !name || !email) {
     // Highlight required fields
     ['sdBusiness','sdTitle2','sdUrl','sdContactName','sdContactEmail'].forEach(function(id){
@@ -1599,14 +1645,14 @@ function submitDeal() {
     return;
   }
   if (email.indexOf('@') === -1) { document.getElementById('sdContactEmail').style.borderColor='#dc2626'; return; }
-
+  
   var btn = document.getElementById('sdSubmitBtn');
   btn.disabled = true; btn.textContent = 'Submitting\u2026';
-
+  
   if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.indexOf('YOUR_') !== -1) {
     showSubmitSuccess(name); return;
   }
-
+  
   var params = 'action=submitDeal'
     + '&business=' + encodeURIComponent(biz)
     + '&title=' + encodeURIComponent(title)
@@ -1618,7 +1664,7 @@ function submitDeal() {
     + '&contactName=' + encodeURIComponent(name)
     + '&contactEmail=' + encodeURIComponent(email)
     + '&expiry=' + encodeURIComponent(expiry);
-
+  
   var cb = 'sd_' + Date.now(), sc = document.createElement('script');
   var tim = setTimeout(function(){ if(sc.parentNode)sc.parentNode.removeChild(sc); delete window[cb]; showSubmitSuccess(name); }, 12000);
   window[cb] = function(){ clearTimeout(tim); if(sc.parentNode)sc.parentNode.removeChild(sc); delete window[cb]; showSubmitSuccess(name); };

@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SmartSaver Connect — Money Saving Tips & Blog</title>
+<meta name="description" content="Australian money saving tips, cashback strategies, fuel savings, grocery hacks and smart shopping guides."/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Lexend:wght@600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f4f2ef;--surface:#fff;--s2:#edeae5;--s3:#e3dfda;
+  --border:#d8d4ce;--border2:#c4bfb8;
+  --ink:#1a1714;--ink2:#3d3832;--ink3:#6b6560;--ink4:#9e9890;
+  --teal:#0d6e63;--teal2:#0a5a52;--teal-bg:#e8f5f2;
+  --red:#c42b1c;--red-bg:#fef1ef;
+  --grn:#157a3e;--grn-bg:#eef8f1;
+  --blue:#1d5dbf;--blue-bg:#edf3fc;
+  --amber:#d97706;--amber-bg:#fef8ec;
+  --fh:'Lexend',system-ui,sans-serif;--fb:'Inter',system-ui,sans-serif;
+  --r:12px;--s:0 2px 8px rgba(0,0,0,.06);
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#161413;--surface:#222120;--s2:#2c2a28;--s3:#363432;
+  --border:#444240;--border2:#555350;
+  --ink:#f0ece6;--ink2:#c4beb6;--ink3:#8a847c;--ink4:#5a5650;
+  --teal:#14b8a6;--teal2:#0d9488;--teal-bg:#0a1e1b;
+  --red:#f87171;--red-bg:#2d0e0e;
+  --grn:#4ade80;--grn-bg:#072615;
+  --blue:#60a5fa;--blue-bg:#0e1d3c;
+  --amber:#fbbf24;--amber-bg:#1c1500;
+}}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+body{font-family:var(--fb);font-size:16px;line-height:1.75;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased}
+:focus-visible{outline:3px solid var(--teal);outline-offset:3px;border-radius:4px}
+a{color:var(--blue);text-decoration:underline;text-underline-offset:2px}
+a:hover{color:var(--teal)}
+
+/* Nav */
+.top-bar{background:var(--teal);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.top-bar a{color:#fff;text-decoration:none;font-weight:600;font-size:14px;padding:6px 14px;border-radius:8px;min-height:44px;display:inline-flex;align-items:center}
+.top-bar a:hover{background:rgba(255,255,255,.15)}
+.top-bar .logo{font-family:var(--fh);font-size:16px;font-weight:800}
+.top-nav{display:flex;gap:4px;flex-wrap:wrap}
+
+.wrap{max-width:860px;margin:0 auto;padding:32px 20px 80px}
+
+/* Hero */
+.hero{background:var(--teal);color:#fff;border-radius:var(--r);padding:40px 32px;margin-bottom:36px;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;right:-60px;bottom:-60px;width:200px;height:200px;background:rgba(255,255,255,.08);border-radius:50%}
+.hero h1{font-family:var(--fh);font-size:clamp(26px,3.5vw,36px);font-weight:900;letter-spacing:-1px;margin-bottom:8px;position:relative;z-index:1}
+.hero p{font-size:16px;color:rgba(255,255,255,.8);max-width:600px;line-height:1.7;position:relative;z-index:1}
+
+/* Blog post card */
+.post{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);margin-bottom:24px;overflow:hidden;box-shadow:var(--s)}
+.post-header{padding:28px 28px 0;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.post-tag{font-family:var(--fh);font-size:11px;font-weight:800;padding:4px 12px;border-radius:999px;text-transform:uppercase;letter-spacing:.05em}
+.tag-grocery{background:var(--grn-bg);color:var(--grn)}
+.tag-fuel{background:#f3e8ff;color:#7c3aed}
+.tag-cashback{background:var(--amber-bg);color:var(--amber)}
+.tag-energy{background:var(--blue-bg);color:var(--blue)}
+.tag-general{background:var(--teal-bg);color:var(--teal)}
+.tag-insurance{background:var(--red-bg);color:var(--red)}
+.tag-tech{background:#eef0ff;color:#4338ca}
+.post-date{font-size:13px;color:var(--ink3)}
+.post-body{padding:20px 28px 28px}
+.post-body h2{font-family:var(--fh);font-size:22px;font-weight:800;letter-spacing:-.4px;margin-bottom:12px;color:var(--ink);line-height:1.3}
+.post-body h3{font-family:var(--fh);font-size:17px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+.post-body p{margin-bottom:14px;color:var(--ink2)}
+.post-body ul,.post-body ol{margin:0 0 16px 24px;color:var(--ink2)}
+.post-body li{margin-bottom:6px;line-height:1.65}
+.post-body strong{color:var(--ink);font-weight:700}
+.tip-box{background:var(--teal-bg);border-left:4px solid var(--teal);border-radius:0 8px 8px 0;padding:14px 18px;margin:16px 0;font-size:14px;line-height:1.65}
+.tip-box strong{color:var(--teal)}
+.warning-box{background:var(--red-bg);border-left:4px solid var(--red);border-radius:0 8px 8px 0;padding:14px 18px;margin:16px 0;font-size:14px;line-height:1.65}
+
+/* User blog posts from Google Sheets */
+#userPosts{margin-top:40px}
+.user-post{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:24px 28px;margin-bottom:20px;box-shadow:var(--s)}
+.user-post h2{font-family:var(--fh);font-size:20px;font-weight:800;margin-bottom:8px}
+.user-post .meta{font-size:13px;color:var(--ink3);margin-bottom:12px}
+.user-post .content{color:var(--ink2);line-height:1.75}
+
+/* Admin panel */
+.admin-panel{background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:24px;margin-top:40px}
+.admin-panel h2{font-family:var(--fh);font-size:18px;font-weight:800;margin-bottom:4px}
+.admin-panel p{font-size:13px;color:var(--ink3);margin-bottom:16px}
+.admin-panel label{font-size:14px;font-weight:700;color:var(--ink);display:block;margin-bottom:4px}
+.admin-panel input,.admin-panel textarea,.admin-panel select{width:100%;padding:10px 14px;border:1.5px solid var(--border2);border-radius:8px;font-size:15px;font-family:inherit;color:var(--ink);background:var(--surface);margin-bottom:12px;min-height:44px}
+.admin-panel textarea{min-height:120px;resize:vertical;line-height:1.6}
+.admin-panel button{padding:12px 24px;background:var(--teal);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--fh);min-height:44px}
+.admin-panel button:hover{background:var(--teal2)}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <a href="index.html" class="logo">&#128176; SmartSaver Connect</a>
+  <nav class="top-nav" aria-label="Main navigation">
+    <a href="index.html">Deals</a>
+    <a href="catalogues.html">Catalogues</a>
+    <a href="compare.html">Compare</a>
+    <a href="blog.html" style="background:rgba(255,255,255,.2)">Blog & Tips</a>
+    <a href="cashback.html">Cashback</a>
+  </nav>
+</div>
+
+<div class="wrap">
+
+<div class="hero">
+  <h1>&#128161; Money Saving Tips & Blog</h1>
+  <p>Practical Australian money-saving strategies from grocery shopping to fuel, energy, cashback stacking and smart subscriptions.</p>
+</div>
+
+<!-- ═══ BUILT-IN TIPS ═══ -->
+
+<article class="post">
+  <div class="post-header">
+    <span class="post-tag tag-cashback">Cashback</span>
+    <span class="post-date">Essential Guide</span>
+  </div>
+  <div class="post-body">
+    <h2>The Cashback Stacking Strategy That Saves Australians $500+/Year</h2>
+    <p>Most people use one cashback app. The real savings come from <strong>stacking multiple sources</strong> on the same purchase. Here is exactly how to do it legally and ethically.</p>
+
+    <h3>Step 1: Sign up to all three cashback portals (free)</h3>
+    <ul>
+      <li><strong><a href="https://www.shopback.com.au" target="_blank" rel="noopener">ShopBack</a></strong> &mdash; highest rates for fashion, electronics, travel</li>
+      <li><strong><a href="https://www.cashrewards.com.au" target="_blank" rel="noopener">Cashrewards</a></strong> &mdash; best for grocery (Woolworths gift cards), petrol, everyday</li>
+      <li><strong><a href="https://www.topcashback.com.au" target="_blank" rel="noopener">TopCashback</a></strong> &mdash; often highest rate but slower payout</li>
+    </ul>
+    <p>Before every online purchase, check all three for the <strong>highest cashback rate</strong> on that retailer. Rates change daily.</p>
+
+    <h3>Step 2: Stack with a cashback credit card</h3>
+    <p>Use a credit card that earns cashback or points on top of the portal cashback. For example: ING Orange One (1% cashback) + ShopBack (5% on electronics) = <strong>6% total return</strong>.</p>
+
+    <h3>Step 3: Buy gift cards at a discount</h3>
+    <p>Cashrewards often offers 5% cashback on Woolworths gift cards. Buy a $500 Woolworths gift card through Cashrewards, get $25 back, then use the card for groceries. You just saved 5% on groceries permanently.</p>
+
+    <div class="tip-box">
+      <strong>Pro tip:</strong> Set a reminder every Sunday night to check ShopBack, Cashrewards and TopCashback for the week&rsquo;s best rates before doing your online shopping.
+    </div>
+  </div>
+</article>
+
+<article class="post">
+  <div class="post-header">
+    <span class="post-tag tag-fuel">Fuel</span>
+    <span class="post-date">Essential Guide</span>
+  </div>
+  <div class="post-body">
+    <h2>How to Save $400+/Year on Petrol in Melbourne</h2>
+    <p>Fuel prices in Melbourne follow predictable cycles. Understanding them can save a family car <strong>$400&ndash;$800 per year</strong>.</p>
+
+    <h3>The Melbourne fuel price cycle</h3>
+    <p>Melbourne petrol prices follow a roughly <strong>fortnightly cycle</strong>: prices drop for 5&ndash;7 days then spike overnight. The cheapest days are typically <strong>Tuesday or Wednesday</strong> at the bottom of the cycle.</p>
+
+    <h3>How to time your fill-up</h3>
+    <ol>
+      <li>Check <a href="https://petrolspy.com.au" target="_blank" rel="noopener">PetrolSpy</a> or <a href="https://www.motormouth.com.au" target="_blank" rel="noopener">Motormouth</a> before filling up</li>
+      <li>Use the <a href="https://www.accc.gov.au/consumers/petrol-and-fuel/petrol-price-cycles" target="_blank" rel="noopener">ACCC petrol price cycle</a> to predict the cheapest day</li>
+      <li>Fill up at the <strong>bottom of the cycle</strong> &mdash; don&rsquo;t wait until your tank is empty</li>
+      <li>Drive to a cheaper suburb if the saving is more than 10c/L (saves $5&ndash;$8 per tank)</li>
+    </ol>
+
+    <h3>Best fuel discount programs</h3>
+    <ul>
+      <li><strong>Woolworths Everyday Rewards:</strong> Earn points on groceries, redeem for fuel discounts at Ampol</li>
+      <li><strong>Flybuys + Shell Coles Express:</strong> Earn flybuys points, 4c/L off with $30+ Coles spend</li>
+      <li><strong>7-Eleven Fuel Lock:</strong> Lock in today&rsquo;s price via the app for up to 7 days &mdash; fill up when convenient</li>
+      <li><strong>Costco fuel:</strong> Consistently 10&ndash;20c/L cheaper (membership required, $65/year)</li>
+    </ul>
+
+    <div class="tip-box">
+      <strong>Point Cook tip:</strong> Costco Altona (15 min drive) and Liberty stations on Palmers Road are usually the cheapest options near Point Cook. Check <a href="https://www.motormouth.com.au/fuel-price-map?postcode=3030" target="_blank" rel="noopener">Motormouth postcode 3030</a> before driving.
+    </div>
+  </div>
+</article>
+
+<article class="post">
+  <div class="post-header">
+    <span class="post-tag tag-grocery">Grocery</span>
+    <span class="post-date">Essential Guide</span>
+  </div>
+  <div class="post-body">
+    <h2>Save $2,000/Year on Groceries Without Couponing</h2>
+    <p>The average Australian family spends $250&ndash;$350/week on groceries. These strategies can cut that by <strong>20&ndash;30%</strong> without clipping a single coupon.</p>
+
+    <h3>The half-price rotation system</h3>
+    <p>Woolworths and Coles rotate half-price specials every Wednesday. Most products go half-price every <strong>4&ndash;6 weeks</strong>. Buy enough at half price to last until the next half-price cycle.</p>
+    <ul>
+      <li>Stock up on non-perishables when they&rsquo;re half price (pasta, rice, canned goods, cleaning products)</li>
+      <li>Use <a href="https://www.trolley.com.au" target="_blank" rel="noopener">Trolley.com.au</a> to track price history and know when something is genuinely cheap</li>
+      <li>Never buy branded cleaning products at full price &mdash; they go half price every 4 weeks</li>
+    </ul>
+
+    <h3>ALDI first, then fill gaps</h3>
+    <p>Do your main shop at ALDI (typically 15&ndash;25% cheaper), then buy only what ALDI doesn&rsquo;t stock from Coles or Woolworths. ALDI&rsquo;s own-brand products are often made by the same manufacturers as name brands.</p>
+
+    <h3>The markdown schedule</h3>
+    <ul>
+      <li><strong>Woolworths:</strong> Markdowns on bakery and meat typically happen by 7pm, with bigger discounts after 8pm</li>
+      <li><strong>Coles:</strong> Similar timing, check the &ldquo;quick sale&rdquo; section near the deli</li>
+      <li><strong>Costco:</strong> Best for bulk non-perishables, nappies, pet food, and fresh meat in large packs</li>
+    </ul>
+
+    <div class="tip-box">
+      <strong>Pro tip:</strong> Sign up for both <a href="https://www.woolworths.com.au/shop/discover/everyday-rewards" target="_blank" rel="noopener">Everyday Rewards</a> and <a href="https://www.flybuys.com.au" target="_blank" rel="noopener">Flybuys</a>. The points add up to $100&ndash;$200/year in free groceries.
+    </div>
+  </div>
+</article>
+
+<article class="post">
+  <div class="post-header">
+    <span class="post-tag tag-energy">Energy</span>
+    <span class="post-date">Essential Guide</span>
+  </div>
+  <div class="post-body">
+    <h2>Switch Energy Providers in 10 Minutes, Save $300&ndash;$600/Year</h2>
+    <p>Most Australians are on their retailer&rsquo;s default plan, which is <strong>always the most expensive</strong>. Switching takes 10 minutes online and there are no interruptions to your power.</p>
+
+    <h3>How to find the cheapest plan</h3>
+    <ol>
+      <li>Go to <a href="https://www.energymadeeasy.gov.au" target="_blank" rel="noopener">energymadeeasy.gov.au</a> (government comparison site &mdash; no affiliate bias)</li>
+      <li>Enter your postcode and upload your last bill (or enter your usage)</li>
+      <li>Sort by <strong>estimated annual cost</strong></li>
+      <li>Switch online &mdash; the new retailer handles everything</li>
+    </ol>
+
+    <h3>Best value retailers (as of 2024&ndash;25)</h3>
+    <ul>
+      <li><strong><a href="https://www.reamped.com.au" target="_blank" rel="noopener">ReAmped Energy</a></strong> &mdash; consistently cheapest flat-rate in VIC, no lock-in</li>
+      <li><strong><a href="https://www.amber.com.au" target="_blank" rel="noopener">Amber Electric</a></strong> &mdash; wholesale pricing, best if you have solar + battery</li>
+      <li><strong><a href="https://www.goenergy.com.au" target="_blank" rel="noopener">Globird Energy</a></strong> &mdash; competitive VIC rates, good for small households</li>
+    </ul>
+
+    <div class="warning-box">
+      <strong>Important:</strong> Never sign up through a door-to-door salesperson or cold call. Always compare first on energymadeeasy.gov.au. Also compare at <a href="https://compare.energy.vic.gov.au" target="_blank" rel="noopener">Victorian Energy Compare</a> (VIC government site).
+    </div>
+
+    <div class="tip-box">
+      <strong>Re-compare every 12 months.</strong> Retailers change pricing constantly. Set a calendar reminder to re-compare annually. It takes 10 minutes and can save hundreds.
+    </div>
+  </div>
+</article>
+
+<article class="post">
+  <div class="post-header">
+    <span class="post-tag tag-tech">Subscriptions</span>
+    <span class="post-date">Essential Guide</span>
+  </div>
+  <div class="post-body">
+    <h2>The Subscription Audit: How to Cut $50&ndash;$100/Month</h2>
+    <p>The average Australian household has <strong>6&ndash;8 active subscriptions</strong> they&rsquo;re paying for. Many are unused or have cheaper alternatives.</p>
+
+    <h3>The 3-step subscription audit</h3>
+    <ol>
+      <li><strong>List everything:</strong> Check your bank statement for the last 3 months. Write down every recurring charge.</li>
+      <li><strong>Score each one:</strong> Rate each subscription 1&ndash;5 on how much you actually use it. Cancel anything scored 1 or 2.</li>
+      <li><strong>Find cheaper alternatives:</strong> Look for free tiers, family plans, or annual billing discounts.</li>
+    </ol>
+
+    <h3>Common subscription savings</h3>
+    <ul>
+      <li><strong>Streaming:</strong> Rotate services monthly instead of paying for all at once. Watch what you want, cancel, switch to the next.</li>
+      <li><strong>Music:</strong> YouTube Music comes free with YouTube Premium. Spotify has a free tier. Apple Music often has 3&ndash;6 month free trials.</li>
+      <li><strong>Software:</strong> Check <a href="https://www.g2a.com/category/subscriptions-c136" target="_blank" rel="noopener">G2A</a> for discounted subscription codes before renewing at full price.</li>
+      <li><strong>Cloud storage:</strong> Google One 100GB is $2.49/month. iCloud 50GB is $1.49/month. Don&rsquo;t pay for more than you need.</li>
+      <li><strong>Gym:</strong> Many health insurers include gym memberships. Check before paying separately.</li>
+    </ul>
+
+    <div class="tip-box">
+      <strong>Family plan hack:</strong> Apple One Family ($26.95/month) gives 6 people Music, TV+, Arcade, and 200GB iCloud. Split with family = ~$4.50/person/month for 4 services.
+    </div>
+  </div>
+</article>
+
+<article class="post">
+  <div class="post-header">
+    <span class="post-tag tag-insurance">Insurance</span>
+    <span class="post-date">Essential Guide</span>
+  </div>
+  <div class="post-body">
+    <h2>Car & Home Insurance: The 15-Minute Comparison That Saves $200&ndash;$500</h2>
+    <p>Auto-renewing insurance is almost always more expensive than getting a new quote. Spend 15 minutes comparing and save hundreds.</p>
+
+    <h3>The comparison process</h3>
+    <ol>
+      <li>Get your current policy details (sum insured, excess amount, cover type)</li>
+      <li>Get quotes from 3&ndash;4 providers: <a href="https://www.budgetdirect.com.au" target="_blank" rel="noopener">Budget Direct</a>, <a href="https://www.racv.com.au" target="_blank" rel="noopener">RACV</a>, <a href="https://www.aami.com.au" target="_blank" rel="noopener">AAMI</a>, and your current provider</li>
+      <li>Use comparison sites: <a href="https://www.comparethemarket.com.au" target="_blank" rel="noopener">Compare the Market</a>, <a href="https://www.iselect.com.au" target="_blank" rel="noopener">iSelect</a></li>
+      <li>Call your current insurer with the cheapest quote &mdash; they&rsquo;ll often match or beat it to keep you</li>
+    </ol>
+
+    <div class="tip-box">
+      <strong>Pro tip:</strong> Increasing your excess from $500 to $1,000 typically saves 15&ndash;20% on premiums. Only do this if you have $1,000 in savings for emergencies.
+    </div>
+  </div>
+</article>
+
+<!-- ═══ USER BLOG POSTS (from Google Sheets) ═══ -->
+<div id="userPosts">
+  <div style="text-align:center;padding:20px;color:var(--ink3);font-size:14px" id="userPostsLoading"></div>
+</div>
+
+<!-- ═══ ADMIN: ADD/EDIT POST ═══ -->
+<div class="admin-panel" id="adminPanel">
+  <h2>&#9998; Add a Blog Post</h2>
+  <p>Write a new post below. It will be saved to your Google Sheet and appear on this page. You can also edit posts directly in the Google Sheet (Blog tab).</p>
+  <label for="blogTitle">Title</label>
+  <input id="blogTitle" placeholder="e.g. 5 Ways to Save on Your Next Electricity Bill"/>
+  <label for="blogTag">Category</label>
+  <select id="blogTag">
+    <option value="general">General</option>
+    <option value="grocery">Grocery</option>
+    <option value="fuel">Fuel</option>
+    <option value="cashback">Cashback</option>
+    <option value="energy">Energy</option>
+    <option value="insurance">Insurance</option>
+    <option value="tech">Tech & Subscriptions</option>
+  </select>
+  <label for="blogBody">Content (HTML or plain text)</label>
+  <textarea id="blogBody" placeholder="Write your blog post here. You can use basic HTML tags like <h3>, <p>, <ul>, <li>, <strong>, <a href='...'>."></textarea>
+  <button onclick="submitBlogPost()">Publish Post &#8594;</button>
+  <div id="blogMsg" style="margin-top:12px;font-size:14px;color:var(--teal);display:none"></div>
+</div>
+
+<!-- Subscribe banner -->
+<div style="background:var(--teal);color:#fff;padding:32px 24px;margin-top:48px;border-radius:12px;text-align:center">
+  <h2 style="font-size:22px;font-weight:800;margin-bottom:8px">&#128276; Get Daily Savings Tips</h2>
+  <p style="font-size:14px;color:rgba(255,255,255,.75);max-width:500px;margin:0 auto 16px;line-height:1.6">
+    Money-saving tips plus the best deals from 50+ AU retailers delivered at 7am daily. Free.
+  </p>
+  <form style="display:flex;gap:10px;max-width:480px;margin:0 auto;flex-wrap:wrap;justify-content:center"
+    onsubmit="event.preventDefault();this.querySelector('button').textContent='\u2705 Subscribed!';this.querySelector('button').disabled=true">
+    <input type="email" placeholder="Your email" required
+      style="flex:1;min-width:220px;padding:12px 16px;border:2px solid rgba(255,255,255,.4);border-radius:8px;font-size:15px;background:rgba(255,255,255,.15);color:#fff;font-family:inherit"/>
+    <button type="submit"
+      style="padding:12px 24px;background:#fff;color:var(--teal);border:none;border-radius:8px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit">
+      Subscribe Free
+    </button>
+  </form>
+</div>
+
+</div><!-- end .wrap -->
+
+<script>
+// Blog posts from Google Sheets
+var BLOG_URL = localStorage.getItem('ssc_url') || '';
+
+function loadUserPosts() {
+  if (!BLOG_URL || BLOG_URL.indexOf('YOUR_') !== -1) {
+    document.getElementById('userPostsLoading').innerHTML =
+      '<p style="color:var(--ink4)">Set up your Apps Script URL on the <a href="index.html">main page</a> to enable custom blog posts.</p>';
+    return;
+  }
+  var cb = 'blog_' + Date.now(), sc = document.createElement('script');
+  var tim = setTimeout(function(){ delete window[cb]; if(sc.parentNode)sc.parentNode.removeChild(sc); }, 10000);
+  window[cb] = function(json) {
+    clearTimeout(tim); delete window[cb]; if(sc.parentNode)sc.parentNode.removeChild(sc);
+    if (!json || !json.ok || !json.data || !json.data.blog) return;
+    var posts = json.data.blog;
+    if (!posts.length) { document.getElementById('userPostsLoading').textContent = ''; return; }
+    var h = '<h2 style="font-family:var(--fh);font-size:22px;font-weight:800;margin-bottom:16px">\u270D\uFE0F Your Posts</h2>';
+    posts.forEach(function(p) {
+      var tagClass = 'tag-' + (p.tag || 'general');
+      h += '<div class="user-post">'
+        + '<div style="display:flex;gap:10px;align-items:center;margin-bottom:8px">'
+        + '<span class="post-tag ' + tagClass + '">' + esc(p.tag || 'General') + '</span>'
+        + '<span class="post-date">' + esc(p.date || '') + '</span></div>'
+        + '<h2>' + esc(p.title || 'Untitled') + '</h2>'
+        + '<div class="content">' + (p.html ? p.html : '<p>' + esc(p.body || '') + '</p>') + '</div>'
+        + '</div>';
+    });
+    document.getElementById('userPosts').innerHTML = h;
+  };
+  sc.onerror = function(){ clearTimeout(tim); delete window[cb]; if(sc.parentNode)sc.parentNode.removeChild(sc); };
+  sc.src = BLOG_URL + '?action=getBlog&callback=' + cb;
+  document.head.appendChild(sc);
+}
+
+function submitBlogPost() {
+  var title = (document.getElementById('blogTitle').value || '').trim();
+  var tag = document.getElementById('blogTag').value;
+  var body = (document.getElementById('blogBody').value || '').trim();
+  if (!title || !body) { alert('Please enter a title and content.'); return; }
+  if (!BLOG_URL || BLOG_URL.indexOf('YOUR_') !== -1) {
+    document.getElementById('blogMsg').textContent = 'Set up your Apps Script URL first.';
+    document.getElementById('blogMsg').style.display = 'block';
+    return;
+  }
+  var cb = 'bp_' + Date.now(), sc = document.createElement('script');
+  window[cb] = function() {
+    delete window[cb]; if(sc.parentNode)sc.parentNode.removeChild(sc);
+    document.getElementById('blogMsg').textContent = '\u2705 Post published! Refresh to see it.';
+    document.getElementById('blogMsg').style.display = 'block';
+    document.getElementById('blogTitle').value = '';
+    document.getElementById('blogBody').value = '';
+  };
+  sc.onerror = function() { delete window[cb]; if(sc.parentNode)sc.parentNode.removeChild(sc);
+    document.getElementById('blogMsg').textContent = '\u2705 Post saved (pending sync).';
+    document.getElementById('blogMsg').style.display = 'block';
+  };
+  sc.src = BLOG_URL + '?action=addBlog&title=' + encodeURIComponent(title)
+    + '&tag=' + encodeURIComponent(tag) + '&body=' + encodeURIComponent(body) + '&callback=' + cb;
+  document.head.appendChild(sc);
+}
+
+function esc(v) { return String(v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+loadUserPosts();
+</script>
+</body>
+</html>

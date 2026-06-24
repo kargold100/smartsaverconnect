@@ -59,6 +59,10 @@ function doGet(e) {
     );
   } else if (action === 'submitDeal') {
     result = handleDealSubmission(e.parameter);
+  } else if (action === 'getBlog') {
+    result = getBlogPosts();
+  } else if (action === 'addBlog') {
+    result = addBlogPost(e.parameter);
   } else {
     result = getDealsPayload();
   }
@@ -72,6 +76,52 @@ function doGet(e) {
   return ContentService
     .createTextOutput(json)
     .setMimeType(ContentService.MimeType.JSON);
+}
+
+// ── Blog Posts (Google Sheets backend) ─────────────────────────
+function getBlogPosts() {
+  try {
+    const ss = SpreadsheetApp.openById(SHEET_ID);
+    let sh = ss.getSheetByName('Blog');
+    if (!sh) return { ok: true, data: { blog: [] } };
+    const rows = sh.getDataRange().getValues();
+    if (rows.length < 2) return { ok: true, data: { blog: [] } };
+    const posts = [];
+    for (let i = rows.length - 1; i >= 1; i--) {
+      const [date, title, tag, body, html] = rows[i];
+      if (!title) continue;
+      posts.push({
+        date: date ? Utilities.formatDate(new Date(date), 'Australia/Melbourne', 'dd MMM yyyy') : '',
+        title: String(title), tag: String(tag || 'general'),
+        body: String(body || ''), html: String(html || '')
+      });
+    }
+    return { ok: true, data: { blog: posts.slice(0, 50) } };
+  } catch(e) { return { ok: false, error: e.message }; }
+}
+
+function addBlogPost(params) {
+  try {
+    const ss = SpreadsheetApp.openById(SHEET_ID);
+    let sh = ss.getSheetByName('Blog');
+    if (!sh) {
+      sh = ss.insertSheet('Blog');
+      sh.getRange(1,1,1,5).setValues([['Date','Title','Tag','Body','HTML']]);
+      sh.setFrozenRows(1);
+      sh.getRange(1,1,1,5).setFontWeight('bold').setBackground('#e8f5f2');
+      sh.setColumnWidth(2, 250);
+      sh.setColumnWidth(4, 500);
+      sh.setColumnWidth(5, 500);
+    }
+    const title = (params.title || '').trim();
+    const tag = (params.tag || 'general').trim();
+    const body = (params.body || '').trim();
+    if (!title || !body) return { ok: false, error: 'Title and body required' };
+    // If body contains HTML tags, put it in HTML column; otherwise in Body column
+    const hasHtml = /<[a-z][\s\S]*>/i.test(body);
+    sh.appendRow([new Date(), title, tag, hasHtml ? '' : body, hasHtml ? body : '']);
+    return { ok: true, message: 'Post added' };
+  } catch(e) { return { ok: false, error: e.message }; }
 }
 
 // ── Deal Submission Handler ───────────────────────────────────
@@ -1533,7 +1583,7 @@ function setupTriggers(){
   ScriptApp.newTrigger('runTelco').timeBased().everyHours(6).create();
   ScriptApp.newTrigger('runCoupons').timeBased().everyHours(4).create();
   ScriptApp.newTrigger('runInsurance').timeBased().everyHours(8).create();
-  ScriptApp.newTrigger('runFuel').timeBased().everyHours(2).create();
+  ScriptApp.newTrigger('runFuel').timeBased().everyHours(6).create(); // runs 4x/day for fresh fuel data
   ScriptApp.newTrigger('runCheapShark').timeBased().everyHours(4).create();
   ScriptApp.newTrigger('runAmazonPAAPI').timeBased().everyHours(3).create();
   ScriptApp.newTrigger('runCashback').timeBased().everyHours(6).create();
