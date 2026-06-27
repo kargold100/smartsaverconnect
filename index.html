@@ -691,7 +691,7 @@ body{font-family:var(--fb);font-size:15px;line-height:1.65;background:var(--bg);
 <script>
 // SmartSaver Connect — Main JS
 // Replace YOUR_APPS_SCRIPT_WEB_APP_URL_HERE with your Apps Script Web App URL
-var APPS_SCRIPT_URL = 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
+var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbywLhUgHi2lk9S2fFOgxx3_4MCz-O9TAh0-bqgFcUBbBwT0lDZ5UVrHSFpj7_nWlHK2FA/exec';
 var CACHE_KEY = 'ssc_v9';
 var TTL = 2*60*60*1000;
 var deals=[], coupons=[], fuel=[], insurance=[];
@@ -1067,7 +1067,7 @@ function fetchFresh(spin) {
     cleanup();
     if (btn) { btn.disabled=false; ico.className=''; ico.innerHTML='&#8635;'; }
     if (!json || !json.ok) {
-      setErr('Apps Script error: ' + ((json && json.error) || 'unknown') 
+      setErr('Apps Script error: ' + ((json && json.error) || 'unknown')
         + '. Ensure Web App access is set to <strong>Anyone</strong>.');
       return;
     }
@@ -1712,7 +1712,7 @@ function submitDeal() {
   var name = (document.getElementById('sdContactName').value||'').trim();
   var email = (document.getElementById('sdContactEmail').value||'').trim();
   var expiry = (document.getElementById('sdExpiry').value||'').trim();
-  
+
   if (!biz || !title || !url || !name || !email) {
     // Highlight required fields
     ['sdBusiness','sdTitle2','sdUrl','sdContactName','sdContactEmail'].forEach(function(id){
@@ -1723,14 +1723,14 @@ function submitDeal() {
     return;
   }
   if (email.indexOf('@') === -1) { document.getElementById('sdContactEmail').style.borderColor='#dc2626'; return; }
-  
+
   var btn = document.getElementById('sdSubmitBtn');
   btn.disabled = true; btn.textContent = 'Submitting\u2026';
-  
+
   if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.indexOf('YOUR_') !== -1) {
     showSubmitSuccess(name); return;
   }
-  
+
   var params = 'action=submitDeal'
     + '&business=' + encodeURIComponent(biz)
     + '&title=' + encodeURIComponent(title)
@@ -1742,7 +1742,7 @@ function submitDeal() {
     + '&contactName=' + encodeURIComponent(name)
     + '&contactEmail=' + encodeURIComponent(email)
     + '&expiry=' + encodeURIComponent(expiry);
-  
+
   var cb = 'sd_' + Date.now(), sc = document.createElement('script');
   var tim = setTimeout(function(){ if(sc.parentNode)sc.parentNode.removeChild(sc); delete window[cb]; showSubmitSuccess(name); }, 12000);
   window[cb] = function(){ clearTimeout(tim); if(sc.parentNode)sc.parentNode.removeChild(sc); delete window[cb]; showSubmitSuccess(name); };
