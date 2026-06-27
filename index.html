@@ -118,7 +118,32 @@ body{font-family:var(--fb);font-size:15px;line-height:1.65;background:var(--bg);
 .btn-dark:hover{background:rgba(255,255,255,.9)}
 .btn-dark:disabled{opacity:.5;cursor:not-allowed}
 @keyframes spin{to{transform:rotate(360deg)}}.spin{display:inline-block;animation:spin .7s linear infinite}
-@media(max-width:860px){.nav{display:none}.logo-tag{display:none}}
+@media(max-width:860px){
+  .nav{display:none;position:absolute;top:60px;left:0;right:0;background:var(--nav);flex-direction:column;padding:8px 16px 16px;box-shadow:0 8px 24px rgba(0,0,0,.2);z-index:99}
+  .nav.open{display:flex}
+  .nav a{min-height:48px;padding:12px 16px;border-radius:8px;font-size:15px}
+  .logo-tag{display:none}
+  .hdr-in{position:relative}
+  .hamburger{display:flex;align-items:center;justify-content:center;width:44px;height:44px;background:none;border:none;color:var(--nav-txt);font-size:24px;cursor:pointer;order:-1;margin-right:auto}
+  .hero{padding:28px 16px 24px}
+  .hero h1{font-size:28px;letter-spacing:-1px}
+  .hero-sub{font-size:15px}
+  .search-inp{font-size:15px;min-height:48px}
+  .search-btn{min-height:48px;padding:12px 20px}
+  .page{padding:16px 12px 60px}
+  .sidebar{display:none;position:fixed;top:60px;left:0;right:0;bottom:0;z-index:80;overflow-y:auto;border-radius:0;max-height:calc(100vh - 60px)}
+  .sidebar.open{display:block}
+  .mob-filter-btn{display:flex!important;position:fixed;bottom:16px;right:16px;z-index:85;width:54px;height:54px;border-radius:50%;background:var(--nav);color:var(--nav-txt);border:none;font-size:20px;cursor:pointer;box-shadow:var(--s2);align-items:center;justify-content:center}
+  .deals-grid{grid-template-columns:1fr}
+  .live-cards{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+  .modal{padding:20px;max-width:100%;margin:8px}
+  .sub-bar{padding:10px 12px;gap:8px}
+  .sub-bar input{width:150px}
+  .fuel-body{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
+  .stats-in{padding:0 8px}
+  .stat{padding:10px 12px}
+}
+@media(min-width:861px){.hamburger{display:none}.mob-filter-btn{display:none!important}}
 
 /* ── HERO ──────────────────────────────────────────────────────── */
 .hero{background:var(--surface);border-bottom:2px solid var(--border);padding:var(--g12) var(--g6) var(--g10);position:relative;overflow:hidden}
@@ -399,6 +424,21 @@ body{font-family:var(--fb);font-size:15px;line-height:1.65;background:var(--bg);
           <input class="search-inp" type="search" id="hs" placeholder="Try: milk, headphones, nappies, coffee&hellip;" aria-label="Search deals" autocomplete="off" onkeydown="if(event.key==='Enter')doSearch()"/>
           <button class="search-btn" onclick="doSearch()">Search</button>
         </div>
+        <div style="display:flex;gap:8px;margin-top:12px;align-items:center;flex-wrap:wrap">
+          <label for="suburbInput" style="font-size:13px;font-weight:600;color:var(--ink3)">&#128205; Your suburb:</label>
+          <input id="suburbInput" type="text" placeholder="e.g. Point Cook" list="suburbSuggest"
+            style="padding:8px 14px;border:1.5px solid var(--border2);border-radius:8px;font-size:14px;width:200px;background:var(--surface);color:var(--ink);font-family:inherit;min-height:40px"
+            onchange="saveSuburb(this.value)"/>
+          <datalist id="suburbSuggest">
+            <option value="Point Cook"/><option value="Werribee"/><option value="Hoppers Crossing"/>
+            <option value="Tarneit"/><option value="Truganina"/><option value="Williams Landing"/>
+            <option value="Laverton"/><option value="Altona"/><option value="Wyndham Vale"/>
+            <option value="Manor Lakes"/><option value="Melton"/><option value="Caroline Springs"/>
+            <option value="Deer Park"/><option value="Sunshine"/><option value="Footscray"/>
+            <option value="Melbourne CBD"/><option value="Geelong"/><option value="Craigieburn"/>
+            <option value="Dandenong"/><option value="Frankston"/><option value="Ringwood"/>
+          </datalist>
+        </div>
         <div class="quick-row" role="group" aria-label="Quick searches">
           <span class="ql" aria-hidden="true">Try:</span>
           <button class="qb" onclick="qs(this,'woolworths')" aria-pressed="false">Woolworths</button>
@@ -651,7 +691,7 @@ body{font-family:var(--fb);font-size:15px;line-height:1.65;background:var(--bg);
 <script>
 // SmartSaver Connect — Main JS
 // Replace YOUR_APPS_SCRIPT_WEB_APP_URL_HERE with your Apps Script Web App URL
-var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbywLhUgHi2lk9S2fFOgxx3_4MCz-O9TAh0-bqgFcUBbBwT0lDZ5UVrHSFpj7_nWlHK2FA/exec';
+var APPS_SCRIPT_URL = 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
 var CACHE_KEY = 'ssc_v9';
 var TTL = 2*60*60*1000;
 var deals=[], coupons=[], fuel=[], insurance=[];
@@ -750,7 +790,27 @@ function showAmazonFallback() {
 // PetrolSpy API is CORS-friendly — works from browsers
 function fetchFuelBrowser(callback) {
   // PetrolSpy covers Point Cook area (bounding box)
-  var url = 'https://petrolspy.com.au/webservice-1/station/box?neLat=-37.80&neLng=144.82&swLat=-37.95&swLng=144.68';
+  // Suburb-based bounding boxes for PetrolSpy
+  var boxes = {
+    'point cook':    {neLat:-37.87,neLng:144.78,swLat:-37.94,swLng:144.70},
+    'werribee':      {neLat:-37.86,neLng:144.70,swLat:-37.93,swLng:144.62},
+    'hoppers crossing':{neLat:-37.85,neLng:144.73,swLat:-37.92,swLng:144.67},
+    'tarneit':       {neLat:-37.83,neLng:144.72,swLat:-37.90,swLng:144.64},
+    'truganina':     {neLat:-37.83,neLng:144.74,swLat:-37.87,swLng:144.68},
+    'williams landing':{neLat:-37.84,neLng:144.77,swLat:-37.88,swLng:144.73},
+    'laverton':      {neLat:-37.84,neLng:144.79,swLat:-37.87,swLng:144.75},
+    'altona':        {neLat:-37.85,neLng:144.85,swLat:-37.88,swLng:144.80},
+    'melton':        {neLat:-37.67,neLng:144.62,swLat:-37.72,swLng:144.55},
+    'sunshine':      {neLat:-37.77,neLng:144.84,swLat:-37.80,swLng:144.81},
+    'melbourne cbd': {neLat:-37.80,neLng:144.98,swLat:-37.83,swLng:144.94},
+    'geelong':       {neLat:-38.12,neLng:144.38,swLat:-38.18,swLng:144.32},
+    'craigieburn':   {neLat:-37.58,neLng:144.96,swLat:-37.62,swLng:144.91},
+    'dandenong':     {neLat:-37.97,neLng:145.23,swLat:-38.01,swLng:145.19},
+    'frankston':     {neLat:-38.13,neLng:145.14,swLat:-38.17,swLng:145.10},
+  };
+  var sub = (userSuburb || 'point cook').toLowerCase();
+  var box = boxes[sub] || {neLat:-37.80,neLng:144.82,swLat:-37.95,swLng:144.68}; // default: wider Point Cook area
+  var url = 'https://petrolspy.com.au/webservice-1/station/box?neLat='+box.neLat+'&neLng='+box.neLng+'&swLat='+box.swLat+'&swLng='+box.swLng;
   fetch(url).then(function(r){return r.json();}).then(function(data) {
     if (!data||!data.message||!data.message.list) { callback(null); return; }
     var prices = [];
@@ -772,14 +832,25 @@ function fetchFuelBrowser(callback) {
   }).catch(function(){ callback(null); });
 }
 
-// ── Auto-refresh timer ──────────────────────────────────────
+// ── Auto-refresh timer (deals + fuel + Amazon every 12 min) ──
 var autoRefreshTimer = null;
 function startAutoRefresh() {
   if (autoRefreshTimer) clearInterval(autoRefreshTimer);
   autoRefreshTimer = setInterval(function() {
-    if (document.hidden) return; // skip if tab not visible
-    fetchFresh(false); // silent refresh, no spinner
-  }, 15 * 60 * 1000); // every 15 min
+    if (document.hidden) return;
+    fetchFresh(false);
+    // Also refresh browser-side data caches
+    amazonCache = null; amazonCacheTime = 0;
+    // If user is viewing fuel, refresh it live
+    if (activeFilter === 'fuel') {
+      fetchFuelBrowser(function(ps) {
+        if (ps && ps.length) {
+          fuel = ps.map(function(f){return{name:f.name,brand:f.brand,type:f.type,price:f.price,suburb:f.suburb};});
+          renderFuelGrid('');
+        }
+      });
+    }
+  }, 12 * 60 * 1000); // every 12 min
 }
 
 // ── LIVE RETAILER DATA ──────────────────────────────────────────
@@ -960,7 +1031,8 @@ window.addEventListener('DOMContentLoaded', function() {
     fetchFresh(true);
   }
   startAutoRefresh(); // auto-refresh every 15 min
-  showSubBar(); // show subscribe bar after 10 seconds
+  showSubBar();
+  loadSuburb(); // show subscribe bar after 10 seconds
   var q = new URLSearchParams(window.location.search).get('q');
   if (q) { document.getElementById('hs').value = q; searchQ = q; }
 });
@@ -995,7 +1067,7 @@ function fetchFresh(spin) {
     cleanup();
     if (btn) { btn.disabled=false; ico.className=''; ico.innerHTML='&#8635;'; }
     if (!json || !json.ok) {
-      setErr('Apps Script error: ' + ((json && json.error) || 'unknown')
+      setErr('Apps Script error: ' + ((json && json.error) || 'unknown') 
         + '. Ensure Web App access is set to <strong>Anyone</strong>.');
       return;
     }
@@ -1640,7 +1712,7 @@ function submitDeal() {
   var name = (document.getElementById('sdContactName').value||'').trim();
   var email = (document.getElementById('sdContactEmail').value||'').trim();
   var expiry = (document.getElementById('sdExpiry').value||'').trim();
-
+  
   if (!biz || !title || !url || !name || !email) {
     // Highlight required fields
     ['sdBusiness','sdTitle2','sdUrl','sdContactName','sdContactEmail'].forEach(function(id){
@@ -1651,14 +1723,14 @@ function submitDeal() {
     return;
   }
   if (email.indexOf('@') === -1) { document.getElementById('sdContactEmail').style.borderColor='#dc2626'; return; }
-
+  
   var btn = document.getElementById('sdSubmitBtn');
   btn.disabled = true; btn.textContent = 'Submitting\u2026';
-
+  
   if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.indexOf('YOUR_') !== -1) {
     showSubmitSuccess(name); return;
   }
-
+  
   var params = 'action=submitDeal'
     + '&business=' + encodeURIComponent(biz)
     + '&title=' + encodeURIComponent(title)
@@ -1670,7 +1742,7 @@ function submitDeal() {
     + '&contactName=' + encodeURIComponent(name)
     + '&contactEmail=' + encodeURIComponent(email)
     + '&expiry=' + encodeURIComponent(expiry);
-
+  
   var cb = 'sd_' + Date.now(), sc = document.createElement('script');
   var tim = setTimeout(function(){ if(sc.parentNode)sc.parentNode.removeChild(sc); delete window[cb]; showSubmitSuccess(name); }, 12000);
   window[cb] = function(){ clearTimeout(tim); if(sc.parentNode)sc.parentNode.removeChild(sc); delete window[cb]; showSubmitSuccess(name); };
@@ -1684,6 +1756,32 @@ function showSubmitSuccess(name) {
   document.getElementById('sdSuccess').style.display = 'block';
 }
 document.addEventListener('keydown', function(ev) { if (ev.key === 'Escape') { closeSubmitDeal(); closeSubscribe(); } });
+
+// ── MOBILE NAV & SIDEBAR ──────────────────────────────────────
+function toggleMobileNav() {
+  document.querySelector('.nav').classList.toggle('open');
+}
+function toggleMobileSidebar() {
+  document.querySelector('.sidebar').classList.toggle('open');
+}
+// Close mobile nav/sidebar on backdrop click
+document.addEventListener('click', function(e) {
+  var nav = document.querySelector('.nav');
+  var sb = document.querySelector('.sidebar');
+  if (nav && nav.classList.contains('open') && !e.target.closest('.nav') && !e.target.closest('.hamburger')) {
+    nav.classList.remove('open');
+  }
+  if (sb && sb.classList.contains('open') && !e.target.closest('.sidebar') && !e.target.closest('.mob-filter-btn')) {
+    sb.classList.remove('open');
+  }
+});
+// Close sidebar when filter is selected on mobile
+var origSetFilter = setFilter;
+setFilter = function(el) {
+  origSetFilter(el);
+  var sb = document.querySelector('.sidebar');
+  if (sb) sb.classList.remove('open');
+};
 
 // ── COPY COUPON ───────────────────────────────────────────────────
 function cpyCode(code,btn){
@@ -1730,6 +1828,20 @@ function quickSub(form) {
   sc.src = APPS_SCRIPT_URL + '?action=subscribe&email=' + encodeURIComponent(email)
     + '&name=&cats=grocery,retail,amazon,fuel,telco,chemist,gaming&callback=' + cb;
   document.head.appendChild(sc);
+}
+
+// ── SUBURB / LOCATION ─────────────────────────────────────────
+var userSuburb = localStorage.getItem('ssc_suburb') || 'Point Cook';
+
+function saveSuburb(val) {
+  userSuburb = (val || '').trim();
+  localStorage.setItem('ssc_suburb', userSuburb);
+}
+function loadSuburb() {
+  var saved = localStorage.getItem('ssc_suburb') || 'Point Cook';
+  userSuburb = saved;
+  var el = document.getElementById('suburbInput');
+  if (el) el.value = saved;
 }
 
 // ── HELPERS ───────────────────────────────────────────────────────
