@@ -425,19 +425,17 @@ body{font-family:var(--fb);font-size:15px;line-height:1.65;background:var(--bg);
           <button class="search-btn" onclick="doSearch()">Search</button>
         </div>
         <div style="display:flex;gap:8px;margin-top:12px;align-items:center;flex-wrap:wrap">
-          <label for="suburbInput" style="font-size:13px;font-weight:600;color:var(--ink3)">&#128205; Your suburb:</label>
-          <input id="suburbInput" type="text" placeholder="e.g. Point Cook" list="suburbSuggest"
-            style="padding:8px 14px;border:1.5px solid var(--border2);border-radius:8px;font-size:14px;width:200px;background:var(--surface);color:var(--ink);font-family:inherit;min-height:40px"
-            onchange="saveSuburb(this.value)"/>
-          <datalist id="suburbSuggest">
-            <option value="Point Cook"/><option value="Werribee"/><option value="Hoppers Crossing"/>
-            <option value="Tarneit"/><option value="Truganina"/><option value="Williams Landing"/>
-            <option value="Laverton"/><option value="Altona"/><option value="Wyndham Vale"/>
-            <option value="Manor Lakes"/><option value="Melton"/><option value="Caroline Springs"/>
-            <option value="Deer Park"/><option value="Sunshine"/><option value="Footscray"/>
-            <option value="Melbourne CBD"/><option value="Geelong"/><option value="Craigieburn"/>
-            <option value="Dandenong"/><option value="Frankston"/><option value="Ringwood"/>
-          </datalist>
+          <label style="font-size:13px;font-weight:600;color:var(--ink3)">&#128205;</label>
+          <select id="stateSelect" onchange="saveLocation()"
+            style="padding:8px 12px;border:1.5px solid var(--border2);border-radius:8px;font-size:14px;background:var(--surface);color:var(--ink);font-family:inherit;min-height:40px">
+            <option value="VIC">VIC</option><option value="NSW">NSW</option>
+            <option value="QLD">QLD</option><option value="SA">SA</option>
+            <option value="WA">WA</option><option value="TAS">TAS</option>
+            <option value="NT">NT</option><option value="ACT">ACT</option>
+          </select>
+          <input id="suburbInput" type="text" placeholder="Suburb or postcode"
+            style="padding:8px 14px;border:1.5px solid var(--border2);border-radius:8px;font-size:14px;width:180px;background:var(--surface);color:var(--ink);font-family:inherit;min-height:40px"
+            onchange="saveLocation()"/>
         </div>
         <div class="quick-row" role="group" aria-label="Quick searches">
           <span class="ql" aria-hidden="true">Try:</span>
@@ -790,27 +788,49 @@ function showAmazonFallback() {
 // PetrolSpy API is CORS-friendly — works from browsers
 function fetchFuelBrowser(callback) {
   // PetrolSpy covers Point Cook area (bounding box)
-  // Suburb-based bounding boxes for PetrolSpy
-  var boxes = {
-    'point cook':    {neLat:-37.87,neLng:144.78,swLat:-37.94,swLng:144.70},
-    'werribee':      {neLat:-37.86,neLng:144.70,swLat:-37.93,swLng:144.62},
-    'hoppers crossing':{neLat:-37.85,neLng:144.73,swLat:-37.92,swLng:144.67},
-    'tarneit':       {neLat:-37.83,neLng:144.72,swLat:-37.90,swLng:144.64},
-    'truganina':     {neLat:-37.83,neLng:144.74,swLat:-37.87,swLng:144.68},
-    'williams landing':{neLat:-37.84,neLng:144.77,swLat:-37.88,swLng:144.73},
-    'laverton':      {neLat:-37.84,neLng:144.79,swLat:-37.87,swLng:144.75},
-    'altona':        {neLat:-37.85,neLng:144.85,swLat:-37.88,swLng:144.80},
-    'melton':        {neLat:-37.67,neLng:144.62,swLat:-37.72,swLng:144.55},
-    'sunshine':      {neLat:-37.77,neLng:144.84,swLat:-37.80,swLng:144.81},
-    'melbourne cbd': {neLat:-37.80,neLng:144.98,swLat:-37.83,swLng:144.94},
-    'geelong':       {neLat:-38.12,neLng:144.38,swLat:-38.18,swLng:144.32},
-    'craigieburn':   {neLat:-37.58,neLng:144.96,swLat:-37.62,swLng:144.91},
-    'dandenong':     {neLat:-37.97,neLng:145.23,swLat:-38.01,swLng:145.19},
-    'frankston':     {neLat:-38.13,neLng:145.14,swLat:-38.17,swLng:145.10},
+  // State capital centres + suburb lookup for PetrolSpy coverage
+  var stateCentres = {
+    VIC:{lat:-37.81,lng:144.96}, NSW:{lat:-33.87,lng:151.21},
+    QLD:{lat:-27.47,lng:153.03}, SA:{lat:-34.93,lng:138.60},
+    WA:{lat:-31.95,lng:115.86}, TAS:{lat:-42.88,lng:147.33},
+    NT:{lat:-12.46,lng:130.84}, ACT:{lat:-35.28,lng:149.13}
   };
-  var sub = (userSuburb || 'point cook').toLowerCase();
-  var box = boxes[sub] || {neLat:-37.80,neLng:144.82,swLat:-37.95,swLng:144.68}; // default: wider Point Cook area
-  var url = 'https://petrolspy.com.au/webservice-1/station/box?neLat='+box.neLat+'&neLng='+box.neLng+'&swLat='+box.swLat+'&swLng='+box.swLng;
+  // Known suburb coordinates (popular ones across AU)
+  var suburbCoords = {
+    'point cook':{lat:-37.90,lng:144.75},'werribee':{lat:-37.90,lng:144.66},
+    'hoppers crossing':{lat:-37.88,lng:144.70},'tarneit':{lat:-37.85,lng:144.68},
+    'truganina':{lat:-37.85,lng:144.72},'williams landing':{lat:-37.86,lng:144.75},
+    'laverton':{lat:-37.86,lng:144.78},'altona':{lat:-37.87,lng:144.83},
+    'sunshine':{lat:-37.79,lng:144.83},'footscray':{lat:-37.80,lng:144.90},
+    'melbourne cbd':{lat:-37.81,lng:144.96},'south yarra':{lat:-37.84,lng:144.99},
+    'richmond':{lat:-37.82,lng:145.00},'brunswick':{lat:-37.77,lng:144.96},
+    'geelong':{lat:-38.15,lng:144.36},'ballarat':{lat:-37.56,lng:143.86},
+    'bendigo':{lat:-36.76,lng:144.28},'melton':{lat:-37.68,lng:144.58},
+    'craigieburn':{lat:-37.60,lng:144.94},'epping':{lat:-37.65,lng:145.03},
+    'dandenong':{lat:-37.99,lng:145.21},'frankston':{lat:-38.14,lng:145.12},
+    'ringwood':{lat:-37.81,lng:145.23},'doncaster':{lat:-37.78,lng:145.13},
+    'box hill':{lat:-37.82,lng:145.12},'glen waverley':{lat:-37.88,lng:145.16},
+    'sydney cbd':{lat:-33.87,lng:151.21},'parramatta':{lat:-33.82,lng:151.00},
+    'chatswood':{lat:-33.80,lng:151.18},'bondi':{lat:-33.89,lng:151.27},
+    'penrith':{lat:-33.75,lng:150.69},'liverpool':{lat:-33.92,lng:150.93},
+    'north sydney':{lat:-33.84,lng:151.21},'manly':{lat:-33.80,lng:151.29},
+    'blacktown':{lat:-33.77,lng:150.91},'campbelltown':{lat:-34.07,lng:150.81},
+    'brisbane cbd':{lat:-27.47,lng:153.03},'gold coast':{lat:-28.02,lng:153.43},
+    'sunshine coast':{lat:-26.65,lng:153.07},'cairns':{lat:-16.92,lng:145.78},
+    'townsville':{lat:-19.26,lng:146.82},'toowoomba':{lat:-27.56,lng:151.95},
+    'ipswich':{lat:-27.62,lng:152.76},'logan':{lat:-27.64,lng:153.11},
+    'adelaide cbd':{lat:-34.93,lng:138.60},'glenelg':{lat:-34.98,lng:138.52},
+    'mount barker':{lat:-35.07,lng:138.86},'elizabeth':{lat:-34.72,lng:138.67},
+    'perth cbd':{lat:-31.95,lng:115.86},'fremantle':{lat:-32.06,lng:115.75},
+    'joondalup':{lat:-31.74,lng:115.77},'rockingham':{lat:-32.28,lng:115.74},
+    'mandurah':{lat:-32.53,lng:115.72},
+    'hobart':{lat:-42.88,lng:147.33},'launceston':{lat:-41.44,lng:147.14},
+    'darwin':{lat:-12.46,lng:130.84},'canberra':{lat:-35.28,lng:149.13},
+  };
+  var sub = (userSuburb || '').toLowerCase().trim();
+  var coords = suburbCoords[sub] || stateCentres[userState] || stateCentres.VIC;
+  var radius = 0.08; // ~8km radius bounding box
+  var url = 'https://petrolspy.com.au/webservice-1/station/box?neLat='+(coords.lat+radius)+'&neLng='+(coords.lng+radius)+'&swLat='+(coords.lat-radius)+'&swLng='+(coords.lng-radius);
   fetch(url).then(function(r){return r.json();}).then(function(data) {
     if (!data||!data.message||!data.message.list) { callback(null); return; }
     var prices = [];
@@ -839,6 +859,7 @@ function startAutoRefresh() {
   autoRefreshTimer = setInterval(function() {
     if (document.hidden) return;
     fetchFresh(false);
+    filterExpiredDeals();
     // Also refresh browser-side data caches
     amazonCache = null; amazonCacheTime = 0;
     // If user is viewing fuel, refresh it live
@@ -1093,6 +1114,7 @@ function ingest(d) {
   coupons   = norm(d.coupons   || [], normCpn);
   fuel      = norm(d.fuel      || [], normFuel);
   insurance = norm(d.insurance || [], normIns);
+  filterExpiredDeals();
   updateStats();
   renderDeals();
 }
@@ -1830,18 +1852,38 @@ function quickSub(form) {
   document.head.appendChild(sc);
 }
 
-// ── SUBURB / LOCATION ─────────────────────────────────────────
+// ── LOCATION (State + Suburb) ─────────────────────────────────
+var userState = localStorage.getItem('ssc_state') || 'VIC';
 var userSuburb = localStorage.getItem('ssc_suburb') || 'Point Cook';
 
-function saveSuburb(val) {
-  userSuburb = (val || '').trim();
+function saveLocation() {
+  userState = document.getElementById('stateSelect').value || 'VIC';
+  userSuburb = (document.getElementById('suburbInput').value || '').trim() || userState;
+  localStorage.setItem('ssc_state', userState);
   localStorage.setItem('ssc_suburb', userSuburb);
 }
 function loadSuburb() {
-  var saved = localStorage.getItem('ssc_suburb') || 'Point Cook';
-  userSuburb = saved;
-  var el = document.getElementById('suburbInput');
-  if (el) el.value = saved;
+  userState = localStorage.getItem('ssc_state') || 'VIC';
+  userSuburb = localStorage.getItem('ssc_suburb') || 'Point Cook';
+  var sel = document.getElementById('stateSelect');
+  var inp = document.getElementById('suburbInput');
+  if (sel) sel.value = userState;
+  if (inp) inp.value = userSuburb;
+}
+
+// ── DEAL EXPIRY FILTER ──────────────────────────────────────
+// Remove deals older than 48 hours on each refresh
+function filterExpiredDeals() {
+  var cutoff = Date.now() - (48 * 60 * 60 * 1000); // 48 hours ago
+  var before = deals.length;
+  deals = deals.filter(function(d) {
+    if (!d.ts) return true; // keep deals without timestamp (hardcoded)
+    var dealTime = new Date(d.ts).getTime();
+    if (isNaN(dealTime)) return true; // keep if can't parse date
+    return dealTime > cutoff;
+  });
+  var removed = before - deals.length;
+  if (removed > 0) console.log('Removed ' + removed + ' expired deals (older than 48hrs)');
 }
 
 // ── HELPERS ───────────────────────────────────────────────────────
