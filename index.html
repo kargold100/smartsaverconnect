@@ -235,7 +235,7 @@ body{font-family:var(--fb);font-size:15px;line-height:1.65;background:var(--bg);
 .deal-card.cg-telco::after{background:#0d9488}.deal-card.cg-nbn::after{background:#2563eb}
 .deal-card.cg-energy::after{background:#d97706}.deal-card.cg-coupon::after{background:#7c3aed}
 .deal-card.cg-fuel::after{background:#9333ea}.deal-card.cg-ins::after{background:#1e40af}
-.deal-card.cg-food::after{background:#f97316}.deal-card.cg-gaming::after{background:#6366f1}
+.deal-card.cg-food::after{background:#f97316}.deal-card.cg-gaming::after{background:#6366f1}.deal-card.cg-cashback::after{background:#ea580c}
 .deal-card.cg-def::after{background:var(--border2)}
 
 .card-body{padding:var(--g4) var(--g4) var(--g4) calc(var(--g4) + 6px);display:flex;flex-direction:column;gap:var(--g3);flex:1}
@@ -426,16 +426,16 @@ body{font-family:var(--fb);font-size:15px;line-height:1.65;background:var(--bg);
         </div>
         <div style="display:flex;gap:8px;margin-top:12px;align-items:center;flex-wrap:wrap">
           <label style="font-size:13px;font-weight:600;color:var(--ink3)">&#128205;</label>
-          <select id="stateSelect" onchange="saveLocation()"
+          <select id="stateSelect" onchange="populateSuburbs();saveLocation()"
             style="padding:8px 12px;border:1.5px solid var(--border2);border-radius:8px;font-size:14px;background:var(--surface);color:var(--ink);font-family:inherit;min-height:40px">
             <option value="VIC">VIC</option><option value="NSW">NSW</option>
             <option value="QLD">QLD</option><option value="SA">SA</option>
             <option value="WA">WA</option><option value="TAS">TAS</option>
             <option value="NT">NT</option><option value="ACT">ACT</option>
           </select>
-          <input id="suburbInput" type="text" placeholder="Suburb or postcode"
-            style="padding:8px 14px;border:1.5px solid var(--border2);border-radius:8px;font-size:14px;width:180px;background:var(--surface);color:var(--ink);font-family:inherit;min-height:40px"
-            onchange="saveLocation()"/>
+          <select id="suburbSelect" onchange="saveLocation()"
+            style="padding:8px 12px;border:1.5px solid var(--border2);border-radius:8px;font-size:14px;background:var(--surface);color:var(--ink);font-family:inherit;min-height:40px;min-width:180px">
+          </select>
         </div>
         <div class="quick-row" role="group" aria-label="Quick searches">
           <span class="ql" aria-hidden="true">Try:</span>
@@ -491,7 +491,8 @@ body{font-family:var(--fb);font-size:15px;line-height:1.65;background:var(--bg);
       <li><div class="fdiv"></div></li>
       <li><button class="fb" data-cat="coupon" aria-pressed="false" onclick="setFilter(this)"><span class="fi">&#127981;</span><span class="fl">Coupon Codes</span><span class="fc" id="cnt-cpn"></span></button></li>
       <li><button class="fb" data-cat="fuel" aria-pressed="false" onclick="setFilter(this)"><span class="fi">&#9981;</span><span class="fl">Fuel Prices</span><span class="fc" id="cnt-fuel"></span></button></li>
-      <li><button class="fb" data-cat="insurance" aria-pressed="false" onclick="setFilter(this)"><span class="fi">&#128737;&#65039;</span><span class="fl">Insurance</span><span class="fc" id="cnt-ins"></span></button></li>
+      <li><button class="fb" data-cat="cashback" aria-pressed="false" onclick="setFilter(this)"><span class="fi">&#128176;</span><span class="fl">Cashback Deals</span><span class="fc" id="cnt-cb"></span></button></li>
+        <li><button class="fb" data-cat="insurance" aria-pressed="false" onclick="setFilter(this)"><span class="fi">&#128737;&#65039;</span><span class="fl">Insurance</span><span class="fc" id="cnt-ins"></span></button></li>
       <li><div class="fdiv"></div></li>
       <li><button class="fb" data-cat="live" aria-pressed="false" onclick="setFilter(this)"><span class="fi">&#128308;</span><span class="fl">Live Specials</span></button></li>
     </ul>
@@ -826,6 +827,45 @@ function fetchFuelBrowser(callback) {
     'mandurah':{lat:-32.53,lng:115.72},
     'hobart':{lat:-42.88,lng:147.33},'launceston':{lat:-41.44,lng:147.14},
     'darwin':{lat:-12.46,lng:130.84},'canberra':{lat:-35.28,lng:149.13},
+    // VIC expanded
+    'wyndham vale':{lat:-37.89,lng:144.63},'manor lakes':{lat:-37.87,lng:144.64},
+    'caroline springs':{lat:-37.74,lng:144.74},'deer park':{lat:-37.77,lng:144.78},
+    'sydenham':{lat:-37.70,lng:144.77},'st albans':{lat:-37.74,lng:144.80},
+    'south yarra':{lat:-37.84,lng:144.99},'brunswick':{lat:-37.77,lng:144.96},
+    'coburg':{lat:-37.74,lng:144.96},'essendon':{lat:-37.75,lng:144.91},
+    'south morang':{lat:-37.66,lng:145.10},'berwick':{lat:-38.04,lng:145.35},
+    'cranbourne':{lat:-38.10,lng:145.28},'pakenham':{lat:-38.07,lng:145.49},
+    'mornington':{lat:-38.22,lng:145.04},'ballarat':{lat:-37.56,lng:143.86},
+    'bendigo':{lat:-36.76,lng:144.28},'shepparton':{lat:-36.38,lng:145.40},
+    // NSW expanded
+    'strathfield':{lat:-33.88,lng:151.08},'burwood':{lat:-33.88,lng:151.10},
+    'homebush':{lat:-33.87,lng:151.08},'hornsby':{lat:-33.70,lng:151.10},
+    'castle hill':{lat:-33.73,lng:151.01},'bankstown':{lat:-33.92,lng:151.03},
+    'hurstville':{lat:-33.97,lng:151.10},'sutherland':{lat:-34.03,lng:151.06},
+    'cronulla':{lat:-34.06,lng:151.15},'wollongong':{lat:-34.43,lng:150.89},
+    'newcastle':{lat:-32.93,lng:151.78},'central coast':{lat:-33.43,lng:151.34},
+    // QLD expanded
+    'south brisbane':{lat:-27.48,lng:153.02},'fortitude valley':{lat:-27.46,lng:153.04},
+    'toowong':{lat:-27.48,lng:152.98},'indooroopilly':{lat:-27.50,lng:152.97},
+    'chermside':{lat:-27.39,lng:153.03},'carindale':{lat:-27.51,lng:153.10},
+    'springfield':{lat:-27.67,lng:152.91},'north lakes':{lat:-27.24,lng:153.00},
+    'surfers paradise':{lat:-28.00,lng:153.43},'robina':{lat:-28.07,lng:153.38},
+    'noosa':{lat:-26.39,lng:153.09},'maroochydore':{lat:-26.65,lng:153.10},
+    // SA expanded
+    'north adelaide':{lat:-34.91,lng:138.59},'prospect':{lat:-34.88,lng:138.60},
+    'norwood':{lat:-34.92,lng:138.63},'unley':{lat:-34.95,lng:138.60},
+    'marion':{lat:-35.01,lng:138.56},'salisbury':{lat:-34.76,lng:138.64},
+    // WA expanded
+    'subiaco':{lat:-31.95,lng:115.83},'victoria park':{lat:-31.97,lng:115.90},
+    'canning vale':{lat:-32.06,lng:115.92},'ellenbrook':{lat:-31.77,lng:115.97},
+    'armadale':{lat:-32.15,lng:116.01},'midland':{lat:-31.89,lng:116.01},
+    'bunbury':{lat:-33.33,lng:115.64},
+    // TAS expanded
+    'sandy bay':{lat:-42.90,lng:147.33},'glenorchy':{lat:-42.83,lng:147.28},
+    'kingston':{lat:-42.98,lng:147.30},'devonport':{lat:-41.18,lng:146.36},
+    // ACT expanded
+    'belconnen':{lat:-35.24,lng:149.07},'woden':{lat:-35.35,lng:149.09},
+    'tuggeranong':{lat:-35.42,lng:149.07},'gungahlin':{lat:-35.19,lng:149.13},
   };
   var sub = (userSuburb || '').toLowerCase().trim();
   var coords = suburbCoords[sub] || stateCentres[userState] || stateCentres.VIC;
@@ -862,7 +902,10 @@ function startAutoRefresh() {
     filterExpiredDeals();
     // Also refresh browser-side data caches
     amazonCache = null; amazonCacheTime = 0;
-    // If user is viewing fuel, refresh it live
+    // If user is viewing cashback or fuel, refresh browser-side data
+    if (activeFilter === 'cashback') {
+      renderDeals(); // re-render with fresh hardcoded data
+    }
     if (activeFilter === 'fuel') {
       fetchFuelBrowser(function(ps) {
         if (ps && ps.length) {
@@ -1159,7 +1202,7 @@ function updateStats() {
   var cm = {all:deals.length, ww:c('woolworths'), coles:c('coles'), aldi:c('aldi'),
     amz:c('amazon'), ret:cRet(), cw:c('chemist'), travel:c('travel'),
     telco:c('telco'), nbn:c('nbn'), energy:c('energy'),
-    ent:c('entertainment')+c('food'), gaming:getHardcodedPool('gaming').length, cpn:coupons.length, fuel:fuel.length, ins:insurance.length};
+    ent:c('entertainment')+c('food'), gaming:getHardcodedPool('gaming').length, cb:getHardcodedPool('cashback').length, cpn:coupons.length, fuel:fuel.length, ins:insurance.length};
   Object.keys(cm).forEach(function(k){var el=document.getElementById('cnt-'+k);if(el)el.textContent=cm[k]||'';});
 }
 function c(cat){ return deals.filter(function(d){return d.cat===cat;}).length; }
@@ -1207,6 +1250,48 @@ var HARDCODED_PLANS = [
   {vendor:'Pet Circle',cat:'retail',title:'Pet Circle \u2014 Pet Food & Supplies Deals',desc:'Pet Circle deals on dog food, cat food, treats and accessories. Auto-delivery saves extra. Often cheapest for pet supplies in AU.',url:'https://www.petcircle.com.au/deals'},
   {vendor:'Baby Bunting',cat:'retail',title:'Baby Bunting \u2014 Current Sale & Clearance',desc:'Baby Bunting deals on prams, car seats, nursery furniture and baby essentials. Price match guarantee on all products.',url:'https://www.babybunting.com.au/sale'},
   {vendor:'Spotlight',cat:'retail',title:'Spotlight \u2014 Current Sale & VIP Offers',desc:'Spotlight sale on fabrics, homewares, crafts and party supplies. VIP members get 10% off always plus exclusive sale access.',url:'https://www.spotlightstores.com/sale'},
+  // Missing key retailers
+  {vendor:'Kmart',cat:'retail',title:'Kmart Australia \u2014 Current Specials & New Arrivals',desc:'Kmart current specials on homewares, clothing, toys, electronics. New products drop weekly. Anko brand exclusives.',url:'https://www.kmart.com.au/specials/'},
+  {vendor:'Kmart',cat:'retail',title:'Kmart \u2014 Clearance & Last Chance',desc:'Kmart clearance items and markdowns. In-store and online. Check regularly for deep discounts on seasonal lines.',url:'https://www.kmart.com.au/category/shop-all-clearance/'},
+  {vendor:'Big W',cat:'retail',title:'Big W \u2014 Current Sale & Weekly Specials',desc:'Big W sale on toys, electronics, clothing, home and baby. Check weekly catalogue for half-price events.',url:'https://www.bigw.com.au/sale'},
+  {vendor:'Big W',cat:'retail',title:'Big W \u2014 Clearance & Last Chance',desc:'Big W clearance items across all categories. Deep discounts on end-of-line and seasonal stock.',url:'https://www.bigw.com.au/clearance'},
+  {vendor:'ALDI',cat:'retail',title:'ALDI \u2014 Special Buys This Week',desc:'ALDI Special Buys available Wednesday and Saturday. Sell out fast. Tools, garden, electronics, clothing and more.',url:'https://www.aldi.com.au/en/special-buys/'},
+  {vendor:'ALDI',cat:'grocery',title:'ALDI \u2014 Grocery Specials & Super Savers',desc:'ALDI grocery specials including Super Savers locked-in low prices. Typically 15-25% cheaper than Coles/Woolworths.',url:'https://www.aldi.com.au/en/groceries/'},
+  {vendor:'Amazon AU',cat:'retail',title:'Amazon AU \u2014 Today\u2019s Deals & Lightning Sales',desc:'Amazon AU daily deals, lightning sales and coupons across all categories. Prime members get early access and free delivery.',url:'https://www.amazon.com.au/deals'},
+  {vendor:'Amazon AU',cat:'retail',title:'Amazon AU \u2014 Subscribe & Save (5-15% Off Recurring)',desc:'Subscribe & Save gives 5-15% off groceries, pet food, baby, health and household items with auto-delivery. Cancel any time.',url:'https://www.amazon.com.au/subscribe-save'},
+  {vendor:'Nick Scali',cat:'retail',title:'Nick Scali \u2014 Current Furniture Sale',desc:'Nick Scali premium leather lounges, dining and bedroom furniture. Regular sale events with significant reductions. Check current offers.',url:'https://www.nickscali.com.au/sale'},
+  {vendor:'Nick Scali',cat:'retail',title:'Nick Scali \u2014 Outlet & Clearance',desc:'Nick Scali outlet items including ex-display, discontinued and slight seconds at heavily reduced prices.',url:'https://www.nickscali.com.au/outlet'},
+  {vendor:'Koala',cat:'retail',title:'Koala Living \u2014 Mattress & Furniture Sale',desc:'Koala mattresses, sofas, bed frames and desks. 120-night trial. Regular sale events. Australian-designed, delivered in a box.',url:'https://au.koala.com/collections/on-sale'},
+  {vendor:'Koala',cat:'retail',title:'Koala Living \u2014 Mattress Finder & Current Offers',desc:'Koala award-winning mattresses from $750. Free delivery, 120-night trial, 10-year warranty. Check current bundle deals.',url:'https://au.koala.com'},
+  {vendor:'Forty Winks',cat:'retail',title:'Forty Winks \u2014 Mattress & Bedroom Sale',desc:'Forty Winks sale on mattresses, bed frames, pillows and bedroom furniture. Price match guarantee. In-store and online.',url:'https://www.fortywinks.com.au/sale'},
+  {vendor:'Freedom',cat:'retail',title:'Freedom Furniture \u2014 Current Sale',desc:'Freedom furniture sale on sofas, dining, bedroom and homewares. End-of-season clearance events with 30-50% off.',url:'https://www.freedom.com.au/sale'},
+  {vendor:'Temple & Webster',cat:'retail',title:'Temple & Webster \u2014 Online Furniture & Homewares Sale',desc:'Temple & Webster online-only furniture and homewares. Daily deals and clearance. Free delivery on most items over $100.',url:'https://www.templeandwebster.com.au/daily-deals.html'},
+  {vendor:'Woolworths',cat:'grocery',title:'Woolworths \u2014 Half Price Specials This Week',desc:'Woolworths weekly half-price specials. Reset every Wednesday. Stock up on non-perishables when they hit half price.',url:'https://www.woolworths.com.au/shop/specials/half-price'},
+  {vendor:'Coles',cat:'grocery',title:'Coles \u2014 Half Price & Weekly Specials',desc:'Coles half-price specials and weekly catalogue. Reset Wednesday. Flybuys members earn bonus points on selected items.',url:'https://www.coles.com.au/on-special'},
+  {vendor:'Chemist Warehouse',cat:'chemist',title:'Chemist Warehouse \u2014 Half Price Health & Beauty',desc:'Chemist Warehouse weekly half-price specials on vitamins, skincare, makeup, fragrance and health products.',url:'https://www.chemistwarehouse.com.au/weekly-specials'},
+  {vendor:'Priceline',cat:'chemist',title:'Priceline Pharmacy \u2014 Current Sale & 40% Off Events',desc:'Priceline 40% off skincare and cosmetics events. Sister Club members earn points. Check current catalogue.',url:'https://www.priceline.com.au/sale'},
+  {vendor:'JB Hi-Fi',cat:'retail',title:'JB Hi-Fi \u2014 Current Sale & Clearance',desc:'JB Hi-Fi deals on TVs, laptops, phones, gaming, audio and appliances. Price match guarantee on identical products.',url:'https://www.jbhifi.com.au/pages/jb-deals'},
+  // Cashback Deals — All Major Portals
+  {vendor:'ShopBack',cat:'cashback',title:'ShopBack \u2014 Up to 30% Cashback at 500+ Stores',desc:'ShopBack offers cashback at 500+ AU retailers. Top rates on electronics, fashion, travel and food delivery. New member bonus available.',url:'https://www.shopback.com.au'},
+  {vendor:'ShopBack',cat:'cashback',title:'ShopBack \u2014 eBay Cashback (Currently Up to 5%)',desc:'Earn cashback on eBay AU purchases via ShopBack. Rate changes daily. Check current rate before buying.',url:'https://www.shopback.com.au/ebay-australia'},
+  {vendor:'ShopBack',cat:'cashback',title:'ShopBack \u2014 Amazon AU Cashback',desc:'Earn cashback on Amazon AU purchases. Rate varies by category (electronics, fashion, home often higher). Check current rate.',url:'https://www.shopback.com.au/amazon-australia'},
+  {vendor:'ShopBack',cat:'cashback',title:'ShopBack \u2014 Booking.com & Hotels Cashback',desc:'Earn cashback on hotel bookings via Booking.com, Agoda and Expedia through ShopBack. Often 5-8% on accommodation.',url:'https://www.shopback.com.au/booking-com'},
+  {vendor:'ShopBack',cat:'cashback',title:'ShopBack \u2014 Uber Eats & Food Delivery Cashback',desc:'Earn cashback on Uber Eats, Menulog, DoorDash orders via ShopBack. Rates vary. Stack with delivery app promos.',url:'https://www.shopback.com.au/ubereats'},
+  {vendor:'Cashrewards',cat:'cashback',title:'Cashrewards \u2014 Woolworths Gift Cards 5% Cashback',desc:'Buy Woolworths gift cards through Cashrewards and earn ~5% cashback. Use the cards for groceries = 5% off groceries permanently.',url:'https://www.cashrewards.com.au/woolworths-gift-cards'},
+  {vendor:'Cashrewards',cat:'cashback',title:'Cashrewards \u2014 Up to 20% Cashback at 1,500+ Stores',desc:'Cashrewards offers cashback at 1,500+ AU stores. Strong rates on insurance, utilities, fashion and homewares. New member bonus.',url:'https://www.cashrewards.com.au'},
+  {vendor:'Cashrewards',cat:'cashback',title:'Cashrewards \u2014 Apple Store Cashback',desc:'Earn cashback on Apple Store purchases (iPhones, MacBooks, iPads) through Cashrewards. Check current rate.',url:'https://www.cashrewards.com.au/apple-store'},
+  {vendor:'Cashrewards',cat:'cashback',title:'Cashrewards \u2014 The Good Guys Cashback',desc:'Earn cashback on The Good Guys purchases through Cashrewards. Great for appliances and electronics.',url:'https://www.cashrewards.com.au/the-good-guys'},
+  {vendor:'Cashrewards',cat:'cashback',title:'Cashrewards \u2014 Chemist Warehouse Cashback',desc:'Earn cashback on Chemist Warehouse purchases. Stack with their half-price specials for double savings.',url:'https://www.cashrewards.com.au/chemist-warehouse'},
+  {vendor:'TopCashback',cat:'cashback',title:'TopCashback AU \u2014 Highest Cashback Rates Guaranteed',desc:'TopCashback guarantees the highest cashback rate or they match + $5. Slower payout but often best rates. Free to join.',url:'https://www.topcashback.com.au'},
+  {vendor:'TopCashback',cat:'cashback',title:'TopCashback \u2014 Insurance Cashback (Car, Home, Health)',desc:'Earn cashback when switching insurance via TopCashback. Often $30-$100 back on new car, home and health insurance policies.',url:'https://www.topcashback.com.au/search/?q=insurance'},
+  {vendor:'TopCashback',cat:'cashback',title:'TopCashback \u2014 Energy Switch Cashback',desc:'Earn cashback when switching energy providers through TopCashback. $20-$80 back on new electricity and gas plans.',url:'https://www.topcashback.com.au/search/?q=energy'},
+  {vendor:'TopCashback',cat:'cashback',title:'TopCashback \u2014 Travel & Flights Cashback',desc:'Earn cashback on Expedia, Hotels.com, Booking.com and Qantas bookings through TopCashback.',url:'https://www.topcashback.com.au/search/?q=travel'},
+  {vendor:'Honey (PayPal)',cat:'cashback',title:'Honey \u2014 Auto Coupon Finder + PayPal Rewards',desc:'Honey browser extension auto-applies coupon codes at checkout on 30,000+ sites. Also earns PayPal rewards (Honey Gold). Free.',url:'https://www.joinhoney.com/au'},
+  {vendor:'Honey (PayPal)',cat:'cashback',title:'Honey \u2014 Price Drop Alerts on Amazon',desc:'Honey\u2019s Droplist feature tracks prices on Amazon and alerts you when items drop. Add items to your Droplist for automatic monitoring.',url:'https://www.joinhoney.com/features/droplist'},
+  {vendor:'Everyday Rewards',cat:'cashback',title:'Woolworths Everyday Rewards \u2014 Points on Groceries + Fuel',desc:'Earn 1 point per $1 at Woolworths, BWS, BIG W. 2,000 points = $10 off shop or fuel discount at Ampol. Boost offers for bonus points.',url:'https://www.woolworthsrewards.com.au'},
+  {vendor:'Flybuys',cat:'cashback',title:'Flybuys \u2014 Coles Points + Shell Fuel Discount',desc:'Earn flybuys at Coles, Kmart, Target, Bunnings, Shell. 2,000 points = $10 off at Coles. 4c/L fuel discount with $30+ Coles spend.',url:'https://www.flybuys.com.au'},
+  {vendor:'Qantas',cat:'cashback',title:'Qantas Shopping \u2014 Earn Qantas Points Online',desc:'Earn Qantas Frequent Flyer points at 350+ online stores by clicking through Qantas Shopping first. Stack with credit card points.',url:'https://shopping.qantas.com'},
+  {vendor:'Point Hacks',cat:'cashback',title:'Point Hacks \u2014 Credit Card Points & Rewards Guide',desc:'Independent guide to maximising credit card points, frequent flyer programs and travel rewards in Australia.',url:'https://www.pointhacks.com.au'},
   // Energy
   {vendor:'ReAmped Energy',cat:'energy',title:'ReAmped Energy — Consistently Cheapest in AU',desc:'Repeatedly ranks among cheapest on Energy Made Easy. Flat-rate, no lock-in, no exit fees.',url:'https://www.reamped.com.au'},
   {vendor:'Amber Electric',cat:'energy',title:'Amber Electric — Wholesale Electricity Pricing',desc:'Amber passes through wholesale electricity prices. Best for solar + battery homes.',url:'https://www.amber.com.au'},
@@ -1357,9 +1442,9 @@ function renderDeals() {
 
   var pool = deals.slice();
   // Always merge hardcoded plans for these categories so they show even before scraper runs
-  if (activeFilter==='telco'||activeFilter==='nbn'||activeFilter==='energy'||activeFilter==='gaming'||activeFilter==='all') {
+  if (activeFilter==='telco'||activeFilter==='nbn'||activeFilter==='energy'||activeFilter==='gaming'||activeFilter==='cashback'||activeFilter==='all') {
     var hc = (activeFilter==='all')
-      ? getHardcodedPool('telco').concat(getHardcodedPool('nbn')).concat(getHardcodedPool('energy')).concat(getHardcodedPool('gaming'))
+      ? getHardcodedPool('telco').concat(getHardcodedPool('nbn')).concat(getHardcodedPool('energy')).concat(getHardcodedPool('gaming')).concat(getHardcodedPool('cashback'))
       : getHardcodedPool(activeFilter);
     // Only add hardcoded if not already in scraped deals (avoid duplicates by title)
     var existingTitles = pool.map(function(d){return d.title.toLowerCase().slice(0,40);});
@@ -1379,6 +1464,7 @@ function renderDeals() {
       : activeFilter==='coupon'  ? (d._cpn||d.cat==='coupon')
       : activeFilter==='retail'  ? (d.cat==='retail'||isGenRet(d.vendor))
       : activeFilter==='entertainment' ? (d.cat==='entertainment'||d.cat==='food')
+      : activeFilter==='cashback' ? d.cat==='cashback'
       : d.cat===activeFilter;
     var qOk = !q
       || d.title.toLowerCase().indexOf(q)!==-1
@@ -1396,7 +1482,7 @@ function renderDeals() {
     aldi:'ALDI Deals', amazon:'Amazon AU', retail:'Retail Deals',
     chemist:'Health & Beauty', telco:'Mobile Plans', nbn:'NBN & Internet',
     energy:'Energy Deals', travel:'Travel Deals',
-    entertainment:'Movies & Entertainment', gaming:'Software & Products', coupon:'Coupon Codes'};
+    entertainment:'Movies & Entertainment', gaming:'Software & Products', cashback:'Cashback Deals', coupon:'Coupon Codes'};
   setTitle(labels[activeFilter]||'Deals', items.length+' result'+(items.length!==1?'s':''));
 
   // For Amazon: try browser-side fetch first (Apps Script blocked by Amazon IP filter)
@@ -1454,6 +1540,7 @@ var HOW_TO = {
   coupon:'Copy the code above. Go to the retailer site, add items to cart, paste at checkout. Check expiry.',
   fuel:'Price is at a specific station at time of scrape. Use motormouth.com.au with postcode 3030 to find cheapest near Point Cook.',
   entertainment:'Check the cinema website for booking. Discount Tuesdays must usually be booked on the day.',
+  cashback:'Sign up free to the cashback portal, then click through their link BEFORE purchasing. The cashback tracks automatically. Always compare rates across ShopBack, Cashrewards and TopCashback as they change daily. Cashback typically takes 30-90 days to become withdrawable.',
   gaming:'Click through to buy. For G2A and CDKeys you receive a key to activate on Steam/Xbox/PlayStation. Always check the region (AU or Global) before buying. Epic Games free games must be claimed during the offer window.',
   food:'Open the app (Uber Eats, Menulog or DoorDash) and apply the promo code at checkout.',
 };
@@ -1461,7 +1548,7 @@ function howTo(cat,cpn){ if(cpn)return HOW_TO.coupon; return HOW_TO[cat]||'Click
 
 // ── DEAL CARD ─────────────────────────────────────────────────────
 function catCls(cat){
-  var m={woolworths:'cg-grocery',coles:'cg-grocery',aldi:'cg-grocery',grocery:'cg-grocery',gaming:'cg-gaming',
+  var m={woolworths:'cg-grocery',coles:'cg-grocery',aldi:'cg-grocery',grocery:'cg-grocery',gaming:'cg-gaming',cashback:'cg-cashback',
     retail:'cg-retail',amazon:'cg-retail',chemist:'cg-chemist',travel:'cg-travel',
     telco:'cg-telco',nbn:'cg-nbn',energy:'cg-energy',coupon:'cg-coupon',
     fuel:'cg-fuel',insurance:'cg-ins',food:'cg-food',entertainment:'cg-retail'};
@@ -1477,6 +1564,7 @@ function vbadge(v,cat){
   if(nm.indexOf('chemist')!==-1||nm.indexOf('priceline')!==-1) return'vbadge vb-cw';
   if(nm.indexOf('jb hi-fi')!==-1||nm.indexOf('jb hifi')!==-1) return'vbadge vb-jb';
   if(cat==='gaming') return'vbadge vb-gaming';
+  if(cat==='cashback') return'vbadge vb-travel';
   if(cat==='coupon') return'vbadge vb-cpn';
   if(cat==='insurance'||cat==='finance') return'vbadge vb-ins';
   if(cat==='fuel') return'vbadge vb-fuel';
@@ -1852,23 +1940,51 @@ function quickSub(form) {
   document.head.appendChild(sc);
 }
 
-// ── LOCATION (State + Suburb) ─────────────────────────────────
+// ── LOCATION (State + Suburb cascading dropdowns) ────────────
 var userState = localStorage.getItem('ssc_state') || 'VIC';
 var userSuburb = localStorage.getItem('ssc_suburb') || 'Point Cook';
 
+var SUBURBS = {
+  VIC:['Point Cook','Werribee','Hoppers Crossing','Tarneit','Truganina','Williams Landing','Laverton','Altona','Wyndham Vale','Manor Lakes','Melton','Caroline Springs','Deer Park','Sunshine','Footscray','Yarraville','Williamstown','St Albans','Sydenham','Watergardens','Melbourne CBD','South Melbourne','Southbank','Docklands','North Melbourne','Carlton','Fitzroy','Collingwood','Richmond','South Yarra','Prahran','St Kilda','Brunswick','Coburg','Pascoe Vale','Moonee Ponds','Essendon','Airport West','Keilor','Craigieburn','Epping','South Morang','Whittlesea','Doreen','Mernda','Bundoora','Thomastown','Preston','Northcote','Heidelberg','Ivanhoe','Doncaster','Box Hill','Blackburn','Mitcham','Ringwood','Croydon','Lilydale','Belgrave','Glen Waverley','Mount Waverley','Clayton','Oakleigh','Caulfield','Brighton','Bentleigh','Moorabbin','Chelsea','Mordialloc','Dandenong','Noble Park','Springvale','Cranbourne','Berwick','Narre Warren','Pakenham','Officer','Frankston','Mornington','Hastings','Rosebud','Geelong','Bellarine','Torquay','Lara','Corio','Ballarat','Bendigo','Shepparton','Wodonga','Warrnambool','Traralgon','Mildura'],
+  NSW:['Sydney CBD','Parramatta','Chatswood','North Sydney','Bondi','Manly','Mosman','Neutral Bay','Surry Hills','Newtown','Marrickville','Ashfield','Strathfield','Burwood','Homebush','Rhodes','Ryde','Epping','Macquarie Park','Hornsby','Castle Hill','Baulkham Hills','Blacktown','Penrith','Mount Druitt','Rooty Hill','Liverpool','Campbelltown','Bankstown','Canterbury','Hurstville','Sutherland','Cronulla','Miranda','Caringbah','Kogarah','Rockdale','Mascot','Botany','Maroubra','Randwick','Coogee','Bondi Junction','Chatswood','Lane Cove','Gladesville','Hunters Hill','Wollongong','Newcastle','Central Coast','Gosford','Maitland','Cessnock','Tamworth','Orange','Bathurst','Dubbo','Wagga Wagga','Albury','Coffs Harbour','Port Macquarie','Lismore','Byron Bay','Tweed Heads'],
+  QLD:['Brisbane CBD','South Brisbane','Fortitude Valley','West End','New Farm','Paddington','Milton','Toowong','Indooroopilly','St Lucia','Kenmore','Chapel Hill','Springfield','Ipswich','Logan','Beenleigh','Browns Plains','Carindale','Mount Gravatt','Sunnybank','Eight Mile Plains','Upper Mount Gravatt','Chermside','Aspley','Kedron','Stafford','Nundah','Clayfield','Sandgate','Redcliffe','North Lakes','Caboolture','Morayfield','Pine Rivers','Strathpine','Gold Coast','Surfers Paradise','Broadbeach','Robina','Southport','Nerang','Coomera','Sunshine Coast','Noosa','Maroochydore','Caloundra','Buderim','Cairns','Townsville','Mackay','Rockhampton','Bundaberg','Hervey Bay','Gladstone','Toowoomba'],
+  SA:['Adelaide CBD','North Adelaide','Prospect','Walkerville','Norwood','Burnside','Unley','Goodwood','Hyde Park','Glenelg','Brighton','Marion','Morphett Vale','Reynella','Noarlunga','Seaford','Salisbury','Elizabeth','Gawler','Modbury','Golden Grove','Tea Tree Gully','Campbelltown','Magill','Paradise','Athelstone','Mount Barker','Murray Bridge','Victor Harbor','Port Augusta','Whyalla','Mount Gambier'],
+  WA:['Perth CBD','Subiaco','Leederville','Mount Lawley','Victoria Park','South Perth','Como','Applecross','Fremantle','East Fremantle','Palmyra','Melville','Canning Vale','Joondalup','Wanneroo','Ellenbrook','Midland','Armadale','Rockingham','Mandurah','Bunbury','Geraldton','Kalgoorlie','Albany','Karratha','Broome'],
+  TAS:['Hobart','Sandy Bay','Battery Point','Glenorchy','Moonah','Kingston','Huonville','Launceston','Devonport','Burnie','Ulverstone'],
+  NT:['Darwin','Palmerston','Casuarina','Alice Springs','Katherine'],
+  ACT:['Canberra','Belconnen','Woden','Tuggeranong','Gungahlin','Weston Creek','Fyshwick','Dickson','Braddon','Kingston','Manuka','Barton']
+};
+
+function populateSuburbs() {
+  var state = document.getElementById('stateSelect').value;
+  var sel = document.getElementById('suburbSelect');
+  var subs = SUBURBS[state] || [];
+  sel.innerHTML = '';
+  subs.forEach(function(s) {
+    var opt = document.createElement('option');
+    opt.value = s; opt.textContent = s;
+    sel.appendChild(opt);
+  });
+  // Try to restore saved suburb if it matches this state
+  var saved = localStorage.getItem('ssc_suburb') || '';
+  if (subs.indexOf(saved) !== -1) sel.value = saved;
+}
+
 function saveLocation() {
   userState = document.getElementById('stateSelect').value || 'VIC';
-  userSuburb = (document.getElementById('suburbInput').value || '').trim() || userState;
+  userSuburb = document.getElementById('suburbSelect').value || '';
   localStorage.setItem('ssc_state', userState);
   localStorage.setItem('ssc_suburb', userSuburb);
 }
+
 function loadSuburb() {
   userState = localStorage.getItem('ssc_state') || 'VIC';
   userSuburb = localStorage.getItem('ssc_suburb') || 'Point Cook';
   var sel = document.getElementById('stateSelect');
-  var inp = document.getElementById('suburbInput');
   if (sel) sel.value = userState;
-  if (inp) inp.value = userSuburb;
+  populateSuburbs();
+  var subSel = document.getElementById('suburbSelect');
+  if (subSel && userSuburb) subSel.value = userSuburb;
 }
 
 // ── DEAL EXPIRY FILTER ──────────────────────────────────────
