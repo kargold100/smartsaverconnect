@@ -102,13 +102,13 @@ body{font-family:var(--fb);font-size:15px;line-height:1.65;background:var(--bg);
 
 /* ── NAV — deep teal, trustworthy ─────────────────────────────── */
 .hdr{background:var(--nav);position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.15)}
-.hdr-in{max-width:1320px;margin:0 auto;padding:0 var(--g6);display:flex;align-items:center;height:60px;gap:var(--g3)}
+.hdr-in{max-width:1320px;margin:0 auto;padding:0 var(--g6);display:flex;align-items:center;height:58px;gap:var(--g4)}
 .logo{display:flex;align-items:center;gap:var(--g3);text-decoration:none;margin-right:var(--g8);flex-shrink:0}
 .logo-mark{width:36px;height:36px;border-radius:var(--r2);background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
 .logo-name{font-family:var(--fh);font-size:16px;font-weight:800;color:var(--nav-txt);letter-spacing:-.3px;line-height:1.2}
 .logo-tag{font-size:10px;color:rgba(255,255,255,.65);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
 .nav{display:flex;gap:3px;list-style:none;flex:1;align-items:center}
-.nav a{display:block;padding:8px 14px;border-radius:var(--r2);font-size:14px;font-weight:600;color:rgba(255,255,255,.85);text-decoration:none;transition:background .15s;white-space:nowrap;min-height:44px;display:flex;align-items:center}
+.nav a{padding:8px 14px;border-radius:var(--r2);font-size:13.5px;font-weight:600;color:rgba(255,255,255,.85);text-decoration:none;transition:all .15s;white-space:nowrap;min-height:44px;display:flex;align-items:center;letter-spacing:-.01em}
 .nav a:hover{background:rgba(255,255,255,.15);color:#fff}
 .nav a[aria-current="page"]{background:rgba(255,255,255,.2);color:#fff;font-weight:700}
 .hdr-btns{display:flex;gap:var(--g2);align-items:center;margin-left:auto}
@@ -118,38 +118,13 @@ body{font-family:var(--fb);font-size:15px;line-height:1.65;background:var(--bg);
 .btn-dark:hover{background:rgba(255,255,255,.9)}
 .btn-dark:disabled{opacity:.5;cursor:not-allowed}
 @keyframes spin{to{transform:rotate(360deg)}}.spin{display:inline-block;animation:spin .7s linear infinite}
-@media(max-width:860px){
-  .nav{display:none;position:absolute;top:60px;left:0;right:0;background:var(--nav);flex-direction:column;padding:8px 16px 16px;box-shadow:0 8px 24px rgba(0,0,0,.2);z-index:99}
-  .nav.open{display:flex}
-  .nav a{min-height:48px;padding:12px 16px;border-radius:8px;font-size:15px}
-  .logo-tag{display:none}
-  .hdr-in{position:relative}
-  .hamburger{display:flex;align-items:center;justify-content:center;width:44px;height:44px;background:none;border:none;color:var(--nav-txt);font-size:24px;cursor:pointer;order:-1;margin-right:auto}
-  .hero{padding:28px 16px 24px}
-  .hero h1{font-size:28px;letter-spacing:-1px}
-  .hero-sub{font-size:15px}
-  .search-inp{font-size:15px;min-height:48px}
-  .search-btn{min-height:48px;padding:12px 20px}
-  .page{padding:16px 12px 60px}
-  .sidebar{display:none;position:fixed;top:60px;left:0;right:0;bottom:0;z-index:80;overflow-y:auto;border-radius:0;max-height:calc(100vh - 60px)}
-  .sidebar.open{display:block}
-  .mob-filter-btn{display:flex!important;position:fixed;bottom:16px;right:16px;z-index:85;width:54px;height:54px;border-radius:50%;background:var(--nav);color:var(--nav-txt);border:none;font-size:20px;cursor:pointer;box-shadow:var(--s2);align-items:center;justify-content:center}
-  .deals-grid{grid-template-columns:1fr}
-  .live-cards{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
-  .modal{padding:20px;max-width:100%;margin:8px}
-  .sub-bar{padding:10px 12px;gap:8px}
-  .sub-bar input{width:150px}
-  .fuel-body{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
-  .stats-in{padding:0 8px}
-  .stat{padding:10px 12px}
-}
-@media(min-width:861px){.hamburger{display:none}.mob-filter-btn{display:none!important}}
+
 
 /* ── HERO ──────────────────────────────────────────────────────── */
 .hero{background:var(--surface);border-bottom:2px solid var(--border);padding:var(--g12) var(--g6) var(--g10);position:relative;overflow:hidden}
 .hero::after{content:'';position:absolute;right:-100px;top:-100px;width:350px;height:350px;background:var(--nav);opacity:.06;border-radius:50%;pointer-events:none}
 .hero-in{max-width:1320px;margin:0 auto;position:relative;z-index:1;display:grid;grid-template-columns:1fr auto;gap:var(--g8);align-items:center}
-@media(max-width:800px){.hero-in{grid-template-columns:1fr}.hero-aside{display:none}}
+
 .hero-eyebrow{display:inline-flex;align-items:center;gap:var(--g2);background:var(--amber-bg);border:1px solid var(--amber-bd);color:var(--amber);padding:5px 14px;border-radius:999px;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-bottom:var(--g5)}
 .hero-blink{width:6px;height:6px;border-radius:50%;background:var(--amber);animation:blink 1.8s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.15}}
@@ -193,7 +168,7 @@ body{font-family:var(--fb);font-size:15px;line-height:1.65;background:var(--bg);
 
 /* ── LAYOUT ───────────────────────────────────────────────────── */
 .page{max-width:1320px;margin:0 auto;padding:var(--g6) var(--g6) var(--g12);display:grid;grid-template-columns:230px 1fr;gap:var(--g6);align-items:start}
-@media(max-width:960px){.page{grid-template-columns:1fr}.sidebar{display:none}}
+
 
 /* ── SIDEBAR ──────────────────────────────────────────────────── */
 .sidebar{background:var(--surface);border:1px solid var(--border);border-radius:var(--r3);box-shadow:var(--s0);overflow:hidden;position:sticky;top:76px}
@@ -209,8 +184,8 @@ body{font-family:var(--fb);font-size:15px;line-height:1.65;background:var(--bg);
 .fdiv{height:1px;background:var(--border);margin:4px 0}
 
 /* ── CONTENT HEADER ───────────────────────────────────────────── */
-.ch{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:var(--g4);margin-bottom:var(--g5)}
-.ch-title{font-family:var(--fh);font-size:22px;font-weight:800;letter-spacing:-.4px;color:var(--ink)}
+.ch{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:var(--g5)}
+.ch-title{font-family:var(--fh);font-size:22px;font-weight:800;letter-spacing:-.5px;color:var(--ink);line-height:1.2}
 .ch-sub{font-size:14px;color:var(--ink3);margin-top:2px}
 .ctrls{display:flex;align-items:center;gap:var(--g3);flex-wrap:wrap}
 .isrch{display:flex;align-items:center;background:var(--surface);border:1.5px solid var(--border2);border-radius:var(--r2);overflow:hidden;box-shadow:var(--s0);transition:border-color .15s}
@@ -228,7 +203,7 @@ body{font-family:var(--fb);font-size:15px;line-height:1.65;background:var(--bg);
 /* ── DEAL CARDS ───────────────────────────────────────────────── */
 .deals-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:var(--g4)}
 .deal-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r3);display:flex;flex-direction:column;box-shadow:var(--s0);transition:box-shadow .2s,transform .18s;overflow:hidden;position:relative}
-.deal-card:hover{box-shadow:var(--s2);transform:translateY(-2px)}
+.deal-card:hover{box-shadow:0 8px 28px rgba(0,0,0,.12);transform:translateY(-3px)}
 .deal-card::after{content:'';position:absolute;left:0;top:0;bottom:0;width:4px}
 .deal-card.cg-grocery::after{background:#16a34a}.deal-card.cg-retail::after{background:#7c3aed}
 .deal-card.cg-chemist::after{background:#0e7490}.deal-card.cg-travel::after{background:#ea580c}
@@ -238,7 +213,7 @@ body{font-family:var(--fb);font-size:15px;line-height:1.65;background:var(--bg);
 .deal-card.cg-food::after{background:#f97316}.deal-card.cg-gaming::after{background:#6366f1}.deal-card.cg-cashback::after{background:#ea580c}
 .deal-card.cg-def::after{background:var(--border2)}
 
-.card-body{padding:var(--g4) var(--g4) var(--g4) calc(var(--g4) + 6px);display:flex;flex-direction:column;gap:var(--g3);flex:1}
+.card-body{padding:16px 16px 16px 20px;display:flex;flex-direction:column;gap:10px;flex:1}
 .card-top{display:flex;align-items:center;justify-content:space-between;gap:var(--g2)}
 .vbadge{display:inline-flex;align-items:center;padding:4px 11px;border-radius:999px;font-family:var(--fh);font-size:11px;font-weight:700;white-space:nowrap;background:var(--surface2);color:var(--ink2);border:1px solid var(--border2)}
 .vb-ww{background:#eef8f1;color:#166534;border-color:#b3e6c1}
@@ -381,7 +356,150 @@ body{font-family:var(--fb);font-size:15px;line-height:1.65;background:var(--bg);
 .sub-bar input{padding:10px 14px;border:2px solid var(--nav);border-radius:8px;font-size:14px;background:#fff;color:var(--ink);font-family:inherit;width:230px;min-height:44px}
 .sub-bar button{padding:10px 20px;background:var(--nav);color:var(--nav-txt);border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;min-height:44px}
 .sub-bar .close-sub{background:none;border:none;color:rgba(255,255,255,.5);font-size:20px;cursor:pointer;padding:8px;margin-left:4px;min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center}
-@media(max-width:600px){.sub-bar input{width:170px}.sub-bar-text{font-size:13px}}
+
+
+
+/* Mobile bottom nav */
+.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:95;background:var(--surface);border-top:2px solid var(--border);padding:6px 8px env(safe-area-inset-bottom,0);box-shadow:0 -2px 12px rgba(0,0,0,.1)}
+.bottom-nav-inner{display:flex;justify-content:space-around;max-width:500px;margin:0 auto}
+.bnav-btn{display:flex;flex-direction:column;align-items:center;gap:1px;padding:5px 4px 3px;background:none;border:none;color:var(--ink3);font-size:10px;font-weight:700;font-family:var(--fh);cursor:pointer;min-width:52px;min-height:44px;border-radius:8px;text-decoration:none;transition:all .15s;letter-spacing:-.02em}
+.bnav-btn:hover,.bnav-btn.active{color:var(--nav);background:var(--teal-bg,rgba(13,110,99,.08))}
+.bnav-icon{font-size:20px;line-height:1}
+
+
+
+/* Quick action cards (mobile hero) */
+.quick-actions{display:none;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px}
+.qa-btn{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 6px;background:var(--surface);border:1.5px solid var(--border);border-radius:10px;text-decoration:none;color:var(--ink);font-size:11px;font-weight:700;font-family:var(--fh);text-align:center;min-height:60px;transition:all .15s}
+.qa-btn:hover{border-color:var(--nav);color:var(--nav)}
+.qa-fuel{background:var(--nav);color:var(--nav-txt)!important;border-color:var(--nav)}
+.qa-fuel:hover{background:var(--nav2);color:var(--nav-txt)!important}
+.qa-fuel .qa-icon{filter:brightness(10)}
+.qa-icon{font-size:22px}
+
+
+
+/* ═══ RESPONSIVE — CONSOLIDATED ═══════════════════════════════ */
+/* Desktop: hide mobile-only elements */
+@media(min-width:861px){
+  .hamburger{display:none}
+  .mob-filter-btn{display:none!important}
+  .bottom-nav{display:none}
+  .quick-actions{display:none}
+}
+
+/* Tablet: 601-860px */
+@media(max-width:960px){
+  .page{grid-template-columns:1fr}
+}
+@media(max-width:860px){
+  /* Header & Nav */
+  .hdr-in{position:relative;height:56px}
+  .hamburger{display:flex;align-items:center;justify-content:center;width:44px;height:44px;background:none;border:none;color:var(--nav-txt);font-size:26px;cursor:pointer;order:-1;flex-shrink:0}
+  .nav{display:none;position:absolute;top:56px;left:0;right:0;background:var(--nav2);flex-direction:column;padding:8px 12px 14px;box-shadow:0 12px 32px rgba(0,0,0,.25);z-index:99;border-top:1px solid rgba(255,255,255,.1)}
+  .nav.open{display:flex}
+  .nav a{min-height:48px;padding:12px 16px;border-radius:10px;font-size:16px;color:#fff}
+  .logo-tag{display:none}
+  .logo-name{font-size:15px}
+  .hdr-btns .btn-ghost{padding:6px 10px;font-size:12px}
+  .hdr-btns .btn-dark{padding:6px 12px;font-size:12px}
+
+  /* Hero */
+  .hero{padding:24px 16px 20px}
+  .hero::after{display:none}
+  .hero-in{grid-template-columns:1fr;gap:12px}
+  .hero-aside{display:none}
+  .hero-eyebrow{font-size:11px;padding:4px 10px}
+  .hero h1{font-size:26px;letter-spacing:-.8px;line-height:1.15;margin-bottom:8px}
+  .hero-sub{display:none}
+  .search-box{border-radius:10px}
+  .search-inp{font-size:15px;min-height:48px;padding:12px 14px}
+  .search-btn{min-height:48px;padding:10px 16px;font-size:14px}
+  .search-lbl{padding:0 10px;font-size:16px}
+  .quick-row{display:none}
+
+  /* Quick Actions */
+  .quick-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}
+  .qa-btn{padding:10px 4px;border-radius:10px;font-size:10px;gap:3px}
+  .qa-icon{font-size:20px}
+
+  /* Location */
+  #stateSelect,#suburbSelect{font-size:13px;min-height:38px;padding:6px 8px}
+
+  /* Stats */
+  .stats{display:none}
+
+  /* Layout */
+  .page{padding:12px 10px 80px;gap:12px}
+  .sidebar{display:none;position:fixed;top:56px;left:0;right:0;bottom:62px;z-index:80;overflow-y:auto;border-radius:0;border:none;box-shadow:0 8px 32px rgba(0,0,0,.3)}
+  .sidebar.open{display:block}
+
+  /* Content header */
+  .ch{gap:8px;margin-bottom:12px}
+  .ch-title{font-size:18px}
+  .ch-sub{font-size:12px}
+  .ctrls{width:100%}
+  .isrch{flex:1}
+  .isrch input{width:100%}
+
+  /* Cards */
+  .deals-grid{grid-template-columns:1fr;gap:12px}
+  .deal-card{border-radius:12px}
+  .card-body{padding:14px 14px 14px 18px}
+  .card-title{font-size:15px}
+  .card-desc{font-size:13px}
+  .price-now{font-size:22px}
+  .card-foot{padding:10px 14px 10px 18px}
+
+  /* Fuel */
+  .fuel-body{grid-template-columns:repeat(2,1fr);gap:8px;padding:10px}
+  .fuel-price{font-size:20px}
+  .fuel-ph{padding:10px 14px}
+
+  /* Live specials */
+  .live-cards{grid-template-columns:1fr 1fr;gap:8px;padding:10px}
+  .live-ph{padding:10px 14px;flex-direction:column;align-items:flex-start;gap:8px}
+  .live-tabs{overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:2px}
+  .live-tabs::-webkit-scrollbar{display:none}
+  .live-tab{white-space:nowrap;flex-shrink:0;font-size:12px;padding:6px 12px}
+
+  /* Modals */
+  .modal-backdrop{padding:8px;align-items:flex-end}
+  .modal{padding:20px;max-width:100%;border-radius:16px 16px 0 0;max-height:85vh}
+  .modal h2{font-size:20px}
+  .form-input{min-height:48px;font-size:16px}
+
+  /* Mobile filter button */
+  .mob-filter-btn{display:flex!important;position:fixed;bottom:74px;right:14px;z-index:85;width:50px;height:50px;border-radius:50%;background:var(--nav);color:var(--nav-txt);border:none;font-size:18px;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.25);align-items:center;justify-content:center}
+
+  /* Bottom nav */
+  .bottom-nav{display:block}
+  body{padding-bottom:62px}
+  .sub-bar{bottom:62px;padding:8px 12px;gap:6px}
+  .sub-bar input{width:140px;font-size:13px}
+  .sub-bar-text{font-size:12px}
+  .sub-bar button{padding:8px 14px;font-size:13px}
+
+  /* Insurance grid */
+  .ins-grid{grid-template-columns:1fr}
+
+  /* Empty state */
+  .empty-state{padding:32px 16px}
+}
+
+/* Small phones: <400px */
+@media(max-width:400px){
+  .quick-actions{grid-template-columns:repeat(4,1fr);gap:6px}
+  .qa-btn{padding:8px 2px;font-size:9px}
+  .qa-icon{font-size:18px}
+  .hero h1{font-size:22px}
+  .hdr-in{padding:0 10px}
+  .bottom-nav-inner{gap:0}
+  .bnav-btn{font-size:9px;min-width:48px;padding:4px 2px}
+  .bnav-icon{font-size:18px}
+  .live-cards{grid-template-columns:1fr}
+  .fuel-body{grid-template-columns:1fr}
+}
 
 </style>
 </head>
@@ -423,6 +541,16 @@ body{font-family:var(--fb);font-size:15px;line-height:1.65;background:var(--bg);
           <label class="search-lbl" for="hs"><span aria-hidden="true">&#128269;</span><span class="sr-only">Search</span></label>
           <input class="search-inp" type="search" id="hs" placeholder="Try: milk, headphones, nappies, coffee&hellip;" aria-label="Search deals" autocomplete="off" onkeydown="if(event.key==='Enter')doSearch()"/>
           <button class="search-btn" onclick="doSearch()">Search</button>
+        </div>
+        <div class="quick-actions">
+          <a class="qa-btn qa-fuel" href="#" onclick="setFilterDirect('fuel');return false"><span class="qa-icon">&#9981;</span>Fuel Prices</a>
+          <a class="qa-btn" href="#" onclick="setFilterDirect('grocery');return false"><span class="qa-icon">&#128722;</span>Grocery</a>
+          <a class="qa-btn" href="#" onclick="setFilterDirect('retail');return false"><span class="qa-icon">&#128717;</span>Retail</a>
+          <a class="qa-btn" href="#" onclick="setFilterDirect('amazon');return false"><span class="qa-icon">&#128230;</span>Amazon</a>
+          <a class="qa-btn" href="#" onclick="setFilterDirect('cashback');return false"><span class="qa-icon">&#128176;</span>Cashback</a>
+          <a class="qa-btn" href="catalogues.html"><span class="qa-icon">&#128214;</span>Catalogues</a>
+          <a class="qa-btn" href="compare.html"><span class="qa-icon">&#128200;</span>Compare</a>
+          <a class="qa-btn" href="blog.html"><span class="qa-icon">&#128161;</span>Tips</a>
         </div>
         <div style="display:flex;gap:8px;margin-top:12px;align-items:center;flex-wrap:wrap">
           <label style="font-size:13px;font-weight:600;color:var(--ink3)">&#128205;</label>
@@ -701,6 +829,93 @@ var activeFilter='all', searchQ='';
 // These run in the USER's BROWSER (real home IP) and fetch live
 // data from APIs that block server IPs but allow browsers.
 
+// ── BROWSER-SIDE DEAL AGGREGATOR ─────────────────────────────
+// Fetches deals from multiple free RSS/API sources directly from
+// the user's browser (no server needed, no GCP IP blocks)
+function fetchBrowserDeals() {
+  var feeds = [
+    {name:'OzBargain',url:'https://www.ozbargain.com.au/deals/feed',cat:'retail'},
+    {name:'OzBargain Grocery',url:'https://www.ozbargain.com.au/cat/groceries/feed',cat:'grocery'},
+    {name:'OzBargain Computing',url:'https://www.ozbargain.com.au/cat/computing/feed',cat:'retail'},
+    {name:'OzBargain Gaming',url:'https://www.ozbargain.com.au/cat/gaming/feed',cat:'gaming'},
+    {name:'OzBargain Fashion',url:'https://www.ozbargain.com.au/cat/fashion/feed',cat:'retail'},
+    {name:'OzBargain Travel',url:'https://www.ozbargain.com.au/cat/travel/feed',cat:'travel'},
+    {name:'OzBargain Home',url:'https://www.ozbargain.com.au/cat/home-living/feed',cat:'retail'},
+    {name:'OzBargain Amazon',url:'https://www.ozbargain.com.au/tag/amazon/feed',cat:'amazon'},
+  ];
+  var proxy = 'https://api.rss2json.com/v1/api.json?rss_url=';
+  var completed = 0;
+  var newDeals = [];
+
+  feeds.forEach(function(feed) {
+    var url = proxy + encodeURIComponent(feed.url) + '&count=15';
+    fetch(url).then(function(r){return r.json();}).then(function(data) {
+      if (data && data.items && data.items.length) {
+        data.items.forEach(function(item) {
+          var title = item.title || '';
+          var desc = (item.description || '').replace(/<[^>]+>/g,'').slice(0,140);
+          // Extract price from title
+          var priceMatch = title.match(/\$(\d+[\d,.]*)/);
+          var pNow = priceMatch ? priceMatch[0] : null;
+          // Detect vendor
+          var vendor = feed.name;
+          var titleL = title.toLowerCase();
+          if (titleL.indexOf('amazon')!==-1) vendor = 'Amazon AU';
+          else if (titleL.indexOf('woolworth')!==-1) vendor = 'Woolworths';
+          else if (titleL.indexOf('coles ')!==-1||titleL.indexOf('coles.')!==-1) vendor = 'Coles';
+          else if (titleL.indexOf('aldi')!==-1) vendor = 'ALDI';
+          else if (titleL.indexOf('kmart')!==-1) vendor = 'Kmart';
+          else if (titleL.indexOf('big w')!==-1) vendor = 'Big W';
+          else if (titleL.indexOf('jb hi')!==-1) vendor = 'JB Hi-Fi';
+          else if (titleL.indexOf('bunning')!==-1) vendor = 'Bunnings';
+          else if (titleL.indexOf('harvey')!==-1) vendor = 'Harvey Norman';
+          else if (titleL.indexOf('good guys')!==-1) vendor = 'The Good Guys';
+          else if (titleL.indexOf('officeworks')!==-1) vendor = 'Officeworks';
+          else if (titleL.indexOf('chemist')!==-1) vendor = 'Chemist Warehouse';
+          else if (titleL.indexOf('catch')!==-1) vendor = 'Catch';
+          else if (titleL.indexOf('ebay')!==-1) vendor = 'eBay AU';
+          else if (titleL.indexOf('nick scali')!==-1) vendor = 'Nick Scali';
+          else if (titleL.indexOf('ikea')!==-1) vendor = 'IKEA';
+          else if (titleL.indexOf('target')!==-1) vendor = 'Target';
+          else if (titleL.indexOf('myer')!==-1) vendor = 'Myer';
+          else vendor = 'OzBargain';
+
+          var cat = feed.cat;
+          if (vendor==='Amazon AU') cat = 'amazon';
+
+          newDeals.push({
+            vendor: vendor, cat: cat,
+            title: title.slice(0,120), desc: desc,
+            pNow: pNow, pWas: null, disc: 0,
+            url: item.link || '', ts: item.pubDate || ''
+          });
+        });
+      }
+    }).catch(function(){}).finally(function() {
+      completed++;
+      if (completed >= feeds.length && newDeals.length) {
+        // Merge with existing deals, dedupe by URL
+        var existingUrls = {};
+        deals.forEach(function(d){if(d.url) existingUrls[d.url]=true;});
+        var added = 0;
+        newDeals.forEach(function(d) {
+          if (d.url && !existingUrls[d.url]) {
+            deals.push(d);
+            existingUrls[d.url] = true;
+            added++;
+          }
+        });
+        if (added > 0) {
+          filterExpiredDeals();
+          updateStats();
+          renderDeals();
+          console.log('Browser feeds: added ' + added + ' live deals from OzBargain');
+        }
+      }
+    });
+  });
+}
+
 // ── CheapShark API (free, CORS-friendly, real game prices) ──
 function fetchCheapSharkBrowser(callback) {
   var url = 'https://www.cheapshark.com/api/1.0/deals?upperPrice=60&pageSize=30&sortBy=Deal+Rating&onSale=1';
@@ -899,6 +1114,7 @@ function startAutoRefresh() {
   autoRefreshTimer = setInterval(function() {
     if (document.hidden) return;
     fetchFresh(false);
+    fetchBrowserDeals();
     filterExpiredDeals();
     // Also refresh browser-side data caches
     amazonCache = null; amazonCacheTime = 0;
@@ -1073,26 +1289,29 @@ var LIVE = {
 
 // ── BOOT ─────────────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', function() {
+  // Always show hardcoded deals immediately
+  var hcAll = getHardcodedPool('retail').concat(getHardcodedPool('grocery'))
+    .concat(getHardcodedPool('cashback')).concat(getHardcodedPool('gaming'))
+    .concat(getHardcodedPool('telco')).concat(getHardcodedPool('nbn'))
+    .concat(getHardcodedPool('energy'));
+  deals = hcAll;
+  updateStats();
+  renderDeals();
+
+  // Fetch live deals from browser-side RSS feeds (works without any setup)
+  fetchBrowserDeals();
+
   if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.indexOf('YOUR_') !== -1) {
-    document.getElementById('setupBanner').style.display = 'block';
-    document.getElementById('dealOutput').innerHTML =
-      '<div class="deals-grid"><div class="empty-state">'
-      + '<h3>Setup required</h3>'
-      + '<p>Open <strong>index.html</strong> in VS Code, press Ctrl+H, '
-      + 'find <strong>YOUR_APPS_SCRIPT_WEB_APP_URL_HERE</strong> and replace with your '
-      + 'Apps Script Web App URL, save, then push to GitHub.</p>'
-      + '</div></div>';
-    setTitle('Setup required', 'Add your Apps Script URL to load deals');
-    return;
-  }
-  var cached = readCache();
-  if (cached) {
-    ingest(cached);
-    document.getElementById('lastUpd').textContent = 'Cached — ' + fmt(cached.ts);
-    if (Date.now() - cached.ts > TTL) fetchFresh(false);
+    console.log('No Apps Script URL configured. Browser-side feeds active.');
   } else {
-    showSkeleton();
-    fetchFresh(true);
+    var cached = readCache();
+    if (cached) {
+      ingest(cached);
+      document.getElementById('lastUpd').textContent = 'Cached — ' + fmt(cached.ts);
+      if (Date.now() - cached.ts > TTL) fetchFresh(false);
+    } else {
+      fetchFresh(false);
+    }
   }
   startAutoRefresh(); // auto-refresh every 15 min
   showSubBar();
@@ -1867,6 +2086,24 @@ function showSubmitSuccess(name) {
 }
 document.addEventListener('keydown', function(ev) { if (ev.key === 'Escape') { closeSubmitDeal(); closeSubscribe(); } });
 
+// ── QUICK FILTER (mobile + desktop) ───────────────────────────
+function setFilterDirect(cat) {
+  activeFilter = cat;
+  // Find and press the right sidebar button
+  document.querySelectorAll('.fb').forEach(function(b) {
+    b.setAttribute('aria-pressed', b.dataset.cat === cat ? 'true' : 'false');
+  });
+  // Close mobile sidebar if open
+  var sb = document.querySelector('.sidebar');
+  if (sb) sb.classList.remove('open');
+  // Scroll to deals area
+  var main = document.getElementById('main-content');
+  if (main) main.scrollIntoView({behavior:'smooth',block:'start'});
+  // Update bottom nav active state
+  document.querySelectorAll('.bnav-btn').forEach(function(b){b.classList.remove('active');});
+  renderDeals();
+}
+
 // ── MOBILE NAV & SIDEBAR ──────────────────────────────────────
 function toggleMobileNav() {
   document.querySelector('.nav').classList.toggle('open');
@@ -2030,7 +2267,7 @@ function saveCache(d){try{localStorage.setItem(CACHE_KEY,JSON.stringify({ts:Date
 
 <!-- Footer: Version & Disclaimer -->
 <footer style="background:var(--ink);color:rgba(255,255,255,.55);padding:28px 24px;margin-top:0;font-size:12px;line-height:1.7">
-  <div style="max-width:1320px;margin:0 auto;display:grid;grid-template-columns:1fr auto;gap:24px;align-items:start">
+  <div style="max-width:1320px;margin:0 auto;display:grid;grid-template-columns:1fr auto;gap:24px;align-items:start;text-align:left">
     <div>
       <p style="color:rgba(255,255,255,.8);font-weight:700;font-family:var(--fh);margin-bottom:6px">SmartSaver Connect AU &mdash; v1.0</p>
       <p><strong style="color:rgba(255,255,255,.7)">Disclaimer:</strong> All deals, prices, comparisons, tips and information on this site are provided for general informational purposes only, based on publicly available data and personal experience. Prices, offers and availability change frequently and may not reflect current or real-time pricing. Users are expected to independently verify all information, check actual costs, terms and conditions directly with the retailer or service provider, and confirm reliability before making any purchase or financial decision. SmartSaver Connect does not guarantee the accuracy, completeness or timeliness of any information displayed. This site is not affiliated with any retailer, bank, insurer or service provider listed. Use at your own discretion.</p>
@@ -2043,5 +2280,16 @@ function saveCache(d){try{localStorage.setItem(CACHE_KEY,JSON.stringify({ts:Date
     </div>
   </div>
 </footer>
+
+<!-- Mobile bottom nav -->
+<nav class="bottom-nav" aria-label="Quick navigation">
+  <div class="bottom-nav-inner">
+    <a class="bnav-btn active" href="#" onclick="setFilterDirect('all');return false"><span class="bnav-icon">&#128176;</span>Deals</a>
+    <a class="bnav-btn" href="#" onclick="setFilterDirect('fuel');return false"><span class="bnav-icon">&#9981;</span>Fuel</a>
+    <a class="bnav-btn" href="catalogues.html"><span class="bnav-icon">&#128214;</span>Catalogues</a>
+    <a class="bnav-btn" href="#" onclick="setFilterDirect('cashback');return false"><span class="bnav-icon">&#128176;</span>Cashback</a>
+    <a class="bnav-btn" href="compare.html"><span class="bnav-icon">&#128200;</span>Compare</a>
+  </div>
+</nav>
 </body>
 </html>

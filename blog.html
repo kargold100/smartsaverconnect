@@ -31,7 +31,8 @@
   --amber:#fbbf24;--amber-bg:#1c1500;
 }}
 @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
-body{font-family:var(--fb);font-size:16px;line-height:1.75;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased}
+body{font-family:var(--fb);font-size:16px;line-height:1.75;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+img{max-width:100%}
 :focus-visible{outline:3px solid var(--teal);outline-offset:3px;border-radius:4px}
 a{color:var(--blue);text-decoration:underline;text-underline-offset:2px}
 a:hover{color:var(--teal)}
@@ -52,7 +53,8 @@ a:hover{color:var(--teal)}
 .hero p{font-size:16px;color:rgba(255,255,255,.8);max-width:600px;line-height:1.7;position:relative;z-index:1}
 
 /* Blog post card */
-.post{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);margin-bottom:24px;overflow:hidden;box-shadow:var(--s)}
+.post{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);margin-bottom:28px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.06);transition:box-shadow .2s}
+.post:hover{box-shadow:0 6px 24px rgba(0,0,0,.1)}
 .post-header{padding:28px 28px 0;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .post-tag{font-family:var(--fh);font-size:11px;font-weight:800;padding:4px 12px;border-radius:999px;text-transform:uppercase;letter-spacing:.05em}
 .tag-grocery{background:var(--grn-bg);color:var(--grn)}
@@ -90,6 +92,33 @@ a:hover{color:var(--teal)}
 .admin-panel textarea{min-height:120px;resize:vertical;line-height:1.6}
 .admin-panel button{padding:12px 24px;background:var(--teal);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--fh);min-height:44px}
 .admin-panel button:hover{background:var(--teal2)}
+
+/* ── Mobile ─────────────────────────────────────────────────── */
+@media(max-width:700px){
+  .wrap{padding:16px 14px 60px}
+  .hero{padding:28px 20px;border-radius:10px;margin-bottom:24px}
+  .hero h1{font-size:24px;letter-spacing:-.6px}
+  .hero p{font-size:14px}
+  .top-bar{padding:10px 14px;gap:6px}
+  .top-bar .logo{font-size:14px}
+  .top-nav a{padding:6px 10px;font-size:13px}
+  .post-header{padding:18px 18px 0;gap:8px}
+  .post-body{padding:14px 18px 22px}
+  .post-body h2{font-size:19px;margin-bottom:10px}
+  .post-body h3{font-size:16px;margin:16px 0 6px}
+  .post-body p{font-size:14px;margin-bottom:12px}
+  .post-body ul,.post-body ol{margin-left:18px}
+  .post-body li{font-size:14px;margin-bottom:4px}
+  .tip-box,.warning-box{padding:12px 14px;font-size:13px;margin:12px 0}
+  .admin-panel{padding:18px}
+  .admin-panel h2{font-size:16px}
+}
+@media(max-width:400px){
+  .top-nav{overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch}
+  .top-nav a{flex-shrink:0;font-size:12px;padding:6px 8px}
+  .hero h1{font-size:21px}
+  .post-body h2{font-size:17px}
+}
 </style>
 </head>
 <body>
@@ -108,13 +137,13 @@ a:hover{color:var(--teal)}
 <div class="wrap">
 
 <div class="hero">
-  <h1>&#128161; Money Saving Tips & Blog</h1>
+  <h1>&#128161; Money Saving Tips &amp; Blog</h1>
   <p>Practical Australian money-saving strategies from grocery shopping to fuel, energy, cashback stacking and smart subscriptions.</p>
 </div>
 
 <!-- ═══ BUILT-IN TIPS ═══ -->
 
-<article class="post">
+<article class="post" role="article">
   <div class="post-header">
     <span class="post-tag tag-cashback">Cashback</span>
     <span class="post-date">Essential Guide</span>
@@ -143,7 +172,7 @@ a:hover{color:var(--teal)}
   </div>
 </article>
 
-<article class="post">
+<article class="post" role="article">
   <div class="post-header">
     <span class="post-tag tag-fuel">Fuel</span>
     <span class="post-date">Essential Guide</span>
@@ -177,7 +206,7 @@ a:hover{color:var(--teal)}
   </div>
 </article>
 
-<article class="post">
+<article class="post" role="article">
   <div class="post-header">
     <span class="post-tag tag-grocery">Grocery</span>
     <span class="post-date">Essential Guide</span>
@@ -210,7 +239,7 @@ a:hover{color:var(--teal)}
   </div>
 </article>
 
-<article class="post">
+<article class="post" role="article">
   <div class="post-header">
     <span class="post-tag tag-energy">Energy</span>
     <span class="post-date">Essential Guide</span>
@@ -244,7 +273,7 @@ a:hover{color:var(--teal)}
   </div>
 </article>
 
-<article class="post">
+<article class="post" role="article">
   <div class="post-header">
     <span class="post-tag tag-tech">Subscriptions</span>
     <span class="post-date">Essential Guide</span>
@@ -275,7 +304,7 @@ a:hover{color:var(--teal)}
   </div>
 </article>
 
-<article class="post">
+<article class="post" role="article">
   <div class="post-header">
     <span class="post-tag tag-insurance">Insurance</span>
     <span class="post-date">Essential Guide</span>
@@ -299,7 +328,7 @@ a:hover{color:var(--teal)}
 </article>
 
 
-<article class="post">
+<article class="post" role="article">
   <div class="post-header">
     <span class="post-tag tag-general">Smart Shopping</span>
     <span class="post-date">Essential Guide</span>
@@ -321,7 +350,7 @@ a:hover{color:var(--teal)}
   </div>
 </article>
 
-<article class="post">
+<article class="post" role="article">
   <div class="post-header">
     <span class="post-tag tag-general">Banking</span>
     <span class="post-date">Money Guide</span>
@@ -343,7 +372,7 @@ a:hover{color:var(--teal)}
   </div>
 </article>
 
-<article class="post">
+<article class="post" role="article">
   <div class="post-header">
     <span class="post-tag tag-general">NBN</span>
     <span class="post-date">Essential Guide</span>
@@ -370,7 +399,7 @@ a:hover{color:var(--teal)}
   </div>
 </article>
 
-<article class="post">
+<article class="post" role="article">
   <div class="post-header">
     <span class="post-tag tag-general">Travel</span>
     <span class="post-date">Money Guide</span>
@@ -398,7 +427,7 @@ a:hover{color:var(--teal)}
   </div>
 </article>
 
-<article class="post">
+<article class="post" role="article">
   <div class="post-header">
     <span class="post-tag tag-general">Tax</span>
     <span class="post-date">Money Guide</span>

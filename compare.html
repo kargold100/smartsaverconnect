@@ -111,6 +111,16 @@ a:hover{color:var(--teal)}
 /* Footer */
 .foot{text-align:center;margin-top:48px;padding:24px;font-size:13px;color:var(--ink3);line-height:1.7;border-top:1px solid var(--border)}
 </style>
+
+<style>
+@media(max-width:700px){
+  .top-bar{padding:10px 14px;gap:6px}
+  .top-bar .logo{font-size:14px}
+  .top-nav{overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none;gap:2px}
+  .top-nav::-webkit-scrollbar{display:none}
+  .top-nav a{flex-shrink:0;font-size:13px;padding:6px 10px;white-space:nowrap}
+}
+</style>
 </head>
 <body>
 <div class="wrap">
