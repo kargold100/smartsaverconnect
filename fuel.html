@@ -4,52 +4,66 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
 <title>Fuel Prices — SmartSaver Connect AU</title>
-<meta name="description" content="Live fuel prices near you from PetrolSpy. Compare ULP, E10, P95, P98, Diesel and LPG."/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Lexend:wght@700;800;900&display=swap" rel="stylesheet"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#f4f2ef;--sf:#fff;--bd:#d8d4ce;--bd2:#c4bfb8;--ink:#1a1714;--ink2:#3d3832;--ink3:#6b6560;--teal:#0d6e63;--teal2:#0a5a52;--grn:#157a3e;--fh:'Lexend',sans-serif;--fb:'Inter',sans-serif}
-@media(prefers-color-scheme:dark){:root{--bg:#161413;--sf:#222120;--bd:#444240;--bd2:#555350;--ink:#f0ece6;--ink2:#c4beb6;--ink3:#8a847c;--teal:#14b8a6;--teal2:#0d9488;--grn:#4ade80}}
-body{font-family:var(--fb);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased}
-a{color:var(--teal);text-decoration:underline;text-underline-offset:2px}
-.bar{background:var(--teal);padding:12px 16px;display:flex;align-items:center;justify-content:space-between}
-.bar a{color:#fff;text-decoration:none;font-weight:700;font-size:14px;padding:6px 12px;border-radius:8px;min-height:44px;display:inline-flex;align-items:center}
+:root{--bg:#f4f2ef;--sf:#fff;--sf2:#edeae5;--bd:#d8d4ce;--bd2:#c4bfb8;--ink:#1a1714;--ink2:#3d3832;--ink3:#6b6560;--tl:#0d6e63;--tl2:#0a5a52;--gn:#157a3e;--fh:'Lexend',sans-serif;--fb:'Inter',sans-serif}
+@media(prefers-color-scheme:dark){:root{--bg:#161413;--sf:#222120;--sf2:#2c2a28;--bd:#444240;--bd2:#555350;--ink:#f0ece6;--ink2:#c4beb6;--ink3:#8a847c;--tl:#14b8a6;--tl2:#0d9488;--gn:#4ade80}}
+body{font-family:var(--fb);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;padding-bottom:16px}
+a{color:var(--tl);text-underline-offset:2px}
+
+/* Nav */
+.bar{background:var(--tl);padding:10px 16px;display:flex;align-items:center;gap:8px}
+.bar a{color:#fff;text-decoration:none;font-weight:700;font-size:13px;padding:6px 12px;border-radius:8px;min-height:44px;display:inline-flex;align-items:center}
 .bar a:hover{background:rgba(255,255,255,.15)}
-.bar .logo{font-family:var(--fh);font-size:15px;font-weight:800}
-.wrap{max-width:600px;margin:0 auto;padding:12px}
-.loc{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
-.loc select{padding:10px 12px;border:1.5px solid var(--bd2);border-radius:8px;font-size:15px;background:var(--sf);color:var(--ink);font-family:inherit;min-height:44px;flex:1;min-width:0}
-.go{padding:10px 22px;background:var(--teal);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:800;cursor:pointer;font-family:var(--fh);min-height:44px;white-space:nowrap}
-.go:active{background:var(--teal2)}
-.maps{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
-.mp{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px 8px;background:var(--sf);border:1.5px solid var(--bd);border-radius:10px;text-decoration:none;color:var(--ink);font-size:13px;font-weight:700;min-height:56px;text-align:center;transition:border-color .15s}
-.mp:hover{border-color:var(--teal);color:var(--teal)}
-.mp.pri{background:var(--teal);color:#fff;border-color:var(--teal)}
-.mp small{font-weight:400;font-size:11px;opacity:.7;margin-top:2px}
-.cards{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
-@media(max-width:360px){.cards{grid-template-columns:1fr}}
-.fc{background:var(--sf);border:1.5px solid var(--bd);border-radius:10px;overflow:hidden}
+.bar .logo{font-family:var(--fh);font-size:14px;font-weight:900;margin-right:auto}
+.wrap{max-width:560px;margin:0 auto;padding:12px 12px 0}
+
+/* Location */
+.loc{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.loc select{padding:10px;border:1.5px solid var(--bd2);border-radius:8px;font-size:15px;background:var(--sf);color:var(--ink);font-family:inherit;min-height:44px;flex:1;min-width:0}
+.go{padding:10px 22px;background:var(--tl);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:800;cursor:pointer;font-family:var(--fh);min-height:44px}
+.go:active{background:var(--tl2);transform:scale(.97)}
+
+/* Maps */
+.maps{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.mp{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 8px;background:var(--sf);border:1.5px solid var(--bd);border-radius:10px;text-decoration:none;color:var(--ink);font-size:13px;font-weight:700;min-height:52px;text-align:center;transition:all .15s}
+.mp:hover{border-color:var(--tl);color:var(--tl)}
+.mp.pri{background:var(--tl);color:#fff;border-color:var(--tl)}
+.mp small{font-weight:400;font-size:10px;opacity:.7;margin-top:2px}
+
+/* Fuel cards */
+.sec{font-family:var(--fh);font-size:14px;font-weight:800;padding:10px 4px 6px;color:var(--ink2);display:flex;align-items:center;gap:6px}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+@media(max-width:340px){.cards{grid-template-columns:1fr}}
+.fc{background:var(--sf);border:1.5px solid var(--bd);border-radius:10px;overflow:hidden;transition:border-color .15s}
+.fc:hover{border-color:var(--tl)}
 .ft{padding:5px 10px;font-family:var(--fh);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;text-align:center}
 .ft-ULP{background:#dcfce7;color:#166534}.ft-E10{background:#dbeafe;color:#1e40af}
 .ft-P95{background:#fff7ed;color:#9a3412}.ft-P98{background:#fee2e2;color:#991b1b}
 .ft-Diesel{background:#ede9fe;color:#4c1d95}.ft-LPG{background:#fdf4ff;color:#6b21a8}
 .fb{padding:10px}
-.fp{font-family:var(--fh);font-size:28px;font-weight:900;color:var(--grn);letter-spacing:-1px;line-height:1}
-.fu{font-size:13px;font-weight:700;color:var(--ink3)}
-.fs{font-size:12px;font-weight:700;color:var(--ink);margin-top:4px}
-.fsb{font-size:11px;color:var(--ink3);margin-top:1px}
-.fo{margin-top:6px;padding-top:6px;border-top:1px solid var(--bd);font-size:11px;color:var(--ink3);line-height:1.5}
-.ts{text-align:center;font-size:12px;color:var(--ink3);padding:8px}
-.ts a{font-weight:700}
-.ld{text-align:center;padding:32px;color:var(--ink3)}
-@keyframes spin{to{transform:rotate(360deg)}}.sp{display:inline-block;animation:spin .7s linear infinite;font-size:24px}
-.foot{background:var(--ink);color:rgba(255,255,255,.5);padding:16px;font-size:10px;text-align:center;margin-top:20px;border-radius:12px;line-height:1.6}
+.fp{font-family:var(--fh);font-size:28px;font-weight:900;color:var(--gn);letter-spacing:-1px;line-height:1}
+.fu{font-size:12px;font-weight:700;color:var(--ink3)}
+.fn{font-size:12px;font-weight:700;color:var(--ink);margin-top:4px}
+.fsub{font-size:11px;color:var(--ink3)}
+.fo{margin-top:6px;padding-top:6px;border-top:1px solid var(--bd)}
+.fo div{font-size:11px;color:var(--ink3);padding:2px 0}
+.status{text-align:center;padding:10px;font-size:12px;color:var(--ink3)}
+.status a{font-weight:700}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.loading{animation:pulse 1.2s infinite;color:var(--tl);font-weight:700}
+.tip{background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:14px;margin:12px 0;font-size:13px;line-height:1.65;color:var(--ink2)}
+.tip b{color:var(--ink)}
+.foot{color:var(--ink3);padding:14px;font-size:10px;text-align:center;line-height:1.6;margin-top:12px}
 </style>
 </head>
 <body>
 <div class="bar">
-  <a href="index.html" class="logo">&#128176; SmartSaver Connect</a>
-  <a href="index.html">&#8592; Deals</a>
+  <a href="index.html" class="logo">&#128176; SmartSaver</a>
+  <a href="index.html">Deals</a>
+  <a href="catalogues.html">Catalogues</a>
+  <a href="compare.html">Compare</a>
 </div>
 <div class="wrap">
 
@@ -60,125 +74,154 @@ a{color:var(--teal);text-decoration:underline;text-underline-offset:2px}
   <button class="go" onclick="go()">Go &#8594;</button>
 </div>
 
-<div class="maps" id="mapLinks"></div>
-<div id="cards"></div>
-<div class="ts" id="ts"></div>
-<div class="ld" id="ld" style="display:none"><div class="sp">&#9981;</div><p id="ldTxt">Loading...</p></div>
+<div id="mapLinks" class="maps"></div>
+<div id="statusBar" class="status loading">&#9981; Loading fuel prices...</div>
+<div id="fuelArea"></div>
+
+<div class="tip">
+  <b>&#128161; Save on fuel:</b> Fill up on <b>Tuesday or Wednesday</b> (bottom of the price cycle).
+  Use <a href="https://www.7eleven.com.au/fuel-lock" target="_blank">7-Eleven Fuel Lock</a> to lock today's price.
+  <a href="https://www.woolworthsrewards.com.au" target="_blank">Everyday Rewards</a> gives fuel discounts at Ampol.
+</div>
 
 <div class="foot">
-  SmartSaver Connect AU &mdash; v1.0<br>
-  Fuel data from PetrolSpy. Prices may differ from pump price. Always verify before filling up.
+  SmartSaver Connect AU v1.0 &mdash; Fuel data from PetrolSpy via proxy. Prices may vary at pump. Always verify before filling up.
 </div>
 </div>
 
 <script>
 var SUBS={
-VIC:['Point Cook','Werribee','Hoppers Crossing','Tarneit','Truganina','Williams Landing','Laverton','Altona','Wyndham Vale','Manor Lakes','Melton','Caroline Springs','Deer Park','Sunshine','Footscray','Melbourne CBD','South Yarra','Richmond','Brunswick','Coburg','Essendon','Craigieburn','Epping','South Morang','Doncaster','Box Hill','Ringwood','Glen Waverley','Dandenong','Cranbourne','Berwick','Pakenham','Frankston','Mornington','Geelong','Ballarat','Bendigo'],
-NSW:['Sydney CBD','Parramatta','Chatswood','Bondi','Penrith','Liverpool','Campbelltown','Blacktown','Hornsby','Castle Hill','Bankstown','Hurstville','Cronulla','Wollongong','Newcastle','Central Coast'],
-QLD:['Brisbane CBD','Gold Coast','Sunshine Coast','Cairns','Townsville','Toowoomba','Ipswich','Logan','North Lakes','Chermside','Carindale','Springfield','Surfers Paradise','Robina'],
-SA:['Adelaide CBD','Glenelg','Marion','Salisbury','Elizabeth','Mount Barker','Norwood','Prospect'],
-WA:['Perth CBD','Fremantle','Joondalup','Rockingham','Mandurah','Canning Vale','Midland','Armadale'],
-TAS:['Hobart','Launceston','Devonport','Glenorchy','Kingston'],
-NT:['Darwin','Palmerston','Alice Springs'],
-ACT:['Canberra','Belconnen','Woden','Tuggeranong','Gungahlin']
+VIC:'Point Cook,Werribee,Hoppers Crossing,Tarneit,Truganina,Williams Landing,Laverton,Altona,Wyndham Vale,Manor Lakes,Melton,Caroline Springs,Deer Park,Sunshine,Footscray,Melbourne CBD,South Yarra,Richmond,Brunswick,Coburg,Essendon,Craigieburn,Epping,South Morang,Doncaster,Box Hill,Ringwood,Glen Waverley,Dandenong,Cranbourne,Berwick,Pakenham,Frankston,Mornington,Geelong,Ballarat,Bendigo'.split(','),
+NSW:'Sydney CBD,Parramatta,Chatswood,Bondi,Penrith,Liverpool,Campbelltown,Blacktown,Hornsby,Castle Hill,Bankstown,Hurstville,Cronulla,Wollongong,Newcastle,Central Coast'.split(','),
+QLD:'Brisbane CBD,Gold Coast,Sunshine Coast,Cairns,Townsville,Toowoomba,Ipswich,Logan,North Lakes,Chermside,Surfers Paradise'.split(','),
+SA:'Adelaide CBD,Glenelg,Marion,Salisbury,Elizabeth,Mount Barker,Norwood'.split(','),
+WA:'Perth CBD,Fremantle,Joondalup,Rockingham,Mandurah,Canning Vale,Midland'.split(','),
+TAS:'Hobart,Launceston,Devonport,Glenorchy'.split(','),
+NT:'Darwin,Palmerston,Alice Springs'.split(','),
+ACT:'Canberra,Belconnen,Woden,Tuggeranong,Gungahlin'.split(',')
 };
-var COORDS={
-'point cook':{la:-37.90,ln:144.75},'werribee':{la:-37.90,ln:144.66},'hoppers crossing':{la:-37.88,ln:144.70},'tarneit':{la:-37.85,ln:144.68},'truganina':{la:-37.85,ln:144.72},'williams landing':{la:-37.86,ln:144.75},'laverton':{la:-37.86,ln:144.78},'altona':{la:-37.87,ln:144.83},'sunshine':{la:-37.79,ln:144.83},'footscray':{la:-37.80,ln:144.90},'melbourne cbd':{la:-37.81,ln:144.96},'south yarra':{la:-37.84,ln:144.99},'richmond':{la:-37.82,ln:145.00},'brunswick':{la:-37.77,ln:144.96},'geelong':{la:-38.15,ln:144.36},'ballarat':{la:-37.56,ln:143.86},'bendigo':{la:-36.76,ln:144.28},'melton':{la:-37.68,ln:144.58},'craigieburn':{la:-37.60,ln:144.94},'epping':{la:-37.65,ln:145.03},'dandenong':{la:-37.99,ln:145.21},'frankston':{la:-38.14,ln:145.12},'ringwood':{la:-37.81,ln:145.23},'glen waverley':{la:-37.88,ln:145.16},'box hill':{la:-37.82,ln:145.12},'cranbourne':{la:-38.10,ln:145.28},'berwick':{la:-38.04,ln:145.35},'pakenham':{la:-38.07,ln:145.49},'mornington':{la:-38.22,ln:145.04},
-'sydney cbd':{la:-33.87,ln:151.21},'parramatta':{la:-33.82,ln:151.00},'chatswood':{la:-33.80,ln:151.18},'bondi':{la:-33.89,ln:151.27},'penrith':{la:-33.75,ln:150.69},'liverpool':{la:-33.92,ln:150.93},'campbelltown':{la:-34.07,ln:150.81},'blacktown':{la:-33.77,ln:150.91},'hornsby':{la:-33.70,ln:151.10},'castle hill':{la:-33.73,ln:151.01},'bankstown':{la:-33.92,ln:151.03},'wollongong':{la:-34.43,ln:150.89},'newcastle':{la:-32.93,ln:151.78},
-'brisbane cbd':{la:-27.47,ln:153.03},'gold coast':{la:-28.02,ln:153.43},'sunshine coast':{la:-26.65,ln:153.07},'cairns':{la:-16.92,ln:145.78},'townsville':{la:-19.26,ln:146.82},'toowoomba':{la:-27.56,ln:151.95},'ipswich':{la:-27.62,ln:152.76},'logan':{la:-27.64,ln:153.11},'surfers paradise':{la:-28.00,ln:153.43},
-'adelaide cbd':{la:-34.93,ln:138.60},'glenelg':{la:-34.98,ln:138.52},'marion':{la:-35.01,ln:138.56},'salisbury':{la:-34.76,ln:138.64},
-'perth cbd':{la:-31.95,ln:115.86},'fremantle':{la:-32.06,ln:115.75},'joondalup':{la:-31.74,ln:115.77},'rockingham':{la:-32.28,ln:115.74},'mandurah':{la:-32.53,ln:115.72},'canning vale':{la:-32.06,ln:115.92},
-'hobart':{la:-42.88,ln:147.33},'launceston':{la:-41.44,ln:147.14},
-'darwin':{la:-12.46,ln:130.84},'palmerston':{la:-12.49,ln:130.98},
-'canberra':{la:-35.28,ln:149.13},'belconnen':{la:-35.24,ln:149.07}
+
+var C={
+'point cook':[-37.90,144.75],'werribee':[-37.90,144.66],'hoppers crossing':[-37.88,144.70],
+'tarneit':[-37.85,144.68],'truganina':[-37.85,144.72],'williams landing':[-37.86,144.75],
+'laverton':[-37.86,144.78],'altona':[-37.87,144.83],'sunshine':[-37.79,144.83],
+'footscray':[-37.80,144.90],'melbourne cbd':[-37.81,144.96],'south yarra':[-37.84,144.99],
+'richmond':[-37.82,145.00],'brunswick':[-37.77,144.96],'geelong':[-38.15,144.36],
+'ballarat':[-37.56,143.86],'bendigo':[-36.76,144.28],'melton':[-37.68,144.58],
+'craigieburn':[-37.60,144.94],'epping':[-37.65,145.03],'dandenong':[-37.99,145.21],
+'frankston':[-38.14,145.12],'ringwood':[-37.81,145.23],'glen waverley':[-37.88,145.16],
+'box hill':[-37.82,145.12],'cranbourne':[-38.10,145.28],'berwick':[-38.04,145.35],
+'pakenham':[-38.07,145.49],'mornington':[-38.22,145.04],'coburg':[-37.74,144.96],
+'essendon':[-37.75,144.91],'south morang':[-37.66,145.10],'doncaster':[-37.78,145.13],
+'sydney cbd':[-33.87,151.21],'parramatta':[-33.82,151.00],'chatswood':[-33.80,151.18],
+'bondi':[-33.89,151.27],'penrith':[-33.75,150.69],'liverpool':[-33.92,150.93],
+'campbelltown':[-34.07,150.81],'blacktown':[-33.77,150.91],'hornsby':[-33.70,151.10],
+'castle hill':[-33.73,151.01],'bankstown':[-33.92,151.03],'wollongong':[-34.43,150.89],
+'newcastle':[-32.93,151.78],'cronulla':[-34.06,151.15],'hurstville':[-33.97,151.10],
+'brisbane cbd':[-27.47,153.03],'gold coast':[-28.02,153.43],'sunshine coast':[-26.65,153.07],
+'cairns':[-16.92,145.78],'townsville':[-19.26,146.82],'toowoomba':[-27.56,151.95],
+'ipswich':[-27.62,152.76],'logan':[-27.64,153.11],'surfers paradise':[-28.00,153.43],
+'adelaide cbd':[-34.93,138.60],'glenelg':[-34.98,138.52],'marion':[-35.01,138.56],
+'salisbury':[-34.76,138.64],'elizabeth':[-34.72,138.67],
+'perth cbd':[-31.95,115.86],'fremantle':[-32.06,115.75],'joondalup':[-31.74,115.77],
+'rockingham':[-32.28,115.74],'mandurah':[-32.53,115.72],'canning vale':[-32.06,115.92],
+'hobart':[-42.88,147.33],'launceston':[-41.44,147.14],
+'darwin':[-12.46,130.84],'palmerston':[-12.49,130.98],
+'canberra':[-35.28,149.13],'belconnen':[-35.24,149.07]
 };
-var CAPS={VIC:{la:-37.81,ln:144.96},NSW:{la:-33.87,ln:151.21},QLD:{la:-27.47,ln:153.03},SA:{la:-34.93,ln:138.60},WA:{la:-31.95,ln:115.86},TAS:{la:-42.88,ln:147.33},NT:{la:-12.46,ln:130.84},ACT:{la:-35.28,ln:149.13}};
+var CAP={VIC:[-37.81,144.96],NSW:[-33.87,151.21],QLD:[-27.47,153.03],SA:[-34.93,138.60],WA:[-31.95,115.86],TAS:[-42.88,147.33],NT:[-12.46,130.84],ACT:[-35.28,149.13]};
 
-var curState = localStorage.getItem('ssc_state')||'VIC';
-var curSub = localStorage.getItem('ssc_suburb')||'Point Cook';
-
-function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-
+var st,sb;
 function init(){
-  var st=document.getElementById('st');
-  Object.keys(SUBS).forEach(function(s){
+  st=localStorage.getItem('ssc_state')||'VIC';
+  sb=localStorage.getItem('ssc_suburb')||'Point Cook';
+  var sel=document.getElementById('st');
+  'VIC,NSW,QLD,SA,WA,TAS,NT,ACT'.split(',').forEach(function(s){
     var o=document.createElement('option');o.value=s;o.textContent=s;
-    if(s===curState)o.selected=true;
-    st.appendChild(o);
+    if(s===st)o.selected=true;sel.appendChild(o);
   });
   popSubs();
   renderMaps();
   showCached();
-  fetchLive();
+  fetchPrices();
 }
 
 function popSubs(){
-  var st=document.getElementById('st').value;
-  var sb=document.getElementById('sb');
-  sb.innerHTML='';
-  (SUBS[st]||[]).forEach(function(s){
+  st=document.getElementById('st').value;
+  var el=document.getElementById('sb'),list=SUBS[st]||[];
+  el.innerHTML='';
+  list.forEach(function(s){
     var o=document.createElement('option');o.value=s;o.textContent=s;
-    if(s===curSub)o.selected=true;
-    sb.appendChild(o);
+    if(s===sb)o.selected=true;el.appendChild(o);
   });
 }
 
-function getCoords(){
-  var sub=document.getElementById('sb').value||'';
-  var state=document.getElementById('st').value||'VIC';
-  return COORDS[sub.toLowerCase()]||CAPS[state]||CAPS.VIC;
+function coords(){
+  var s=(document.getElementById('sb').value||'').toLowerCase();
+  return C[s]||CAP[document.getElementById('st').value]||CAP.VIC;
 }
 
+function esc(v){return String(v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+
 function renderMaps(){
-  var c=getCoords();
-  var sub=document.getElementById('sb').value||curSub;
+  var c=coords(),name=document.getElementById('sb').value||sb;
   document.getElementById('mapLinks').innerHTML=
-    '<a class="mp pri" href="https://petrolspy.com.au/map?center='+c.la+','+c.ln+'&zoom=13" target="_blank" rel="noopener">&#127758; PetrolSpy Map<small>Live prices for '+esc(sub)+'</small></a>'
-    +'<a class="mp" href="https://www.motormouth.com.au/fuel-price-map" target="_blank" rel="noopener">&#128200; Motormouth<small>Price cycle + map</small></a>'
-    +'<a class="mp" href="https://www.7eleven.com.au/fuel-lock" target="_blank" rel="noopener">&#128274; 7-Eleven Lock<small>Lock price via app</small></a>'
-    +'<a class="mp" href="https://www.accc.gov.au/consumers/petrol-and-fuel/petrol-price-cycles" target="_blank" rel="noopener">&#128202; ACCC Cycles<small>Best day to fill up</small></a>';
+    '<a class="mp pri" href="https://petrolspy.com.au/map?center='+c[0]+','+c[1]+'&zoom=13" target="_blank" rel="noopener">&#127758; PetrolSpy Map<small>Live prices '+esc(name)+'</small></a>'
+   +'<a class="mp" href="https://www.motormouth.com.au/fuel-price-map" target="_blank" rel="noopener">&#128200; Motormouth<small>Price cycle + map</small></a>'
+   +'<a class="mp" href="https://www.7eleven.com.au/fuel-lock" target="_blank" rel="noopener">&#128274; 7-Eleven Lock<small>Lock price in app</small></a>'
+   +'<a class="mp" href="https://www.accc.gov.au/consumers/petrol-and-fuel/petrol-price-cycles" target="_blank" rel="noopener">&#128202; ACCC Cycles<small>Best day to fill up</small></a>';
 }
 
 function go(){
-  curState=document.getElementById('st').value;
-  curSub=document.getElementById('sb').value;
-  localStorage.setItem('ssc_state',curState);
-  localStorage.setItem('ssc_suburb',curSub);
+  st=document.getElementById('st').value;
+  sb=document.getElementById('sb').value;
+  localStorage.setItem('ssc_state',st);
+  localStorage.setItem('ssc_suburb',sb);
   renderMaps();
-  showLoading('Loading prices near '+curSub+'...');
-  document.getElementById('cards').innerHTML='';
-  document.getElementById('ts').innerHTML='';
-  fetchLive();
+  setStatus('&#9981; Loading fuel prices near '+esc(sb)+'...','loading');
+  document.getElementById('fuelArea').innerHTML='';
+  fetchPrices();
 }
 
-function showLoading(msg){
-  var ld=document.getElementById('ld');
-  ld.style.display='block';
-  document.getElementById('ldTxt').textContent=msg;
+function setStatus(html,cls){
+  var el=document.getElementById('statusBar');
+  el.innerHTML=html;el.className='status '+(cls||'');
 }
-function hideLoading(){document.getElementById('ld').style.display='none';}
 
 function showCached(){
   try{
-    var c=JSON.parse(localStorage.getItem('ssc_fuel')||'null');
-    if(!c||!c.p||!c.p.length)return;
-    if(c.sub!==curSub)return; // only show cache for current suburb
-    var age=Math.round((Date.now()-c.ts)/60000);
-    renderCards(c.p,age+'m ago (cached)');
+    var d=JSON.parse(localStorage.getItem('ssc_fuel2')||'null');
+    if(!d||!d.p||!d.p.length)return;
+    var age=Math.round((Date.now()-d.ts)/60000);
+    var label=age<60?age+'m ago':Math.round(age/60)+'h ago';
+    renderCards(d.p,d.sub||sb);
+    setStatus('&#9981; Showing cached prices ('+label+') \u2014 refreshing...','loading');
   }catch(e){}
 }
 
-function fetchLive(){
-  var c=getCoords(),r=0.08;
-  var url='https://api.allorigins.win/raw?url='+encodeURIComponent(
-    'https://petrolspy.com.au/webservice-1/station/box?neLat='+(c.la+r)+'&neLng='+(c.ln+r)+'&swLat='+(c.la-r)+'&swLng='+(c.ln-r));
-  var ctrl=new AbortController();
-  var tm=setTimeout(function(){ctrl.abort();},12000);
-  fetch(url,{signal:ctrl.signal})
-    .then(function(r){return r.json();})
-    .then(function(d){
-      clearTimeout(tm);hideLoading();
-      if(!d||!d.message||!d.message.list){return;}
+function fetchPrices(){
+  var c=coords(),r=0.08;
+  var psUrl='https://petrolspy.com.au/webservice-1/station/box?neLat='+(c[0]+r)+'&neLng='+(c[1]+r)+'&swLat='+(c[0]-r)+'&swLng='+(c[1]-r);
+
+  // Try 2 proxies
+  var proxies=['https://api.allorigins.win/raw?url=','https://corsproxy.io/?url='];
+  var pi=0;
+
+  function tryProxy(){
+    if(pi>=proxies.length){
+      setStatus('&#9981; Live prices unavailable \u2014 <a href="https://petrolspy.com.au/map?center='+c[0]+','+c[1]+'&zoom=13" target="_blank" style="font-weight:800">open PetrolSpy directly \u2192</a>','');
+      return;
+    }
+    var url=proxies[pi]+encodeURIComponent(psUrl);
+    pi++;
+    var ctrl=new AbortController();
+    var tm=setTimeout(function(){ctrl.abort();},8000);
+    fetch(url,{signal:ctrl.signal}).then(function(r){
+      clearTimeout(tm);
+      if(!r.ok)throw new Error(r.status);
+      return r.json();
+    }).then(function(d){
+      if(!d||!d.message||!d.message.list||!d.message.list.length){tryProxy();return;}
       var FM={E10:'E10',U91:'ULP',P95:'P95',P98:'P98',DL:'Diesel',LPG:'LPG',e10:'E10',u91:'ULP',p95:'P95',p98:'P98',diesel:'Diesel',lpg:'LPG'};
       var prices=[];
       d.message.list.forEach(function(s){
@@ -186,42 +229,61 @@ function fetchLive(){
           var p=parseFloat(e[1].amount);
           if(!p||p<50||p>400)return;
           prices.push({n:s.name||'',b:s.brand||'',t:FM[e[0]]||e[0],p:p,
-            s:s.address?s.address.suburb||curSub:curSub});
+            s:s.address?s.address.suburb||sb:sb});
         });
       });
       if(prices.length){
-        try{localStorage.setItem('ssc_fuel',JSON.stringify({p:prices.slice(0,60),sub:curSub,ts:Date.now()}));}catch(e){}
-        renderCards(prices,'just now');
-      }
-    })
-    .catch(function(){clearTimeout(tm);hideLoading();});
+        var name=document.getElementById('sb').value||sb;
+        renderCards(prices,name);
+        setStatus('&#9981; '+prices.length+' stations near '+esc(name)+' \u2014 updated just now \u2014 <a href="https://petrolspy.com.au/map?center='+c[0]+','+c[1]+'&zoom=13" target="_blank">PetrolSpy map \u2192</a>','');
+        try{localStorage.setItem('ssc_fuel2',JSON.stringify({p:prices.slice(0,60),sub:name,ts:Date.now()}));}catch(e){}
+      } else { tryProxy(); }
+    }).catch(function(){clearTimeout(tm);tryProxy();});
+  }
+  tryProxy();
 }
 
-function renderCards(prices,timeLabel){
+function renderCards(prices,subName){
   var byT={};
   prices.forEach(function(f){if(!byT[f.t])byT[f.t]=[];byT[f.t].push(f);});
-  var h='';
+  var h='<div class="sec">&#9981; Cheapest near '+esc(subName)+'</div><div class="cards">';
   ['ULP','E10','P95','P98','Diesel','LPG'].forEach(function(ft){
     if(!byT[ft])return;
     var sorted=byT[ft].sort(function(a,b){return a.p-b.p;});
     var best=sorted[0];
     h+='<div class="fc"><div class="ft ft-'+ft+'">'+ft+'</div><div class="fb">'
       +'<div class="fp">'+best.p.toFixed(1)+'<span class="fu"> c/L</span></div>'
-      +'<div class="fs">'+esc(best.n||best.b)+'</div>'
-      +'<div class="fsb">'+esc(best.s)+'</div>';
+      +'<div class="fn">'+esc(best.n||best.b)+'</div>'
+      +'<div class="fsub">'+esc(best.s)+'</div>';
     if(sorted.length>1){
       h+='<div class="fo">';
-      sorted.slice(1,4).forEach(function(s){
-        h+=s.p.toFixed(1)+'c &mdash; '+esc(s.n||s.b)+'<br>';
+      sorted.slice(1,3).forEach(function(s){
+        h+='<div>'+s.p.toFixed(1)+'c \u2014 '+esc(s.n||s.b)+'</div>';
       });
       h+='</div>';
     }
     h+='</div></div>';
   });
-  document.getElementById('cards').innerHTML='<div class="cards">'+h+'</div>';
-  var c=getCoords();
-  document.getElementById('ts').innerHTML='&#9981; Updated '+timeLabel+' &middot; '+prices.length+' stations near '+esc(curSub)
-    +' &middot; <a href="https://petrolspy.com.au/map?center='+c.la+','+c.ln+'&zoom=13" target="_blank">Verify on PetrolSpy &rarr;</a>';
+  h+='</div>';
+
+  // Also show ALL stations sorted by price
+  var allSorted=prices.filter(function(f){return f.t==='ULP'||f.t==='E10';}).sort(function(a,b){return a.p-b.p;});
+  if(allSorted.length>3){
+    h+='<div class="sec">&#128200; All ULP/E10 Stations (cheapest first)</div>';
+    h+='<div style="background:var(--sf);border:1px solid var(--bd);border-radius:10px;overflow:hidden">';
+    allSorted.slice(0,15).forEach(function(f,i){
+      var bg=i===0?'background:rgba(21,122,62,.08)':'';
+      h+='<div style="padding:10px 12px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:10px;'+bg+'">'
+        +'<span style="font-family:var(--fh);font-size:18px;font-weight:900;color:'+(i===0?'var(--gn)':'var(--ink)')+';min-width:60px">'+f.p.toFixed(1)+'<span style="font-size:11px;color:var(--ink3)">c</span></span>'
+        +'<div><div style="font-size:13px;font-weight:700">'+esc(f.n||f.b)+'</div>'
+        +'<div style="font-size:11px;color:var(--ink3)">'+esc(f.s)+' \u2014 '+f.t+'</div></div>'
+        +(i===0?'<span style="margin-left:auto;font-size:11px;font-weight:800;color:var(--gn);background:rgba(21,122,62,.12);padding:3px 8px;border-radius:99px">CHEAPEST</span>':'')
+        +'</div>';
+    });
+    h+='</div>';
+  }
+
+  document.getElementById('fuelArea').innerHTML=h;
 }
 
 init();
