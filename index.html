@@ -413,6 +413,9 @@ body{font-family:var(--fb);font-size:15px;line-height:1.65;background:var(--bg);
   .fuel-results-grid{grid-template-columns:1fr}
 }
 
+.fuel-fb-btn{padding:14px 12px;background:var(--surface);border:1.5px solid var(--border2);color:var(--ink);border-radius:10px;text-decoration:none;font-weight:700;font-size:14px;text-align:center;min-height:48px;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.fuel-fb-btn:hover{border-color:var(--nav);color:var(--nav);background:rgba(13,110,99,.05)}
+
 /* ═══ RESPONSIVE — CONSOLIDATED ═══════════════════════════════ */
 /* Desktop: hide mobile-only elements */
 @media(min-width:861px){
@@ -1036,9 +1039,25 @@ function showAmazonFallback() {
 }
 
 // ── BROWSER-SIDE FUEL PRICE FETCHER ──────────────────────────
-// Uses CORS proxy to access PetrolSpy API from the browser
+// Caches results in localStorage for instant display on next visit.
+// Background-fetches fresh data and updates when ready.
+
+function getFuelCache() {
+  try {
+    var c = JSON.parse(localStorage.getItem('ssc_fuel_cache') || 'null');
+    if (c && c.prices && c.ts) return c;
+  } catch(e) {}
+  return null;
+}
+function setFuelCache(prices, sub, state) {
+  try {
+    localStorage.setItem('ssc_fuel_cache', JSON.stringify({
+      prices: prices.slice(0, 80), sub: sub, state: state, ts: Date.now()
+    }));
+  } catch(e) {}
+}
+
 function fetchFuelBrowser(callback) {
-  // Read current location from fuel page dropdowns or stored values
   var currentSub = userSuburb || '';
   var currentState = userState || 'VIC';
   var fuelSubEl = document.getElementById('fuelSuburb');
@@ -1048,78 +1067,37 @@ function fetchFuelBrowser(callback) {
 
   var subKey = (currentSub || '').toLowerCase().trim();
   var coords = suburbCoords[subKey] || stateCentres[currentState] || stateCentres.VIC;
-  var radius = 0.08;
+  var r = 0.08;
 
-  var petrolSpyUrl = 'https://petrolspy.com.au/webservice-1/station/box'
-    + '?neLat=' + (coords.lat + radius)
-    + '&neLng=' + (coords.lng + radius)
-    + '&swLat=' + (coords.lat - radius)
-    + '&swLng=' + (coords.lng - radius);
+  var psUrl = 'https://petrolspy.com.au/webservice-1/station/box'
+    + '?neLat='+(coords.lat+r)+'&neLng='+(coords.lng+r)
+    + '&swLat='+(coords.lat-r)+'&swLng='+(coords.lng-r);
 
-  console.log('Fuel: fetching for ' + currentSub + ' ' + currentState + ' lat=' + coords.lat + ' lng=' + coords.lng);
+  var proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(psUrl);
 
-  // Try multiple CORS proxies in order
-  var proxies = [
-    'https://api.allorigins.win/raw?url=',
-    'https://corsproxy.io/?url=',
-    '',  // direct (in case PetrolSpy allows CORS)
-  ];
+  var controller = new AbortController();
+  var timer = setTimeout(function(){ controller.abort(); }, 10000);
 
-  var tried = 0;
-  function tryNext() {
-    if (tried >= proxies.length) {
-      console.log('Fuel: all fetch methods failed');
-      callback(null);
-      return;
-    }
-    var proxy = proxies[tried];
-    var url = proxy ? proxy + encodeURIComponent(petrolSpyUrl) : petrolSpyUrl;
-    tried++;
-
-    fetch(url, {signal: AbortSignal.timeout ? AbortSignal.timeout(8000) : undefined})
-      .then(function(r) {
-        if (!r.ok) throw new Error('HTTP ' + r.status);
-        return r.json();
-      })
-      .then(function(data) {
-        if (!data || !data.message || !data.message.list || !data.message.list.length) {
-          console.log('Fuel: empty response from proxy ' + (tried));
-          tryNext();
-          return;
-        }
-        var prices = [];
-        var fuelMap = {
-          E10:'E10',U91:'ULP',P95:'P95',P98:'P98',DL:'Diesel',LPG:'LPG',
-          e10:'E10',u91:'ULP',p95:'P95',p98:'P98',diesel:'Diesel',lpg:'LPG',
-          B20:'Diesel',EV:'EV',AdBlue:'AdBlue'
-        };
-        data.message.list.forEach(function(s) {
-          Object.entries(s.prices || {}).forEach(function(entry) {
-            var fuelId = entry[0], priceObj = entry[1];
-            var p = parseFloat(priceObj.amount);
-            if (!p || p < 50 || p > 400) return;
-            prices.push({
-              name: s.name || 'Station',
-              brand: s.brand || '',
-              type: fuelMap[fuelId] || fuelId,
-              price: p,
-              suburb: s.address ? s.address.suburb || currentSub : currentSub
-            });
-          });
+  fetch(proxyUrl, {signal: controller.signal})
+    .then(function(resp) { clearTimeout(timer); return resp.json(); })
+    .then(function(data) {
+      if (!data || !data.message || !data.message.list) { callback(null); return; }
+      var fuelMap = {E10:'E10',U91:'ULP',P95:'P95',P98:'P98',DL:'Diesel',LPG:'LPG',
+        e10:'E10',u91:'ULP',p95:'P95',p98:'P98',diesel:'Diesel',lpg:'LPG'};
+      var prices = [];
+      data.message.list.forEach(function(s) {
+        Object.entries(s.prices||{}).forEach(function(e) {
+          var p = parseFloat(e[1].amount);
+          if (!p||p<50||p>400) return;
+          prices.push({name:s.name||'',brand:s.brand||'',
+            type:fuelMap[e[0]]||e[0],price:p,
+            suburb: s.address?s.address.suburb||currentSub:currentSub});
         });
-        console.log('Fuel: got ' + prices.length + ' prices via proxy ' + tried);
-        if (prices.length) {
-          callback(prices);
-        } else {
-          tryNext();
-        }
-      })
-      .catch(function(err) {
-        console.log('Fuel: proxy ' + tried + ' failed: ' + err.message);
-        tryNext();
       });
-  }
-  tryNext();
+      if (prices.length) setFuelCache(prices, currentSub, currentState);
+      callback(prices.length ? prices : null);
+    })
+    .catch(function() { clearTimeout(timer); callback(null); });
 }
 
 // ── Auto-refresh timer (deals + fuel + Amazon every 12 min) ──
@@ -2218,77 +2196,96 @@ function refreshFuel() {
 }
 
 function doFuelFetch(sub, state) {
-  fetchFuelBrowser(function(ps) {
-    var loading = document.getElementById('fuelLoading');
-    var cards = document.getElementById('fuelCards');
-    var timeEl = document.getElementById('fuelTime');
-    if (!cards) return; // user navigated away
+  var loading = document.getElementById('fuelLoading');
+  var cards = document.getElementById('fuelCards');
+  var timeEl = document.getElementById('fuelTime');
+  if (!cards) return;
 
+  // STEP 1: Show cached data INSTANTLY if available for this suburb
+  var cache = getFuelCache();
+  if (cache && cache.prices && cache.prices.length &&
+      (cache.sub||'').toLowerCase() === (sub||'').toLowerCase()) {
+    var age = Math.round((Date.now() - cache.ts) / 60000);
     if (loading) loading.style.display = 'none';
+    renderFuelCards(cache.prices, sub, state, cards, timeEl, age + ' min ago (cached)');
+    // Still fetch fresh data in background
+    fetchFuelBrowser(function(fresh) {
+      if (fresh && fresh.length && cards) {
+        renderFuelCards(fresh, sub, state, cards, timeEl, 'just now (live)');
+      }
+    });
+    return;
+  }
 
-    if (ps && ps.length) {
-      fuel = ps.map(function(f){return{name:f.name,brand:f.brand,type:f.type,price:f.price,suburb:f.suburb};});
+  // STEP 2: No cache — show loading and fetch
+  if (loading) {
+    loading.style.display = 'block';
+    loading.innerHTML = '<div class="spin" style="font-size:28px;margin-bottom:8px">&#9981;</div>'
+      + '<p style="font-size:14px;font-weight:600">Loading fuel prices near <strong>' + esc(sub||state) + '</strong>...</p>'
+      + '<p style="font-size:12px;color:var(--ink4);margin-top:4px">Connecting to PetrolSpy via proxy...</p>';
+  }
 
-      // Group by fuel type, find cheapest
-      var byType = {};
-      fuel.forEach(function(f) {
-        if (!byType[f.type]) byType[f.type] = [];
-        byType[f.type].push(f);
-      });
-
-      var h = '<div class="fuel-results-grid">';
-      var typeOrder = ['ULP','E10','P95','P98','Diesel','LPG'];
-      typeOrder.forEach(function(ft) {
-        if (!byType[ft]) return;
-        var sorted = byType[ft].sort(function(a,b){return a.price - b.price;});
-        var cheapest = sorted[0];
-        h += '<div class="fuel-result-card' + (sorted.length ? '' : '') + '">'
-          + '<div class="frc-type frc-' + ft.replace(/[^a-zA-Z]/g,'') + '">' + ft + '</div>'
-          + '<div class="frc-body">'
-          + '<div class="frc-price">' + cheapest.price.toFixed(1) + '<span class="frc-unit">c/L</span></div>'
-          + '<div class="frc-station">' + esc(cheapest.name || cheapest.brand) + '</div>'
-          + '<div class="frc-suburb">' + esc(cheapest.suburb || sub) + '</div>';
-        if (sorted.length > 1) {
-          h += '<div class="frc-others">';
-          sorted.slice(1,4).forEach(function(s) {
-            h += '<div class="frc-other">' + s.price.toFixed(1) + 'c &mdash; ' + esc(s.name||s.brand) + '</div>';
-          });
-          h += '</div>';
-        }
-        h += '</div></div>';
-      });
-      h += '</div>';
-      cards.innerHTML = h;
-
-      var now = new Date().toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit'});
-      setTitle('Fuel near ' + (sub||state), fuel.length + ' stations \u00B7 ' + now);
-      if (timeEl) timeEl.textContent = 'Updated ' + now + ' from PetrolSpy \u00B7 ' + fuel.length + ' stations near ' + (sub||state);
+  fetchFuelBrowser(function(prices) {
+    if (!cards) return;
+    if (loading) loading.style.display = 'none';
+    if (prices && prices.length) {
+      renderFuelCards(prices, sub, state, cards, timeEl, 'just now (live)');
     } else {
-      var c = suburbCoords[(sub||'').toLowerCase()] || stateCentres[state] || {lat:-37.9,lng:144.75};
-      cards.innerHTML = '<div style="text-align:center;padding:24px">'
-        + '<p style="font-size:16px;font-weight:700;color:var(--ink);margin-bottom:6px">&#9981; Fuel prices for ' + esc(sub||state) + '</p>'
-        + '<p style="font-size:13px;color:var(--ink3);line-height:1.6;margin-bottom:16px">Live prices are loading from PetrolSpy. If they don\u2019t appear, tap a link below to check directly.</p>'
-        + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:400px;margin:0 auto">'
-        + '<a href="https://petrolspy.com.au/map?center=' + c.lat + ',' + c.lng + '&zoom=13" target="_blank" rel="noopener" style="padding:14px;background:var(--nav);color:var(--nav-txt);border-radius:10px;text-decoration:none;font-weight:700;font-size:14px;text-align:center;min-height:48px;display:flex;align-items:center;justify-content:center">&#127758; PetrolSpy Map</a>'
-        + '<a href="https://www.motormouth.com.au/fuel-price-map" target="_blank" rel="noopener" style="padding:14px;background:var(--surface);border:1.5px solid var(--border2);color:var(--ink);border-radius:10px;text-decoration:none;font-weight:700;font-size:14px;text-align:center;min-height:48px;display:flex;align-items:center;justify-content:center">&#128200; Motormouth</a>'
-        + '<a href="https://www.7eleven.com.au/fuel-lock" target="_blank" rel="noopener" style="padding:14px;background:var(--surface);border:1.5px solid var(--border2);color:var(--ink);border-radius:10px;text-decoration:none;font-weight:700;font-size:14px;text-align:center;min-height:48px;display:flex;align-items:center;justify-content:center">&#128274; 7-Eleven Lock</a>'
-        + '<a href="https://www.accc.gov.au/consumers/petrol-and-fuel/petrol-price-cycles" target="_blank" rel="noopener" style="padding:14px;background:var(--surface);border:1.5px solid var(--border2);color:var(--ink);border-radius:10px;text-decoration:none;font-weight:700;font-size:14px;text-align:center;min-height:48px;display:flex;align-items:center;justify-content:center">&#128202; ACCC Cycles</a>'
-        + '</div></div>';
-      setTitle('Fuel Prices', 'No data for ' + (sub||state));
+      showFuelFallbackLinks(sub, state, cards, timeEl);
     }
   });
 }
 
-// ── APPLY LOCATION (Go button) ────────────────────────────────
-function applyLocation() {
-  saveLocation();
-  // If currently viewing fuel, refresh fuel data
-  if (activeFilter === 'fuel') {
-    showFuelPage();
-  }
-  // Update the hero location display
-  var locText = (userSuburb || userState) + ', ' + userState;
-  console.log('Location set to: ' + locText);
+function renderFuelCards(prices, sub, state, cards, timeEl, timeLabel) {
+  fuel = prices.map(function(f){return{name:f.name,brand:f.brand,type:f.type,price:f.price,suburb:f.suburb};});
+  var byType = {};
+  fuel.forEach(function(f) { if (!byType[f.type]) byType[f.type]=[]; byType[f.type].push(f); });
+
+  var h = '<div class="fuel-results-grid">';
+  ['ULP','E10','P95','P98','Diesel','LPG'].forEach(function(ft) {
+    if (!byType[ft]) return;
+    var sorted = byType[ft].sort(function(a,b){return a.price-b.price;});
+    var best = sorted[0];
+    h += '<div class="fuel-result-card">'
+      + '<div class="frc-type frc-' + ft + '">' + ft + '</div>'
+      + '<div class="frc-body">'
+      + '<div class="frc-price">' + best.price.toFixed(1) + '<span class="frc-unit">c/L</span></div>'
+      + '<div class="frc-station">' + esc(best.name||best.brand) + '</div>'
+      + '<div class="frc-suburb">' + esc(best.suburb||sub) + '</div>';
+    if (sorted.length > 1) {
+      h += '<div class="frc-others">';
+      sorted.slice(1, 4).forEach(function(s) {
+        h += '<div class="frc-other">' + s.price.toFixed(1) + 'c \u2014 ' + esc(s.name||s.brand) + '</div>';
+      });
+      h += '</div>';
+    }
+    h += '</div></div>';
+  });
+  h += '</div>';
+  cards.innerHTML = h;
+
+  var now = new Date().toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit'});
+  setTitle('Fuel near ' + (sub||state), fuel.length + ' stations');
+  if (timeEl) timeEl.innerHTML = '&#9981; Updated ' + timeLabel + ' \u00B7 ' + fuel.length + ' stations near ' + esc(sub||state)
+    + ' \u00B7 <a href="https://petrolspy.com.au/map?center='
+    + (suburbCoords[(sub||'').toLowerCase()]||stateCentres[state]||{lat:-37.9,lng:144.75}).lat + ','
+    + (suburbCoords[(sub||'').toLowerCase()]||stateCentres[state]||{lat:-37.9,lng:144.75}).lng
+    + '&zoom=13" target="_blank" rel="noopener" style="color:var(--nav);font-weight:700">Verify on PetrolSpy \u2192</a>';
+}
+
+function showFuelFallbackLinks(sub, state, cards, timeEl) {
+  var c = suburbCoords[(sub||'').toLowerCase()] || stateCentres[state] || {lat:-37.9,lng:144.75};
+  cards.innerHTML = '<div style="padding:20px;text-align:center">'
+    + '<p style="font-size:15px;font-weight:700;color:var(--ink);margin-bottom:12px">Fuel prices for ' + esc(sub||state) + '</p>'
+    + '<p style="font-size:13px;color:var(--ink3);margin-bottom:16px;line-height:1.6">The live price feed is currently slow to respond. Check prices directly on these sites:</p>'
+    + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:360px;margin:0 auto">'
+    + '<a href="https://petrolspy.com.au/map?center='+c.lat+','+c.lng+'&zoom=13" target="_blank" rel="noopener" class="fuel-fb-btn">&#127758; PetrolSpy</a>'
+    + '<a href="https://www.motormouth.com.au/fuel-price-map" target="_blank" rel="noopener" class="fuel-fb-btn">&#128200; Motormouth</a>'
+    + '<a href="https://www.7eleven.com.au/fuel-lock" target="_blank" rel="noopener" class="fuel-fb-btn">&#128274; 7-Eleven Lock</a>'
+    + '<a href="https://www.accc.gov.au/consumers/petrol-and-fuel/petrol-price-cycles" target="_blank" rel="noopener" class="fuel-fb-btn">&#128202; ACCC Cycles</a>'
+    + '</div></div>';
+  if (timeEl) timeEl.textContent = 'Live feed unavailable. Use the links above for current prices.';
+  setTitle('Fuel near ' + (sub||state), 'Check links below');
 }
 
 // ── QUICK FILTER (mobile + desktop) ───────────────────────────
