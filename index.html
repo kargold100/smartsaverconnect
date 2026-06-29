@@ -583,7 +583,7 @@ body{font-family:var(--fb);font-size:15px;line-height:1.65;background:var(--bg);
           <button class="search-btn" onclick="doSearch()">Search</button>
         </div>
         <div class="quick-actions">
-          <a class="qa-btn qa-fuel" href="#" onclick="setFilterDirect('fuel');return false"><span class="qa-icon">&#9981;</span>Fuel Prices</a>
+          <a class="qa-btn qa-fuel" href="fuel.html"><span class="qa-icon">&#9981;</span>Fuel Prices</a>
           <a class="qa-btn" href="#" onclick="setFilterDirect('grocery');return false"><span class="qa-icon">&#128722;</span>Grocery</a>
           <a class="qa-btn" href="#" onclick="setFilterDirect('retail');return false"><span class="qa-icon">&#128717;</span>Retail</a>
           <a class="qa-btn" href="#" onclick="setFilterDirect('amazon');return false"><span class="qa-icon">&#128230;</span>Amazon</a>
@@ -659,7 +659,7 @@ body{font-family:var(--fb);font-size:15px;line-height:1.65;background:var(--bg);
         <li><button class="fb" data-cat="entertainment" aria-pressed="false" onclick="setFilter(this)"><span class="fi">&#127916;</span><span class="fl">Movies &amp; Fun</span><span class="fc" id="cnt-ent"></span></button></li>
       <li><div class="fdiv"></div></li>
       <li><button class="fb" data-cat="coupon" aria-pressed="false" onclick="setFilter(this)"><span class="fi">&#127981;</span><span class="fl">Coupon Codes</span><span class="fc" id="cnt-cpn"></span></button></li>
-      <li><button class="fb" data-cat="fuel" aria-pressed="false" onclick="setFilter(this)"><span class="fi">&#9981;</span><span class="fl">Fuel Prices</span><span class="fc" id="cnt-fuel"></span></button></li>
+      <li><button class="fb" data-cat="fuel" aria-pressed="false" onclick="window.location.href='fuel.html'"><span class="fi">&#9981;</span><span class="fl">Fuel Prices</span><span class="fc" id="cnt-fuel"></span></button></li>
       <li><button class="fb" data-cat="cashback" aria-pressed="false" onclick="setFilter(this)"><span class="fi">&#128176;</span><span class="fl">Cashback Deals</span><span class="fc" id="cnt-cb"></span></button></li>
         <li><button class="fb" data-cat="insurance" aria-pressed="false" onclick="setFilter(this)"><span class="fi">&#128737;&#65039;</span><span class="fl">Insurance</span><span class="fc" id="cnt-ins"></span></button></li>
       <li><div class="fdiv"></div></li>
@@ -1618,34 +1618,7 @@ function renderDeals() {
     return;
   }
   if (activeFilter==='fuel') {
-    // ALWAYS try browser-side PetrolSpy for real-time fuel prices
-    // (server-side data may be hours old or use stale fallback)
-    setTitle('Fuel Prices', 'Fetching live prices from PetrolSpy\u2026');
-    fetchFuelBrowser(function(ps) {
-      if (ps && ps.length) {
-        fuel = ps.map(function(f){return{name:f.name,brand:f.brand,type:f.type,price:f.price,suburb:f.suburb};});
-        renderFuelGrid(q);
-        var now = new Date().toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit'});
-        setTitle('Fuel Prices \u2014 Live', fuel.length + ' stations \u00B7 Updated ' + now + ' from PetrolSpy');
-      } else if (fuel.length) {
-        // Fall back to server-side data
-        renderFuelGrid(q);
-        setTitle('Fuel Prices (Cached)', fuel.length + ' stations \u00B7 Server data (may not be current)');
-      } else {
-        document.getElementById('fuelOutput').innerHTML=
-          '<div class="deals-grid"><div class="empty-state"><h3>Could not load live fuel prices</h3>'
-          +'<p>PetrolSpy may be temporarily unavailable. Check these live sources directly:</p>'
-          +'<p style="margin-top:12px"><a href="https://petrolspy.com.au/map?center=-37.9,144.75&zoom=12" target="_blank" rel="noopener" style="font-weight:700">PetrolSpy Live Map (Point Cook)</a></p>'
-          +'<p><a href="https://www.motormouth.com.au/fuel-price-map?postcode=3030" target="_blank" rel="noopener" style="font-weight:700">Motormouth 3030</a></p>'
-          +'<p><a href="https://www.7eleven.com.au/fuel-lock" target="_blank" rel="noopener" style="font-weight:700">7-Eleven Fuel Lock App</a></p>'
-          +'</div></div>';
-        setTitle('Fuel Prices', 'Live sources linked below');
-      }
-    });
-    return;
-    document.getElementById('dealOutput').innerHTML='';
-    renderFuelGrid(q);
-    setTitle('Fuel Prices','Cheapest per fuel type \u2014 live from PetrolSpy highlighted');
+    showFuelPage();
     return;
   }
   if (activeFilter==='insurance') {
@@ -2513,7 +2486,7 @@ function saveCache(d){try{localStorage.setItem(CACHE_KEY,JSON.stringify({ts:Date
 <nav class="bottom-nav" aria-label="Quick navigation">
   <div class="bottom-nav-inner">
     <a class="bnav-btn active" href="#" onclick="setFilterDirect('all');return false"><span class="bnav-icon">&#128176;</span>Deals</a>
-    <a class="bnav-btn" href="#" onclick="setFilterDirect('fuel');return false"><span class="bnav-icon">&#9981;</span>Fuel</a>
+    <a class="bnav-btn" href="fuel.html"><span class="bnav-icon">&#9981;</span>Fuel</a>
     <a class="bnav-btn" href="catalogues.html"><span class="bnav-icon">&#128214;</span>Catalogues</a>
     <a class="bnav-btn" href="#" onclick="setFilterDirect('cashback');return false"><span class="bnav-icon">&#128176;</span>Cashback</a>
     <a class="bnav-btn" href="compare.html"><span class="bnav-icon">&#128200;</span>Compare</a>
