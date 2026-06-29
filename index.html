@@ -379,6 +379,40 @@ body{font-family:var(--fb);font-size:15px;line-height:1.65;background:var(--bg);
 
 
 
+
+/* ── FUEL PAGE ────────────────────────────────────────────────── */
+.fuel-page{background:var(--surface);border:1px solid var(--border);border-radius:var(--r3);overflow:hidden;box-shadow:var(--s0)}
+.fuel-top-bar{background:var(--surface2);padding:14px 16px;border-bottom:1px solid var(--border)}
+.fuel-loc-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.fuel-links{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.fuel-links a{display:inline-flex;align-items:center;gap:4px;padding:6px 12px;background:var(--surface);border:1px solid var(--border);border-radius:8px;font-size:12px;font-weight:700;color:var(--ink2);text-decoration:none;min-height:36px;transition:all .15s}
+.fuel-links a:hover{border-color:var(--nav);color:var(--nav)}
+.fuel-results-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;padding:16px}
+.fuel-result-card{background:var(--surface);border:1.5px solid var(--border);border-radius:10px;overflow:hidden}
+.frc-type{padding:6px 12px;font-family:var(--fh);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;text-align:center}
+.frc-ULP{background:#dcfce7;color:#166534}.frc-E10{background:#dbeafe;color:#1e40af}
+.frc-P95{background:#fff7ed;color:#9a3412}.frc-P98{background:#fee2e2;color:#991b1b}
+.frc-Diesel{background:#ede9fe;color:#4c1d95}.frc-LPG{background:#fdf4ff;color:#6b21a8}
+.frc-body{padding:12px}
+.frc-price{font-family:var(--fh);font-size:32px;font-weight:900;color:var(--grn);letter-spacing:-1px;line-height:1}
+.frc-unit{font-size:14px;font-weight:700;color:var(--ink3);margin-left:2px}
+.frc-station{font-size:13px;font-weight:700;color:var(--ink);margin-top:6px}
+.frc-suburb{font-size:12px;color:var(--ink3);margin-top:2px}
+.frc-others{margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
+.frc-other{font-size:12px;color:var(--ink3);padding:3px 0}
+@media(max-width:860px){
+  .fuel-results-grid{grid-template-columns:repeat(2,1fr);gap:8px;padding:10px}
+  .frc-price{font-size:26px}
+  .fuel-loc-row{gap:6px}
+  .fuel-loc-row select{font-size:13px;min-height:38px;flex:1}
+  .fuel-loc-row button{flex:0;padding:8px 12px}
+  .fuel-links{gap:6px}
+  .fuel-links a{font-size:11px;padding:5px 10px}
+}
+@media(max-width:400px){
+  .fuel-results-grid{grid-template-columns:1fr}
+}
+
 /* ═══ RESPONSIVE — CONSOLIDATED ═══════════════════════════════ */
 /* Desktop: hide mobile-only elements */
 @media(min-width:861px){
@@ -2085,6 +2119,146 @@ function showSubmitSuccess(name) {
   document.getElementById('sdSuccess').style.display = 'block';
 }
 document.addEventListener('keydown', function(ev) { if (ev.key === 'Escape') { closeSubmitDeal(); closeSubscribe(); } });
+
+// ── FUEL PAGE (dedicated, mobile-friendly) ──────────────────
+function showFuelPage() {
+  var sub = userSuburb || 'Point Cook';
+  var state = userState || 'VIC';
+
+  // Build inline location selector + loading state
+  var fuelHtml = '<div class="fuel-page">'
+    + '<div class="fuel-top-bar">'
+    + '<div class="fuel-loc-row">'
+    + '<span style="font-size:18px">&#9981;</span>'
+    + '<select id="fuelState" onchange="changeFuelLocation()" style="padding:8px 10px;border:1.5px solid var(--border2);border-radius:8px;font-size:14px;background:var(--surface);color:var(--ink);font-family:inherit;min-height:40px">'
+    + ['VIC','NSW','QLD','SA','WA','TAS','NT','ACT'].map(function(s){return '<option value="'+s+'"'+(s===state?' selected':'')+'>'+s+'</option>';}).join('')
+    + '</select>'
+    + '<select id="fuelSuburb" onchange="changeFuelLocation()" style="padding:8px 10px;border:1.5px solid var(--border2);border-radius:8px;font-size:14px;background:var(--surface);color:var(--ink);font-family:inherit;min-height:40px;min-width:160px;flex:1">'
+    + '</select>'
+    + '<button onclick="refreshFuel()" style="padding:8px 14px;background:var(--nav);color:var(--nav-txt);border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;min-height:40px;white-space:nowrap">&#128260; Refresh</button>'
+    + '</div>'
+    + '<div class="fuel-links">'
+    + '<a href="https://petrolspy.com.au/map?center=' + (suburbCoords[(sub||'').toLowerCase()]||stateCentres[state]||{lat:-37.9,lng:144.75}).lat + ',' + (suburbCoords[(sub||'').toLowerCase()]||stateCentres[state]||{lat:-37.9,lng:144.75}).lng + '&zoom=13" target="_blank" rel="noopener">&#127758; PetrolSpy Map</a>'
+    + '<a href="https://www.motormouth.com.au/fuel-price-map" target="_blank" rel="noopener">&#128200; Motormouth</a>'
+    + '<a href="https://www.7eleven.com.au/fuel-lock" target="_blank" rel="noopener">&#128274; 7-Eleven Lock</a>'
+    + '<a href="https://petrolspy.com.au" target="_blank" rel="noopener">&#128241; PetrolSpy App</a>'
+    + '</div>'
+    + '</div>'
+    + '<div id="fuelLoading" style="text-align:center;padding:32px;color:var(--ink3)">'
+    + '<div class="spin" style="font-size:28px;margin-bottom:8px">&#9981;</div>'
+    + '<p style="font-size:14px;font-weight:600">Loading fuel prices near <strong>' + esc(sub) + '</strong>...</p>'
+    + '</div>'
+    + '<div id="fuelCards"></div>'
+    + '<div id="fuelTime" style="text-align:center;padding:8px;font-size:12px;color:var(--ink4)"></div>'
+    + '</div>';
+
+  document.getElementById('dealOutput').innerHTML = fuelHtml;
+  document.getElementById('fuelOutput').innerHTML = '';
+  setTitle('Fuel Prices', 'Loading near ' + sub + '...');
+
+  // Populate suburb dropdown for selected state
+  var fuelSubSel = document.getElementById('fuelSuburb');
+  if (fuelSubSel && SUBURBS[state]) {
+    fuelSubSel.innerHTML = SUBURBS[state].map(function(s){
+      return '<option value="' + s + '"' + (s === sub ? ' selected' : '') + '>' + s + '</option>';
+    }).join('');
+  }
+
+  // Fetch fuel data
+  doFuelFetch(sub, state);
+}
+
+function changeFuelLocation() {
+  var state = document.getElementById('fuelState').value;
+  var subSel = document.getElementById('fuelSuburb');
+
+  // Repopulate suburbs if state changed
+  if (state !== userState) {
+    userState = state;
+    if (subSel && SUBURBS[state]) {
+      subSel.innerHTML = SUBURBS[state].map(function(s){
+        return '<option value="' + s + '">' + s + '</option>';
+      }).join('');
+    }
+  }
+
+  userSuburb = subSel ? subSel.value : '';
+  userState = state;
+  localStorage.setItem('ssc_state', userState);
+  localStorage.setItem('ssc_suburb', userSuburb);
+  refreshFuel();
+}
+
+function refreshFuel() {
+  var loading = document.getElementById('fuelLoading');
+  if (loading) {
+    loading.style.display = 'block';
+    loading.innerHTML = '<div class="spin" style="font-size:28px;margin-bottom:8px">&#9981;</div>'
+      + '<p style="font-size:14px;font-weight:600">Refreshing prices near <strong>' + esc(userSuburb||userState) + '</strong>...</p>';
+  }
+  document.getElementById('fuelCards').innerHTML = '';
+  doFuelFetch(userSuburb || userState, userState);
+}
+
+function doFuelFetch(sub, state) {
+  fetchFuelBrowser(function(ps) {
+    var loading = document.getElementById('fuelLoading');
+    var cards = document.getElementById('fuelCards');
+    var timeEl = document.getElementById('fuelTime');
+    if (!cards) return; // user navigated away
+
+    if (loading) loading.style.display = 'none';
+
+    if (ps && ps.length) {
+      fuel = ps.map(function(f){return{name:f.name,brand:f.brand,type:f.type,price:f.price,suburb:f.suburb};});
+
+      // Group by fuel type, find cheapest
+      var byType = {};
+      fuel.forEach(function(f) {
+        if (!byType[f.type]) byType[f.type] = [];
+        byType[f.type].push(f);
+      });
+
+      var h = '<div class="fuel-results-grid">';
+      var typeOrder = ['ULP','E10','P95','P98','Diesel','LPG'];
+      typeOrder.forEach(function(ft) {
+        if (!byType[ft]) return;
+        var sorted = byType[ft].sort(function(a,b){return a.price - b.price;});
+        var cheapest = sorted[0];
+        h += '<div class="fuel-result-card' + (sorted.length ? '' : '') + '">'
+          + '<div class="frc-type frc-' + ft.replace(/[^a-zA-Z]/g,'') + '">' + ft + '</div>'
+          + '<div class="frc-body">'
+          + '<div class="frc-price">' + cheapest.price.toFixed(1) + '<span class="frc-unit">c/L</span></div>'
+          + '<div class="frc-station">' + esc(cheapest.name || cheapest.brand) + '</div>'
+          + '<div class="frc-suburb">' + esc(cheapest.suburb || sub) + '</div>';
+        if (sorted.length > 1) {
+          h += '<div class="frc-others">';
+          sorted.slice(1,4).forEach(function(s) {
+            h += '<div class="frc-other">' + s.price.toFixed(1) + 'c &mdash; ' + esc(s.name||s.brand) + '</div>';
+          });
+          h += '</div>';
+        }
+        h += '</div></div>';
+      });
+      h += '</div>';
+      cards.innerHTML = h;
+
+      var now = new Date().toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit'});
+      setTitle('Fuel near ' + (sub||state), fuel.length + ' stations \u00B7 ' + now);
+      if (timeEl) timeEl.textContent = 'Updated ' + now + ' from PetrolSpy \u00B7 ' + fuel.length + ' stations near ' + (sub||state);
+    } else {
+      cards.innerHTML = '<div style="text-align:center;padding:24px;color:var(--ink3)">'
+        + '<p style="font-size:15px;font-weight:700;margin-bottom:8px">No stations found near ' + esc(sub||state) + '</p>'
+        + '<p style="font-size:13px;line-height:1.6">PetrolSpy may not have coverage in this area, or the service is temporarily unavailable.<br>'
+        + 'Try a nearby suburb, or check directly:</p>'
+        + '<div style="display:flex;gap:10px;justify-content:center;margin-top:14px;flex-wrap:wrap">'
+        + '<a href="https://petrolspy.com.au" target="_blank" rel="noopener" style="padding:10px 18px;background:var(--nav);color:var(--nav-txt);border-radius:8px;text-decoration:none;font-weight:700;font-size:14px">PetrolSpy Map &#8594;</a>'
+        + '<a href="https://www.motormouth.com.au" target="_blank" rel="noopener" style="padding:10px 18px;background:var(--surface);border:1.5px solid var(--border2);color:var(--ink);border-radius:8px;text-decoration:none;font-weight:700;font-size:14px">Motormouth &#8594;</a>'
+        + '</div></div>';
+      setTitle('Fuel Prices', 'No data for ' + (sub||state));
+    }
+  });
+}
 
 // ── QUICK FILTER (mobile + desktop) ───────────────────────────
 function setFilterDirect(cat) {
