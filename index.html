@@ -1036,91 +1036,11 @@ function showAmazonFallback() {
 }
 
 // ── BROWSER-SIDE FUEL PRICE FETCHER ──────────────────────────
-// PetrolSpy API is CORS-friendly — works from browsers
+// Uses CORS proxy to access PetrolSpy API from the browser
 function fetchFuelBrowser(callback) {
-  // PetrolSpy covers Point Cook area (bounding box)
-  // State capital centres + suburb lookup for PetrolSpy coverage
-  var stateCentres = {
-    VIC:{lat:-37.81,lng:144.96}, NSW:{lat:-33.87,lng:151.21},
-    QLD:{lat:-27.47,lng:153.03}, SA:{lat:-34.93,lng:138.60},
-    WA:{lat:-31.95,lng:115.86}, TAS:{lat:-42.88,lng:147.33},
-    NT:{lat:-12.46,lng:130.84}, ACT:{lat:-35.28,lng:149.13}
-  };
-  // Known suburb coordinates (popular ones across AU)
-  var suburbCoords = {
-    'point cook':{lat:-37.90,lng:144.75},'werribee':{lat:-37.90,lng:144.66},
-    'hoppers crossing':{lat:-37.88,lng:144.70},'tarneit':{lat:-37.85,lng:144.68},
-    'truganina':{lat:-37.85,lng:144.72},'williams landing':{lat:-37.86,lng:144.75},
-    'laverton':{lat:-37.86,lng:144.78},'altona':{lat:-37.87,lng:144.83},
-    'sunshine':{lat:-37.79,lng:144.83},'footscray':{lat:-37.80,lng:144.90},
-    'melbourne cbd':{lat:-37.81,lng:144.96},'south yarra':{lat:-37.84,lng:144.99},
-    'richmond':{lat:-37.82,lng:145.00},'brunswick':{lat:-37.77,lng:144.96},
-    'geelong':{lat:-38.15,lng:144.36},'ballarat':{lat:-37.56,lng:143.86},
-    'bendigo':{lat:-36.76,lng:144.28},'melton':{lat:-37.68,lng:144.58},
-    'craigieburn':{lat:-37.60,lng:144.94},'epping':{lat:-37.65,lng:145.03},
-    'dandenong':{lat:-37.99,lng:145.21},'frankston':{lat:-38.14,lng:145.12},
-    'ringwood':{lat:-37.81,lng:145.23},'doncaster':{lat:-37.78,lng:145.13},
-    'box hill':{lat:-37.82,lng:145.12},'glen waverley':{lat:-37.88,lng:145.16},
-    'sydney cbd':{lat:-33.87,lng:151.21},'parramatta':{lat:-33.82,lng:151.00},
-    'chatswood':{lat:-33.80,lng:151.18},'bondi':{lat:-33.89,lng:151.27},
-    'penrith':{lat:-33.75,lng:150.69},'liverpool':{lat:-33.92,lng:150.93},
-    'north sydney':{lat:-33.84,lng:151.21},'manly':{lat:-33.80,lng:151.29},
-    'blacktown':{lat:-33.77,lng:150.91},'campbelltown':{lat:-34.07,lng:150.81},
-    'brisbane cbd':{lat:-27.47,lng:153.03},'gold coast':{lat:-28.02,lng:153.43},
-    'sunshine coast':{lat:-26.65,lng:153.07},'cairns':{lat:-16.92,lng:145.78},
-    'townsville':{lat:-19.26,lng:146.82},'toowoomba':{lat:-27.56,lng:151.95},
-    'ipswich':{lat:-27.62,lng:152.76},'logan':{lat:-27.64,lng:153.11},
-    'adelaide cbd':{lat:-34.93,lng:138.60},'glenelg':{lat:-34.98,lng:138.52},
-    'mount barker':{lat:-35.07,lng:138.86},'elizabeth':{lat:-34.72,lng:138.67},
-    'perth cbd':{lat:-31.95,lng:115.86},'fremantle':{lat:-32.06,lng:115.75},
-    'joondalup':{lat:-31.74,lng:115.77},'rockingham':{lat:-32.28,lng:115.74},
-    'mandurah':{lat:-32.53,lng:115.72},
-    'hobart':{lat:-42.88,lng:147.33},'launceston':{lat:-41.44,lng:147.14},
-    'darwin':{lat:-12.46,lng:130.84},'canberra':{lat:-35.28,lng:149.13},
-    // VIC expanded
-    'wyndham vale':{lat:-37.89,lng:144.63},'manor lakes':{lat:-37.87,lng:144.64},
-    'caroline springs':{lat:-37.74,lng:144.74},'deer park':{lat:-37.77,lng:144.78},
-    'sydenham':{lat:-37.70,lng:144.77},'st albans':{lat:-37.74,lng:144.80},
-    'south yarra':{lat:-37.84,lng:144.99},'brunswick':{lat:-37.77,lng:144.96},
-    'coburg':{lat:-37.74,lng:144.96},'essendon':{lat:-37.75,lng:144.91},
-    'south morang':{lat:-37.66,lng:145.10},'berwick':{lat:-38.04,lng:145.35},
-    'cranbourne':{lat:-38.10,lng:145.28},'pakenham':{lat:-38.07,lng:145.49},
-    'mornington':{lat:-38.22,lng:145.04},'ballarat':{lat:-37.56,lng:143.86},
-    'bendigo':{lat:-36.76,lng:144.28},'shepparton':{lat:-36.38,lng:145.40},
-    // NSW expanded
-    'strathfield':{lat:-33.88,lng:151.08},'burwood':{lat:-33.88,lng:151.10},
-    'homebush':{lat:-33.87,lng:151.08},'hornsby':{lat:-33.70,lng:151.10},
-    'castle hill':{lat:-33.73,lng:151.01},'bankstown':{lat:-33.92,lng:151.03},
-    'hurstville':{lat:-33.97,lng:151.10},'sutherland':{lat:-34.03,lng:151.06},
-    'cronulla':{lat:-34.06,lng:151.15},'wollongong':{lat:-34.43,lng:150.89},
-    'newcastle':{lat:-32.93,lng:151.78},'central coast':{lat:-33.43,lng:151.34},
-    // QLD expanded
-    'south brisbane':{lat:-27.48,lng:153.02},'fortitude valley':{lat:-27.46,lng:153.04},
-    'toowong':{lat:-27.48,lng:152.98},'indooroopilly':{lat:-27.50,lng:152.97},
-    'chermside':{lat:-27.39,lng:153.03},'carindale':{lat:-27.51,lng:153.10},
-    'springfield':{lat:-27.67,lng:152.91},'north lakes':{lat:-27.24,lng:153.00},
-    'surfers paradise':{lat:-28.00,lng:153.43},'robina':{lat:-28.07,lng:153.38},
-    'noosa':{lat:-26.39,lng:153.09},'maroochydore':{lat:-26.65,lng:153.10},
-    // SA expanded
-    'north adelaide':{lat:-34.91,lng:138.59},'prospect':{lat:-34.88,lng:138.60},
-    'norwood':{lat:-34.92,lng:138.63},'unley':{lat:-34.95,lng:138.60},
-    'marion':{lat:-35.01,lng:138.56},'salisbury':{lat:-34.76,lng:138.64},
-    // WA expanded
-    'subiaco':{lat:-31.95,lng:115.83},'victoria park':{lat:-31.97,lng:115.90},
-    'canning vale':{lat:-32.06,lng:115.92},'ellenbrook':{lat:-31.77,lng:115.97},
-    'armadale':{lat:-32.15,lng:116.01},'midland':{lat:-31.89,lng:116.01},
-    'bunbury':{lat:-33.33,lng:115.64},
-    // TAS expanded
-    'sandy bay':{lat:-42.90,lng:147.33},'glenorchy':{lat:-42.83,lng:147.28},
-    'kingston':{lat:-42.98,lng:147.30},'devonport':{lat:-41.18,lng:146.36},
-    // ACT expanded
-    'belconnen':{lat:-35.24,lng:149.07},'woden':{lat:-35.35,lng:149.09},
-    'tuggeranong':{lat:-35.42,lng:149.07},'gungahlin':{lat:-35.19,lng:149.13},
-  };
-  // Read CURRENT location from dropdowns (not stale localStorage)
+  // Read current location from fuel page dropdowns or stored values
   var currentSub = userSuburb || '';
   var currentState = userState || 'VIC';
-  // Check fuel page dropdowns first (they have the latest selection)
   var fuelSubEl = document.getElementById('fuelSuburb');
   var fuelStateEl = document.getElementById('fuelState');
   if (fuelSubEl && fuelSubEl.value) currentSub = fuelSubEl.value;
@@ -1128,28 +1048,78 @@ function fetchFuelBrowser(callback) {
 
   var subKey = (currentSub || '').toLowerCase().trim();
   var coords = suburbCoords[subKey] || stateCentres[currentState] || stateCentres.VIC;
-  var radius = 0.08; // ~8km radius bounding box
-  console.log('Fuel fetch: ' + currentSub + ', ' + currentState + ' => lat:' + coords.lat + ' lng:' + coords.lng);
-  var url = 'https://petrolspy.com.au/webservice-1/station/box?neLat='+(coords.lat+radius)+'&neLng='+(coords.lng+radius)+'&swLat='+(coords.lat-radius)+'&swLng='+(coords.lng-radius);
-  fetch(url).then(function(r){return r.json();}).then(function(data) {
-    if (!data||!data.message||!data.message.list) { callback(null); return; }
-    var prices = [];
-    data.message.list.forEach(function(s) {
-      Object.entries(s.prices||{}).forEach(function(entry) {
-        var fuelId = entry[0], priceObj = entry[1];
-        var p = parseFloat(priceObj.amount);
-        if (!p||p<80||p>350) return;
-        var fuelMap = {E10:'E10',U91:'ULP',P95:'P95',P98:'P98',DL:'Diesel',LPG:'LPG',
-          e10:'E10',u91:'ULP',p95:'P95',p98:'P98',diesel:'Diesel',lpg:'LPG'};
-        prices.push({
-          name: s.name||'Station', brand: s.brand||'',
-          type: fuelMap[fuelId]||fuelId, price: p,
-          suburb: s.suburb||'Point Cook area'
+  var radius = 0.08;
+
+  var petrolSpyUrl = 'https://petrolspy.com.au/webservice-1/station/box'
+    + '?neLat=' + (coords.lat + radius)
+    + '&neLng=' + (coords.lng + radius)
+    + '&swLat=' + (coords.lat - radius)
+    + '&swLng=' + (coords.lng - radius);
+
+  console.log('Fuel: fetching for ' + currentSub + ' ' + currentState + ' lat=' + coords.lat + ' lng=' + coords.lng);
+
+  // Try multiple CORS proxies in order
+  var proxies = [
+    'https://api.allorigins.win/raw?url=',
+    'https://corsproxy.io/?url=',
+    '',  // direct (in case PetrolSpy allows CORS)
+  ];
+
+  var tried = 0;
+  function tryNext() {
+    if (tried >= proxies.length) {
+      console.log('Fuel: all fetch methods failed');
+      callback(null);
+      return;
+    }
+    var proxy = proxies[tried];
+    var url = proxy ? proxy + encodeURIComponent(petrolSpyUrl) : petrolSpyUrl;
+    tried++;
+
+    fetch(url, {signal: AbortSignal.timeout ? AbortSignal.timeout(8000) : undefined})
+      .then(function(r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
+      })
+      .then(function(data) {
+        if (!data || !data.message || !data.message.list || !data.message.list.length) {
+          console.log('Fuel: empty response from proxy ' + (tried));
+          tryNext();
+          return;
+        }
+        var prices = [];
+        var fuelMap = {
+          E10:'E10',U91:'ULP',P95:'P95',P98:'P98',DL:'Diesel',LPG:'LPG',
+          e10:'E10',u91:'ULP',p95:'P95',p98:'P98',diesel:'Diesel',lpg:'LPG',
+          B20:'Diesel',EV:'EV',AdBlue:'AdBlue'
+        };
+        data.message.list.forEach(function(s) {
+          Object.entries(s.prices || {}).forEach(function(entry) {
+            var fuelId = entry[0], priceObj = entry[1];
+            var p = parseFloat(priceObj.amount);
+            if (!p || p < 50 || p > 400) return;
+            prices.push({
+              name: s.name || 'Station',
+              brand: s.brand || '',
+              type: fuelMap[fuelId] || fuelId,
+              price: p,
+              suburb: s.address ? s.address.suburb || currentSub : currentSub
+            });
+          });
         });
+        console.log('Fuel: got ' + prices.length + ' prices via proxy ' + tried);
+        if (prices.length) {
+          callback(prices);
+        } else {
+          tryNext();
+        }
+      })
+      .catch(function(err) {
+        console.log('Fuel: proxy ' + tried + ' failed: ' + err.message);
+        tryNext();
       });
-    });
-    callback(prices);
-  }).catch(function(){ callback(null); });
+  }
+  tryNext();
 }
 
 // ── Auto-refresh timer (deals + fuel + Amazon every 12 min) ──
@@ -2179,6 +2149,18 @@ function showFuelPage() {
   doFuelFetch(sub, state);
 }
 
+function updateFuelSuburbs() {
+  var stateEl = document.getElementById('fuelState');
+  var subEl = document.getElementById('fuelSuburb');
+  if (!stateEl || !subEl) return;
+  var state = stateEl.value;
+  if (SUBURBS[state]) {
+    subEl.innerHTML = SUBURBS[state].map(function(s){
+      return '<option value="' + s + '">' + s + '</option>';
+    }).join('');
+  }
+}
+
 function changeFuelLocation() {
   var stateEl = document.getElementById('fuelState');
   var subEl = document.getElementById('fuelSuburb');
@@ -2282,13 +2264,15 @@ function doFuelFetch(sub, state) {
       setTitle('Fuel near ' + (sub||state), fuel.length + ' stations \u00B7 ' + now);
       if (timeEl) timeEl.textContent = 'Updated ' + now + ' from PetrolSpy \u00B7 ' + fuel.length + ' stations near ' + (sub||state);
     } else {
-      cards.innerHTML = '<div style="text-align:center;padding:24px;color:var(--ink3)">'
-        + '<p style="font-size:15px;font-weight:700;margin-bottom:8px">No stations found near ' + esc(sub||state) + '</p>'
-        + '<p style="font-size:13px;line-height:1.6">PetrolSpy may not have coverage in this area, or the service is temporarily unavailable.<br>'
-        + 'Try a nearby suburb, or check directly:</p>'
-        + '<div style="display:flex;gap:10px;justify-content:center;margin-top:14px;flex-wrap:wrap">'
-        + '<a href="https://petrolspy.com.au" target="_blank" rel="noopener" style="padding:10px 18px;background:var(--nav);color:var(--nav-txt);border-radius:8px;text-decoration:none;font-weight:700;font-size:14px">PetrolSpy Map &#8594;</a>'
-        + '<a href="https://www.motormouth.com.au" target="_blank" rel="noopener" style="padding:10px 18px;background:var(--surface);border:1.5px solid var(--border2);color:var(--ink);border-radius:8px;text-decoration:none;font-weight:700;font-size:14px">Motormouth &#8594;</a>'
+      var c = suburbCoords[(sub||'').toLowerCase()] || stateCentres[state] || {lat:-37.9,lng:144.75};
+      cards.innerHTML = '<div style="text-align:center;padding:24px">'
+        + '<p style="font-size:16px;font-weight:700;color:var(--ink);margin-bottom:6px">&#9981; Fuel prices for ' + esc(sub||state) + '</p>'
+        + '<p style="font-size:13px;color:var(--ink3);line-height:1.6;margin-bottom:16px">Live prices are loading from PetrolSpy. If they don\u2019t appear, tap a link below to check directly.</p>'
+        + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:400px;margin:0 auto">'
+        + '<a href="https://petrolspy.com.au/map?center=' + c.lat + ',' + c.lng + '&zoom=13" target="_blank" rel="noopener" style="padding:14px;background:var(--nav);color:var(--nav-txt);border-radius:10px;text-decoration:none;font-weight:700;font-size:14px;text-align:center;min-height:48px;display:flex;align-items:center;justify-content:center">&#127758; PetrolSpy Map</a>'
+        + '<a href="https://www.motormouth.com.au/fuel-price-map" target="_blank" rel="noopener" style="padding:14px;background:var(--surface);border:1.5px solid var(--border2);color:var(--ink);border-radius:10px;text-decoration:none;font-weight:700;font-size:14px;text-align:center;min-height:48px;display:flex;align-items:center;justify-content:center">&#128200; Motormouth</a>'
+        + '<a href="https://www.7eleven.com.au/fuel-lock" target="_blank" rel="noopener" style="padding:14px;background:var(--surface);border:1.5px solid var(--border2);color:var(--ink);border-radius:10px;text-decoration:none;font-weight:700;font-size:14px;text-align:center;min-height:48px;display:flex;align-items:center;justify-content:center">&#128274; 7-Eleven Lock</a>'
+        + '<a href="https://www.accc.gov.au/consumers/petrol-and-fuel/petrol-price-cycles" target="_blank" rel="noopener" style="padding:14px;background:var(--surface);border:1.5px solid var(--border2);color:var(--ink);border-radius:10px;text-decoration:none;font-weight:700;font-size:14px;text-align:center;min-height:48px;display:flex;align-items:center;justify-content:center">&#128202; ACCC Cycles</a>'
         + '</div></div>';
       setTitle('Fuel Prices', 'No data for ' + (sub||state));
     }
