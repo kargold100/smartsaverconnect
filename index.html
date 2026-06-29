@@ -598,6 +598,7 @@ body{font-family:var(--fb);font-size:15px;line-height:1.65;background:var(--bg);
           <select id="suburbSelect" onchange="saveLocation()"
             style="padding:8px 12px;border:1.5px solid var(--border2);border-radius:8px;font-size:14px;background:var(--surface);color:var(--ink);font-family:inherit;min-height:40px;min-width:180px">
           </select>
+          <button onclick="applyLocation()" style="padding:8px 18px;background:var(--nav);color:var(--nav-txt);border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--fh);min-height:40px;white-space:nowrap">Go &#8594;</button>
         </div>
         <div class="quick-row" role="group" aria-label="Quick searches">
           <span class="ql" aria-hidden="true">Try:</span>
@@ -1116,9 +1117,19 @@ function fetchFuelBrowser(callback) {
     'belconnen':{lat:-35.24,lng:149.07},'woden':{lat:-35.35,lng:149.09},
     'tuggeranong':{lat:-35.42,lng:149.07},'gungahlin':{lat:-35.19,lng:149.13},
   };
-  var sub = (userSuburb || '').toLowerCase().trim();
-  var coords = suburbCoords[sub] || stateCentres[userState] || stateCentres.VIC;
+  // Read CURRENT location from dropdowns (not stale localStorage)
+  var currentSub = userSuburb || '';
+  var currentState = userState || 'VIC';
+  // Check fuel page dropdowns first (they have the latest selection)
+  var fuelSubEl = document.getElementById('fuelSuburb');
+  var fuelStateEl = document.getElementById('fuelState');
+  if (fuelSubEl && fuelSubEl.value) currentSub = fuelSubEl.value;
+  if (fuelStateEl && fuelStateEl.value) currentState = fuelStateEl.value;
+
+  var subKey = (currentSub || '').toLowerCase().trim();
+  var coords = suburbCoords[subKey] || stateCentres[currentState] || stateCentres.VIC;
   var radius = 0.08; // ~8km radius bounding box
+  console.log('Fuel fetch: ' + currentSub + ', ' + currentState + ' => lat:' + coords.lat + ' lng:' + coords.lng);
   var url = 'https://petrolspy.com.au/webservice-1/station/box?neLat='+(coords.lat+radius)+'&neLng='+(coords.lng+radius)+'&swLat='+(coords.lat-radius)+'&swLng='+(coords.lng-radius);
   fetch(url).then(function(r){return r.json();}).then(function(data) {
     if (!data||!data.message||!data.message.list) { callback(null); return; }
@@ -2135,7 +2146,7 @@ function showFuelPage() {
     + '</select>'
     + '<select id="fuelSuburb" onchange="changeFuelLocation()" style="padding:8px 10px;border:1.5px solid var(--border2);border-radius:8px;font-size:14px;background:var(--surface);color:var(--ink);font-family:inherit;min-height:40px;min-width:160px;flex:1">'
     + '</select>'
-    + '<button onclick="refreshFuel()" style="padding:8px 14px;background:var(--nav);color:var(--nav-txt);border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;min-height:40px;white-space:nowrap">&#128260; Refresh</button>'
+    + '<button onclick="changeFuelLocation()" style="padding:10px 20px;background:var(--nav);color:var(--nav-txt);border:none;border-radius:8px;font-size:14px;font-weight:800;cursor:pointer;font-family:var(--fh);min-height:44px;white-space:nowrap;letter-spacing:-.02em">Go &#8594;</button>'
     + '</div>'
     + '<div class="fuel-links">'
     + '<a href="https://petrolspy.com.au/map?center=' + (suburbCoords[(sub||'').toLowerCase()]||stateCentres[state]||{lat:-37.9,lng:144.75}).lat + ',' + (suburbCoords[(sub||'').toLowerCase()]||stateCentres[state]||{lat:-37.9,lng:144.75}).lng + '&zoom=13" target="_blank" rel="noopener">&#127758; PetrolSpy Map</a>'
@@ -2169,35 +2180,59 @@ function showFuelPage() {
 }
 
 function changeFuelLocation() {
-  var state = document.getElementById('fuelState').value;
-  var subSel = document.getElementById('fuelSuburb');
+  var stateEl = document.getElementById('fuelState');
+  var subEl = document.getElementById('fuelSuburb');
+  var newState = stateEl ? stateEl.value : userState;
+  var newSub = subEl ? subEl.value : userSuburb;
 
-  // Repopulate suburbs if state changed
-  if (state !== userState) {
-    userState = state;
-    if (subSel && SUBURBS[state]) {
-      subSel.innerHTML = SUBURBS[state].map(function(s){
+  // If state changed, repopulate suburb dropdown
+  if (newState !== userState) {
+    userState = newState;
+    if (subEl && SUBURBS[newState]) {
+      subEl.innerHTML = SUBURBS[newState].map(function(s){
         return '<option value="' + s + '">' + s + '</option>';
       }).join('');
+      newSub = SUBURBS[newState][0] || '';
     }
   }
 
-  userSuburb = subSel ? subSel.value : '';
-  userState = state;
+  userSuburb = newSub;
+  userState = newState;
   localStorage.setItem('ssc_state', userState);
   localStorage.setItem('ssc_suburb', userSuburb);
+
+  // Also update hero dropdowns
+  var heroState = document.getElementById('stateSelect');
+  var heroSub = document.getElementById('suburbSelect');
+  if (heroState) heroState.value = userState;
+  if (heroSub) {
+    populateSuburbs();
+    heroSub.value = userSuburb;
+  }
+
   refreshFuel();
 }
 
 function refreshFuel() {
+  // Read current values from fuel page dropdowns
+  var subEl = document.getElementById('fuelSuburb');
+  var stateEl = document.getElementById('fuelState');
+  var sub = subEl ? subEl.value : userSuburb;
+  var state = stateEl ? stateEl.value : userState;
+  userSuburb = sub;
+  userState = state;
+  localStorage.setItem('ssc_state', state);
+  localStorage.setItem('ssc_suburb', sub);
+
   var loading = document.getElementById('fuelLoading');
   if (loading) {
     loading.style.display = 'block';
     loading.innerHTML = '<div class="spin" style="font-size:28px;margin-bottom:8px">&#9981;</div>'
-      + '<p style="font-size:14px;font-weight:600">Refreshing prices near <strong>' + esc(userSuburb||userState) + '</strong>...</p>';
+      + '<p style="font-size:14px;font-weight:600">Fetching prices near <strong>' + esc(sub||state) + '</strong>...</p>';
   }
-  document.getElementById('fuelCards').innerHTML = '';
-  doFuelFetch(userSuburb || userState, userState);
+  var cards = document.getElementById('fuelCards');
+  if (cards) cards.innerHTML = '';
+  doFuelFetch(sub || state, state);
 }
 
 function doFuelFetch(sub, state) {
@@ -2258,6 +2293,18 @@ function doFuelFetch(sub, state) {
       setTitle('Fuel Prices', 'No data for ' + (sub||state));
     }
   });
+}
+
+// ── APPLY LOCATION (Go button) ────────────────────────────────
+function applyLocation() {
+  saveLocation();
+  // If currently viewing fuel, refresh fuel data
+  if (activeFilter === 'fuel') {
+    showFuelPage();
+  }
+  // Update the hero location display
+  var locText = (userSuburb || userState) + ', ' + userState;
+  console.log('Location set to: ' + locText);
 }
 
 // ── QUICK FILTER (mobile + desktop) ───────────────────────────
