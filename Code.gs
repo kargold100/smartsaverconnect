@@ -63,6 +63,8 @@ function doGet(e) {
     result = getBlogPosts();
   } else if (action === 'addBlog') {
     result = addBlogPost(e.parameter);
+  } else if (action === 'getFuel') {
+    result = getFuelPrices(e.parameter);
   } else {
     result = getDealsPayload();
   }
@@ -76,6 +78,41 @@ function doGet(e) {
   return ContentService
     .createTextOutput(json)
     .setMimeType(ContentService.MimeType.JSON);
+}
+
+// ── Fuel Price Proxy (for fuel.html) ──────────────────────────
+// Called from fuel.html via JSONP — bypasses CORS completely
+function getFuelPrices(params) {
+  var lat = parseFloat(params.lat) || -37.90;
+  var lng = parseFloat(params.lng) || 144.75;
+  var r = 0.08;
+  try {
+    var url = 'https://petrolspy.com.au/webservice-1/station/box'
+      + '?neLat=' + (lat+r) + '&neLng=' + (lng+r)
+      + '&swLat=' + (lat-r) + '&swLng=' + (lng-r);
+    var resp = UrlFetchApp.fetch(url, {muteHttpExceptions: true, headers: {
+      'User-Agent': 'Mozilla/5.0', 'Accept': 'application/json'
+    }});
+    if (resp.getResponseCode() === 200) {
+      var data = JSON.parse(resp.getContentText());
+      if (data && data.message && data.message.list) {
+        var FM = {E10:'E10',U91:'ULP',P95:'P95',P98:'P98',DL:'Diesel',LPG:'LPG'};
+        var prices = [];
+        data.message.list.forEach(function(s) {
+          Object.entries(s.prices || {}).forEach(function(e) {
+            var p = parseFloat(e[1].amount);
+            if (!p || p < 50 || p > 400) return;
+            prices.push({n:s.name||'',b:s.brand||'',t:FM[e[0]]||e[0],p:p,
+              s:s.address?s.address.suburb||'':''});
+          });
+        });
+        return {ok:true,prices:prices,ts:new Date().toISOString()};
+      }
+    }
+    return {ok:false,error:'PetrolSpy returned '+resp.getResponseCode()};
+  } catch(err) {
+    return {ok:false,error:err.message};
+  }
 }
 
 // ── Blog Posts (Google Sheets backend) ─────────────────────────
@@ -306,12 +343,16 @@ function handleUnsubscribe(email, token) {
     const sh = ss.getSheetByName(TAB.SUBS); if (!sh) return { ok:false, error:'Not found' };
     const rows = sh.getDataRange().getValues();
     for (let i = 1; i < rows.length; i++) {
-      if ((rows[i][2]||'').toLowerCase() === email.toLowerCase() && rows[i][6] === token) {
-        sh.getRange(i+1, 5).setValue(false);
-        return { ok:true, message:'Unsubscribed' };
+      if ((rows[i][2]||'').toLowerCase() === email.toLowerCase()) {
+        // Accept either: correct UUID token OR email-as-token (from portal form)
+        if (rows[i][6] === token || token === email || !token) {
+          sh.getRange(i+1, 5).setValue(false);
+          return { ok:true, message:'Unsubscribed' };
+        }
       }
     }
-    return { ok:false, error:'Not found' };
+    // If email not found in subscribers, still return success (don't reveal subscriber list)
+    return { ok:true, message:'Unsubscribed' };
   } catch(err) { return { ok:false, error:err.message }; }
 }
 
